@@ -16,9 +16,8 @@ from baselines.models_gru import ProbabilisticGRU
 # --- CONFIG ---
 ADAPT_STEPS = 50
 ADAPT_LR = 1e-3
-N_SHOTS = 2  
-STEPS_SWEEP = [20, 40, 50, 80, 100, 120, 201] # The X-axis for your plots
-ROLLOUT_STEPS = 50 
+N_SHOTS = 2
+STEPS_SWEEP = [20, 40, 50, 80, 100, 120, 201]
 
 def get_task_data(dataset, theta_id, device):
     rows = dataset.metadata[dataset.metadata["theta_id"] == theta_id]
@@ -43,55 +42,60 @@ def recursive_rollout(model, x_seed, n_steps):
 
 def adapt_and_eval_gru(model_init, support, query, config, limit_steps):
     device = support.device
-    
+
     # 1. Clone & Adapt (Warm-Start)
     model = copy.deepcopy(model_init)
     model.train()
     optimizer = optim.Adam(model.parameters(), lr=ADAPT_LR)
-    
+
     # Slice Support Data (The Sweep Constraint)
-    # We only see the first 'limit_steps' of the history
+    # We only see the first 'limit_steps' of the support trajectory.
+    # Teacher-forced NLL over all limit_steps-1 one-step transitions provides
+    # a richer adaptation signal than endpoint-only supervision (used by MAML
+    # and Transfer baselines), giving the GRU a fair opportunity to adapt.
     support_view = support[:, :limit_steps, :]
-    inputs = support_view[:, :-1, :]
-    targets = support_view[:, 1:, :]
-    
-    # METRIC: Adaptation Time
+    inputs  = support_view[:, :-1, :]
+    targets = support_view[:, 1:,  :]
+
     start_time = time.time()
-    
     for _ in range(ADAPT_STEPS):
         optimizer.zero_grad()
         mu, var, _ = model(inputs)
         loss = F.gaussian_nll_loss(mu, targets, var)
         loss.backward()
         optimizer.step()
-        
     adapt_time = time.time() - start_time
-    
-    # 2. Evaluation (Always on Full Query)
-    model.eval()
+
+    # 2. Evaluation — full autoregressive rollout from query[:, 0, :]
+    #
+    # FIX (fairness): All other baselines and Model C evaluate over the FULL
+    # 200-step trajectory starting from the true initial state query[:, 0, :].
+    # The previous code evaluated over only the LAST 50 steps of the query,
+    # which is a shorter and easier horizon that made GRU appear better than
+    # it is.  We now start from x0 and roll out for n_steps = 200.
+    n_eval = config.time_grid.n_steps  # 200
+    x0_q = query[:, 0, :]             # true initial state, shape (B, D)
+
+    pred_rollout = recursive_rollout(model, x0_q, n_eval)  # (B, 201, D)
+
     with torch.no_grad():
-        # A. One-Step Metrics
-        q_in = query[:, :-1, :]
-        q_target = query[:, 1:, :]
+        # Teacher-forced NLL on the full query (one-step, for calibration)
+        q_in     = query[:, :-1, :]
+        q_target = query[:, 1:,  :]
         mu_q, var_q, _ = model(q_in)
-        
-        nll = F.gaussian_nll_loss(mu_q, q_target, var_q).item()
+        nll          = F.gaussian_nll_loss(mu_q, q_target, var_q).item()
         mse_one_step = F.mse_loss(mu_q, q_target).item()
-        
-        # B. Multi-Step Rollout (Simulation Test)
-        # Test rollout accuracy on the LAST 50 steps
-        rollout_start_idx = query.shape[1] - ROLLOUT_STEPS - 1
-        x_seed = query[:, rollout_start_idx, :] 
-        true_future = query[:, rollout_start_idx : rollout_start_idx + ROLLOUT_STEPS + 1, :]
-        
-        pred_rollout = recursive_rollout(model, x_seed, ROLLOUT_STEPS)
-        mse_rollout = F.mse_loss(pred_rollout, true_future).item()
+
+        # Full-horizon rollout metrics (comparable to every other baseline)
+        mse_rollout = F.mse_loss(pred_rollout, query).item()
+        mse_final   = F.mse_loss(pred_rollout[:, -1], query[:, -1]).item()
 
     return {
-        "Adapt_Time": adapt_time,
-        "NLL": nll,
-        "MSE_OneStep": mse_one_step,
-        "MSE_Rollout": mse_rollout
+        "adapt_time":   adapt_time,
+        "nll":          nll,
+        "mse_one_step": mse_one_step,
+        "mse_rollout":  mse_rollout,
+        "mse_final":    mse_final,
     }
 
 def main():
@@ -140,9 +144,9 @@ def main():
         header = not os.path.exists(out_file)
         df_task.to_csv(out_file, mode=mode, header=header, index=False)
 
-    print(f"\n✅ GRU Sweep Complete. Saved to {out_file}")
+    print(f"\nGRU Sweep Complete. Saved to {out_file}")
     df = pd.read_csv(out_file)
-    print(df.groupby(["regime", "steps_available"])[["MSE_Rollout"]].mean())
+    print(df.groupby(["regime", "steps_available"])[["mse_rollout"]].mean())
 
 if __name__ == "__main__":
     main()

@@ -1,102 +1,119 @@
-#evaluation/proximity_analysis.py
-import torch
-import pandas as pd
-import numpy as np
+# evaluation/proximity_analysis.py
+#
+# Computes the Euclidean distance in theta-space (flattened SDE parameters)
+# from each test task (regimes A, B, C) to the nearest point on the training
+# manifold.  Writes results/adaptation_with_distances.csv for use by the
+# plotting script.
+#
+# Distance metric
+# ---------------
+# Each SDE task theta is represented by the concatenated, flattened weight
+# vectors [theta_b | theta_sigma].  Distance is measured as the L2 norm
+# between this vector and the nearest training task in the same space:
+#
+#   d(theta_test) = min_{theta_train in Train} || v(theta_test) - v(theta_train) ||_2
+#
+# This gives a scalar "difficulty" score: tasks farther from the training
+# manifold are structurally harder to generalise to.
+
 import os
 import sys
+import torch
+import numpy as np
+import pandas as pd
 
-# Ensure project root is in path
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
 from config.base_config import cfg
-# We need the Theta class definition to load the pickle file correctly
-from sde_basis.parameters import Theta
+from sde_basis.parameters import Theta  # noqa: F401 — needed for unpickling
 
-def flatten_theta(theta_obj) -> torch.Tensor:
-    """Flattens theta_b and theta_sigma into a single vector."""
-    # Ensure we are accessing attributes correctly depending on how Theta is defined
-    b = theta_obj.theta_b.flatten()
-    s = theta_obj.theta_sigma.flatten()
-    return torch.cat([b, s])
+
+def flatten_theta(theta: Theta) -> torch.Tensor:
+    """Concatenate flattened drift and diffusion weights into one vector."""
+    return torch.cat([theta.theta_b.flatten(), theta.theta_sigma.flatten()])
+
 
 def main():
-    print("🔍 Starting Proximity Analysis...")
-    
-    # 1. Load Meta-Parameters (Ground Truth)
-    if not os.path.exists(cfg.paths.meta_params_path):
-        raise FileNotFoundError(f"Meta-params not found at {cfg.paths.meta_params_path}")
-    
-    meta_params = torch.load(cfg.paths.meta_params_path, map_location="cpu")
-    
-    # 2. Build Training Distribution Matrix
-    # This matrix represents the "Known Physics" manifold
-    train_thetas = meta_params['train']
-    train_vecs = [flatten_theta(t) for t in train_thetas]
-    train_matrix = torch.stack(train_vecs) # Shape: (N_train, P)
-    print(f"Training distribution shape: {train_matrix.shape}")
-    
-    # 3. Load Adaptation Results
-    res_path = "results/adaptation_results.csv"
-    if not os.path.exists(res_path):
-        raise FileNotFoundError(f"{res_path} not found. Run few_shot_adapt.py first.")
-        
-    df = pd.read_csv(res_path)
-    
-    # 4. Compute Distances for each test task
-    distances = []
-    
-    # Helper to find theta object by ID
-    # We combine all test lists to search easily
-    all_test_thetas = meta_params.get('testA', []) + \
-                      meta_params.get('testB', []) + \
-                      meta_params.get('testC', [])
-    
-    theta_map = {t.id: t for t in all_test_thetas}
-    
-    print("Computing distances to training manifold...")
-    
-    for idx, row in df.iterrows():
-        theta_id = row['theta_id']
-        
-        if theta_id not in theta_map:
-            # Should not happen if data is consistent
-            distances.append(np.nan)
+    print("Starting Proximity Analysis...")
+
+    # --- 1. Load meta-parameters ---
+    meta_path = cfg.paths.meta_params_path          # "data/meta_params.npz"
+    if not os.path.exists(meta_path):
+        raise FileNotFoundError(f"Meta-params not found at {meta_path}")
+
+    # weights_only=False is required because meta_params contains Theta objects
+    meta_params = torch.load(meta_path, map_location="cpu", weights_only=False)
+
+    # --- 2. Build training manifold matrix ---
+    train_vecs = [flatten_theta(t) for t in meta_params["train"]]
+    train_matrix = torch.stack(train_vecs)  # (N_train, P)
+    print(f"Training manifold: {train_matrix.shape[0]} tasks, "
+          f"{train_matrix.shape[1]}-dim parameter vector")
+
+    # --- 3. Compute per-test-task distances ---
+    records = []
+    for regime in ["testA", "testB", "testC"]:
+        test_thetas = meta_params.get(regime, [])
+        if not test_thetas:
+            print(f"  WARNING: no tasks found for {regime}")
             continue
-            
-        target_theta = theta_map[theta_id]
-        target_vec = flatten_theta(target_theta).unsqueeze(0) # (1, P)
-        
-        # Calculate Euclidean distance to ALL training tasks
-        dists = torch.norm(train_matrix - target_vec, dim=1)
-        
-        # The "Proximity" is the distance to the NEAREST training task
-        min_dist = dists.min().item()
-        distances.append(min_dist)
-        
-    df['proximity_score'] = distances
-    
-    # 5. Save Analysis
+
+        test_vecs  = torch.stack([flatten_theta(t) for t in test_thetas])  # (N_test, P)
+        dists      = torch.cdist(test_vecs, train_matrix)                  # (N_test, N_train)
+        min_dists  = dists.min(dim=1).values.numpy()
+
+        for theta, dist in zip(test_thetas, min_dists):
+            records.append({
+                "regime":          regime,
+                "theta_id":        theta.id,
+                "proximity_score": float(dist),
+            })
+
+    df_dist = pd.DataFrame(records)
+
+    # --- 4. Merge with gated results (gate_value, mse_rollout) ---
+    gated_path = "results/gated_regularized_final_fixed.csv"
+    if os.path.exists(gated_path):
+        df_gated = pd.read_csv(gated_path)
+        # Use a single representative step count for the summary table
+        canonical_steps = 50
+        df_summary = df_gated[df_gated["steps_available"] == canonical_steps][
+            ["theta_id", "regime", "gate_value", "mse_rollout"]
+        ].copy()
+        df_out = df_dist.merge(df_summary, on=["theta_id", "regime"], how="left")
+    else:
+        print(f"  WARNING: {gated_path} not found — saving distances only")
+        df_out = df_dist
+
     out_path = "results/adaptation_with_distances.csv"
-    df.to_csv(out_path, index=False)
-    print(f"✅ Analysis saved to {out_path}")
-    
-    # 6. Print Correlations
-    print("\n📊 Correlation: Distance vs Zero-Shot Error")
-    print("(Positive correlation = Farther tasks are harder to predict)")
-    print("-" * 50)
-    
-    for regime in ['testA', 'testB', 'testC']:
-        sub = df[df['regime'] == regime]
-        if sub.empty: continue
-        
-        # Correlation between Distance and Zero-Shot Error
-        corr = sub['proximity_score'].corr(sub['mse_path_zeroshot'])
-        
-        print(f"[{regime}]")
-        print(f"   Correlation: {corr:.4f}")
-        print(f"   Avg Distance: {sub['proximity_score'].mean():.4f}")
-        print(f"   Avg MSE:      {sub['mse_path_zeroshot'].mean():.4f}")
+    df_out.to_csv(out_path, index=False)
+    print(f"Saved {len(df_out)} rows to {out_path}")
+
+    # --- 5. Print per-regime statistics ---
+    print("\nPer-regime summary (proximity & error at steps=50)")
+    print("-" * 60)
+    for regime in ["testA", "testB", "testC"]:
+        sub = df_out[df_out["regime"] == regime]
+        if sub.empty:
+            continue
+        row = (f"[{regime}]  "
+               f"avg_dist={sub['proximity_score'].mean():.3f}  "
+               f"max_dist={sub['proximity_score'].max():.3f}")
+        if "mse_rollout" in sub.columns and sub["mse_rollout"].notna().any():
+            rmse = np.sqrt(sub["mse_rollout"].dropna()).mean()
+            row += f"  avg_RMSE={rmse:.4f}"
+        if "gate_value" in sub.columns and sub["gate_value"].notna().any():
+            row += f"  avg_gate={sub['gate_value'].mean():.4f}"
+        print(row)
+
+    # --- 6. Distance-error correlation ---
+    if "mse_rollout" in df_out.columns:
+        valid = df_out.dropna(subset=["mse_rollout", "proximity_score"])
+        corr = valid["proximity_score"].corr(valid["mse_rollout"])
+        print(f"\nCorr(distance, MSE): {corr:.4f}  "
+              "(positive = farther tasks are harder)")
+
 
 if __name__ == "__main__":
     main()

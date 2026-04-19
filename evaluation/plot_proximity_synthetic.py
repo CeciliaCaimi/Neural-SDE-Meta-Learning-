@@ -1,158 +1,207 @@
+# evaluation/plot_proximity_synthetic.py
+#
+# Generates results/manifold_distance_analysis.png — a two-panel figure
+# showing how both Prediction Error (RMSE) and Gate Value vary with the
+# theta-space distance of a test task from the training manifold.
+#
+# Usage (run from project root):
+#   python evaluation/plot_proximity_synthetic.py
+#
+# Requires:
+#   results/gated_regularized_final_fixed.csv   — per-task adaptation metrics
+#   data/meta_params.npz                        — ground-truth SDE parameters
+#
+# The distance metric is the L2 norm of the flattened parameter vector
+# [theta_b | theta_sigma] to the nearest training task (see proximity_analysis.py).
+
 import os
+import sys
 import torch
-import pandas as pd
 import numpy as np
+import pandas as pd
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import seaborn as sns
+import matplotlib.gridspec as gridspec
 from sklearn.decomposition import PCA
-from config.base_config import cfg
 
-# --- CONFIG ---
-RESULTS_PATH = "results/gated_regularized_final.csv"  # Points to your main experiment
-META_PARAMS_PATH = "data/meta_params.pt"              # Ground truth SDE parameters
-SAVE_DIR = "results/plots_synthetic"
+if os.getcwd() not in sys.path:
+    sys.path.append(os.getcwd())
 
-def flatten_theta(theta_dict):
-    """Flattens the SDE parameters (b and sigma weights) into a single vector."""
-    # Assuming theta is a dictionary or object with theta_b and theta_sigma
-    # Adjust attribute access if your Theta object is different
-    vecs = []
-    if hasattr(theta_dict, 'theta_b'):
-        vecs.append(theta_dict.theta_b.flatten())
-    if hasattr(theta_dict, 'theta_sigma'):
-        vecs.append(theta_dict.theta_sigma.flatten())
-    return torch.cat(vecs) if vecs else torch.tensor([])
+from sde_basis.parameters import Theta  # noqa: F401 — needed for unpickling
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+META_PARAMS_PATH  = "data/meta_params.npz"
+RESULTS_PATH      = "results/gated_regularized_final_fixed.csv"
+DISTANCES_PATH    = "results/adaptation_with_distances.csv"
+OUTPUT_PLOT       = "results/manifold_distance_analysis.png"
+
+REGIME_PALETTE    = {"testA": "#2196F3", "testB": "#FF9800", "testC": "#F44336"}
+REGIME_LABELS     = {"testA": "Regime A (In-dist.)", "testB": "Regime B (Mild shift)",
+                     "testC": "Regime C (Strong shift)"}
+CANONICAL_STEPS   = 50   # adaptation step count used for the comparison panels
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def flatten_theta(theta: Theta) -> torch.Tensor:
+    return torch.cat([theta.theta_b.flatten(), theta.theta_sigma.flatten()])
+
+
+def compute_distances(meta_params: dict) -> pd.DataFrame:
+    """Compute min-L2 distance from each test theta to the training manifold."""
+    train_matrix = torch.stack([flatten_theta(t) for t in meta_params["train"]])
+    records = []
+    for regime in ["testA", "testB", "testC"]:
+        test_thetas = meta_params.get(regime, [])
+        if not test_thetas:
+            continue
+        test_vecs = torch.stack([flatten_theta(t) for t in test_thetas])
+        dists     = torch.cdist(test_vecs, train_matrix)
+        min_dists = dists.min(dim=1).values.numpy()
+        for theta, dist in zip(test_thetas, min_dists):
+            records.append({"theta_id": theta.id, "regime": regime,
+                            "proximity_score": float(dist)})
+    return pd.DataFrame(records)
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 def main():
-    os.makedirs(SAVE_DIR, exist_ok=True)
-    print("🎨 Generating Synthetic Proximity Plots...")
+    os.makedirs("results", exist_ok=True)
+    print("Generating manifold distance analysis plot...")
 
-    # 1. Load Ground Truth Parameters
+    # --- 1. Load SDE parameters ---
     if not os.path.exists(META_PARAMS_PATH):
-        print(f"❌ Missing meta-params: {META_PARAMS_PATH}")
-        return
-    
-    # Load all parameters
-    meta_params = torch.load(META_PARAMS_PATH, map_location="cpu")
-    
-    # Extract Vectors and Labels
-    all_vectors = []
-    labels = []
-    
-    # Process Train (The Manifold)
-    train_vecs = [flatten_theta(t) for t in meta_params['train']]
-    train_matrix = torch.stack(train_vecs)
-    all_vectors.extend(train_vecs)
-    labels.extend(['Train'] * len(train_vecs))
-    
-    # Process Test Sets
-    test_data = {}
-    for regime in ['testA', 'testB', 'testC']:
-        if regime in meta_params:
-            vecs = [flatten_theta(t) for t in meta_params[regime]]
-            test_data[regime] = (meta_params[regime], torch.stack(vecs))
-            all_vectors.extend(vecs)
-            labels.extend([regime] * len(vecs))
+        raise FileNotFoundError(f"Missing: {META_PARAMS_PATH}")
+    meta_params = torch.load(META_PARAMS_PATH, map_location="cpu", weights_only=False)
 
-    # 2. PCA Projection (Visualization)
-    print("   Computing PCA...")
-    X = torch.stack(all_vectors).numpy()
-    pca = PCA(n_components=2)
-    X_pca = pca.fit_transform(X)
-    
-    # Create DataFrame for Plotting
-    df_pca = pd.DataFrame(X_pca, columns=['PC1', 'PC2'])
-    df_pca['Regime'] = labels
+    # --- 2. Get per-task distances (use cached file if available) ---
+    if os.path.exists(DISTANCES_PATH):
+        df_dist = pd.read_csv(DISTANCES_PATH)[["theta_id", "regime", "proximity_score"]]
+        print(f"  Loaded distances from {DISTANCES_PATH}")
+    else:
+        print("  Computing distances from meta_params...")
+        df_dist = compute_distances(meta_params)
 
-    # =======================================================
-    # PLOT 1: THE MANIFOLD (PCA)
-    # =======================================================
-    
-    plt.figure(figsize=(10, 7))
-    sns.scatterplot(
-        data=df_pca, x='PC1', y='PC2', hue='Regime', style='Regime',
-        palette={'Train': 'gray', 'testA': 'blue', 'testB': 'orange', 'testC': 'red'},
-        s=80, alpha=0.8
-    )
-    plt.title("Parameter Space Manifold (PCA Projection)")
-    plt.xlabel(f"PC1 ({pca.explained_variance_ratio_[0]:.1%} var)")
-    plt.ylabel(f"PC2 ({pca.explained_variance_ratio_[1]:.1%} var)")
-    plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(SAVE_DIR, "manifold_pca.png"))
-    print("✅ Saved Manifold PCA Plot")
-
-    # 3. Compute Distances & Merge with Results
+    # --- 3. Load gated results and filter to canonical step count ---
     if not os.path.exists(RESULTS_PATH):
-        print(f"❌ Missing results file: {RESULTS_PATH}")
-        return
+        raise FileNotFoundError(f"Missing: {RESULTS_PATH}")
+    df_gated = pd.read_csv(RESULTS_PATH)
+    df_plot  = df_gated[df_gated["steps_available"] == CANONICAL_STEPS].copy()
+    df_plot  = df_plot.merge(df_dist, on=["theta_id", "regime"], how="left")
+    df_plot  = df_plot.dropna(subset=["proximity_score"])
+    df_plot["rmse"] = np.sqrt(df_plot["mse_rollout"].clip(lower=0))
 
-    df_res = pd.read_csv(RESULTS_PATH)
-    
-    # We map theta_id to distance
-    dist_map = {}
-    
-    # Compute Distance to Nearest Training Neighbor
-    print("   Computing Proximity Scores...")
-    for regime in ['testA', 'testB', 'testC']:
-        if regime not in test_data: continue
-        
-        thetas, matrix = test_data[regime]
-        
-        # Calculate distances to ALL training points
-        # matrix: (N_test, D), train_matrix: (N_train, D)
-        dists = torch.cdist(matrix, train_matrix) # (N_test, N_train)
-        
-        # Min distance for each test task
-        min_dists = dists.min(dim=1).values.numpy()
-        
-        for t, d in zip(thetas, min_dists):
-            # Assumes theta objects have an 'id' attribute matching the CSV
-            if hasattr(t, 'id'):
-                dist_map[t.id] = d
-    
-    # Map back to results dataframe
-    df_res['proximity'] = df_res['theta_id'].map(dist_map)
-    
-    # Filter out NaNs (if any IDs didn't match)
-    df_plot = df_res.dropna(subset=['proximity'])
-    
-    # Filter for a specific step count (e.g., 50) to avoid overplotting
-    df_plot = df_plot[df_plot['steps_available'] == 50]
+    # --- 4. PCA of full parameter space (for inset / reference) ---
+    all_vecs, labels = [], []
+    for split, label in [("train", "Train"), ("testA", "Regime A"),
+                          ("testB", "Regime B"), ("testC", "Regime C")]:
+        if split not in meta_params:
+            continue
+        for t in meta_params[split]:
+            all_vecs.append(flatten_theta(t).numpy())
+            labels.append(label)
+    X_pca = PCA(n_components=2).fit_transform(np.array(all_vecs))
+    df_pca = pd.DataFrame(X_pca, columns=["PC1", "PC2"])
+    df_pca["Regime"] = labels
 
-    # =======================================================
-    # PLOT 2: GATE VS PROXIMITY
-    # =======================================================
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(
-        data=df_plot, x='proximity', y='gate_value', hue='regime',
-        palette={'testA': 'blue', 'testB': 'orange', 'testC': 'red'},
-        s=60
+    # --- 5. Build figure ---
+    fig = plt.figure(figsize=(16, 6))
+    fig.suptitle(
+        "Continuous Manifold Hypothesis: Distance from Training Manifold vs. Model Behaviour",
+        fontsize=13, fontweight="bold", y=1.01
     )
-    plt.axhline(1.0, linestyle=':', color='gray')
-    plt.axhline(0.0, linestyle=':', color='gray')
-    plt.title("Safety Mechanism: Gate vs. Distance from Prior")
-    plt.xlabel("Distance to Training Manifold")
-    plt.ylabel("Gate Openness (g)")
-    plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(SAVE_DIR, "gate_vs_proximity.png"))
-    print("✅ Saved Gate Response Plot")
+    gs = gridspec.GridSpec(1, 3, figure=fig, wspace=0.35)
 
-    # =======================================================
-    # PLOT 3: ERROR VS PROXIMITY
-    # =======================================================
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(
-        data=df_plot, x='proximity', y='mse_rollout', hue='regime',
-        palette={'testA': 'blue', 'testB': 'orange', 'testC': 'red'},
-        s=60
-    )
-    plt.yscale('log')
-    plt.title("Performance Frontier: Error vs. Difficulty")
-    plt.xlabel("Distance to Training Manifold")
-    plt.ylabel("MSE Rollout (Log Scale)")
-    plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(SAVE_DIR, "error_vs_proximity.png"))
-    print("✅ Saved Error Plot")
+    ax_pca  = fig.add_subplot(gs[0])
+    ax_rmse = fig.add_subplot(gs[1])
+    ax_gate = fig.add_subplot(gs[2])
+
+    # -- Panel 1: PCA of theta-space --
+    pca_palette = {"Train": "#BDBDBD", "Regime A": REGIME_PALETTE["testA"],
+                   "Regime B": REGIME_PALETTE["testB"], "Regime C": REGIME_PALETTE["testC"]}
+    pca_markers = {"Train": "o", "Regime A": "^", "Regime B": "s", "Regime C": "D"}
+    for grp, sub in df_pca.groupby("Regime", sort=False):
+        ax_pca.scatter(sub["PC1"], sub["PC2"],
+                       c=pca_palette.get(grp, "black"),
+                       marker=pca_markers.get(grp, "o"),
+                       s=35 if grp == "Train" else 55,
+                       alpha=0.55 if grp == "Train" else 0.85,
+                       label=grp, edgecolors="none")
+    ax_pca.set_title("(a) Parameter Space (PCA)", fontsize=11)
+    ax_pca.set_xlabel("PC1")
+    ax_pca.set_ylabel("PC2")
+    ax_pca.legend(fontsize=8, markerscale=1.2)
+    ax_pca.grid(True, alpha=0.25)
+
+    # -- Panel 2: RMSE vs. distance --
+    for regime in ["testA", "testB", "testC"]:
+        sub = df_plot[df_plot["regime"] == regime]
+        if sub.empty:
+            continue
+        ax_rmse.scatter(sub["proximity_score"], sub["rmse"],
+                        c=REGIME_PALETTE[regime], label=REGIME_LABELS[regime],
+                        s=55, alpha=0.8, edgecolors="white", linewidths=0.4)
+        # Trend line
+        z = np.polyfit(sub["proximity_score"], sub["rmse"], 1)
+        xr = np.linspace(sub["proximity_score"].min(), sub["proximity_score"].max(), 50)
+        ax_rmse.plot(xr, np.polyval(z, xr), c=REGIME_PALETTE[regime],
+                     linestyle="--", linewidth=1.2, alpha=0.7)
+    ax_rmse.set_title(f"(b) RMSE vs. Distance  (steps={CANONICAL_STEPS})", fontsize=11)
+    ax_rmse.set_xlabel("Distance to Training Manifold  (L2, θ-space)")
+    ax_rmse.set_ylabel("RMSE")
+    ax_rmse.legend(fontsize=8)
+    ax_rmse.grid(True, alpha=0.25)
+
+    # -- Panel 3: Gate value vs. distance --
+    for regime in ["testA", "testB", "testC"]:
+        sub = df_plot[df_plot["regime"] == regime]
+        if sub.empty:
+            continue
+        ax_gate.scatter(sub["proximity_score"], sub["gate_value"],
+                        c=REGIME_PALETTE[regime], label=REGIME_LABELS[regime],
+                        s=55, alpha=0.8, edgecolors="white", linewidths=0.4)
+        z = np.polyfit(sub["proximity_score"], sub["gate_value"], 1)
+        xr = np.linspace(sub["proximity_score"].min(), sub["proximity_score"].max(), 50)
+        ax_gate.plot(xr, np.polyval(z, xr), c=REGIME_PALETTE[regime],
+                     linestyle="--", linewidth=1.2, alpha=0.7)
+    ax_gate.axhline(1.0, linestyle=":", color="#555", linewidth=1.0, label="g = 1 (full data)")
+    ax_gate.axhline(0.0, linestyle=":", color="#555", linewidth=1.0, label="g = 0 (full prior)")
+    ax_gate.set_ylim(-0.05, 1.1)
+    ax_gate.set_title(f"(c) Gate Value vs. Distance  (steps={CANONICAL_STEPS})", fontsize=11)
+    ax_gate.set_xlabel("Distance to Training Manifold  (L2, θ-space)")
+    ax_gate.set_ylabel("Gate Value  g")
+    ax_gate.legend(fontsize=8)
+    ax_gate.grid(True, alpha=0.25)
+
+    # --- 6. Save ---
+    plt.tight_layout()
+    plt.savefig(OUTPUT_PLOT, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {OUTPUT_PLOT}")
+
+    # --- 7. Print summary statistics ---
+    print("\nManifold distance summary (steps={})".format(CANONICAL_STEPS))
+    print("-" * 65)
+    for regime in ["testA", "testB", "testC"]:
+        sub = df_plot[df_plot["regime"] == regime]
+        if sub.empty:
+            continue
+        print(f"  {REGIME_LABELS[regime]}")
+        print(f"    distance : {sub['proximity_score'].mean():.3f} "
+              f"± {sub['proximity_score'].std():.3f}")
+        print(f"    RMSE     : {sub['rmse'].mean():.4f} "
+              f"± {sub['rmse'].std():.4f}")
+        print(f"    gate     : {sub['gate_value'].mean():.4f} "
+              f"± {sub['gate_value'].std():.4f}")
+
 
 if __name__ == "__main__":
     main()

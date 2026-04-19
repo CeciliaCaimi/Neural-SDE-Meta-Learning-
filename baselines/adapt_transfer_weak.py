@@ -18,7 +18,7 @@ from models.head import ForecastHead
 from training.train_meta import simulate_neural_sde_batch
 
 # === CONFIG ===
-ADAPT_STEPS = 20         # Modest budget for weak baseline
+ADAPT_STEPS = 50         # Match Model C / Scratch / GRU for fair comparison
 ADAPT_LR = 1e-2          # Head fine-tuning rate
 N_SHOTS = 2
 STEPS_SWEEP = [20, 40, 50, 80, 100, 120, 201]

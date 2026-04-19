@@ -87,6 +87,15 @@ def train_meta_loop():
     # Datasets
     # -----------------
     train_ds = TrajectoryDataset(index_path, "train", "train_inner", check_shapes=True)
+
+    # Two-scalar approach: fit the SOURCE scaler on training data only.
+    # This scaler is saved with every checkpoint so evaluation scripts can
+    # load it and maintain the correct coordinate frame.
+    print("Fitting source scaler on training split (per-dimension StandardScaler)...")
+    source_scaler = train_ds.fit_scaler()
+    print(f"  mean range [{source_scaler.mean_.min():.4f}, {source_scaler.mean_.max():.4f}]  "
+          f"std range [{source_scaler.scale_.min():.4f}, {source_scaler.scale_.max():.4f}]")
+
     val_ds = TrajectoryDataset(index_path, "val", "val", check_shapes=True)
 
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
@@ -182,6 +191,7 @@ def train_meta_loop():
                 "sde": sde.state_dict(),
                 "head": head.state_dict(),
                 "cfg": cfg,
+                "source_scaler": source_scaler,  # per-dim StandardScaler fitted on training split
             }, ckpt_path)
             print(f"💾 Saved checkpoint: {ckpt_path}")
 

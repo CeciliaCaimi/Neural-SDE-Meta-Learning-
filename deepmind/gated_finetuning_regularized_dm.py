@@ -10,7 +10,12 @@ import numpy as np
 from tqdm import tqdm
 
 from config.base_config import cfg
-from dataloaders.trajectory_datasets import TrajectoryDataset
+from dataloaders.trajectory_datasets import (
+    TrajectoryDataset,
+    fit_scaler_on_trajectories,
+    apply_scaler_to_trajectories,
+    invert_scaler_to_original,
+)
 from models.encoder import TrajEncoder
 from models.neural_sde import NeuralSDE
 from models.head import ForecastHead
@@ -109,43 +114,90 @@ def compute_residual(sde, head, z, support, gen, cfg):
         valid_len = min(traj.shape[1], T)
         return F.mse_loss(traj[:, :valid_len], support[:, :valid_len]).item()
 
-def gated_inference(encoder, sde, head, support, query, gen, cfg):
+def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=None):
+    """Gated inference with optional per-task normalization.
+
+    Args:
+        support: (N_shots, T, D) — raw (unnormalized) support trajectories.
+        query:   (N_query, T, D) — raw (unnormalized) query trajectories.
+        target_scaler: StandardScaler fitted on the support set for this task.
+            When provided (two-scalar approach), support and query are normalized
+            before the model sees them. Predictions are inverted to original
+            simulator units before RMSE is computed, so all CSV values are
+            physically interpretable. Critical for DM Control where position
+            and velocity dimensions have very different dynamic ranges.
     """
-    Phase 3: Gated Inference.
-    """
-    # 1. Initial Z (Zero-Shot)
+    # --- 0. Normalize inputs ---
+    if target_scaler is not None:
+        support_in = apply_scaler_to_trajectories(support, target_scaler)
+        query_in   = apply_scaler_to_trajectories(query,   target_scaler)
+    else:
+        support_in = support
+        query_in   = query
+
+    # 1. Initial Z
     with torch.no_grad():
-        enc_len = min(support.shape[1], 50)
-        z_init = encoder(support[:, :enc_len]).mean(dim=0, keepdim=True)
+        enc_len = min(support_in.shape[1], 50)
+        z_init = encoder(support_in[:, :enc_len]).mean(dim=0, keepdim=True)
 
     # 2. Adapt (Regularized)
-    head_opt, z_opt, adapt_time = adapt_model(sde, head, z_init, support, gen, cfg)
-    
+    head_opt, z_opt, adapt_time = adapt_model(sde, head, z_init, support_in, gen, cfg)
+
     # 3. Compute Gate
-    d_res = compute_residual(sde, head_opt, z_opt, support, gen, cfg)
+    d_res = compute_residual(sde, head_opt, z_opt, support_in, gen, cfg)
     g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_res))).item()
-    
-    # 4. Predict (Mixture)
-    B_q = query.shape[0]
+
+    # 4. Predict (in normalized space if scaler is active)
+    B_q = query_in.shape[0]
     z_smart = z_opt.expand(B_q, -1); z_safe = torch.zeros_like(z_smart)
     T_full = cfg.time_grid.T; n_steps = cfg.time_grid.n_steps
     x_max = cfg.stability.max_state_abs
-    
+
     mc_preds = []
     with torch.no_grad():
         for _ in range(MC_SAMPLES):
-            t_smart = simulate_neural_sde_batch(sde, query[:, 0], z_smart, T_full, n_steps, x_max, gen)
-            t_safe = simulate_neural_sde_batch(sde, query[:, 0], z_safe, T_full, n_steps, x_max, gen)
+            t_smart = simulate_neural_sde_batch(sde, query_in[:, 0], z_smart, T_full, n_steps, x_max, gen)
+            t_safe  = simulate_neural_sde_batch(sde, query_in[:, 0], z_safe,  T_full, n_steps, x_max, gen)
             mc_preds.append((1 - g) * t_safe + g * t_smart)
-            
+
     mc_tensor = torch.stack(mc_preds, dim=0)
-    mean = mc_tensor.mean(dim=0); var = mc_tensor.var(dim=0) + 1e-6
-    
+    mean_norm = mc_tensor.mean(dim=0)
+    var_norm  = mc_tensor.var(dim=0) + 1e-6
+
+    # --- 5. Invert to original simulator units before computing metrics ---
+    # This is especially important for DM Control where position/velocity dims
+    # have different scales. Without inversion, MSE is in normalized units and
+    # can't be compared across tasks or to physical reference values.
+    if target_scaler is not None:
+        mean       = invert_scaler_to_original(mean_norm, target_scaler)
+        query_orig = query   # already in original units
+    else:
+        mean       = mean_norm
+        query_orig = query_in
+
+    mse_rollout = F.mse_loss(mean, query_orig).item()
+    mse_final   = F.mse_loss(mean[:, -1], query_orig[:, -1]).item()
+
+    # Per-dimension RMSE in original units. rmse_per_dim_max exposes collapse
+    # on individual observation dimensions that aggregate MSE hides.
+    per_dim_mse       = ((mean - query_orig) ** 2).mean(dim=(0, 1))  # (D,)
+    per_dim_rmse      = per_dim_mse.sqrt()
+    rmse_rollout      = mse_rollout ** 0.5
+    rmse_final        = mse_final   ** 0.5
+    rmse_per_dim_mean = per_dim_rmse.mean().item()
+    rmse_per_dim_max  = per_dim_rmse.max().item()
+
+    nll = F.gaussian_nll_loss(mean_norm, query_in, var_norm).item()
+
     return {
         "gate_value": g, "residual_error": d_res, "adapt_time": adapt_time,
-        "mse_rollout": F.mse_loss(mean, query).item(),
-        "mse_final": F.mse_loss(mean[:, -1], query[:, -1]).item(),
-        "nll": F.gaussian_nll_loss(mean, query, var).item()
+        "mse_rollout": mse_rollout,
+        "mse_final": mse_final,
+        "rmse_rollout": rmse_rollout,
+        "rmse_final": rmse_final,
+        "rmse_per_dim_mean": rmse_per_dim_mean,
+        "rmse_per_dim_max": rmse_per_dim_max,
+        "nll": nll,
     }
 
 def main():
@@ -198,12 +250,20 @@ def main():
     encoder = TrajEncoder(x_dim, cfg.latent.latent_dim, cfg.latent.encoder_hidden_dim).to(device)
     sde = NeuralSDE(x_dim, cfg.latent.latent_dim, cfg.latent.sde_hidden_dim).to(device)
     head = ForecastHead(x_dim, cfg.latent.latent_dim, cfg.latent.head_hidden_dim).to(device)
-    
+
     ckpt = torch.load(CHECKPOINT_PATH, map_location=device)
     encoder.load_state_dict(ckpt['encoder'])
     sde.load_state_dict(ckpt['sde'])
     head.load_state_dict(ckpt['head'])
     encoder.eval(); sde.eval(); head.eval()
+
+    # Two-scalar approach: source scaler signals that the model was trained
+    # in normalized coordinate space. Target scaler is fitted per-task below.
+    source_scaler = ckpt.get('source_scaler', None)
+    if source_scaler is not None:
+        print("  ✅ Source scaler loaded. Normalization active.")
+    else:
+        print("  ⚠️  No source scaler in checkpoint — metrics in raw units (pre-normalization model).")
     
     # --- 5. RUN EVALUATION LOOPS ---
     gen = torch.Generator(device=device); gen.manual_seed(42)
@@ -211,9 +271,12 @@ def main():
 
     # Clean start for results
     if os.path.exists(RESULTS_PATH): os.remove(RESULTS_PATH)
-    pd.DataFrame(columns=["regime", "theta_id", "steps_available", 
-                          "gate_value", "residual_error", "adapt_time", 
-                          "mse_rollout", "mse_final", "nll"]).to_csv(RESULTS_PATH, index=False)
+    pd.DataFrame(columns=["regime", "theta_id", "steps_available",
+                          "gate_value", "residual_error", "adapt_time",
+                          "mse_rollout", "mse_final",
+                          "rmse_rollout", "rmse_final",
+                          "rmse_per_dim_mean", "rmse_per_dim_max",
+                          "nll"]).to_csv(RESULTS_PATH, index=False)
 
     buffer = []
     
@@ -231,15 +294,27 @@ def main():
         for theta_id in tqdm(tasks, desc=f"{TASK_NAME} [{regime}]"):
             # Strict Few-Shot: Only see first N_SHOTS
             supp_full = get_task_data(ds_supp, theta_id, device)[:N_SHOTS]
-            query = get_task_data(ds_query, theta_id, device)
-            
+            query     = get_task_data(ds_query, theta_id, device)
+
+            # Fit the TARGET scaler on the support set only (prevents query leakage).
+            # For DM Control this is especially important: velocity and position
+            # dimensions can differ by 10-100x in magnitude.
+            target_scaler = (
+                fit_scaler_on_trajectories(supp_full)
+                if source_scaler is not None
+                else None
+            )
+
             for steps in STEPS_SWEEP:
                 # Cap steps if data is shorter than sweep requirement
                 actual_steps = min(steps, supp_full.shape[1])
-                
-                # Run Model C Inference
-                metrics = gated_inference(encoder, sde, head, supp_full[:, :actual_steps], query, gen, cfg)
-                
+
+                metrics = gated_inference(
+                    encoder, sde, head,
+                    supp_full[:, :actual_steps], query,
+                    gen, cfg,
+                    target_scaler=target_scaler,
+                )
                 metrics.update({"regime": regime, "theta_id": theta_id, "steps_available": steps})
                 buffer.append(metrics)
                 
@@ -254,7 +329,9 @@ def main():
     print(f"\n✅ Results saved to {RESULTS_PATH}")
     full_df = pd.read_csv(RESULTS_PATH)
     # Quick Summary Print
-    print(full_df.groupby(['regime', 'steps_available'])[['mse_rollout', 'gate_value']].mean())
+    print(full_df.groupby(['regime', 'steps_available'])[
+        ['mse_rollout', 'rmse_rollout', 'rmse_per_dim_mean', 'rmse_per_dim_max', 'gate_value']
+    ].mean())
 
 if __name__ == "__main__":
     main()

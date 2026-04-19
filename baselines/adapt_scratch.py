@@ -75,9 +75,17 @@ def train_from_scratch_per_task(x_dim, z_dim, support_trajs, config, gen, limit_
         )
 
         pred_final = head(traj_pred[:, -1, :], z_init)
-        
-        # Loss
-        loss = F.mse_loss(pred_final, target_final)
+
+        # Path loss + head loss (mirrors Model C's adaptation objective).
+        # FIX (fairness): the original code used head-only loss (MSE to the
+        # final state only), while Model C uses full-trajectory path loss +
+        # head loss + regularization.  Since the scratch SDE is trainable,
+        # path loss provides gradient signal from every intermediate timestep,
+        # closing the supervision gap.  Weak Transfer is exempt because its
+        # SDE is frozen (path loss carries no gradient there).
+        loss_path = F.mse_loss(traj_pred, train_data)
+        loss_head = F.mse_loss(pred_final, target_final)
+        loss = loss_path + loss_head
         
         loss.backward()
         torch.nn.utils.clip_grad_norm_(
