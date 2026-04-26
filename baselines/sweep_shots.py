@@ -104,7 +104,7 @@ def main():
     print(f"Shots: {SHOTS_SWEEP} | Adapt Steps: {ADAPT_STEPS}")
     
     # Load Meta-Model
-    ckpt = torch.load("checkpoints/meta_epoch_50.pt", map_location=device)
+    ckpt = torch.load("checkpoints/meta_epoch_50.pt", map_location=device, weights_only=False)
     x_dim = cfg.basis.x_dim
     z_dim = cfg.latent.latent_dim
     

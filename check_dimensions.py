@@ -7,7 +7,7 @@ ROOT_DIR = "checkpoints"
 def check_model_dimension(path):
     try:
         # Load checkpoint on CPU to be fast
-        ckpt = torch.load(path, map_location="cpu")
+        ckpt = torch.load(path, map_location="cpu", weights_only=False)
         
         # We need to find the Encoder's input weight
         # Common keys: 'encoder_state_dict', 'encoder', 'model_state_dict'

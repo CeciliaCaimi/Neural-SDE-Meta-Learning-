@@ -129,7 +129,7 @@ def main():
     head = ForecastHead(x_dim, z_dim, cfg.latent.head_hidden_dim).to(device)
 
     if ckpt_path:
-        ckpt = torch.load(ckpt_path, map_location=device)
+        ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
         sde.load_state_dict(ckpt["sde"])
         head.load_state_dict(ckpt["head"])
 

@@ -34,7 +34,7 @@ def run_regime_switch():
         print("⚠️ Checkpoint not found, skipping.")
         return
 
-    ckpt = torch.load(ckpt_path, map_location=device)
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     
     x_dim = cfg.basis.x_dim
     z_dim = cfg.latent.latent_dim

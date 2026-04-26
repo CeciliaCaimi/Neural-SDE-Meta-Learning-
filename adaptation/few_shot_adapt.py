@@ -141,7 +141,7 @@ def main():
     if not os.path.exists(ckpt_path):
         raise FileNotFoundError(f"Checkpoint not found at {ckpt_path}. Run training first.")
 
-    ckpt = torch.load(ckpt_path, map_location=device)
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     x_dim = cfg.basis.x_dim
     z_dim = cfg.latent.latent_dim
 

@@ -73,7 +73,7 @@ def run_regime_switch():
         print(f"❌ Checkpoint missing: {CKPT_PATH}")
         return
 
-    checkpoint = torch.load(CKPT_PATH, map_location=device)
+    checkpoint = torch.load(CKPT_PATH, map_location=device, weights_only=False)
     z_dim = cfg.latent.latent_dim
     encoder = TrajEncoder(X_DIM, z_dim, HIDDEN_DIM).to(device)
     sde = NeuralSDE(X_DIM, z_dim, HIDDEN_DIM).to(device)

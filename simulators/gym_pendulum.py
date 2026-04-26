@@ -65,7 +65,7 @@ def main():
     sde = NeuralSDE(x_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
     head = ForecastHead(x_dim, z_dim, cfg.latent.head_hidden_dim).to(device)
     
-    ckpt = torch.load('checkpoints/meta_epoch_50.pt', map_location=device)
+    ckpt = torch.load('checkpoints/meta_epoch_50.pt', map_location=device, weights_only=False)
     encoder.load_state_dict(ckpt['encoder']) # Check key names (sometimes 'encoder_state_dict')
     sde.load_state_dict(ckpt['sde']) 
     head.load_state_dict(ckpt['head'])

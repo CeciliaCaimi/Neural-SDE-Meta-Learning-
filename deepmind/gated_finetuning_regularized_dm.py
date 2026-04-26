@@ -144,8 +144,14 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
     head_opt, z_opt, adapt_time = adapt_model(sde, head, z_init, support_in, gen, cfg)
 
     # 3. Compute Gate
+    # d_res is in units of (state value)^2 and is scale-dependent. Dividing by
+    # the empirical variance of the support data yields a dimensionless NMSE so
+    # that GATE_TAU is meaningful regardless of raw vs. normalized data regime.
+    # d_norm ≈ 0: model explains all variance; d_norm = 1: no better than mean.
     d_res = compute_residual(sde, head_opt, z_opt, support_in, gen, cfg)
-    g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_res))).item()
+    data_var = support_in.var().item()
+    d_norm = d_res / (data_var + 1e-8)
+    g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_norm))).item()
 
     # 4. Predict (in normalized space if scaler is active)
     B_q = query_in.shape[0]
@@ -239,7 +245,7 @@ def main():
     # --- 3. AUTO-DETECT DIMENSION ---
     try:
         sample_path = os.path.join(DATA_ROOT, "train", "task_000_support.pt")
-        x_dim = torch.load(sample_path).shape[-1]
+        x_dim = torch.load(sample_path, weights_only=False).shape[-1]
         cfg.basis.x_dim = x_dim
         print(f"   📏 Dimension: {x_dim}")
     except:
@@ -251,7 +257,7 @@ def main():
     sde = NeuralSDE(x_dim, cfg.latent.latent_dim, cfg.latent.sde_hidden_dim).to(device)
     head = ForecastHead(x_dim, cfg.latent.latent_dim, cfg.latent.head_hidden_dim).to(device)
 
-    ckpt = torch.load(CHECKPOINT_PATH, map_location=device)
+    ckpt = torch.load(CHECKPOINT_PATH, map_location=device, weights_only=False)
     encoder.load_state_dict(ckpt['encoder'])
     sde.load_state_dict(ckpt['sde'])
     head.load_state_dict(ckpt['head'])

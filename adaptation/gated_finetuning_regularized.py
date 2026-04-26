@@ -136,8 +136,14 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
     head_opt, z_opt, adapt_time = adapt_model(sde, head, z_init, support_in, gen, cfg)
 
     # 3. Gate
+    # d_res is in units of (state value)^2 and is scale-dependent. Dividing by
+    # the empirical variance of the support data yields a dimensionless NMSE so
+    # that GATE_TAU is meaningful regardless of raw vs. normalized data regime.
+    # d_norm ≈ 0: model explains all variance; d_norm = 1: no better than mean.
     d_res = compute_residual(sde, head_opt, z_opt, support_in, gen, cfg)
-    g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_res))).item()
+    data_var = support_in.var().item()
+    d_norm = d_res / (data_var + 1e-8)
+    g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_norm))).item()
 
     # 4. Predict (in normalized space if scaler is active)
     B_q = query_in.shape[0]
@@ -247,7 +253,7 @@ def main():
     device = torch.device(cfg.device)
     print("🛡️  Resumable Gated Finetuning (REGULARIZED + NORMALISED) Started...")
 
-    ckpt = torch.load("checkpoints/meta_epoch_50.pt", map_location=device)
+    ckpt = torch.load("checkpoints/meta_epoch_50.pt", map_location=device, weights_only=False)
     x_dim, z_dim = cfg.basis.x_dim, cfg.latent.latent_dim
     encoder = TrajEncoder(x_dim, z_dim, cfg.latent.encoder_hidden_dim).to(device)
     sde = NeuralSDE(x_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
@@ -324,11 +330,11 @@ def main():
                 buffer.append(metrics)
 
             if len(buffer) >= SAVE_EVERY:
-                pd.DataFrame(buffer).to_csv(RESULTS_PATH, mode='a', header=False, index=False)
+                pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(RESULTS_PATH, mode='a', header=False, index=False)
                 buffer = []
 
     if buffer:
-        pd.DataFrame(buffer).to_csv(RESULTS_PATH, mode='a', header=False, index=False)
+        pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(RESULTS_PATH, mode='a', header=False, index=False)
 
     print("\n✅ Regularized Run Complete.")
     full_df = pd.read_csv(RESULTS_PATH)

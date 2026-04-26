@@ -39,7 +39,7 @@ def run_sweep():
     encoder = TrajEncoder(X_DIM, cfg.latent.latent_dim, HIDDEN_DIM).to(device)
     sde = NeuralSDE(X_DIM, cfg.latent.latent_dim, HIDDEN_DIM).to(device)
     
-    ckpt = torch.load(CKPT_PATH, map_location=device)
+    ckpt = torch.load(CKPT_PATH, map_location=device, weights_only=False)
     enc_key = 'encoder_state_dict' if 'encoder_state_dict' in ckpt else 'encoder'
     sde_key = 'sde_state_dict' if 'sde_state_dict' in ckpt else 'sde'
     encoder.load_state_dict(ckpt[enc_key]); sde.load_state_dict(ckpt[sde_key])

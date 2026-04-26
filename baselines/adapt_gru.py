@@ -106,7 +106,7 @@ def main():
         raise FileNotFoundError("Run train_gru_transfer.py first!")
         
     model = ProbabilisticGRU(cfg.basis.x_dim).to(device)
-    model.load_state_dict(torch.load("checkpoints/gru_warmstart.pt"))
+    model.load_state_dict(torch.load("checkpoints/gru_warmstart.pt", weights_only=False))
     
     index_path = os.path.join(cfg.paths.data_root, "index.csv")
     out_file = "results/gru_baseline_sweep.csv"

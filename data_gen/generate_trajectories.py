@@ -22,7 +22,7 @@ def generate_dataset():
         raise FileNotFoundError(f"Meta-params not found at {cfg.paths.meta_params_path}. Run generate_meta_params.py first!")
     
     # Load onto CPU first
-    meta_params = torch.load(cfg.paths.meta_params_path, map_location="cpu")
+    meta_params = torch.load(cfg.paths.meta_params_path, map_location="cpu", weights_only=False)
     
     # 2. Setup Indexing
     index_rows = []

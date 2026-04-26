@@ -11,10 +11,10 @@ PLOTS_DIR = "plots"
 
 # Map: CSV Filename -> (Legend Label, Column Name, Color, Line Style)
 FILES = {
-    "efficiency_sweep_results.csv": ("Latent Meta-SDE (Ours)", "mse_head_fewshot", "#d62728", "-"),
-    "maml_results.csv":             ("MAML (Gradient-Adapt)", "mse_head_maml", "#ff7f0e", "--"),
-    "scratch_sweep_results.csv":    ("Random Initialization", "mse_head_scratch", "#7f7f7f", ":"),
-    "transfer_weak_results.csv":    ("Pretrained Mean (Head-Only)", "mse_head_transfer_weak", "#1f77b4", "-."),
+    "gated_regularized_final_fixed.csv": ("Latent Meta-SDE (Ours)", "mse_rollout", "#d62728", "-"),
+    "maml_results_full.csv":             ("MAML (Gradient-Adapt)", "mse_head_maml", "#ff7f0e", "--"),
+    "scratch_sweep_results_full.csv":    ("Random Initialization", "mse_head_scratch", "#7f7f7f", ":"),
+    "transfer_weak_results_full.csv":    ("Pretrained Mean (Head-Only)", "mse_head_transfer_weak", "#1f77b4", "-."),
 }
 def load_data(regime):
     all_data = []

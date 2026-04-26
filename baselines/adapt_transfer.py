@@ -174,7 +174,7 @@ def main():
         )
 
     print(f"📂 Loading checkpoint: {ckpt_path}")
-    ckpt = torch.load(ckpt_path, map_location=device)
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
 
     x_dim = cfg.basis.x_dim
     z_dim = cfg.latent.latent_dim

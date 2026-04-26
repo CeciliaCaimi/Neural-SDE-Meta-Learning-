@@ -1,7 +1,7 @@
 #deepmind/train_manager.py
 import os
 import shutil
-import numpy as np
+import pandas as pd
 import torch
 from config.base_config import cfg
 from training.train_meta import train_meta_loop
@@ -22,27 +22,28 @@ def train_task_model(task_name):
     # 1. Prepare Paths
     task_data_dir = os.path.join(BASE_DATA_DIR, task_name)
     task_ckpt_dir = os.path.join(BASE_CKPT_DIR, task_name)
-    train_dir = os.path.join(task_data_dir, "train")
-    
+
     # Ensure destination exists
     os.makedirs(task_ckpt_dir, exist_ok=True)
     
     # 2. Robust Dimension Detection
-    # We look for ANY .npy file to determine input size
-    if not os.path.exists(train_dir):
-        print(f"❌ Missing training data for {task_name}")
+    # Use the index.csv written by generate_all.py to find a training sample.
+    index_path = os.path.join(task_data_dir, "index.csv")
+    if not os.path.exists(index_path):
+        print(f"❌ Missing index.csv for {task_name} at {index_path}")
         return
 
-    files = [f for f in os.listdir(train_dir) if f.endswith(".npy")]
-    if not files:
-        print(f"❌ No .npy files found in {train_dir}")
+    index = pd.read_csv(index_path)
+    train_rows = index[index["split"] == "train"]
+    if train_rows.empty:
+        print(f"❌ No training rows found in index for {task_name}")
         return
 
-    # Load one file to check shape
-    # Shape is typically (Time, Dim) -> e.g. (201, 6)
-    sample_path = os.path.join(train_dir, files[0])
+    # Load one .pt tensor to detect the state dimension.
+    # Shape is (N_shots, Time, Dim) for support or (1, Time, Dim) for query.
+    sample_path = train_rows["path"].iloc[0]
     try:
-        arr = np.load(sample_path)
+        arr = torch.load(sample_path, weights_only=False)
         x_dim = arr.shape[-1]
     except Exception as e:
         print(f"❌ Error reading {sample_path}: {e}")

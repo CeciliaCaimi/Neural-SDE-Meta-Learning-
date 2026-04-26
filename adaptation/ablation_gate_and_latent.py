@@ -166,8 +166,12 @@ def run_inference(encoder, sde, head, support, query, gen, gate_mode: str):
     d_res = _compute_residual(sde, head_opt, z_opt, support, gen)
 
     # 4. Determine gate value
+    # Normalize residual to NMSE so GATE_TAU is scale-invariant (same fix as
+    # gated_finetuning_regularized.py — see there for full rationale).
+    data_var = support.var().item()
+    d_norm = d_res / (data_var + 1e-8)
     if gate_mode == "adaptive":
-        g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_res))).item()
+        g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_norm))).item()
     elif gate_mode == "always_on":
         g = 1.0
     elif gate_mode == "always_off":
@@ -225,7 +229,7 @@ def load_checkpoint(z_dim: int, x_dim: int, device):
     if not os.path.exists(ckpt_path):
         return None
 
-    ckpt = torch.load(ckpt_path, map_location=device)
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
 
     encoder = TrajEncoder(x_dim, z_dim, cfg.latent.encoder_hidden_dim).to(device)
     sde     = NeuralSDE(x_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
@@ -348,8 +352,8 @@ def main():
                     buffer.append(metrics)
 
                 if len(buffer) >= SAVE_EVERY:
-                    pd.DataFrame(buffer).to_csv(RESULTS_PATH, mode="a",
-                                                header=False, index=False)
+                    pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(RESULTS_PATH, mode="a",
+                                                        header=False, index=False)
                     buffer = []
 
     # -----------------------------------------------------------------------
@@ -399,12 +403,12 @@ def main():
                     buffer.append(metrics)
 
                 if len(buffer) >= SAVE_EVERY:
-                    pd.DataFrame(buffer).to_csv(RESULTS_PATH, mode="a",
-                                                header=False, index=False)
+                    pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(RESULTS_PATH, mode="a",
+                                                        header=False, index=False)
                     buffer = []
 
     if buffer:
-        pd.DataFrame(buffer).to_csv(RESULTS_PATH, mode="a", header=False, index=False)
+        pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(RESULTS_PATH, mode="a", header=False, index=False)
 
     print(f"\n✅  Results saved to {RESULTS_PATH}")
 
