@@ -789,3 +789,614 @@ Activation: SiLU (default in `models/mlp.py`).
 
 (*) MAML inner steps = 5, matching meta-training inner-loop count (see Section 9).
 
+
+===========================================================================
+SECTION 11: PERSISTENCE BASELINE (Phase 2 Addition)
+Completed: 2026-04-26
+Script: baselines/adapt_persistence.py
+Output: results/persistence_results_full.csv
+===========================================================================
+
+---------------------------------------------------------------------------
+11.1  PURPOSE
+---------------------------------------------------------------------------
+
+A zero-parameter persistence baseline was added as a mandatory sanity check
+for the Phase 2 evaluation rubric.
+
+The baseline requires no pre-training, no adaptation, and no checkpoint.
+It is the absolute methodological floor: if any trained model cannot
+outperform persistence on mse_rollout, the model has learned nothing
+about the dynamics beyond the trivial "last observed value" heuristic.
+
+---------------------------------------------------------------------------
+11.2  PREDICTION RULE
+---------------------------------------------------------------------------
+
+For a given support slice of length `steps_available`:
+
+  1. Take the final observed state of each support trajectory:
+       last_obs_i = support[i, steps_available - 1, :]   for i in N_SHOTS
+
+  2. Average across shots:
+       last_obs = mean_i(last_obs_i)                      shape: (D,)
+
+  3. Persist (repeat) this single state across the full 200-step query
+     horizon:
+       pred[b, t, :] = last_obs   for all b in B_q, t in {0, ..., T-1}
+
+No SDE is simulated. No gradient is computed. Adaptation time = 0.
+
+---------------------------------------------------------------------------
+11.3  REPORTED METRICS
+---------------------------------------------------------------------------
+
+  mse_rollout   MSE(pred, query) averaged over (B_q, T, D)
+  mse_final     MSE(pred[:, -1], query[:, -1])  — terminal step only
+  rmse_rollout  sqrt(mse_rollout)
+  rmse_final    sqrt(mse_final)
+  mse_1step     MSE(pred[:, 1], query[:, 1])    — first predicted step
+
+Because the prediction is constant in time, mse_1step measures the
+one-step displacement of the true system from the last observed state,
+independent of any model. This provides a natural reference point for
+interpreting mse_1step values from trained models (see Section 12).
+
+NLL, gate_value, and residual_error are not applicable and are not
+written to the persistence CSV.
+
+---------------------------------------------------------------------------
+11.4  DESIGN DECISIONS
+---------------------------------------------------------------------------
+
+Shot averaging (rather than picking one shot) is used to reduce variance
+from individual noisy support trajectories. For N_SHOTS = 2 the effect is
+minor but keeps the baseline principled.
+
+The same STEPS_SWEEP = [20, 40, 50, 80, 100, 120, 201] as all other
+baselines is used. This lets the comparison table include persistence
+at every context-length operating point.
+
+The output CSV follows the same EXPECTED_COLUMNS schema and lowercase
+snake_case naming convention as all other baselines so it can be ingested
+by evaluation/final_comparison.py without modification.
+
+
+===========================================================================
+SECTION 12: ONE-STEP MSE DIAGNOSTIC (Phase 2 Addition)
+Completed: 2026-04-26
+===========================================================================
+
+---------------------------------------------------------------------------
+12.1  MOTIVATION
+---------------------------------------------------------------------------
+
+The Phase 2 evaluation rubric requires tracking one-step MSE as a
+diagnostic tool alongside the primary rollout metric.
+
+mse_rollout averages error over all 200 timesteps. This can mask two
+distinct failure modes:
+
+  (a) Short-horizon collapse: the model diverges immediately (high
+      mse_1step) but the error happens to average out over time.
+
+  (b) Long-horizon drift: the model tracks the first few steps accurately
+      but diverges later. mse_1step is low; mse_rollout is high.
+
+Tracking mse_1step separately distinguishes these cases and allows
+reviewers to verify that reported mse_rollout improvements come from
+genuine trajectory tracking rather than a lucky long-range coincidence.
+
+---------------------------------------------------------------------------
+12.2  DEFINITION
+---------------------------------------------------------------------------
+
+  mse_1step = MSE(mean_pred[:, 1, :], query_orig[:, 1, :])
+
+where:
+  - mean_pred is the Monte Carlo mean trajectory produced by the model,
+    shape (B_q, T, D), starting from the true initial state query[:, 0, :].
+  - query_orig[:, 1, :] is the true system state at the first simulated
+    step after the initial condition.
+  - Index 1 (not 0) is used because index 0 is the given initial condition,
+    which is identical for model and ground truth by construction.
+
+---------------------------------------------------------------------------
+12.3  SCRIPTS UPDATED
+---------------------------------------------------------------------------
+
+  adaptation/gated_finetuning_regularized.py
+    - gated_inference(): added mse_1step computation
+    - EXPECTED_COLUMNS: added "mse_1step" between "mse_final" and
+      "rmse_rollout"
+    - return dict: added "mse_1step" key
+    NOTE: Delete results/gated_regularized_final.csv before re-running;
+          the column schema has changed.
+
+  deepmind/gated_finetuning_regularized_dm.py
+    - gated_inference(): same addition as above
+    - main() CSV header: added "mse_1step"
+
+  baselines/adapt_MAML.py
+    - adapt_maml_per_task(): added mse_1step; return dict updated.
+
+  baselines/adapt_transfer_weak.py
+    - adapt_and_eval_weak_head_only(): added mse_1step; return dict updated.
+
+  baselines/adapt_persistence.py
+    - eval_persistence(): mse_1step included from the start (new script).
+
+---------------------------------------------------------------------------
+12.4  INTERPRETATION GUIDE
+---------------------------------------------------------------------------
+
+Compare mse_1step of each model against the persistence baseline's
+mse_1step at the same (regime, steps_available) cell.
+
+  Model mse_1step << persistence mse_1step:
+      The model successfully predicts short-horizon dynamics. Any advantage
+      in mse_rollout is likely real.
+
+  Model mse_1step ≈ persistence mse_1step:
+      The model is no better than a constant prediction at t=1. Any
+      mse_rollout advantage must come from later timesteps; inspect
+      rmse_per_dim_max for dimensional collapse.
+
+  Model mse_1step >> persistence mse_1step:
+      The model's first step is worse than doing nothing. This signals
+      a degenerate rollout (e.g., SDE explosion, wrong initial condition,
+      or dimensional collapse on the dominant dimension).
+
+
+===========================================================================
+SECTION 13: UNCERTAINTY REPORTING PROTOCOL (Phase 2 Addition)
+Completed: 2026-04-26
+===========================================================================
+
+All summary outputs now follow a uniform uncertainty reporting standard
+mandated by the Phase 2 evaluation rubric.
+
+---------------------------------------------------------------------------
+13.1  SUMMARY TABLES — mean ± std
+---------------------------------------------------------------------------
+
+Script:  evaluation/final_comparison.py
+Outputs: results/final_mse_comparison_table.csv          (formatted strings)
+         results/final_mse_comparison_table_numeric.csv  (floats, for scripts)
+
+Each cell in the comparison table is formatted as:
+
+    "mean ± std"    e.g. "0.115 ± 0.021"
+
+where:
+  mean  = arithmetic mean of mse_rollout across all tasks in the
+          (regime, steps_available, Model) cell
+  std   = sample standard deviation across those tasks
+          (ddof=1, i.e. pandas default)
+
+Both quantities are computed in a single .groupby().agg(mean=..., std=...)
+call over the full per-task result DataFrames.  This is the standard
+deviation of per-task outcomes, not a standard error; it quantifies
+variability across the task distribution rather than uncertainty in the
+mean estimate.  Reviewers who want the standard error can derive it as
+std / sqrt(n_tasks).
+
+If a cell contains only one task (std = NaN), only the bare mean is
+shown.
+
+The numeric float table is saved separately so that downstream scripts
+(e.g. gate calibration plots, proximity analysis) can read numeric values
+without having to parse "mean ± std" strings.
+
+---------------------------------------------------------------------------
+13.2  HERO PLOTS — 95% confidence interval bands
+---------------------------------------------------------------------------
+
+Script:  plots/plot_hero_curve.py
+Outputs: plots/hero_curve_{testA,testB,testC}.png
+
+Each method is drawn as a solid mean line with a shaded 95% CI band.
+The CI is computed as:
+
+    CI half-width = 1.96 × SE,   where SE = std / sqrt(n_tasks)
+
+This is the normal-approximation 95% CI on the mean MSE, which is
+appropriate when n_tasks ≥ 20 (the standard task count per regime).
+
+Implementation detail:
+  - The raw per-task DataFrames are passed to plot_regime() without
+    pre-aggregation. groupby("steps_available").agg(["mean","std","count"])
+    is called inside the plotting function.
+  - The lower CI band edge is clamped to max(mean - ci_half, mean × 1e-3)
+    to prevent zero or negative values on the log-scale y-axis.
+  - Custom line colors and styles (from the FILES dict) are applied via
+    ax.plot() and ax.fill_between() directly, bypassing seaborn's hue
+    machinery so that the existing color/style specification is preserved.
+
+The final_comparison.py plot uses sns.lineplot(errorbar=("ci", 95))
+(seaborn's bootstrap CI, 1000 resamples by default) for the multi-panel
+comparison figure, which is consistent in interpretation.
+
+---------------------------------------------------------------------------
+13.3  RATIONALE FOR SEPARATING std (TABLE) FROM CI (PLOT)
+---------------------------------------------------------------------------
+
+The table reports std because it communicates the spread of performance
+across the task distribution — a quantity directly relevant to whether a
+method is reliable across diverse physics regimes.  A reviewer can inspect
+whether Model C's std is smaller than MAML's std to assess stability.
+
+The plot shades CI (= std / sqrt(n)) because CI is the standard visual
+encoding for "uncertainty in the depicted mean line".  The std band would
+be wider and would overlap substantially between methods, obscuring
+mean differences.  CI bands convey the precision of the mean estimate,
+which is what the trend lines represent.
+
+Both are reported; neither replaces the other.
+
+---------------------------------------------------------------------------
+13.4  SCRIPTS MODIFIED IN THIS SECTION
+---------------------------------------------------------------------------
+
+  plots/plot_hero_curve.py
+    - load_data(): removed pre-aggregation (.groupby().mean()); now returns
+      raw per-task rows so CI can be computed during plotting.
+    - plot_regime(): replaced plt.plot() loop with ax.plot() +
+      ax.fill_between() loop that computes mean ± 1.96*SE per step.
+    - Column names in FILES dict corrected: mse_head_maml / mse_head_scratch
+      / mse_head_transfer_weak → mse_rollout (matching current baseline CSVs).
+    - persistence_results_full.csv added to FILES dict.
+    - numpy import added for np.sqrt, np.maximum.
+
+  evaluation/final_comparison.py
+    - main(): pivot now shows "mean ± std" string cells; numeric float table
+      saved separately as final_mse_comparison_table_numeric.csv.
+    - plot_comparison(): added errorbar=("ci", 95) to sns.lineplot call;
+      added sharey=False and bbox_inches="tight" to savefig.
+    - persistence_results_full.csv added to FILES dict.
+    - _MODEL_ORDER constant controls column ordering (Model C first).
+
+
+===========================================================================
+SECTION 14: GATE CORRECTION STUDY
+Date: 2026-04-26
+File: evaluation/gate_correction_study.py
+===========================================================================
+
+
+---------------------------------------------------------------------------
+14.1  MOTIVATION
+---------------------------------------------------------------------------
+
+The original gate formula uses a fixed raw residual threshold:
+
+    g = sigmoid(GATE_ALPHA * (GATE_TAU - D_res))
+    GATE_ALPHA = 20,  GATE_TAU = 0.05
+
+This design is pathological when data variance is large.  In the synthetic
+SDE experiments, raw support-set MSE values (D_res) typically fall in the
+range 1.1 – 1.6.  With GATE_TAU = 0.05, the argument to sigmoid is always
+strongly negative (~20 * (0.05 - 1.3) = -25), yielding g ≈ σ(-25) ≈ 0.
+
+A gate permanently stuck at 0 provides no adaptation signal: the model
+always outputs the safe prior regardless of how well it has adapted.  This
+is functionally equivalent to "always_off".
+
+The professor's constraint: the threshold must NOT simply be raised.  The
+residual must be made dimensionless so that the same threshold τ is
+meaningful across tasks and regimes with different data scales.
+
+
+---------------------------------------------------------------------------
+14.2  THREE GATE VARIANTS
+---------------------------------------------------------------------------
+
+V1 — ORIGINAL (raw D_res)
+  g = sigmoid(20 * (0.05 - D_res))
+
+  Problem: D_res has units of squared state amplitude.  For SDE tasks where
+  state values are O(1), D_res ~ 1–2 and the gate is always near zero.
+  Expected behaviour: g ≈ 0 for all tasks; adaptation ignored.
+
+V2 — NORMALIZED (NMSE)
+  d_norm = D_res / (data_var + 1e-8)
+  g      = sigmoid(20 * (0.05 - d_norm))
+
+  data_var is the empirical variance of the support trajectories (scalar,
+  not per-dimension).  d_norm is the Normalized Mean Squared Error (NMSE).
+
+  Interpretation: GATE_TAU = 0.05 now means "gate fully opens when the
+  adapted model explains ≥ 95% of the data variance".  This is
+  dimensionless and scale-invariant.  This variant is used in the deployed
+  Model C (adaptation/gated_finetuning_regularized.py).
+
+V3 — ADAPTIVE τ(N)
+  tau_n  = GATE_TAU * sqrt(N_steps / N_MAX)    # N_MAX = 201
+  d_norm = D_res / (data_var + 1e-8)
+  g      = sigmoid(20 * (tau_n - d_norm))
+
+  tau_n is stricter at short horizons (fewer steps → less information →
+  require lower NMSE before trusting adaptation) and equals GATE_TAU at the
+  maximum step count.  This encodes the prior belief that early in the
+  adaptation budget the model should be more conservative.
+
+  At N=201:  tau_n = 0.05 * sqrt(1.0) = 0.05  (identical to V2)
+  At N=20:   tau_n = 0.05 * sqrt(20/201) ≈ 0.016  (3× stricter)
+
+REFERENCE MODES (bounds, not variants):
+  always_on:  g = 1.0  — pure adapted model, no safety fallback
+  always_off: g = 0.0  — pure safe prior, adaptation discarded
+
+
+---------------------------------------------------------------------------
+14.3  SHARED ROLLOUT EFFICIENCY
+---------------------------------------------------------------------------
+
+All five modes (V1, V2, V3, always_on, always_off) differ only in the
+scalar gate value g.  The final prediction is linear in g:
+
+    pred = (1 - g) * t_safe + g * t_smart
+
+By linearity of expectation the MC average can be split:
+
+    E[pred] = (1 - g) * E[t_safe] + g * E[t_smart]
+
+The script computes t_smart_mean and t_safe_mean once using MC_SAMPLES
+draws from the SDE, then evaluates MSE for each g value analytically.
+This costs 2×MC_SAMPLES SDE rollouts instead of 5×MC_SAMPLES.
+
+Each STEPS_SWEEP value [20, 50, 100, 201] triggers a fresh z encoding:
+
+    enc_len = min(steps, 50)
+    z_init  = encoder(support[:, :enc_len]).mean(0, keepdim=True)
+
+The adaptation loop runs for ADAPT_STEPS gradient steps starting from
+z_init.  D_res (support-set MSE after adaptation) and data_var are
+computed on the same support slice used for encoding, ensuring no
+query-set leakage.
+
+
+---------------------------------------------------------------------------
+14.4  OUTPUT FILES
+---------------------------------------------------------------------------
+
+results/gate_study_metrics.csv
+    Columns: regime, theta_id, steps_available, d_res, data_var, d_norm,
+             tau_v3, gate_v1, gate_v2, gate_v3, gate_always_on,
+             gate_always_off, mse_v1, mse_v2, mse_v3, mse_always_on,
+             mse_always_off
+    One row per (task, steps_available) combination.
+    Supports resume: rows already in the CSV are skipped.
+
+plots/gate_correction_analysis.png
+    Three-panel 1×3 figure (15×5 inches, 200 dpi):
+
+    Panel A — Gate Value vs. Horizon (step sweep)
+      x-axis: steps_available ∈ {20, 50, 100, 201}
+      y-axis: gate value g ∈ [0, 1]
+      Lines: V1 / V2 / V3, each with ±1.96·SE shaded band (95% CI)
+      Expected: V1 flat near 0; V2 stable at intermediate g;
+                V3 rises with steps (stricter at low N).
+
+    Panel B — Gate Value vs. Raw Residual D_res (scatter)
+      x-axis: D_res (raw support MSE, same units as data squared)
+      y-axis: gate value g
+      Points: V1 / V2 / V3 coloured by variant; testA/B/C distinguished
+              by marker shape
+      Overlay: theoretical V2 sigmoid curve at median data_var
+      Expected: V1 points cluster in a horizontal band near g=0;
+                V2/V3 points spread along the sigmoid curve.
+
+    Panel C — MSE per Regime at steps=201 (grouped bar chart)
+      x-axis: regimes {testA, testB, testC}
+      y-axis: mean MSE, log scale
+      Bars: one group of 5 bars per regime (V1, V2, V3, always_on,
+            always_off), coloured by variant
+      Expected: V2 and V3 outperform V1 (which equals always_off
+                due to gate collapse); always_on gives a useful upper
+                bound on adaptation risk.
+
+
+---------------------------------------------------------------------------
+14.5  INTERPRETATION GUIDE
+---------------------------------------------------------------------------
+
+If V1 gate ≈ 0 for all tasks:
+    This confirms the original gate is broken for scaled data.  The raw
+    threshold is not meaningful without normalization.
+
+If V2 and V3 gates spread between 0 and 1 across regimes:
+    Normalization works.  testA tasks (in-distribution) should have lower
+    NMSE → higher gate; testC tasks (OOD) should have higher NMSE → lower
+    gate.  This validates the safety mechanism: the gate automatically
+    reduces trust when the task is novel.
+
+If V3 < V2 at low step counts:
+    Adaptive τ(N) is more conservative early in adaptation, as intended.
+
+If V2 MSE < V1 MSE:
+    Normalization improves task performance by allowing the adapted model
+    to contribute, rather than always falling back to the safe prior.
+
+If always_on MSE > always_off MSE for testC:
+    Adaptation overcorrects on OOD tasks without the safety gate, validating
+    the necessity of the gating mechanism.
+
+
+===========================================================================
+SECTION 15: REGIME-SWITCH EXPERIMENT
+Date: 2026-04-26
+File: evaluation/regime_switch_experiment.py
+===========================================================================
+
+
+---------------------------------------------------------------------------
+15.1  PURPOSE
+---------------------------------------------------------------------------
+
+The regime-switch experiment answers the question: "How quickly does the
+model detect and adapt to a sudden, unannounced change in the underlying
+physics?"  This is a stress-test beyond the standard few-shot evaluation:
+the model receives no explicit signal that the regime has changed — it must
+infer the shift purely from the incoming observation stream.
+
+The experiment also provides visual evidence for the "continuous manifold"
+claim: a model with a well-structured latent space should show a smooth,
+monotone trajectory of the latent norm ||z_t|| after the shock, tracking
+the new regime rather than oscillating or collapsing.
+
+
+---------------------------------------------------------------------------
+15.2  EXPERIMENTAL PROTOCOL
+---------------------------------------------------------------------------
+
+For each of N_SEEDS=5 independent (taskA, taskC) task pairs:
+
+STEP 1 — "Hard Shock" trajectory construction
+  A "Frankenstein" ground-truth sequence is built:
+      gt = traj_A[:T_PRE] || traj_C[:T_POST + 1]
+  where:
+      T_PRE  = 50   (steps of testA physics before the switch)
+      T_POST = 100  (steps of testC physics after the switch)
+  This is intentionally adversarial: both the hidden state AND the
+  underlying physics change instantaneously at index T_PRE.  There is no
+  warm-up period for the new regime.
+
+STEP 2 — Online sliding-window inference
+  A sliding context window of CONTEXT_LEN = 20 observations is maintained.
+  At each step t ∈ [CONTEXT_LEN, T_PRE + T_POST):
+      context  = gt[t - CONTEXT_LEN : t]             shape (CONTEXT_LEN, D)
+      z_t      = encoder(context.unsqueeze(0))        online re-encoding
+      x_pred   = gt[t] + SDE.f(0, gt[t], z_t) * DT  Euler step (DT = 0.005)
+      mse_t    = MSE(x_pred, gt[t + 1])              per-step error
+      ||z_t||  = L2 norm of the latent vector         latent norm
+
+  The encoder is not fine-tuned during this loop; adaptation occurs
+  purely through the changing context window content.
+
+STEP 3 — Per-seed metrics
+
+  Let errors[i] denote mse_t at position i in the flattened errors array,
+  where position 0 corresponds to absolute step CONTEXT_LEN and the shock
+  falls at position SHOCK_IDX = T_PRE - CONTEXT_LEN = 30.
+
+  pre_errors  = errors[:SHOCK_IDX]       (30 measurements, pre-shock)
+  post_errors = errors[SHOCK_IDX:]       (100 measurements, post-shock)
+
+  baseline_mse   = mean(pre_errors)
+
+  Peak Shock Error
+      = max(post_errors)
+      Definition: the single worst per-step prediction error in the
+      post-shock window.  A model with a rigid latent space will show a
+      large spike immediately after the switch.
+
+  Mean Recovery Time
+      = argmin_{i ∈ [0, T_POST)}  { post_errors[i] <= baseline_mse }
+        (sentinel value T_POST = 100 if the condition is never met)
+      Definition: the number of steps after the regime switch until the
+      per-step MSE returns to its pre-shock average level.  Smaller is
+      better; T_POST means the model did not recover within the observation
+      window.
+
+STEP 4 — Aggregation
+  Both metrics are averaged across N_SEEDS pairs.  The std is reported as
+  the uncertainty measure, consistent with the rest of the evaluation
+  (see Section 13).
+
+  Reported as: "Peak Shock Error = mean ± std"
+               "Mean Recovery Time = mean ± std steps"
+
+
+---------------------------------------------------------------------------
+15.3  LATENT NORM TRAJECTORY
+---------------------------------------------------------------------------
+
+The L2 norm of the latent code ||z_t|| = sqrt(sum_i z_i^2) is tracked at
+every step of the online inference loop.  Its trajectory reveals whether
+the encoder's representation actively shifts in response to the new physics.
+
+Expected behaviour:
+  Pre-shock (t < T_PRE):  ||z_t|| is approximately stable.  The context
+      window contains only testA data; the encoder outputs a consistent
+      latent code for those dynamics.
+
+  Post-shock (t >= T_PRE):  ||z_t|| begins to change as the sliding window
+      fills with testC observations.  The norm may increase (if testC tasks
+      require larger coefficients) or decrease, but should show a monotone
+      trend rather than noise.  The speed of this transition reflects the
+      model's effective "memory horizon": full adaptation is reached after
+      approximately CONTEXT_LEN = 20 steps, when the window contains only
+      testC data.
+
+  Latent norm convergence:  If the latent norm plateaus at a new stable
+  value within CONTEXT_LEN steps of the shock, this validates that the
+  encoder is operating in a well-organised latent space where testA and
+  testC tasks occupy distinct, stable regions.  Oscillation or failure to
+  converge would indicate latent space entanglement.
+
+The latent norm trajectory is plotted in Panel B of the figure alongside
+the shock line and recovery window, making the timescale of adaptation
+directly comparable to the timescale of error recovery.
+
+
+---------------------------------------------------------------------------
+15.4  FIGURE DESIGN
+---------------------------------------------------------------------------
+
+File: plots/regime_switching_analysis.png  (12×8 inches, 200 dpi)
+Two vertically stacked panels sharing the x-axis (absolute time step).
+
+Panel A — Error Trajectory
+  Line:   mean one-step MSE across seeds, ± 1 std shaded band.
+  Shock:  vertical dashed black line at x = T_PRE = 50.
+  Window: green shaded region from shock to shock + mean_recovery_steps.
+          Orange if no seed recovered within T_POST steps.
+  Ref:    horizontal dotted blue line at pre-shock baseline MSE level.
+  Label:  annotation with arrow indicating peak shock error value (mean ± std).
+  Title:  includes both headline scalar metrics.
+
+Panel B — Latent Norm Trajectory
+  Line:   mean ||z_t||₂ across seeds, ± 1 std shaded band.
+  Shock:  same vertical dashed line as Panel A.
+  Window: same shading as Panel A (recovery window reference).
+  Title:  "Latent State Adaptation During Regime Switch".
+
+x-axis range:  [CONTEXT_LEN, T_PRE + T_POST - 1]  =  [20, 149]
+  The first CONTEXT_LEN steps (burn-in) are excluded because no prediction
+  is made until the context window is full.
+
+
+---------------------------------------------------------------------------
+15.5  CSV SCHEMA
+---------------------------------------------------------------------------
+
+results/regime_switch_metrics.csv
+  One row per seed.
+  Columns:
+    seed              int   seed index (0 … N_SEEDS-1)
+    task_A_id         str   theta_id of the testA task used
+    task_C_id         str   theta_id of the testC task used
+    baseline_mse      float mean per-step MSE over the pre-shock window
+    peak_shock_error  float max  per-step MSE over the post-shock window
+    recovery_steps    int   first post-shock index where MSE ≤ baseline_mse;
+                            T_POST (100) means "did not recover in window"
+
+
+---------------------------------------------------------------------------
+15.6  RELATIONSHIP TO OTHER SECTIONS
+---------------------------------------------------------------------------
+
+This experiment is complementary to the manifold distance analysis
+(Section 14 of README, evaluation/proximity_analysis.py):
+  - Proximity analysis measures static distance: how far is a *fixed* test
+    task from the training distribution?
+  - Regime-switch measures dynamic adaptation: how quickly does the model
+    track a *moving* task that transitions from near to far?
+
+Peak Shock Error is expected to be higher for task pairs where testC lies
+farther from the training distribution (larger theta-space distance).
+Mean Recovery Time is expected to be approximately CONTEXT_LEN = 20 steps
+for a model with a well-structured latent space, since full context refresh
+requires that many new observations.
+

@@ -69,6 +69,7 @@ python -m baselines.adapt_scratch
 python -m baselines.adapt_gru
 python -m baselines.adapt_MAML
 python -m baselines.adapt_transfer_weak
+python -m baselines.adapt_persistence               # zero-parameter sanity-check baseline
 ```
 
 Each script writes to `results/<name>_results.csv` and supports resuming from a partial run.
@@ -90,8 +91,14 @@ python -m plots.plot_hero_curve
 ```
 
 Outputs:
-- `results/final_mse_comparison_table.csv`
-- `results/final_comparison_plot.png`
+- `results/final_mse_comparison_table.csv` — human-readable table with cells formatted as **"mean ± std"** (standard deviation across tasks at each operating point)
+- `results/final_mse_comparison_table_numeric.csv` — numeric mean-only table for downstream scripts
+- `results/final_comparison_plot.png` — line plots with **95% bootstrap CI** shaded, one panel per regime
+
+**Uncertainty reporting conventions (Phase 2 rubric):**
+- Summary tables: `mean ± std` where std is the standard deviation across tasks within each (regime, steps) cell.  This quantifies per-task variability, not measurement noise.
+- Hero plots: mean line with `±1.96 × SE` band (≈ 95% CI on the mean), computed per (method, steps_available) bucket across tasks.  Band edges are clamped to `mean × 1e-3` to stay positive on the log axis.
+- `sns.lineplot(errorbar=("ci", 95))` is used in `evaluation/final_comparison.py`; `matplotlib.fill_between` with `±1.96 × SE` is used in `plots/plot_hero_curve.py` so that custom line styles and colors are fully controlled.
 
 ---
 
@@ -109,7 +116,34 @@ The gate formula is `g = sigmoid(20 * (0.05 - D_res))`. Because gate value is co
 
 ---
 
-### Step 7 - Ablation Study
+### Step 7 - Gate Correction Study
+
+```bash
+python -m evaluation.gate_correction_study
+```
+
+Outputs:
+- `results/gate_study_metrics.csv` — raw per-task results for all gate variants across all step counts
+- `plots/gate_correction_analysis.png` — three-panel figure:
+  - **Panel A**: Mean gate value ± 95% CI vs. support steps for V1/V2/V3 — shows V1 collapse and V2/V3 stability
+  - **Panel B**: Gate value vs. raw residual D_res (scatter) — V1 clusters near zero for all tasks; V2/V3 spread across the sigmoid; theoretical V2 sigmoid overlaid at median data variance
+  - **Panel C**: Grouped bar chart of MSE per regime at `steps=201` for all five modes (V1, V2, V3, always-on, always-off) on a log scale
+
+**Three gate variants compared:**
+
+| Variant | Formula | Description |
+|---------|---------|-------------|
+| V1 (Original) | `g = σ(α(τ − D_res))` | Raw residual; collapses to g≈0 when data variance is large |
+| V2 (Normalized) | `g = σ(α(τ − D_res/(var+ε)))` | Dimensionless NMSE; τ=0.05 means "gate opens when model explains ≥95% of variance" |
+| V3 (Adaptive τ) | `g = σ(α(τ(N) − NMSE))`, τ(N)=τ·√(N/N_max) | Stricter at short horizons; equals V2 at full horizon |
+
+**Reference modes**: `always_on` (g=1, no fallback) and `always_off` (g=0, prior only) bound the performance range.
+
+The script runs adaptation once per task and shares MC rollout samples across all five modes (efficiency: 2×MC instead of 5×MC per task via linearity of expectation).
+
+---
+
+### Step 8 - Ablation Study
 
 ```bash
 python -m adaptation.ablation_gate_and_latent
@@ -145,7 +179,7 @@ mv checkpoints/meta_epoch_50.pt checkpoints/meta_zdim8_epoch_50.pt
 
 ---
 
-### Step 8 - Manifold Distance Analysis (Section 4.2)
+### Step 9 - Manifold Distance Analysis (Section 4.2)
 
 This quantifies the "continuous manifold" claim by measuring how far each test task lies from the training distribution in theta-space.
 
@@ -169,6 +203,31 @@ Regime C   avg distance = 4.97   avg RMSE = 1.002   avg gate = 0.491
 
 Pearson r(distance, RMSE) = 0.90
 ```
+
+---
+
+### Step 10 - Regime-Switch Experiment
+
+```bash
+python -m evaluation.regime_switch_experiment
+```
+
+Simulates a sudden physics-regime change (testA → testC) midway through an online inference sequence and measures how quickly the model adapts its latent representation.
+
+**Protocol**: For each of N_SEEDS=5 independent (taskA, taskC) task pairs, a "hard shock" ground-truth sequence is constructed by concatenating T_PRE=50 steps of a testA trajectory with T_POST=100 steps of a testC trajectory. At each time step the model re-encodes the most recent CONTEXT_LEN=20 observations via a sliding window, makes a one-step Euler prediction, and the error is recorded.
+
+**Metrics computed across seeds (mean ± std):**
+
+| Metric | Definition |
+|--------|-----------|
+| `peak_shock_error` | Maximum per-step MSE in the post-shock window (steps T_PRE … T_PRE + T_POST) |
+| `recovery_steps` | First post-shock step where per-step MSE ≤ pre-shock baseline mean; set to T_POST if MSE never returns to baseline |
+
+**Outputs:**
+- `results/regime_switch_metrics.csv` — per-seed values of baseline_mse, peak_shock_error, recovery_steps
+- `plots/regime_switching_analysis.png` — two-panel figure:
+  - **Panel A** (Error Trajectory): mean MSE ± 1 std across seeds; vertical dashed line at the shock; recovery window shaded green (orange if no recovery); horizontal dotted line at pre-shock baseline; peak shock annotated with mean ± std
+  - **Panel B** (Latent Norm Trajectory): mean ||z_t||₂ ± 1 std across seeds; same shock line and recovery shading — shows whether and when the latent representation shifts to track the new regime
 
 ---
 
@@ -228,11 +287,22 @@ python -m deepmind.plot_benchmark_results
 | `results/maml_results_full.csv` | `baselines/adapt_MAML.py` | comparison table |
 | `results/transfer_weak_results_full.csv` | `baselines/adapt_transfer_weak.py` | comparison table |
 | `results/scratch_sweep_results_full.csv` | `baselines/adapt_scratch.py` | comparison table |
+| `results/persistence_results_full.csv` | `baselines/adapt_persistence.py` | sanity-check lower bound |
 | `results/final_mse_comparison_table.csv` | `evaluation/final_comparison.py` | paper appendix |
 | `results/manifold_distance_analysis.png` | `evaluation/plot_proximity_synthetic.py` | paper Figure (Section 4.2) |
 | `results/gate_calibration.png` | `evaluation/plot_gate_calibration.py` | paper Figure (Gate) |
+| `results/gate_study_metrics.csv` | `evaluation/gate_correction_study.py` | gate variant comparison |
+| `plots/gate_correction_analysis.png` | `evaluation/gate_correction_study.py` | paper Figure (Gate Study) |
+| `results/regime_switch_metrics.csv` | `evaluation/regime_switch_experiment.py` | paper Figure (Regime Switch) |
+| `plots/regime_switching_analysis.png` | `evaluation/regime_switch_experiment.py` | paper Figure (Regime Switch) |
 | `results/ablation_gate_and_latent.csv` | `adaptation/ablation_gate_and_latent.py` | paper Table (Ablation) |
 | `results/dm_{task}_model_c.csv` | `deepmind/gated_finetuning_regularized_dm.py` | DM results table |
+
+---
+
+## Uncertainty Reporting
+
+All summary tables report **mean ± std** and all hero plots render **95% confidence intervals**.  See Step 5 above for the precise definitions.
 
 ---
 
@@ -242,6 +312,7 @@ All evaluation scripts report the following:
 
 - `mse_rollout`: MSE over the full trajectory (batch x time x dims)
 - `mse_final`: MSE at the terminal timestep only
+- `mse_1step`: MSE strictly at the first predicted timestep (t=1); diagnostic tool — a model that cannot beat the persistence baseline on `mse_1step` is not learning useful short-horizon dynamics
 - `nll`: Gaussian NLL using MC sample variance
 - `rmse_per_dim_max`: worst-case single-dimension RMSE (diagnostic for dimensional collapse; if this is more than 10x `mse_rollout^0.5`, the model is ignoring some dimensions)
 - `gate_value`: safety gate g in [0,1]; values near 1 mean the model trusts the adapted prediction, values near 0 fall back to the prior

@@ -96,14 +96,16 @@ def adapt_maml_per_task(sde_init, head_init, support, query, config, gen, limit_
     
     # Metrics
     mse_rollout = F.mse_loss(pred_mean, query).item()
-    mse_final = F.mse_loss(pred_mean[:, -1], query[:, -1]).item()
+    mse_final   = F.mse_loss(pred_mean[:, -1], query[:, -1]).item()
+    mse_1step   = F.mse_loss(pred_mean[:, 1],  query[:, 1]).item()
     nll = F.gaussian_nll_loss(pred_mean, query, pred_var).item()
-    
+
     return {
-        "adapt_time": adapt_time,
+        "adapt_time":  adapt_time,
         "mse_rollout": mse_rollout,
-        "mse_final": mse_final,
-        "nll": nll
+        "mse_final":   mse_final,
+        "mse_1step":   mse_1step,
+        "nll":         nll,
     }
 
 def main():

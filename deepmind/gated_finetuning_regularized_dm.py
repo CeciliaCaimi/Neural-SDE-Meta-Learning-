@@ -183,6 +183,7 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
 
     mse_rollout = F.mse_loss(mean, query_orig).item()
     mse_final   = F.mse_loss(mean[:, -1], query_orig[:, -1]).item()
+    mse_1step   = F.mse_loss(mean[:, 1],  query_orig[:, 1]).item()
 
     # Per-dimension RMSE in original units. rmse_per_dim_max exposes collapse
     # on individual observation dimensions that aggregate MSE hides.
@@ -199,6 +200,7 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
         "gate_value": g, "residual_error": d_res, "adapt_time": adapt_time,
         "mse_rollout": mse_rollout,
         "mse_final": mse_final,
+        "mse_1step": mse_1step,
         "rmse_rollout": rmse_rollout,
         "rmse_final": rmse_final,
         "rmse_per_dim_mean": rmse_per_dim_mean,
@@ -279,7 +281,7 @@ def main():
     if os.path.exists(RESULTS_PATH): os.remove(RESULTS_PATH)
     pd.DataFrame(columns=["regime", "theta_id", "steps_available",
                           "gate_value", "residual_error", "adapt_time",
-                          "mse_rollout", "mse_final",
+                          "mse_rollout", "mse_final", "mse_1step",
                           "rmse_rollout", "rmse_final",
                           "rmse_per_dim_mean", "rmse_per_dim_max",
                           "nll"]).to_csv(RESULTS_PATH, index=False)
