@@ -1400,3 +1400,188 @@ Mean Recovery Time is expected to be approximately CONTEXT_LEN = 20 steps
 for a model with a well-structured latent space, since full context refresh
 requires that many new observations.
 
+
+===========================================================================
+SECTION 16: ADAPTATION-BUDGET SENSITIVITY SWEEP (Phase 3)
+Date: 2026-04-26
+File: evaluation/sweep_adaptation_budget.py
+===========================================================================
+
+
+---------------------------------------------------------------------------
+16.1  MOTIVATION AND CLAIM
+---------------------------------------------------------------------------
+
+The main evaluation (gated_finetuning_regularized.py) fixes the test-time
+adaptation budget at ADAPT_STEPS = 50 gradient steps of Adam over (z, head).
+This is a deliberate hyperparameter choice, not a derived quantity.
+
+A legitimate reviewer concern: are the reported gains of Model C contingent
+on using exactly 50 steps?  If performance collapses at 25 steps or at 100
+steps, then the headline result is a narrow artefact of a single optimiser
+setting, not a property of the method.
+
+This sweep answers that concern directly by evaluating Model C at four
+budget levels — 10, 25, 50, and 100 gradient steps — and demonstrating that
+the qualitative result (testA < testB < testC in MSE; Model C beats the
+persistence baseline; gate value decreases with regime novelty) is stable
+across the full range.  This is the standard robustness check required before
+any sensitivity-dependent hyperparameter can be reported in a paper without
+a hedge.
+
+
+---------------------------------------------------------------------------
+16.2  EXPERIMENTAL DESIGN
+---------------------------------------------------------------------------
+
+The sweep is a grid over three axes:
+
+  ADAPT_BUDGETS    : {10, 25, 50, 100}   gradient steps on (z, head)
+  STEPS_SWEEP      : {20, 50, 201}       context length (support timesteps)
+  Regimes          : testA, testB, testC  (30 tasks each)
+
+All other hyperparameters are IDENTICAL to the main evaluation:
+  LR_Z       = 1e-2   (Adam LR for latent code z)
+  LR_HEAD    = 1e-2   (Adam LR for forecast head)
+  N_SHOTS    = 2      (support trajectories per task)
+  BETA_REG   = 0.01   (L2 regularisation weight on z)
+  GATE_ALPHA = 20.0   (sigmoid sharpness)
+  GATE_TAU   = 0.05   (normalised residual threshold)
+  MC_SAMPLES = 5      (Monte Carlo rollout samples for mean/variance)
+  Checkpoint = checkpoints/meta_epoch_50.pt
+
+The gate formula, normalised-residual computation, MC rollout, and
+scaler-inversion logic are all copied verbatim from gated_inference()
+in adaptation/gated_finetuning_regularized.py.  The only change is that
+the adapt_steps argument is passed explicitly instead of read from the
+ADAPT_STEPS global constant.
+
+Total evaluation cells: 4 × 3 × 3 × 30 = 1,080 (budget × ctx × regime × task).
+
+
+---------------------------------------------------------------------------
+16.3  ADAPTATION PROCEDURE (per task per budget)
+---------------------------------------------------------------------------
+
+STEP 1 — Encode z_init
+  enc_len = min(support.shape[1], 50)
+  z_init  = encoder(support[:, :enc_len]).mean(dim=0, keepdim=True)
+  This is identical across all budgets; only the subsequent gradient
+  optimisation changes.
+
+STEP 2 — Adapt for `adapt_budget` steps
+  For _ in range(adapt_budget):
+      z_exp     = z.expand(B, -1)
+      traj      = simulate_neural_sde_batch(sde, support[:, 0], z_exp, ...)
+      loss      = MSE(traj, support)            # path loss
+               + MSE(head(traj[:, -1], z_exp),  # head loss
+                         support[:, -1])
+               + BETA_REG * ||z||^2             # regularisation
+      loss.backward(); opt.step()
+
+  Adam is used throughout; SGD would require a separate LR search and
+  would not constitute a fair comparison across budgets.
+
+STEP 3 — Gate and rollout
+  Identical to the main evaluation:
+    d_norm = D_res / (data_var + 1e-8)          # NMSE normalisation
+    g      = sigmoid(GATE_ALPHA * (GATE_TAU - d_norm))
+    pred   = (1 - g) * rollout(z=0) + g * rollout(z_opt)
+
+
+---------------------------------------------------------------------------
+16.4  EXPECTED RESULTS
+---------------------------------------------------------------------------
+
+If the method is methodologically sound:
+
+  Performance improves with budget:
+    MSE should decrease (or plateau) as adapt_steps increases from 10 to 100.
+    A sharp improvement from 10 to 25 is expected, as 10 steps may be
+    insufficient to converge even in the easy testA regime.  The curve
+    should flatten between 50 and 100, indicating that 50 steps is in the
+    "good enough" region rather than an extreme optimum.
+
+  Relative regime ordering is preserved:
+    testA MSE < testB MSE < testC MSE at every budget level.
+    This confirms that the method's fundamental behaviour — trustworthy
+    adaptation in-distribution, conservative fallback out-of-distribution —
+    is not disrupted by the budget choice.
+
+  Gate value trend is preserved:
+    Mean gate value (testA) > mean gate value (testB) > mean gate value (testC)
+    at every budget level.  The gate's safety property does not depend on
+    the number of gradient steps.
+
+  Graceful degradation at low budget:
+    At adapt_steps = 10, the model should still outperform persistence
+    (the zero-parameter lower bound) in testA.  If it does not, there is
+    a convergence failure that needs to be investigated separately.
+
+Failure mode to watch for:
+  If MSE is *lower* at 10 steps than at 50 steps for testA, this may
+  indicate overfitting: too many steps cause z to memorise the support
+  trajectories rather than generalise to the query.  The L2 regulariser
+  (BETA_REG = 0.01) is designed to prevent this, but may need tuning if
+  overfitting is observed.
+
+
+---------------------------------------------------------------------------
+16.5  OUTPUT FILES
+---------------------------------------------------------------------------
+
+results/adaptation_budget_metrics.csv
+  One row per (adapt_budget, steps_available, regime, theta_id) tuple.
+  Columns:
+    adapt_budget      int   gradient steps used (10 / 25 / 50 / 100)
+    steps_available   int   support context length (20 / 50 / 201)
+    regime            str   testA / testB / testC
+    theta_id          str   task identifier
+    gate_value        float g ∈ [0, 1]
+    residual_error    float raw support-set MSE D_res after adaptation
+    adapt_time        float wall-clock seconds for the adaptation loop
+    mse_rollout       float MSE over full (B_q, T, D) rollout; primary metric
+    mse_final         float MSE at terminal timestep t = T
+    mse_1step         float MSE at first predicted step t = 1
+    rmse_rollout      float sqrt(mse_rollout)
+    rmse_final        float sqrt(mse_final)
+    rmse_per_dim_mean float mean per-dimension RMSE (collapse diagnostic)
+    rmse_per_dim_max  float worst-case per-dimension RMSE (collapse diagnostic)
+    nll               float Gaussian NLL in normalised coordinate space
+
+plots/adaptation_budget_sensitivity.png
+  Three-panel figure (one per regime), 14×4.5 inches, 150 dpi.
+
+  Each panel:
+    x-axis : adapt_budget ∈ {10, 25, 50, 100}
+    y-axis : mean rollout MSE across the 30 tasks in the regime
+    lines  : one per context length in STEPS_SWEEP
+             solid  = steps_available = 50  (canonical)
+             dashed = steps_available = 20  (short context)
+             dotted = steps_available = 201 (full context)
+    shading: ±95% CI on the mean (1.96 × SE, where SE = std / sqrt(n_tasks))
+    marker : vertical dotted grey line at adapt_budget = 50 (paper default)
+
+
+---------------------------------------------------------------------------
+16.6  RELATIONSHIP TO OTHER SECTIONS
+---------------------------------------------------------------------------
+
+This sweep complements the ablation study (Section 7 / Step 8):
+  - Section 7 ablates the GATE MECHANISM and LATENT DIMENSION.
+  - Section 16 ablates the OPTIMISATION BUDGET.
+
+Together, these three ablations cover the three major hyperparameter axes
+of Model C's adaptation procedure.  None of the three axes appears in the
+main comparison table as a swept dimension; each is evaluated in its own
+dedicated appendix figure so that the main table is clean while the
+appendix provides full methodological transparency.
+
+Relationship to baselines:
+  The MAML baseline (Section 9, adapt_MAML.py) intentionally uses only 5
+  inner-loop steps — matching its meta-training protocol.  This sweep does
+  NOT apply to MAML, because MAML's inner-loop count is not a free
+  hyperparameter: changing it at test time violates the meta-learning
+  contract.  It applies only to Model C's Adam-based z/head adaptation,
+  where the budget is genuinely tuneable without architectural consequences.
+

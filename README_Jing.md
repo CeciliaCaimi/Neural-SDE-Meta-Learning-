@@ -168,14 +168,47 @@ checkpoints/meta_epoch_50.pt          (z_dim=16, default)
 checkpoints/meta_zdim32_epoch_50.pt   (z_dim=32)
 ```
 
-To generate a non-default z_dim checkpoint:
+**You must generate the z_dim=8 and z_dim=32 checkpoints explicitly before running the
+ablation script.** The script silently skips any missing checkpoints and will produce an
+incomplete sweep if they are absent. Follow these steps in order:
+
 ```bash
-# Example: z_dim=8
-# 1. Edit config/base_config.py: set latent_dim = 8
+# Step 8a — generate z_dim=8 checkpoint
+# 1. Edit config/base_config.py: set   latent_dim = 8
 python -m training.train_meta
 mv checkpoints/meta_epoch_50.pt checkpoints/meta_zdim8_epoch_50.pt
-# 2. Restore config/base_config.py: set latent_dim = 16
+
+# Step 8b — generate z_dim=32 checkpoint
+# 2. Edit config/base_config.py: set   latent_dim = 32
+python -m training.train_meta
+mv checkpoints/meta_epoch_50.pt checkpoints/meta_zdim32_epoch_50.pt
+
+# Step 8c — restore default and verify all three checkpoints exist
+# 3. Edit config/base_config.py: set   latent_dim = 16
+ls checkpoints/meta_zdim8_epoch_50.pt checkpoints/meta_epoch_50.pt checkpoints/meta_zdim32_epoch_50.pt
 ```
+
+Once all three checkpoints are in place, run the ablation (a single run covers
+both axes — gate ablation at z_dim=16 and the latent-dim sweep at z_dim ∈ {8,16,32}):
+
+```bash
+python -m adaptation.ablation_gate_and_latent
+```
+
+**Save outputs before any re-run.** The script appends to `results/ablation_gate_and_latent.csv`
+and overwrites `results/ablation_summary.png`. Back up the files immediately after each
+successful run so a restart does not clobber them:
+
+```bash
+# Run the ablation, then immediately archive the outputs with a timestamp
+python -m adaptation.ablation_gate_and_latent
+cp results/ablation_gate_and_latent.csv results/ablation_gate_and_latent_$(date +%Y%m%d_%H%M%S).csv
+cp results/ablation_summary.png         results/ablation_summary_$(date +%Y%m%d_%H%M%S).png
+```
+
+The script supports resuming: if `results/ablation_gate_and_latent.csv` already exists it
+skips completed (axis, z_dim, gate_mode, regime, theta_id, steps) combinations and only
+appends new rows. To force a clean re-run, delete the CSV first.
 
 ---
 
@@ -190,10 +223,13 @@ python evaluation/plot_proximity_synthetic.py
 
 **Step 1** computes per-task L2 distances from each test task to its nearest training task, using the 110-dimensional flattened SDE parameter vector `[theta_b | theta_sigma]`. Writes `results/adaptation_with_distances.csv`.
 
-**Step 2** generates `results/manifold_distance_analysis.png`, a three-panel figure:
-- PCA projection of training and test theta vectors, colored by regime
+**Step 2** generates `plots/manifold_distance_analysis.png`, a two-panel figure:
 - RMSE vs. theta-space distance (positive trend validates the manifold hypothesis)
 - Gate value vs. theta-space distance (negative trend shows the gate automatically reduces trust as novelty increases)
+
+Both panels show the Pearson r value in the corner. If `results/maml_results_full.csv` or
+`results/transfer_weak_results_full.csv` are present, MAML and Transfer points are overlaid
+in the RMSE panel for direct comparison.
 
 Expected results (verified 2026-04-19):
 ```
@@ -237,6 +273,63 @@ Simulates a sudden physics-regime change (testA → testC) midway through an onl
 python -m baselines.sweep_shots       # N_SHOTS in {2,3,4,5,8,10}
 python -m baselines.sweep_iterations  # adaptation step budget sweep
 ```
+
+---
+
+## Phase 3: Sensitivity Analyses
+
+These scripts produce appendix figures that stress-test the robustness of
+the main results.  They can be run independently of each other and in any
+order, but each requires the primary checkpoint (`checkpoints/meta_epoch_50.pt`)
+and the test-split data to be present.
+
+---
+
+### Phase 3, Step 1 — Adaptation-Budget Sensitivity Sweep
+
+```bash
+python -m evaluation.sweep_adaptation_budget
+```
+
+Evaluates Model C across four test-time optimisation budgets:
+`adapt_steps ∈ {10, 25, 50, 100}`.  The main evaluation fixes `ADAPT_STEPS=50`;
+this sweep confirms that the performance advantage is not a fragile artefact
+of that single setting.
+
+Each budget is evaluated at three context lengths (`steps_available ∈ {20, 50, 201}`)
+and across all three test regimes (`testA`, `testB`, `testC`), so the full grid
+is 4 × 3 × 3 = 36 (budget, context, regime) cells, each aggregated over all 30
+tasks in the regime.
+
+**Outputs:**
+- `results/adaptation_budget_metrics.csv` — raw per-task metrics
+  (columns: `adapt_budget`, `steps_available`, `regime`, `theta_id`,
+  `gate_value`, `residual_error`, `adapt_time`, `mse_rollout`, `mse_final`,
+  `mse_1step`, `rmse_rollout`, `rmse_final`, `rmse_per_dim_mean`,
+  `rmse_per_dim_max`, `nll`)
+- `plots/adaptation_budget_sensitivity.png` — three-panel appendix figure
+  (one panel per regime, x-axis = adapt\_steps, y-axis = rollout MSE,
+  one line per context length with ±95% CI bands, vertical dotted line
+  marking the paper's default of 50 steps)
+
+**Expected result:** MSE should improve quickly from 10→25→50 steps and then
+plateau or improve only marginally at 100 steps.  The relative ordering of
+regimes (testA < testB < testC in MSE) should be preserved across all budgets.
+If it is, the main-paper result at 50 steps is representative, not cherry-picked.
+
+**Resume:** the script appends to the CSV and skips already-evaluated rows.
+To force a clean re-run, delete `results/adaptation_budget_metrics.csv` first.
+
+---
+
+### Phase 3, Step 2 — Manifold Distance Analysis (already in Step 9)
+
+```bash
+python evaluation/proximity_analysis.py
+python evaluation/plot_proximity_synthetic.py
+```
+
+See Step 9 above.  The plot is now saved to `plots/manifold_distance_analysis.png`.
 
 ---
 
@@ -289,13 +382,15 @@ python -m deepmind.plot_benchmark_results
 | `results/scratch_sweep_results_full.csv` | `baselines/adapt_scratch.py` | comparison table |
 | `results/persistence_results_full.csv` | `baselines/adapt_persistence.py` | sanity-check lower bound |
 | `results/final_mse_comparison_table.csv` | `evaluation/final_comparison.py` | paper appendix |
-| `results/manifold_distance_analysis.png` | `evaluation/plot_proximity_synthetic.py` | paper Figure (Section 4.2) |
+| `plots/manifold_distance_analysis.png` | `evaluation/plot_proximity_synthetic.py` | paper Figure (Section 4.2) |
 | `results/gate_calibration.png` | `evaluation/plot_gate_calibration.py` | paper Figure (Gate) |
 | `results/gate_study_metrics.csv` | `evaluation/gate_correction_study.py` | gate variant comparison |
 | `plots/gate_correction_analysis.png` | `evaluation/gate_correction_study.py` | paper Figure (Gate Study) |
 | `results/regime_switch_metrics.csv` | `evaluation/regime_switch_experiment.py` | paper Figure (Regime Switch) |
 | `plots/regime_switching_analysis.png` | `evaluation/regime_switch_experiment.py` | paper Figure (Regime Switch) |
 | `results/ablation_gate_and_latent.csv` | `adaptation/ablation_gate_and_latent.py` | paper Table (Ablation) |
+| `results/adaptation_budget_metrics.csv` | `evaluation/sweep_adaptation_budget.py` | paper Appendix (Budget Sensitivity) |
+| `plots/adaptation_budget_sensitivity.png` | `evaluation/sweep_adaptation_budget.py` | paper Appendix (Budget Sensitivity) |
 | `results/dm_{task}_model_c.csv` | `deepmind/gated_finetuning_regularized_dm.py` | DM results table |
 
 ---
