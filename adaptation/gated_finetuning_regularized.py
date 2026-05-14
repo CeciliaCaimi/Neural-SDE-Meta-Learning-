@@ -30,7 +30,7 @@ N_SHOTS = 2
 # Safety / Regularization
 BETA_REG = 0.01         # Suggestion 3 (Regularization Weight)
 GATE_ALPHA = 20.0       
-GATE_TAU = 0.05         
+GATE_TAU = 0.02         # Recalibrated for sqrt(N) normalization (was 0.05)
 MC_SAMPLES = 5          
 
 STEPS_SWEEP = [20, 40, 50, 80, 100, 120, 201]
@@ -137,12 +137,15 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
 
     # 3. Gate
     # d_res is in units of (state value)^2 and is scale-dependent. Dividing by
-    # the empirical variance of the support data yields a dimensionless NMSE so
-    # that GATE_TAU is meaningful regardless of raw vs. normalized data regime.
+    # the empirical variance of the support data AND sqrt(N) yields a dimensionless
+    # NMSE so that GATE_TAU is meaningful regardless of raw vs. normalized data
+    # regime or observation length. Without sqrt(N), the gate collapses to 0 at
+    # high step counts because d_res grows with sequence length.
     # d_norm ≈ 0: model explains all variance; d_norm = 1: no better than mean.
     d_res = compute_residual(sde, head_opt, z_opt, support_in, gen, cfg)
     data_var = support_in.var().item()
-    d_norm = d_res / (data_var + 1e-8)
+    N = support_in.shape[1]  # observation length
+    d_norm = d_res / (data_var * (N ** 0.5) + 1e-8)  # sqrt(N)-normalized
     g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_norm))).item()
 
     # 4. Predict (in normalized space if scaler is active)

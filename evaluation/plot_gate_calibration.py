@@ -6,7 +6,7 @@ Gate Calibration Plot
 Plots the empirical gate value g against the residual error D_res, overlaid
 with the theoretical sigmoid curve:
 
-    g = sigmoid(alpha * (tau - D_res))    [alpha=20, tau=0.05]
+    g = sigmoid(alpha * (tau - D_res))    [alpha=20, tau=0.02]
 
 A monotonically decreasing relationship — higher residual error leads to a
 lower gate value — validates that the safety mechanism correctly de-weights
@@ -46,7 +46,7 @@ import seaborn as sns
 # Constants (must match adaptation/gated_finetuning_regularized.py exactly)
 # ---------------------------------------------------------------------------
 GATE_ALPHA = 20.0
-GATE_TAU   = 0.05
+GATE_TAU   = 0.02
 
 RESULTS_CANDIDATES = [
     "results/gated_regularized_final_fixed.csv",
