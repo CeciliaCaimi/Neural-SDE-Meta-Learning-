@@ -1,0 +1,28 @@
+# Virtual environment
+.venv/
+venv/
+
+# Byte-compiled
+__pycache__/
+*.py[cod]
+
+# Training outputs: checkpoints are ~430 MB each
+checkpoints/
+artifacts/*.out
+artifacts/*.txt
+artifacts/*.png
+artifacts/*.svg
+artifacts/*.pdf
+
+# Split files are reproducible from runner/build_cifar100_splits.py, but small
+# enough to keep if you want exact reproducibility. Uncomment to exclude.
+# artifacts/*.json
+
+# Datasets are not redistributed here
+dataset/
+*.tar.gz
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
