@@ -1,0 +1,22 @@
+checkpoint                        zero   oracle       上界          预算网格跨度      捕获比例
+========================================================================================
+k=16 80k unrelated              0.8821   0.6308   0.1297   [0.130,0.204]      33.4%
+Traceback (most recent call last):
+  File "C:\T1D Meta Learning\code\python\meta-diffusion\scripts\ft_reference.py", line 100, in <module>
+    main()
+  File "C:\T1D Meta Learning\code\python\meta-diffusion\scripts\ft_reference.py", line 57, in main
+    cfg, model, enc, tr, ck = load(path, dev)
+                              ^^^^^^^^^^^^^^^
+  File "C:\T1D Meta Learning\code\python\meta-diffusion\scripts\ft_reference.py", line 36, in load
+    ck = torch.load(ck_path, map_location=dev, weights_only=False)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\T1D Meta Learning\code\python\meta-diffusion\.venv\Lib\site-packages\torch\serialization.py", line 1530, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\T1D Meta Learning\code\python\meta-diffusion\.venv\Lib\site-packages\torch\serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\T1D Meta Learning\code\python\meta-diffusion\.venv\Lib\site-packages\torch\serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints\\stage1_linear_k16_s160000_unrelated.pt'

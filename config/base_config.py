@@ -1,151 +1,115 @@
-# config/base_config.py
+"""Configuration tree: nested dataclasses plus a module-level singleton.
+
+Defaults come from Appendices A.2 / A.3 of the source document. Both the document
+(section 15) and this project's protocol require that **every hyperparameter and
+adaptation budget be selected on the validation classes and then frozen**; the
+test split is reserved for final reporting only.
+"""
+
+from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Tuple
 
-# ------------------------------
-# 1. Time grid
-# ------------------------------
+
 @dataclass
-class TimeGridConfig:
-    T: float = 1.0          # final time
-    n_steps: int = 200      # dt = 0.005 (Finer grid for cubic stability)
-
-    @property
-    def dt(self) -> float:
-        return self.T / self.n_steps
-
-# -----------------------------------
-# 2. Basis Config
-# -----------------------------------
-@dataclass
-class BasisConfig:
-    x_dim: int = 10
-    drift_basis_names: Tuple[str, ...] = (
-        "const", "x", "x2", "x3", "sin", "cos",  # Base 6 terms
-        "tanh", "x4"                              # Enhanced nonlinearity for 10D
-    )
-    diffusion_basis_names: Tuple[str, ...] = ("const", "absx", "sqrt_absx")
-    diffusion_eps: float = 1e-3
-
-    @property
-    def n_drift_basis(self) -> int:
-        return len(self.drift_basis_names)
-
-    @property
-    def n_diffusion_basis(self) -> int:
-        return len(self.diffusion_basis_names)
-
-# ----------------------------------------------
-# 3. Distributions over θ (The Manifold)
-# ----------------------------------------------
-@dataclass
-class ThetaDistributionConfig:
-    # ---- DRIFT ----
-    drift_mean_train: float = 0.0
-    drift_std_train: float = 0.5
-
-    # Scaled priors to dampen high-order terms (CRITICAL SAFETY for 10D)
-    # Added tanh and x4 for richer nonlinear dynamics in 10D
-    drift_scales: Tuple[float, ...] = field(default_factory=lambda: (
-        1.0, 0.5, 0.05, 0.005,  # const, x, x2, x3
-        0.3, 0.3,                # sin, cos
-        0.2, 0.001               # tanh, x4 (very small for x4 stability)
+class ModelConfig:
+    backbone: str = "small_unet"            # registry name; see models/backbone.py
+    backbone_kwargs: dict = field(default_factory=lambda: dict(
+        base_channels=128, channel_mult=(1, 2, 2), num_res_blocks=2, attn_resolutions=(16,)
     ))
+    k: int = 16                             # A.2 starting value; sweep {2,4,8,16,32}
+    basis_init_scale: float = 1e-3
 
-    # ---- DIFFUSION ----
-    diffusion_mean_train: float = -2.0
-    diffusion_std_train: float = 1.0
+    # Set encoder r_psi
+    encoder_width: int = 64
+    encoder_feature_dim: int = 256
+    encoder_hidden: int = 256
+    encoder_pooling: str = "mean"           # mean | mean_std (the latter adds second moments)
 
-    diffusion_scales: Tuple[float, ...] = field(default_factory=lambda: (
-        0.5, 0.2, 0.1
-    ))
+    # Transport Delta_gamma -- A.2: (k + d_c) -> 64 -> 64 -> k
+    transport_hidden: int = 64
+    relation_dim: int = 8                   # d_c in {8, 16}
+    # None = a single relation, so c is omitted -- A.2: "Omit c for a single
+    # fixed relation".
+    #
+    # The relation descriptor must be indexed by the *relation* itself (for the
+    # domain-shift scheme, the transformation type), never by a semantic class or
+    # grouping. A grouping that is disjoint between train and test would make
+    # meta-testing read embedding vectors that were never trained, silently
+    # disabling the transport network. The document states the rule as
+    # "indexed by relation, never semantic class".
+    n_relations: int | None = None
+    transport_out_moments: bool = False     # the single extension point of A.7; keep False in v1
 
-    # ---- TEST REGIMES ----
-    use_same_dist_for_test_A: bool = True
 
-    # Case B: Extrapolation (Mild Shift)
-    drift_mean_shift_test_B: float = 0.5
-    diffusion_mean_shift_test_B: float = 0.5
-
-    # Case C: Strong Extrapolation
-    drift_mean_shift_test_C: float = 1.0
-    diffusion_mean_shift_test_C: float = 1.0
-    drift_std_scale_test_C: float = 2.0
-
-    drift_std_test: float = 1.0
-    diffusion_std_test: float = 1.0
-
-# -------------------------------
-# 4. Stability / Safety
-# -------------------------------
 @dataclass
-class StabilityConfig:
-    max_state_abs: float = 10.0
-    max_retries_per_theta: int = 20
+class DiffusionConfig:
+    n_steps: int = 1000
+    schedule: str = "cosine"
+    loss_weighting: str = "simple"          # simple | snr | min_snr
+    min_snr_gamma: float = 5.0
 
-# -------------------------------
-# 5. Initialization (RESTORED)
-# -------------------------------
+
 @dataclass
-class InitializationConfig:
-    x0_mean: float = 0.0
-    x0_std: float = 0.25  # Reduced from 0.5 for 10D stability
+class EpisodeConfig:
+    scheme: str = "sibling"                 # sibling | domainshift
+    split_path: str = "artifacts/cifar100_split.json"
+    domainshift_path: str = "artifacts/cifar100_domainshift.json"
+    k_shots: tuple[int, ...] = (1, 2, 5, 10, 20)
 
-# --------------------------------
-# 6. Dataset Sizes
-# --------------------------------
+    # Number of source images fed to the encoder during training.
+    # Note: the streaming pooling described in the document is a *deployment*
+    # technique. Training must retain gradients, so M_S is bounded by memory and
+    # we subsample from the src_support pool. The full value of a large M_S shows
+    # up in the meta-test anchor.
+    severity_override: int | None = None     # relatedness / severity sweep; None = use the value stored in the split file
+    enc_source_images: int = 64
+    query_batch: int = 32                   # query images per step for L_src / L_tgt / L_trans
+
+
 @dataclass
-class DatasetSizesConfig:
-    n_train_thetas: int = 150  # Increased from 100 for 10D
-    n_val_thetas: int = 30     # Increased from 20
-    n_test_thetas: int = 30    # Increased from 20
+class TrainConfig:
+    steps: int = 20_000
+    lr: float = 2e-4
+    weight_decay: float = 0.0
+    grad_clip: float = 1.0
+    ema_decay: float = 0.999
+    warmup_steps: int = 500
 
-    # Trajectories per theta (increased for better learning in 10D)
-    n_train_traj_per_theta_train_inner: int = 80  # Increased from 64
-    n_train_traj_per_theta_val_inner: int = 20    # Increased from 16
-    n_val_traj_per_theta: int = 40                # Increased from 32
-    n_test_support_traj_per_theta: int = 10
-    n_test_query_traj_per_theta: int = 32
+    # L_meta = L_src + lambda_T*L_tgt + lambda_tr*L_trans + lambda_z*L_z   [eq. 30]
+    lambda_tgt: float = 1.0                 # A.3: lambda_T = lambda_tr = 1
+    lambda_trans: float = 1.0
+    lambda_z: float = 1e-4                  # light regularisation against degenerate coordinates
 
-# -----------------
-# 7. Latent & Model
-# -----------------
+    log_every: int = 50
+    diagnose_every: int = 500
+    ckpt_every: int = 2_000
+    ckpt_dir: str = "checkpoints"
+    amp: bool = True                        # bf16 mixed precision
+
+
 @dataclass
-class LatentConfig:
-    latent_dim: int = 16           # Increased from 8 to capture 10D variability
-    encoder_hidden_dim: int = 256  # Increased from 64 for 10D state
-    sde_hidden_dim: int = 128      # Increased from 64
-    head_hidden_dim: int = 128     # Increased from 64
+class AdaptConfig:
+    """Meta-test refinement budget. **Every strategy shares one object**, so the
+    matched comparison the document requires holds structurally rather than by
+    manual bookkeeping."""
+    steps: int = 25                         # J in {0, 5, 10, 25, 50, 100}
+    lr: float = 1e-2                        # eta_z in {1e-3, 3e-3, 1e-2, 3e-2}
+    beta0: float = 1.0                      # beta_0 in {0, 0.01, 0.1, 1, 10}
+    noise_batch: int = 16                   # (t, eps) draws per step on the support set
 
-# --------------
-# 8. Paths
-# --------------
-@dataclass
-class DatasetPathsConfig:
-    data_root: str = "data/"
-    meta_params_path: str = "data/meta_params.npz"
-    train_traj_root: str = "data/train_trajectories/"
-    val_traj_root: str = "data/val_trajectories/"
-    test_traj_root: str = "data/test_trajectories/"
 
-# -------------------------
-# 9. Master Config
-# -------------------------
 @dataclass
 class BaseConfig:
-    time_grid: TimeGridConfig = field(default_factory=TimeGridConfig)
-    basis: BasisConfig = field(default_factory=BasisConfig)
-    theta_dist: ThetaDistributionConfig = field(default_factory=ThetaDistributionConfig)
-    stability: StabilityConfig = field(default_factory=StabilityConfig)
-    init: InitializationConfig = field(default_factory=InitializationConfig)
-    dataset_sizes: DatasetSizesConfig = field(default_factory=DatasetSizesConfig)
-    latent: LatentConfig = field(default_factory=LatentConfig)
-    paths: DatasetPathsConfig = field(default_factory=DatasetPathsConfig)
-    
+    model: ModelConfig = field(default_factory=ModelConfig)
+    diffusion: DiffusionConfig = field(default_factory=DiffusionConfig)
+    episodes: EpisodeConfig = field(default_factory=EpisodeConfig)
+    train: TrainConfig = field(default_factory=TrainConfig)
+    adapt: AdaptConfig = field(default_factory=AdaptConfig)
+
     device: str = "cuda"
     global_seed: int = 12345
+    run_name: str = "meta_diffusion_v1"
 
-    test_regimes: Tuple[str, ...] = ("A", "B", "C")
 
 cfg = BaseConfig()

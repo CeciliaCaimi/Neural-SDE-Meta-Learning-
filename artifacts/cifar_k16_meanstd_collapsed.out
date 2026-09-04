@@ -1,0 +1,78 @@
+设备 cuda · 骨干 small_unet · k=16
+φ 27.80M + encoder 0.39M + transport 6.3K
+训练 episode 组合 480 · 共 50000 步
+
+step      1  L=3.2998  src=1.0898  tgt=1.1051  trans=1.1050  gain=+0.0001  |dz|=0.015  1.4 it/s
+step     50  L=1.1826  src=0.3916  tgt=0.3953  trans=0.3956  gain=-0.0004  |dz|=0.019  10.0 it/s
+step    100  L=0.6045  src=0.1979  tgt=0.2037  trans=0.2026  gain=+0.0012  |dz|=0.028  10.7 it/s
+step    150  L=0.3535  src=0.1332  tgt=0.1097  trans=0.1097  gain=-0.0000  |dz|=0.030  11.0 it/s
+step    200  L=0.2969  src=0.0977  tgt=0.0998  trans=0.0984  gain=+0.0014  |dz|=0.028  11.1 it/s
+step    250  L=0.3157  src=0.0916  tgt=0.1116  trans=0.1115  gain=+0.0002  |dz|=0.023  11.2 it/s
+step    300  L=0.3880  src=0.0906  tgt=0.1482  trans=0.1482  gain=+0.0000  |dz|=0.021  11.3 it/s
+step    350  L=0.3232  src=0.0975  tgt=0.1128  trans=0.1122  gain=+0.0006  |dz|=0.018  11.3 it/s
+step    400  L=0.2696  src=0.0903  tgt=0.0893  trans=0.0893  gain=-0.0000  |dz|=0.017  11.4 it/s
+step    450  L=0.2765  src=0.0573  tgt=0.1093  trans=0.1093  gain=-0.0000  |dz|=0.015  11.4 it/s
+step    500  L=0.3382  src=0.0885  tgt=0.1247  trans=0.1245  gain=+0.0001  |dz|=0.014  11.4 it/s
+step    550  L=0.1882  src=0.0780  tgt=0.0549  trans=0.0549  gain=-0.0000  |dz|=0.014  11.4 it/s
+step    600  L=0.2875  src=0.0921  tgt=0.0975  trans=0.0975  gain=-0.0000  |dz|=0.013  11.4 it/s
+step    650  L=0.2430  src=0.1311  tgt=0.0558  trans=0.0558  gain=-0.0000  |dz|=0.012  11.4 it/s
+step    700  L=0.2915  src=0.1045  tgt=0.0934  trans=0.0934  gain=+0.0000  |dz|=0.012  11.4 it/s
+step    750  L=0.1867  src=0.0735  tgt=0.0565  trans=0.0565  gain=-0.0000  |dz|=0.011  11.5 it/s
+step    800  L=0.3099  src=0.1050  tgt=0.1024  trans=0.1023  gain=+0.0000  |dz|=0.011  11.5 it/s
+step    850  L=0.2400  src=0.1096  tgt=0.0651  trans=0.0652  gain=-0.0001  |dz|=0.011  11.5 it/s
+step    900  L=0.2860  src=0.1248  tgt=0.0805  trans=0.0805  gain=-0.0000  |dz|=0.011  11.5 it/s
+step    950  L=0.1230  src=0.0479  tgt=0.0374  trans=0.0374  gain=+0.0000  |dz|=0.010  11.5 it/s
+step   1000  L=0.1639  src=0.0582  tgt=0.0528  trans=0.0528  gain=+0.0000  |dz|=0.011  11.5 it/s
+  [诊断 @ 1000] loss_correct=0.1512  loss_zero=0.2281  loss_shuffled=0.1512  loss_random=0.2298  loss_target_only=0.1516  r_basis=0.2514  |dz_transport|=0.0149  z_s_vs_enc_rel=0.0165  z_spread_rel=0.0128  gain_vs_zero=0.0770  gain_vs_shuffled=-0.0000  gain_vs_target_only=0.0004
+    ⚠ 坐标塌缩: 跨 episode 的 z 相对间距仅 0.013（阈值 0.05）—— encoder 在输出近似常量，此时 gain_vs_zero 反映的是基被当作共享容量，不是任务特异性
+    ⚠ z_S 与 z^enc_T 相对间距仅 0.017 —— encoder 没有把 source 集和 target 集区分开
+step   1050  L=0.1894  src=0.0507  tgt=0.0693  trans=0.0692  gain=+0.0000  |dz|=0.011  11.5 it/s
+step   1100  L=0.2814  src=0.0867  tgt=0.0972  trans=0.0973  gain=-0.0000  |dz|=0.010  11.5 it/s
+step   1150  L=0.2072  src=0.0712  tgt=0.0679  trans=0.0679  gain=-0.0000  |dz|=0.010  11.5 it/s
+step   1200  L=0.1782  src=0.0638  tgt=0.0571  trans=0.0571  gain=+0.0000  |dz|=0.011  11.5 it/s
+step   1250  L=0.1813  src=0.0497  tgt=0.0658  trans=0.0657  gain=+0.0001  |dz|=0.011  11.5 it/s
+step   1300  L=0.1752  src=0.0520  tgt=0.0615  trans=0.0615  gain=+0.0000  |dz|=0.011  11.5 it/s
+step   1350  L=0.1431  src=0.0438  tgt=0.0496  trans=0.0495  gain=+0.0000  |dz|=0.011  11.5 it/s
+step   1400  L=0.1821  src=0.0447  tgt=0.0687  trans=0.0686  gain=+0.0000  |dz|=0.011  11.5 it/s
+step   1450  L=0.1438  src=0.0572  tgt=0.0432  trans=0.0432  gain=-0.0000  |dz|=0.011  11.5 it/s
+step   1500  L=0.1482  src=0.0498  tgt=0.0492  trans=0.0492  gain=+0.0000  |dz|=0.011  11.5 it/s
+step   1550  L=0.1793  src=0.0645  tgt=0.0573  trans=0.0573  gain=+0.0000  |dz|=0.011  11.5 it/s
+step   1600  L=0.1896  src=0.0755  tgt=0.0570  trans=0.0570  gain=-0.0000  |dz|=0.011  11.5 it/s
+step   1650  L=0.2433  src=0.0613  tgt=0.0909  trans=0.0909  gain=+0.0000  |dz|=0.012  11.5 it/s
+step   1700  L=0.1744  src=0.0724  tgt=0.0510  trans=0.0510  gain=+0.0000  |dz|=0.012  11.5 it/s
+step   1750  L=0.1574  src=0.0595  tgt=0.0488  trans=0.0490  gain=-0.0002  |dz|=0.012  11.5 it/s
+step   1800  L=0.2634  src=0.0425  tgt=0.1104  trans=0.1104  gain=-0.0000  |dz|=0.012  11.5 it/s
+step   1850  L=0.1110  src=0.0403  tgt=0.0353  trans=0.0353  gain=-0.0000  |dz|=0.012  11.5 it/s
+step   1900  L=0.2854  src=0.1047  tgt=0.0903  trans=0.0903  gain=-0.0000  |dz|=0.012  11.5 it/s
+step   1950  L=0.1975  src=0.0592  tgt=0.0691  trans=0.0691  gain=-0.0000  |dz|=0.012  11.5 it/s
+step   2000  L=0.1190  src=0.0525  tgt=0.0332  trans=0.0332  gain=-0.0000  |dz|=0.012  11.5 it/s
+  [诊断 @ 2000] loss_correct=0.0963  loss_zero=0.1840  loss_shuffled=0.0963  loss_random=0.1923  loss_target_only=0.0963  r_basis=0.4245  |dz_transport|=0.0114  z_s_vs_enc_rel=0.0093  z_spread_rel=0.0065  gain_vs_zero=0.0877  gain_vs_shuffled=0.0000  gain_vs_target_only=-0.0000
+    ⚠ 坐标塌缩: 跨 episode 的 z 相对间距仅 0.007（阈值 0.05）—— encoder 在输出近似常量，此时 gain_vs_zero 反映的是基被当作共享容量，不是任务特异性
+    ⚠ z_S 与 z^enc_T 相对间距仅 0.009 —— encoder 没有把 source 集和 target 集区分开
+step   2050  L=0.1554  src=0.0545  tgt=0.0504  trans=0.0504  gain=+0.0000  |dz|=0.012  11.5 it/s
+step   2100  L=0.1295  src=0.0465  tgt=0.0415  trans=0.0415  gain=+0.0000  |dz|=0.013  11.5 it/s
+step   2150  L=0.2283  src=0.0794  tgt=0.0744  trans=0.0744  gain=+0.0000  |dz|=0.013  11.5 it/s
+step   2200  L=0.2086  src=0.0727  tgt=0.0679  trans=0.0679  gain=-0.0000  |dz|=0.013  11.5 it/s
+step   2250  L=0.2969  src=0.0877  tgt=0.1046  trans=0.1045  gain=+0.0000  |dz|=0.013  11.5 it/s
+step   2300  L=0.1578  src=0.0870  tgt=0.0354  trans=0.0353  gain=+0.0001  |dz|=0.013  11.5 it/s
+step   2350  L=0.1672  src=0.0563  tgt=0.0554  trans=0.0554  gain=+0.0000  |dz|=0.013  11.5 it/s
+step   2400  L=0.2294  src=0.0347  tgt=0.0973  trans=0.0973  gain=-0.0001  |dz|=0.013  11.5 it/s
+step   2450  L=0.2255  src=0.0937  tgt=0.0658  trans=0.0658  gain=-0.0000  |dz|=0.013  11.5 it/s
+step   2500  L=0.1325  src=0.0496  tgt=0.0414  trans=0.0414  gain=-0.0000  |dz|=0.014  11.5 it/s
+step   2550  L=0.1684  src=0.0864  tgt=0.0409  trans=0.0409  gain=+0.0000  |dz|=0.013  11.5 it/s
+step   2600  L=0.1728  src=0.0352  tgt=0.0688  trans=0.0688  gain=+0.0000  |dz|=0.014  11.5 it/s
+step   2650  L=0.1172  src=0.0399  tgt=0.0386  trans=0.0386  gain=-0.0000  |dz|=0.014  11.5 it/s
+step   2700  L=0.1728  src=0.0661  tgt=0.0533  trans=0.0534  gain=-0.0000  |dz|=0.014  11.5 it/s
+step   2750  L=0.1953  src=0.0772  tgt=0.0590  trans=0.0590  gain=+0.0000  |dz|=0.014  11.5 it/s
+step   2800  L=0.2000  src=0.0537  tgt=0.0731  trans=0.0732  gain=-0.0000  |dz|=0.014  11.5 it/s
+step   2850  L=0.1567  src=0.0740  tgt=0.0413  trans=0.0413  gain=-0.0000  |dz|=0.014  11.5 it/s
+step   2900  L=0.1061  src=0.0343  tgt=0.0359  trans=0.0359  gain=+0.0000  |dz|=0.014  11.5 it/s
+step   2950  L=0.1743  src=0.0692  tgt=0.0525  trans=0.0525  gain=-0.0000  |dz|=0.014  11.5 it/s
+step   3000  L=0.1188  src=0.0553  tgt=0.0317  trans=0.0317  gain=+0.0000  |dz|=0.014  11.5 it/s
+  [诊断 @ 3000] loss_correct=0.0699  loss_zero=0.1590  loss_shuffled=0.0699  loss_random=0.1604  loss_target_only=0.0699  r_basis=0.4477  |dz_transport|=0.0122  z_s_vs_enc_rel=0.0082  z_spread_rel=0.0030  gain_vs_zero=0.0891  gain_vs_shuffled=0.0000  gain_vs_target_only=-0.0000
+    ⚠ 坐标塌缩: 跨 episode 的 z 相对间距仅 0.003（阈值 0.05）—— encoder 在输出近似常量，此时 gain_vs_zero 反映的是基被当作共享容量，不是任务特异性
+    ⚠ z_S 与 z^enc_T 相对间距仅 0.008 —— encoder 没有把 source 集和 target 集区分开
+step   3050  L=0.2327  src=0.0764  tgt=0.0781  trans=0.0781  gain=+0.0000  |dz|=0.014  11.5 it/s
+step   3100  L=0.2161  src=0.0795  tgt=0.0683  trans=0.0683  gain=+0.0000  |dz|=0.015  11.5 it/s
+step   3150  L=0.1484  src=0.0722  tgt=0.0381  trans=0.0381  gain=+0.0001  |dz|=0.015  11.5 it/s
+step   3200  L=0.1714  src=0.0470  tgt=0.0622  trans=0.0622  gain=+0.0001  |dz|=0.015  11.5 it/s
