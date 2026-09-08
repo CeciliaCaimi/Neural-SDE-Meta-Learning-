@@ -68,6 +68,10 @@ def run_diagnostics(
     off_diag = spread[~torch.eye(len(coords), dtype=torch.bool, device=z_stack.device)]
     mean_norm = z_stack.norm(dim=1).mean()
     z_spread_rel = (off_diag.mean() / mean_norm.clamp_min(1e-8)).item()
+    # One coordinate shared by every episode. Substituting it for each episode's own
+    # coordinate removes all task-specific content while keeping the common offset,
+    # which is what separates real adaptation from the basis acting as shared capacity.
+    z_mean = z_stack.mean(dim=0)
 
     # ---- Second pass: the loss under each control ----
     for i, (batch, (z_s, z_enc_t, z_tld_t)) in enumerate(zip(batches, coords)):
@@ -84,9 +88,11 @@ def run_diagnostics(
         z_rand = z_rand / z_rand.norm(dim=1, keepdim=True) * z_correct.norm(dim=1, keepdim=True)
 
         preds = model.eps_hat_many(
-            nb.x_t, nb.t, [z_correct, z_zero, z_mismatch, z_rand, rep(z_enc_t)]
+            nb.x_t, nb.t,
+            [z_correct, z_zero, z_mismatch, z_rand, rep(z_enc_t), rep(z_mean)],
         )
-        for name, pred in zip(("correct", "zero", "shuffled", "random", "target_only"), preds):
+        for name, pred in zip(
+            ("correct", "zero", "shuffled", "random", "target_only", "mean_z"), preds):
             push(f"loss_{name}", denoising_loss(nb.eps, pred, nb.t, sched, w, gamma).item())
 
         push("r_basis", model.basis_usage(nb.x_t, nb.t, z_correct).mean().item())
@@ -99,6 +105,12 @@ def run_diagnostics(
     values["gain_vs_zero"] = values["loss_zero"] - values["loss_correct"]
     values["gain_vs_shuffled"] = values["loss_shuffled"] - values["loss_correct"]
     values["gain_vs_target_only"] = values["loss_target_only"] - values["loss_correct"]
+    values["gain_vs_mean_z"] = values["loss_mean_z"] - values["loss_correct"]
+    # What fraction of the coordinate's whole benefit is actually task-specific?
+    # Near 0 means the basis is a constant offset dressed up as adaptation.
+    denom = values["gain_vs_zero"]
+    values["task_specific_frac"] = (
+        values["gain_vs_mean_z"] / denom if abs(denom) > 1e-9 else 0.0)
 
     return DiagnosticReport(values=values, warnings=_stop_conditions(values))
 
@@ -110,6 +122,11 @@ def _stop_conditions(v: dict[str, float], collapse_tol: float = 0.05) -> list[st
         out.append(f"r_basis={v['r_basis']:.2e} is near 0 -- the basis is barely used (headline failure of 15)")
     if v["gain_vs_zero"] <= 0:
         out.append("z=0 matches or beats the correct coordinate -- low-dimensional structure unproven")
+    if v.get("gain_vs_zero", 0.0) > 1e-3 and v.get("task_specific_frac", 1.0) < 0.05:
+        out.append(
+            f"gain_vs_zero={v['gain_vs_zero']:.4f} looks healthy but only "
+            f"{100*v['task_specific_frac']:.1f}% of it is task-specific: one shared mean "
+            "coordinate does just as well, so the basis is a constant offset, not adaptation")
 
     # Check collapse first: when collapsed gain_vs_shuffled is ~0, but the cause is the encoder
     collapsed = v["z_spread_rel"] < collapse_tol

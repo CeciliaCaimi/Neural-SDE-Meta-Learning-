@@ -308,6 +308,22 @@ not separate the two domains, nothing downstream can.
 **Transport displacement.** `||z_tilde_T - z_S||`. Constantly zero means `Delta_gamma` has
 degenerated to the identity and the method has become "reuse the source coordinate".
 
+**The mean-coordinate substitution.** This is the control that settles whether the method works,
+and it costs one extra forward pass. Replace each episode's coordinate with a *single mean
+coordinate shared by every episode*, then measure the loss. All task-specific content is removed
+while the common offset survives, so
+
+```
+task_specific_frac = (loss[mean z] - loss[own z]) / (loss[z=0] - loss[own z])
+```
+
+is the fraction of the coordinate's benefit that is genuinely task-specific. Near zero means the
+basis is a constant offset wearing the costume of adaptation, however large `gain_vs_zero` looks.
+
+Do not trust `gain_vs_zero` alone. On one checkpoint it read 0.118, apparently decisive, while the
+substitution showed 0.0% of it was task-specific: `z = 0` was catastrophic only because it deleted
+a constant the model needed, not because the coordinate was doing any work.
+
 **Distance to an abundant-target reference.** Encode a *large* target sample to get
 `z_T^abund`, then compare `||z_S - z_T^abund||` before transport with
 `||z_tilde_T - z_T^abund||` after. This separates two questions that are otherwise conflated:
@@ -379,6 +395,7 @@ log-density and finite differences — before trusting anything built on it.
 | `z_S` and `z^enc_T` not separated | the encoder cannot tell the domains apart; change pooling before splitting the encoder |
 | transport displacement near 0 | `Delta_gamma` has become the identity |
 | gain peaks early then decays to 0 | the shared backbone is absorbing the task difference; the coordinate has no work left |
+| large `gain_vs_zero`, `task_specific_frac` near 0 | the basis is one constant offset; no adaptation is happening at all |
 
 That last row is worth dwelling on, because it is what this project observed on natural images,
 and because the obvious diagnosis was wrong.
@@ -391,12 +408,23 @@ closed 93% of the distance from the source coordinate to the true target coordin
 coordinate was closer to the truth than the coordinate encoded from the one available target
 image. The coordinate was right. Multiplying it into the basis simply produced nothing.
 
-This is why the abundant-reference diagnostic earns its place. Without it, "no gain" is a single
-undifferentiated failure; with it, the pipeline splits into three testable stages — can the
-encoder read a task, can transport predict one, can the basis express it — and the failure
-localises to the third. Those three call for entirely different remedies, so collapsing them
-into one number wastes the experiment.
+That was still not the end of it. Shrinking the backbone raised `gain_vs_zero` from 0.0005 to
+0.363, which read as the mechanism finally engaging. The mean-coordinate substitution then showed
+0.0% of even that was task-specific: the capacity sweep had been measuring the size of a constant
+offset, which a large backbone absorbs into its weights and a small one leaves in the basis.
 
-Whether the remedy is a smaller backbone, a more diverse task family, or accepting that the
-hypothesis does not hold in this regime is open. The honest thing is to report the curves and
-the stage-by-stage diagnostic rather than the endpoint alone.
+The abundant-reference diagnostic still earns its place, because it splits the pipeline into
+three testable stages: can the encoder read a task, can transport predict one, can the basis
+express it. Here the first two pass and the third fails, and those call for entirely different
+remedies.
+
+Two lessons generalise beyond this project. First, `gain_vs_zero` answers "does the model need `z`
+to be nonzero", not "does the model use `z` to identify the task"; only a substitution control
+separates them. Second, a diagnostic that moves the way you expect is the easiest thing in the
+world to over-read: the capacity sweep produced exactly the monotone curve the hypothesis
+predicted, and the hypothesis was still wrong.
+
+The remaining explanation is the task family. Every task shares one fixed relation, so the only
+task-specific content available to the coordinate is class identity, which denoising a small
+natural image scarcely needs. That is falsifiable in a domain where the distance between tasks can
+be dialled, which is what the controlled image stage is for.

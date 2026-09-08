@@ -39,12 +39,12 @@ to reimplement the project from scratch.
 |---|---|---|
 | 1 | 2-D Gaussian mixtures (analytic ground truth) | **Works.** Transport beats every baseline at small `K_T`, with paired confidence intervals over 32 tasks x 3 seeds |
 | 2 | dSprites | Not started |
-| 3 | CIFAR-100 | **Partly works, and the failure is localised.** The encoder and the transport map both do their job; the learned basis cannot turn a correct coordinate into a denoising gain |
+| 3 | CIFAR-100 | **The mechanism never engages.** The coordinate machinery is measurably correct in coordinate space, but one constant coordinate shared by every task denoises exactly as well as each task's own: 0% of the benefit is task-specific, at every backbone size tried |
 
 The CIFAR-100 outcome is a real finding, not a bug, and it is documented rather than hidden.
-It is also more specific than "it does not work": of the method's three moving parts, two are
-measurably correct on natural images and one is not. See
-[Findings on CIFAR-100](#findings-on-cifar-100) below.
+It took three rounds of measurement to reach, and two of those rounds reached the wrong
+conclusion. The story is in [Findings on CIFAR-100](#findings-on-cifar-100), because the mistake
+is easy to repeat and the diagnostic that catches it costs one extra forward pass.
 
 ---
 
@@ -197,7 +197,60 @@ the loss. No coordinate beats any other: transport, refinement and even the orac
 all land on the same number, and `K_T` changes nothing. The model learned to use the basis as a
 small fixed offset, not as a task-specific direction.
 
-### Where exactly it fails
+**Coordinate dimension.** `k` in {16, 32, 64}, trained separately, measured on validation.
+All three decay to nothing: final `gain_vs_zero` of 0.0007, 0.0005 and 0.0004. A larger `k`
+raises the early peak (0.084, 0.105, 0.129) and then decays slightly further, which is the
+signature of a backbone absorbing the difference rather than of a coordinate short of capacity.
+
+**Backbone capacity.** Holding `k` at 32 and shrinking the backbone changes the picture
+completely at 20k steps:
+
+| base channels | `r_basis` | `gain_vs_zero` |
+|---|---|---|
+| 128 | 0.024 | 0.0005 |
+| 64 | 0.605 | 0.144 |
+| 32 | 1.289 | 0.363 |
+
+A 53-fold rise in basis usage, and 725-fold in apparent gain. The 64-versus-128 comparison is
+width only, same depth and attention, so this is not an artefact of the shallower 32-channel
+variant.
+
+**Convergence.** Running the two small backbones to 60k steps shows every curve still falling,
+with the half-life of an exponential fit scaling with capacity: 1,965 steps at 128 channels,
+10,160 at 64, and 25,380 at 32. Capacity buys time, not permanence. Meanwhile `loss_correct`
+stays flat throughout, so this is not undertraining -- the model has converged while the
+coordinate keeps losing relevance.
+
+
+### The measurement that settles it
+
+Everything above compares the correct coordinate against `z = 0`. That comparison is a trap, and
+taking it at face value cost two rounds of wrong conclusions.
+
+Substitute **one mean coordinate, shared by every episode**, for each episode's own. That removes
+all task-specific content while keeping the common offset. On the 32-channel checkpoint, the one
+where `gain_vs_zero` looked healthiest at 0.118:
+
+| coordinate used | denoising loss |
+|---|---|
+| this episode's own | 0.0273 |
+| one shared mean, all episodes | 0.0273 |
+| `z = 0` | 0.1456 |
+
+**Zero percent** of the coordinate's benefit is task-specific. Its whole contribution is a
+constant the model needs; `z = 0` is catastrophic only because it deletes that constant. Across
+24 validation episodes the task-specific part is 6.9% of the coordinate's length and worth
+nothing measurable.
+
+This also re-reads the capacity sweep. `gain_vs_zero` rose from 0.0005 at 128 channels to 0.363
+at 32, which looked like the mechanism switching on. It was the size of the constant offset: a
+large backbone absorbs it into its own weights, so deleting `z` costs little; a small one leaves
+it in the basis, so deleting `z` hurts. Neither adapts.
+
+`diagnostics/controls.py` now reports `task_specific_frac` on every run and warns when
+`gain_vs_zero` looks healthy while that fraction is near zero.
+
+### What does work, and why it is not enough
 
 The table above says the coordinate does not help. It does not say *which* part is at fault, and
 the obvious guesses — the encoder cannot read a task, or transport cannot predict one — both turn
@@ -222,19 +275,24 @@ The first three columns do not vary with `K_T` by construction, since `z_S` and 
 both built from source data alone and the third column is their difference. Only the last column
 depends on `K_T`, and it falls monotonically, as a sparse estimate should.
 
-So the encoder reads tasks, and transport predicts them. What fails is the last step: the
-coordinate is multiplied into the learned basis `R_1..R_k` and nothing happens — basis usage
-sits at 0.012 to 0.039, and a correct coordinate denoises no better than a wrong one.
+So the encoder reads tasks and transport predicts them, both demonstrably. But those coordinate
+differences never reach the loss: coordinate space and the denoising objective are not connected
+in a task-specific way. Being right in coordinate space buys nothing.
 
-**The bottleneck is the basis, not the coordinate.** On natural images a backbone of this
-capacity models the domains jointly, leaving the basis with no residual structure to represent;
-it degenerates into a small fixed offset. The source document raises this possibility directly.
-Whether it follows from natural images or merely from *this backbone size* is not settled —
-shrinking the backbone (`--base-channels`) is the experiment that separates the two, and it has
-not been run.
+The likely cause is the task family rather than any module. Every task here shares one fixed
+relation (clean to blurred), so the only task-specific thing a coordinate could carry is class
+identity, and denoising a 32x32 natural image scarcely depends on knowing its class. A model that
+simply denoises any CIFAR image, clean or blurred, already minimises the objective, so learning to
+ignore `z` is the correct solution to the problem as posed.
 
-Stage 1, where the backbone is small and the tasks genuinely diverse, shows all three parts
-working together. That contrast is the most informative result so far.
+Contrast stage 1, where it works: there the tasks are four-component Gaussian mixtures with modes
+in genuinely different places, and one unconditional model can only produce a blurred average at
+high error. The coordinate is not optional there.
+
+Stated so it can be falsified: **the method needs a task family whose members are farther apart
+than the shared backbone can absorb.** CIFAR-100 class-conditional distributions are not. Testing
+that properly needs a domain where the distance between tasks can be dialled, which is what stage
+2 (dSprites) offers.
 
 ---
 

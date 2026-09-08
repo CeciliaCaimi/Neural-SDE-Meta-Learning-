@@ -65,6 +65,11 @@ def main() -> None:
     ap.add_argument("--n-episodes", type=int, default=40)
     ap.add_argument("--k-shots", type=int, nargs="+", default=[1, 5, 20])
     ap.add_argument("--n-noise", type=int, default=8, help="how many (t, eps) draws to average")
+    ap.add_argument("--m-source", type=int, default=None,
+                    help="M_S: source images per episode (the source-evidence sweep). "
+                         "Training used a fixed value; this varies it at evaluation only.")
+    ap.add_argument("--split", default="test", choices=("train", "val", "test"),
+                    help="protocol: sweeps run on val; test is for the final number only")
     a = ap.parse_args()
 
     dev = torch.device("cuda")
@@ -113,8 +118,8 @@ def main() -> None:
     # results[k][strategy] = per-episode losses
     results = {k: {name: [] for name, _, _ in STRATEGIES} for k in a.k_shots}
     for k in a.k_shots:
-        ld = DomainShiftLoader(raw, split, "test", device=dev,
-                               enc_source_images=cfg.episodes.enc_source_images,
+        ld = DomainShiftLoader(raw, split, a.split, device=dev,
+                               enc_source_images=a.m_source or cfg.episodes.enc_source_images,
                                query_batch=cfg.episodes.query_batch, seed=1234)
         for ep in range(a.n_episodes):
             b = ld.sample(k_shot=k)
@@ -148,7 +153,8 @@ def main() -> None:
             h = 1.96 * float(d.std()) / math.sqrt(len(d))
             row += f"{float(d.mean()):>+13.4f} ±{h:.4f}"
         print(row)
-    print(f"\n({a.n_episodes} held-out episodes x {a.n_noise} noise draws, paired per episode)")
+    m_s = a.m_source or cfg.episodes.enc_source_images
+    print(f"\n({a.n_episodes} {a.split} episodes x {a.n_noise} noise draws, paired per episode; M_S={m_s})")
 
 
 if __name__ == "__main__":
