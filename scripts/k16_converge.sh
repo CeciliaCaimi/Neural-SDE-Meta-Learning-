@@ -1,7 +1,11 @@
+#!/usr/bin/env bash
+# Stage 1: train the document's default k = 16 to the same 320k steps as k = 64.
+#
+# Without a step-matched run the k comparison confounds coordinate capacity with
+# training budget, which is the confusion k_matched.sh was written to avoid at 80k.
 set -u
-PY=.venv/Scripts/python.exe
-export PYTHONIOENCODING=utf-8
-# 文档默认 k=16,训到与 k=64 同样的 320k 步
+. "$(dirname "$0")/_common.sh"
+
 $PY -m runner.stage1_gmm --steps 320000 --k 16 --decoder linear \
     --family unrelated --eval-tasks 4 > artifacts/stage1_k16_s320k.log 2>&1
 $PY scripts/ft_reference.py \

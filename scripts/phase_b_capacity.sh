@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Phase B: is the basis unused because the backbone absorbs the domain difference?
 #
 # The k sweep settled that coordinate capacity is not the bottleneck: k = 16, 32 and
@@ -13,16 +13,16 @@
 #
 # If the basis engages at low capacity, the fault was backbone size and the method
 # stands. If it stays at zero, the finding is about natural images themselves.
-cd "$(dirname "$0")/.."
-PY=.venv/Scripts/python.exe
+set -u
+. "$(dirname "$0")/_common.sh"
 
 run () {
   name=$1; shift
   echo "===== BEGIN $name ====="
-  PYTHONIOENCODING=utf-8 $PY -m runner.train \
+  $PY -m runner.train \
     --steps 20000 --scheme domainshift --k 32 \
     --ckpt-every 20000 --diagnose-every 1000 \
-    --run-name "$name" "$@" 2>&1 | grep -vE "VisibleDeprecation|pickle.load"
+    --run-name "$name" "$@" 2>&1 | grep -vE "$NOISE"
   echo "===== END $name (exit $?) ====="
 }
 

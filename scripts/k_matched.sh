@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# k=32 vs k=64 在**同为 80k 步**下比较,排除"容量大所以更难训"的混淆
+# Stage 1: compare k = 32 against k = 64 at an identical 80k steps, which removes
+# the confound that a larger coordinate is simply harder to train.
 set -u
-PY=.venv/Scripts/python.exe
-export PYTHONIOENCODING=utf-8
+. "$(dirname "$0")/_common.sh"
+
 for k in 32 64; do
   echo "### k=$k steps=80000"
   $PY -m runner.stage1_gmm --steps 80000 --k $k --decoder linear \

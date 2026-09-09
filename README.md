@@ -53,7 +53,8 @@ is easy to repeat and the diagnostic that catches it costs one extra forward pas
 Requires Python 3.11+, PyTorch with CUDA, and roughly 2 GB of GPU memory.
 
 ```bash
-pip install torch numpy
+pip install torch --index-url https://download.pytorch.org/whl/cu128   # match your CUDA
+pip install -r requirements.txt
 ```
 
 CIFAR-100 is expected at `<repo>/../../../dataset/cifar-100-python/` (the standard
@@ -112,9 +113,20 @@ diffusion/       schedule, forward noising, losses, samplers
 diagnostics/     the stopping conditions, run automatically during training
 training/        one meta-training step, and the loop around it
 runner/          entry points
-scripts/         one-off analysis and table generation
+scripts/         analysis, figures and sweep drivers -- see scripts/README.md
 tests/           72 assertions, including conformance to the source specification
+artifacts/       the split files the code reads, and the stage-1 logs behind the tables
+docs/            the 28-page report, its LaTeX sources, and the script that builds it
 ```
+
+Four files worth knowing about before anything else:
+
+| | |
+|---|---|
+| `docs/meta_diffusion_combined.pdf` | the whole programme in 28 pages, including a reproduction procedure |
+| `ALGORITHM.md` | every equation, hyperparameter and diagnostic, enough to reimplement from scratch |
+| `scripts/README.md` | which script produced which table |
+| `requirements.txt` | torch and numpy; matplotlib only for the figure scripts |
 
 ### Swapping the diffusion network
 
@@ -313,10 +325,16 @@ python scripts/probe_transport.py checkpoints/<run>_step50000.pt --split val
 ```
 
 Training writes one JSON line per logging step to `checkpoints/<run>_log.jsonl`, and prints a
-diagnostic block on the validation split at a configurable interval. Two numbers matter most:
+diagnostic block on the validation split at a configurable interval. Three numbers matter, and
+the order is the point:
 
-- `gain_vs_zero` — does the correct coordinate beat `z = 0`?
+- `task_specific_frac` — **read this first.** Of the coordinate's benefit, how much depends on
+  it being *this task's* coordinate rather than any coordinate? Near zero means the basis is a
+  constant offset, however healthy the other two look.
+- `gain_vs_zero` — does the correct coordinate beat `z = 0`? Necessary, not sufficient, and
+  taking it at face value cost two rounds of wrong conclusions here.
 - `r_basis` — is the basis contributing anything at all?
 
-When either approaches zero, the framework says so and names the failure mode. That is
-deliberate: the guardrails are stopping conditions, not a post-mortem.
+When any of them approaches zero the framework says so and names the failure mode, including
+the specific case of a healthy `gain_vs_zero` sitting alongside a `task_specific_frac` near
+nought. That is deliberate: the guardrails are stopping conditions, not a post-mortem.

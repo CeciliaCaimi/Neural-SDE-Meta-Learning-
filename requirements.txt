@@ -1,0 +1,18 @@
+# Meta-Diffusion dependencies.
+#
+# The framework itself needs only torch and numpy. Versions below are the ones every
+# result in the report was produced with, on Python 3.12.13; the lower bounds are what
+# the code actually requires rather than what happened to be installed.
+#
+# Install torch first, matched to your CUDA version, from https://pytorch.org.
+# The pinned build here is CUDA 12.8:
+#
+#     pip install torch --index-url https://download.pytorch.org/whl/cu128
+#     pip install -r requirements.txt
+
+torch>=2.4          # produced with 2.11.0+cu128
+numpy>=1.26         # produced with 2.5.2
+
+# Figure generation only (scripts/make_gmm_figure.py, scripts/export_gmm_pdf.py).
+# Nothing in the framework, the runners or the tests imports it.
+matplotlib>=3.8

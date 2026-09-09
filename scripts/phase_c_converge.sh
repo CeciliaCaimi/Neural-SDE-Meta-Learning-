@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Phase C: does the small-backbone advantage survive to convergence?
 #
 # Phase B showed the mechanism engages once the backbone is small enough:
@@ -7,16 +7,16 @@
 # zero; the others fell only 2-3 fold. Whether they level off or eventually reach
 # zero decides whether the capacity finding is a real effect or a slower version
 # of the same collapse, so both are run to 60k with k held at 32.
-cd "$(dirname "$0")/.."
-PY=.venv/Scripts/python.exe
+set -u
+. "$(dirname "$0")/_common.sh"
 
 run () {
   name=$1; shift
   echo "===== BEGIN $name ====="
-  PYTHONIOENCODING=utf-8 $PY -m runner.train \
+  $PY -m runner.train \
     --steps 60000 --scheme domainshift --k 32 \
     --ckpt-every 30000 --diagnose-every 2000 \
-    --run-name "$name" "$@" 2>&1 | grep -vE "VisibleDeprecation|pickle.load"
+    --run-name "$name" "$@" 2>&1 | grep -vE "$NOISE"
   echo "===== END $name (exit $?) ====="
 }
 

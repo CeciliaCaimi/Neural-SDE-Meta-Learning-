@@ -1,0 +1,22 @@
+# This project is developed on Windows, where git's autocrlf turns LF into CRLF on
+# checkout. For a shell script that is fatal rather than cosmetic: bash reads the
+# trailing carriage return as part of the interpreter path and fails with
+#
+#     /usr/bin/env: 'bash\r': No such file or directory
+#
+# on Linux and macOS. The scripts here are meant to be run by other people, so their
+# line endings are pinned regardless of anyone's local git configuration.
+*.sh        text eol=lf
+
+# Python is tolerant of either, but keeping one convention avoids diffs that consist
+# entirely of invisible characters.
+*.py        text eol=lf
+*.md        text eol=lf
+*.tex       text eol=lf
+*.txt       text eol=lf
+*.json      text eol=lf
+
+# Binary: never touched, never diffed as text.
+*.pdf       binary
+*.png       binary
+*.pt        binary

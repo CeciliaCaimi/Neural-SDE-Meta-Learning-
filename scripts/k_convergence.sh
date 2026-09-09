@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
-# 减速是真的表示饱和,还是"大 k 训得更不足"的假象?
-# 把 k=32 / k=64 训到 160k(2x),看 oracle 还降不降。
-# k=32 是对照: 若两者都继续降,说明 80k 普遍不够;
-# 若只有 k=64 降,说明减速是训练量伪影。
+# Stage 1: is the slowdown real saturation, or an artefact of larger k being less
+# trained at a fixed budget?
+#
+# Train k = 32 and k = 64 to 160k steps (2x) and watch whether the oracle keeps
+# falling. k = 32 is the control: if both keep falling, 80k was too short for every
+# k; if only k = 64 falls, the slowdown was a training-budget artefact.
 set -u
-PY=.venv/Scripts/python.exe
-export PYTHONIOENCODING=utf-8
+. "$(dirname "$0")/_common.sh"
+
 for k in 32 64; do
   echo "### k=$k steps=160000"
   $PY -m runner.stage1_gmm --steps 160000 --k $k --decoder linear \
