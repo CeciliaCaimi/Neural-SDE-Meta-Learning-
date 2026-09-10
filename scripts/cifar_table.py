@@ -70,6 +70,9 @@ def main() -> None:
                          "Training used a fixed value; this varies it at evaluation only.")
     ap.add_argument("--split", default="test", choices=("train", "val", "test"),
                     help="protocol: sweeps run on val; test is for the final number only")
+    ap.add_argument("--domainshift-path", default=None,
+                    help="which split file to evaluate against; must be the one the "
+                         "checkpoint was trained on, or the corruption-count guard below fires")
     a = ap.parse_args()
 
     dev = torch.device("cuda")
@@ -88,7 +91,8 @@ def main() -> None:
     cfg.model.encoder_pooling = ck_model.get("encoder_pooling", "mean")
     cfg.model.n_relations = ck_model["n_relations"]
 
-    split = load_domainshift(os.path.join(_ROOT, cfg.episodes.domainshift_path))
+    ds_path = a.domainshift_path or cfg.episodes.domainshift_path
+    split = load_domainshift(ds_path if os.path.isabs(ds_path) else os.path.join(_ROOT, ds_path))
     # The evaluation data must come from the same task family the checkpoint was trained
     # on. n_relations records how many corruptions that was, so a mismatch means the split
     # file has been rebuilt with different settings and the numbers would be meaningless.
@@ -113,7 +117,8 @@ def main() -> None:
           f"weights {'EMA' if used_ema else 'raw'}  corruptions {split.config.corruptions}")
 
     raw = load_cifar100()
-    budget = AdaptBudget(steps=cfg.adapt.steps, lr=cfg.adapt.lr, beta0=cfg.adapt.beta0)
+    budget = AdaptBudget(steps=cfg.adapt.steps, lr=cfg.adapt.lr, beta0=cfg.adapt.beta0,
+                         noise_batch=cfg.adapt.noise_batch)
 
     # results[k][strategy] = per-episode losses
     results = {k: {name: [] for name, _, _ in STRATEGIES} for k in a.k_shots}

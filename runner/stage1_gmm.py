@@ -189,7 +189,8 @@ def main() -> None:
     print(f"  weights saved: {os.path.basename(ck)}")
 
     print("\nevaluation (unseen GMM configurations at meta-test):")
-    budget = AdaptBudget(steps=cfg.adapt.steps, lr=cfg.adapt.lr, beta0=cfg.adapt.beta0)
+    budget = AdaptBudget(steps=cfg.adapt.steps, lr=cfg.adapt.lr, beta0=cfg.adapt.beta0,
+                         noise_batch=cfg.adapt.noise_batch)
     res = evaluate(model, enc, tr, test_loader, cfg, cfg.episodes.k_shots,
                    a.eval_tasks, budget)
 

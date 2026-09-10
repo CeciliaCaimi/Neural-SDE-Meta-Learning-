@@ -78,12 +78,22 @@ class EMA:
                         sd[k].copy_(v)
 
 
-def build(cfg: BaseConfig, device: torch.device) -> tuple[ScoreModel, SetEncoder, Transport]:
-    """Assemble the three modules from the config. The backbone is named by string alone."""
+def build(
+    cfg: BaseConfig,
+    device: torch.device,
+    model_cls: type[ScoreModel] = ScoreModel,
+) -> tuple[ScoreModel, SetEncoder, Transport]:
+    """Assemble the three modules from the config. The backbone is named by string alone.
+
+    model_cls is the seam for comparison arms: a subclass that composes z with the
+    backbone differently (generic latent conditioning, for instance) is swapped in here
+    and everything downstream -- the loop, the diagnostics, refinement, both samplers --
+    is untouched, because they all reach the model only through ScoreModel.eps_hat.
+    """
     sched = NoiseSchedule(cfg.diffusion.n_steps, cfg.diffusion.schedule)
     backbone = build_backbone(cfg.model.backbone, **cfg.model.backbone_kwargs)
-    model = ScoreModel(backbone, sched, k=cfg.model.k,
-                       basis_init_scale=cfg.model.basis_init_scale).to(device)
+    model = model_cls(backbone, sched, k=cfg.model.k,
+                      basis_init_scale=cfg.model.basis_init_scale).to(device)
     encoder = SetEncoder(
         image_channels=backbone.spec.image_channels, image_size=backbone.spec.image_size,
         width=cfg.model.encoder_width, feature_dim=cfg.model.encoder_feature_dim,
@@ -114,7 +124,7 @@ def save_checkpoint(path: str, step: int, cfg: BaseConfig, model, encoder, trans
     )
 
 
-def train(cfg: BaseConfig) -> str:
+def train(cfg: BaseConfig, model_cls: type[ScoreModel] = ScoreModel) -> str:
     torch.manual_seed(cfg.global_seed)
     np.random.seed(cfg.global_seed)
     device = torch.device(cfg.device if torch.cuda.is_available() else "cpu")
@@ -162,7 +172,7 @@ def train(cfg: BaseConfig) -> str:
         diag_loader.images = loader.images          # reuse the one resident copy of the images
         diag_loader._on_device = True
 
-    model, encoder, transport = build(cfg, device)
+    model, encoder, transport = build(cfg, device, model_cls)
     modules = [model, encoder, transport]
     params = [p for m in modules for p in m.parameters()]
     opt = torch.optim.AdamW(params, lr=cfg.train.lr, weight_decay=cfg.train.weight_decay)

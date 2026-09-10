@@ -96,7 +96,12 @@ class AdaptConfig:
     steps: int = 25                         # J in {0, 5, 10, 25, 50, 100}
     lr: float = 1e-2                        # eta_z in {1e-3, 3e-3, 1e-2, 3e-2}
     beta0: float = 1.0                      # beta_0 in {0, 0.01, 0.1, 1, 10}
-    noise_batch: int = 16                   # (t, eps) draws per step on the support set
+    # (t, eps) draws per step on the support set. This field used to read 16 and was
+    # never passed to AdaptBudget by any caller, so every number in the report was in
+    # fact produced with AdaptBudget's own default of 32. It now says 32 and the callers
+    # pass it, which makes the field live without changing what runs -- correcting the
+    # config to match the results rather than the results to match the config.
+    noise_batch: int = 32
 
 
 @dataclass

@@ -40,6 +40,10 @@ def parse() -> argparse.Namespace:
                    help="M_S: source images fed to the encoder (source-evidence sweep)")
     p.add_argument("--scheme", choices=("sibling", "domainshift"), default=None,
                    help="split scheme; domainshift = clean to corrupted")
+    p.add_argument("--domainshift-path", type=str, default=None,
+                   help="which domain-shift split file to train on. Pass it explicitly "
+                        "rather than relying on the default: the split file fixes the "
+                        "task family, so two runs that disagree here are not comparable.")
     p.add_argument("--smoke", action="store_true", help="small model, few steps; checks the pipeline only")
     return p.parse_args()
 
@@ -86,6 +90,8 @@ def main() -> None:
         cfg.model.encoder_pooling = a.pooling
     if a.scheme is not None:
         cfg.episodes.scheme = a.scheme
+    if a.domainshift_path is not None:
+        cfg.episodes.domainshift_path = a.domainshift_path
     if a.severity is not None:
         cfg.episodes.severity_override = a.severity
     if a.m_source is not None:

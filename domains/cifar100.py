@@ -16,10 +16,21 @@ from dataclasses import dataclass
 import numpy as np
 
 # Location of dataset/ relative to this file: domains/cifar100.py -> ../../../../dataset
+#
+# That relative path is the layout of one particular machine. CIFAR-100 is not
+# redistributed with this repository and never enters it, so anyone working from a fresh
+# clone points at their own copy with the CIFAR100_ROOT environment variable:
+#
+#     export CIFAR100_ROOT=/data/cifar-100-python        # POSIX
+#     $env:CIFAR100_ROOT = "D:\data\cifar-100-python"    # PowerShell
+#
+# The variable wins over the relative default, which is kept so that nothing changes for
+# the machine the results on record were produced on.
 _HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_ROOT = os.path.normpath(
+_RELATIVE_ROOT = os.path.normpath(
     os.path.join(_HERE, "..", "..", "..", "..", "dataset", "cifar-100-python")
 )
+DEFAULT_ROOT = os.environ.get("CIFAR100_ROOT") or _RELATIVE_ROOT
 
 N_FINE = 100
 N_COARSE = 20

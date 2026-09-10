@@ -34,7 +34,8 @@ def main():
     ld = GMMEpisodeLoader(fam["test"], dev, m_source=256, query_batch=1024, seed=ck["seed"]+1)
     gen = torch.Generator(device=dev).manual_seed(0)
     n_tasks = 12
-    bud = AdaptBudget(steps=cfg.adapt.steps, lr=cfg.adapt.lr, beta0=cfg.adapt.beta0)
+    bud = AdaptBudget(steps=cfg.adapt.steps, lr=cfg.adapt.lr, beta0=cfg.adapt.beta0,
+                      noise_batch=cfg.adapt.noise_batch)
     ft_bud = AdaptBudget(steps=2000, lr_weights=3e-4)
 
     print(f"k={ck['k']} | {ck['steps']//1000}k steps | {n_tasks} unseen tasks | 2D Gaussian mixtures")
