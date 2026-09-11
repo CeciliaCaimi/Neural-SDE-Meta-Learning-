@@ -1,0 +1,42 @@
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+
+36 episodes: 4 classes x 3 transformations x 3 values of K_T
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            1.577 +-0.210     1.614 +-0.181     1.607 +-0.224
+  reuse z_S                1.410 +-0.204     0.805 +-0.182     0.484 +-0.103
+  transport                0.249 +-0.090     0.272 +-0.068     0.271 +-0.096
+  transport + refine       0.245 +-0.084     0.300 +-0.064     0.356 +-0.108
+  target only              0.276 +-0.082     0.285 +-0.070     0.253 +-0.094
+  oracle                   0.258 +-0.081     0.253 +-0.069     0.249 +-0.087
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.226 +-0.012     0.227 +-0.022     0.222 +-0.015
+  reuse z_S                0.210 +-0.020     0.206 +-0.018     0.180 +-0.015
+  transport                0.174 +-0.012     0.180 +-0.015     0.170 +-0.013
+  transport + refine       0.174 +-0.012     0.177 +-0.018     0.167 +-0.020
+  target only              0.208 +-0.023     0.181 +-0.017     0.162 +-0.014
+  oracle                   0.165 +-0.012     0.162 +-0.016     0.160 +-0.018
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison                                 K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------
+  transport vs reuse z_S             +1.161 +-0.233*     +0.533 +-0.235*     +0.213 +-0.133*
+  transport vs target only           +0.027 +-0.096      +0.013 +-0.066      -0.018 +-0.099 
+  refinement: off vs on              +0.004 +-0.040      -0.028 +-0.060      -0.085 +-0.074*
+  transport + refine vs oracle       -0.013 +-0.075      +0.047 +-0.049      +0.108 +-0.078*
+
+  * = the 95% interval excludes zero
