@@ -158,6 +158,39 @@ def main() -> None:
             h = 1.96 * float(d.std()) / math.sqrt(len(d))
             row += f"{float(d.mean()):>+13.4f} ±{h:.4f}"
         print(row)
+    # ---- the crossover: where does target-only overtake transport? -------------------
+    # The method claims source information is worth most when target evidence is scarce,
+    # so somewhere between K_T=1 and K_T=20 encoding the target support should overtake
+    # transporting the source coordinate. That boundary is the regime the method owns,
+    # and until now it had to be read off the table by eye.
+    if len(a.k_shots) > 1 and "target_only" in results[a.k_shots[0]]:
+        ks = sorted(a.k_shots)
+        deltas = []
+        for k in ks:
+            d = torch.tensor(results[k]["target_only"]) - torch.tensor(results[k][ours])
+            h = 1.96 * float(d.std()) / math.sqrt(len(d))
+            deltas.append((k, float(d.mean()), h))
+        print("\ntarget-only minus transport (positive = transport still ahead)")
+        print(f"  {'K_T':>5}{'difference':>14}{'95% CI':>10}")
+        for k, mu, h in deltas:
+            print(f"  {k:>5}{mu:>+14.5f}  +-{h:.5f}")
+        cross = None
+        for (k0, d0, _), (k1, d1, _) in zip(deltas, deltas[1:]):
+            if d0 > 0 >= d1:                       # transport ahead, then no longer
+                frac = d0 / (d0 - d1) if d0 != d1 else 0.0
+                cross = k0 + frac * (k1 - k0)
+                break
+        if deltas[0][1] <= 0:
+            print(f"\n  crossover: at or below K_T={ks[0]} -- transport is never ahead "
+                  "in the range tested")
+        elif cross is None:
+            print(f"\n  crossover: beyond K_T={ks[-1]} -- transport is still ahead at the "
+                  "largest support tested")
+        else:
+            print(f"\n  crossover: K_T ~ {cross:.1f}, interpolated between "
+                  f"{deltas[0][0]} and {ks[-1]}")
+        print("  (the coordinate-space crossover measured in E11 lies between 5 and 20)")
+
     m_s = a.m_source or cfg.episodes.enc_source_images
     print(f"\n({a.n_episodes} {a.split} episodes x {a.n_noise} noise draws, paired per episode; M_S={m_s})")
 
