@@ -26,6 +26,16 @@ need scripts/posthoc_controls.py
 need evaluation/instruments.py
 need scripts/gen_specificity.py
 
+# phase_d_sweeps.sh still has its checkpoint written in at the top (task 3). If it does,
+# the argument below is accepted and silently ignored, which is this project's signature
+# failure: a run that looks right and measured something else.
+if ! grep -q 'CK=${1' scripts/phase_d_sweeps.sh; then
+    echo "scripts/phase_d_sweeps.sh still hard-codes its checkpoint."
+    echo "  Unpin it first (task 3) -- otherwise the checkpoint passed below is ignored"
+    echo "  without an error and the table reports a different model than you think."
+    exit 1
+fi
+
 echo "===== E12a  post-hoc controls, three corruptions ====="
 $PY scripts/posthoc_controls.py checkpoints/cifar_ds3_step50000.pt \
     --domainshift-path "$C3" --split val --n-episodes 24 --n-noise 4 \

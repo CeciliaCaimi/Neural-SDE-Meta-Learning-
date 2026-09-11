@@ -20,6 +20,18 @@ if [ -z "${CIFAR100_ROOT:-}" ]; then
     exit 1
 fi
 
+# --center-coords is yours to add (task 1). Check for it before starting anything:
+# without this, the first 28-minute run would finish and the second would die on an
+# argparse error, which is an expensive way to be told.
+if [ "$WHICH" != "film" ]; then
+    if ! $PY -m runner.train --help 2>&1 | grep -q -- "--center-coords"; then
+        echo "runner.train does not accept --center-coords yet."
+        echo "  That flag is task 1 of your package -- see handoff/Jing-Peng/README.md."
+        echo "  Add it before running the pairs, or the centring runs cannot happen."
+        exit 1
+    fi
+fi
+
 run () {                      # run <name> <extra args...>
     name="$1"; shift
     echo "===== $name ====="

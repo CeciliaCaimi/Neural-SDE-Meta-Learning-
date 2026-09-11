@@ -22,12 +22,16 @@ need() {
     fi
 }
 
+# Check before training, not after. The sweep below is two hours; discovering a missing
+# analysis script at the end of it is the expensive way to find out.
+need scripts/stage1_panel.py
+
 if [ "$WHICH" = "base" ] || [ "$WHICH" = "all" ]; then
     echo "===== stage 1, unrelated family, $STEPS steps ====="
     $PY -m runner.stage1_gmm --steps "$STEPS" --k 16 --decoder linear \
         --family unrelated --eval-tasks 4 2>&1 | tee "artifacts/stage1_panel_base.log"
 
-    need scripts/stage1_panel.py
+
     echo
     echo "===== four-way panel + coordinate-loss profile ====="
     $PY scripts/stage1_panel.py "checkpoints/stage1_linear_k16_s${STEPS}_unrelated.pt" \
@@ -36,18 +40,18 @@ fi
 
 if [ "$WHICH" = "sweep" ] || [ "$WHICH" = "all" ]; then
     echo
-    echo "===== relatedness sweep -- five settings, leave this running ====="
-    bash scripts/run_relatedness_sweep.sh
+    echo "===== relatedness sweep -- five settings at $STEPS steps, leave this running ====="
+    STAGE1_STEPS="$STEPS" bash scripts/run_relatedness_sweep.sh
 
-    need scripts/stage1_panel.py
+
     echo
     echo "===== the panel on each of the five checkpoints ====="
     : > "$OUT/stage1_relatedness.txt"
-    for ck in stage1_linear_k16_s80000_related0.1 \
-              stage1_linear_k16_s80000_related0.25 \
-              stage1_linear_k16_s80000_related0.5 \
-              stage1_linear_k16_s80000_related1.0 \
-              stage1_linear_k16_s80000_unrelated; do
+    for ck in stage1_linear_k16_s${STEPS}_related0.1 \
+              stage1_linear_k16_s${STEPS}_related0.25 \
+              stage1_linear_k16_s${STEPS}_related0.5 \
+              stage1_linear_k16_s${STEPS}_related1.0 \
+              stage1_linear_k16_s${STEPS}_unrelated; do
         if [ ! -f "checkpoints/${ck}.pt" ]; then
             echo "missing checkpoints/${ck}.pt -- did the sweep finish?"
             continue

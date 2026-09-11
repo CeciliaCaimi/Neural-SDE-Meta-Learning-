@@ -156,7 +156,20 @@ def _report_saved(path: str) -> None:
 def build_domainshift(corruptions: tuple[str, ...], severity: int, out: str) -> None:
     """The main experiment's split: one semantic class per task, clean source pool,
     corrupted target pool, superclasses divided 12/4/4."""
-    cfg = DomainShiftConfig(corruptions=tuple(corruptions), severity=severity)
+    # The relation embedding is sized len(corruptions), while an episode carries the
+    # *global* id CORRUPTION_ID[name]. A subset that skips one -- blur and contrast, say,
+    # ids 0 and 2 against an embedding of 2 rows -- indexes out of range at the first
+    # training step, with an IndexError on CPU and a device-side assert on GPU. Requiring
+    # a prefix keeps the two numberings in agreement.
+    corruptions = tuple(corruptions)
+    if corruptions != CORRUPTIONS[:len(corruptions)]:
+        raise SystemExit(
+            f"--corruptions must be a prefix of {list(CORRUPTIONS)}, in that order; got "
+            f"{list(corruptions)}.\nThe relation embedding is sized by how many "
+            "corruptions the split names, but episodes carry the global corruption id, so "
+            "a subset that skips one would index past the end of the embedding."
+        )
+    cfg = DomainShiftConfig(corruptions=corruptions, severity=severity)
 
     print(RULE)
     print("CIFAR-100 DOMAIN-SHIFT SPLIT")

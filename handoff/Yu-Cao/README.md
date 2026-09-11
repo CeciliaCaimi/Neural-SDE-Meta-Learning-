@@ -65,8 +65,13 @@ lie farther apart than the shared backbone can absorb.* That claim predicts `del
 rises monotonically with `p`. Nobody has tested it. Your five points are the test, and
 they cost two hours on a laptop rather than a week on a cluster.
 
-If you are short of time, run 40 000 steps instead of 80 000 for the sweep and say so — a
-consistent step count across the five points matters far more than its absolute value.
+If you are short of time, halve the step count and say so — a consistent step count
+across the five points matters far more than its absolute value. One variable does it,
+and `run_all.sh` derives the checkpoint names from the same number:
+
+```bash
+STAGE1_STEPS=40000 bash handoff/Yu-Cao/run_all.sh sweep
+```
 
 ## Task 3 — the shared plotting tool
 
