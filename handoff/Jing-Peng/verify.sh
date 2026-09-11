@@ -15,7 +15,7 @@ if ! $PY -c "import torch" >/dev/null 2>&1; then
 fi
 
 echo "== interpreter and device =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import sys, torch
 print(f"python {sys.version.split()[0]}  torch {torch.__version__}")
 if not torch.cuda.is_available():
@@ -33,7 +33,7 @@ if [ -z "${CIFAR100_ROOT:-}" ]; then
     echo "FAIL: CIFAR100_ROOT is not set. setup.sh printed the line to export."
     exit 1
 fi
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 from domains.cifar100 import DEFAULT_ROOT, load_cifar100
 raw = load_cifar100()
 assert raw.images.shape == (60000, 32, 32, 3), raw.images.shape
@@ -42,7 +42,7 @@ PYEOF
 
 echo
 echo "== split file =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import hashlib
 path = "artifacts/cifar100_domainshift_c3.json"
 want = "2ae9b81b639468fbbe5c6f087ed42c5d4eb924184f734988af00540768047708"
@@ -60,7 +60,7 @@ PYEOF
 
 echo
 echo "== the model_cls seam (your FiLM arm depends on it) =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import inspect, torch
 from config.base_config import BaseConfig
 from models.score_model import ScoreModel

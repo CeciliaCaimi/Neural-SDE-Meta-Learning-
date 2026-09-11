@@ -18,7 +18,7 @@ if ! $PY -c "import torch" >/dev/null 2>&1; then
 fi
 
 echo "== interpreter =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import platform, sys, torch
 print(f"python {sys.version.split()[0]}  torch {torch.__version__}")
 print(f"{platform.system()} / {platform.machine()}  |  {torch.get_num_threads()} CPU threads")
@@ -44,7 +44,7 @@ done
 
 echo
 echo "== stage-1 throughput on this machine =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import time, torch
 from config.base_config import BaseConfig
 from domains.gmm2d import build_task_family

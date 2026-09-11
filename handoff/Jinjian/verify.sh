@@ -23,7 +23,7 @@ if ! $PY -c "import torch" >/dev/null 2>&1; then
 fi
 
 echo "== interpreter and device =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import sys, torch
 print(f"python {sys.version.split()[0]}  torch {torch.__version__}")
 if not torch.cuda.is_available():
@@ -34,7 +34,7 @@ PYEOF
 
 echo
 echo "== dataset =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 from domains.cifar100 import DEFAULT_ROOT, load_cifar100
 raw = load_cifar100()
 assert raw.images.shape == (60000, 32, 32, 3), raw.images.shape
@@ -44,7 +44,7 @@ PYEOF
 
 echo
 echo "== split files =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import hashlib
 expected = {
     "artifacts/cifar100_domainshift_c3.json":
@@ -61,7 +61,7 @@ PYEOF
 
 echo
 echo "== checkpoints this package reads =="
-$PY - <<'PYEOF'
+$PY - <<'PYEOF' || exit 1
 import os, torch
 rows = [("checkpoints/cifar_ds3_step50000.pt",     3,    "cifar100_domainshift_c3.json"),
         ("checkpoints/cifar_ds_blur_step50000.pt",  None, "cifar100_domainshift.json"),
