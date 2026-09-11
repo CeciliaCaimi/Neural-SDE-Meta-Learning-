@@ -1,0 +1,48 @@
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+split      cifar100_domainshift_c3.json  relations ('gaussian_blur', 'gaussian_noise', 'contrast')
+sampling   DDIM eta=0, 50 steps, 128 samples per cell, shared initial noise across the four coordinates
+
+  semantic instrument: 20-way over the val classes, 336 steps on 11000 images
+  held-out accuracy on 50 images per class, by domain:
+    clean            fine  41.4%   superclass  69.6%      (chance 5% / 25%)
+    gaussian_blur    fine  39.9%   superclass  67.1%      (chance 5% / 25%)
+    gaussian_noise   fine  40.6%   superclass  68.1%      (chance 5% / 25%)
+    contrast         fine  38.7%   superclass  66.6%      (chance 5% / 25%)
+
+24 episodes: 8 classes x 3 transformations
+
+does generation carry the task? every figure is over 24 episodes, paired on initial noise
+
+  coordinate    transformation    95% CI     class    95% CI      SW2  energy MMD
+  -------------------------------------------------------------------------------
+  own                   100.0%      0.0     29.2%     18.6    0.159      1.8736
+  mean                   33.3%     19.3     16.7%     15.2    0.205      2.8286
+  shuffled                0.0%      0.0      4.2%      8.2    0.252      4.3910
+  zero                   33.3%     19.3      0.0%      0.0    0.222      3.1508
+
+  chance: transformation 33%, class 5%
+  the instrument's own ceiling on real held-out images: 40.2% fine, averaged over domains
+
+high-frequency energy of the generated sets, grouped by the episode's true transformation
+  a coordinate that carries the transformation should spread these rows apart
+
+  coordinate     gaussian_   gaussian_    contrast    spread
+  ----------------------------------------------------------
+  own               0.1417      0.6281      0.1596    0.4864
+  mean              0.2718      0.2787      0.2796    0.0078
+  shuffled          0.6242      0.1596      0.1454    0.4789
+  zero              0.3367      0.3417      0.3427    0.0060
+  real target       0.1068      0.7015      0.1434    0.5947
+
+full statistic triple, averaged over all episodes
+  coordinate     HF energy       std   residual
+  ---------------------------------------------
+  own               0.3098    0.3514     0.0675
+  mean              0.2767    0.3395     0.0600
+  shuffled          0.3097    0.3513     0.0674
+  zero              0.3404    0.3759     0.0741
+  real gaussia      0.1068    0.3683     0.0290
+  real gaussia      0.7015    0.4583     0.1512
+  real contras      0.1434    0.1935     0.0310
+
+grid written to handoff/Jinjian/results/gen_grid.png
