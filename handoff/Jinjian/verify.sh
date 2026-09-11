@@ -9,6 +9,19 @@
 set -u
 . "$(dirname "$0")/../../scripts/_common.sh"
 
+# This package has no setup.sh because it runs in the checkout that already exists on
+# this machine -- the one holding .venv, the dataset and the three checkpoints. If torch
+# is missing, this is a fresh clone somewhere else, and none of those are here either.
+if ! $PY -c "import torch" >/dev/null 2>&1; then
+    echo "FAIL: the interpreter in use ($PY) has no torch."
+    echo "  This package belongs in the existing checkout on the workstation, where the"
+    echo "  virtual environment, CIFAR-100 and the three checkpoints already live."
+    echo "  Update that checkout instead of cloning a new one:"
+    echo "      git fetch origin"
+    echo "      git checkout jinjian"
+    exit 1
+fi
+
 echo "== interpreter and device =="
 $PY - <<'PYEOF'
 import sys, torch

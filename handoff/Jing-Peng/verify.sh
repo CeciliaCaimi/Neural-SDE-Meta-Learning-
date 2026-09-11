@@ -5,6 +5,15 @@
 set -u
 . "$(dirname "$0")/../../scripts/_common.sh"
 
+# A fresh clone has no .venv, so _common.sh falls back to whatever python is on PATH.
+# Say so in one line rather than emitting a wall of import tracebacks.
+if ! $PY -c "import torch" >/dev/null 2>&1; then
+    echo "FAIL: the interpreter in use ($PY) has no torch."
+    echo "  This looks like a fresh clone. Bootstrap the environment first:"
+    echo "      bash handoff/Jing-Peng/setup.sh"
+    exit 1
+fi
+
 echo "== interpreter and device =="
 $PY - <<'PYEOF'
 import sys, torch

@@ -8,6 +8,14 @@ You have what nobody else has: the CIFAR-100 dataset and all three trained check
 which are 430 MB each and are not in git. Everything in this package reads them. No
 training happens here.
 
+**Work in the checkout you already have**, not a fresh clone — the virtual environment,
+the dataset and the checkpoints are all there, and none of them travel through git:
+
+```bash
+git fetch origin
+git checkout jinjian
+```
+
 Your package answers the first question of the supervisor's note — **does the coordinate
 change what the model generates?** — and prepares the sweep harness for integration.
 
