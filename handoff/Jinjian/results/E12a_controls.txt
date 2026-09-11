@@ -127,3 +127,41 @@ coordinate-loss profile: L(z_bar + s (z - z_bar)), mean over episodes
   largest excursion along the correct ray  0.00001
   largest excursion along a wrong ray      0.00005
 
+
+================================================================
+TIMESTEP-STRATIFIED: where in the noise schedule does the coordinate pay?
+================================================================
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+split      cifar100_domainshift_c3.json  ('gaussian_blur', 'gaussian_noise', 'contrast')  severity 3
+protocol   24 val episodes x 4 noise draws, K_T=1, M_S=64
+where the coordinate pays, by noise level
+  t = diffusion step; sigma = how much of x_t is noise rather than image
+
+      t   sigma    L(own)   delta_task     95% CI   % of L
+  --------------------------------------------------------
+     25   0.051    0.4186     +0.00370    0.00071    0.88%
+    100   0.169    0.2333     +0.00433    0.00127    1.86%
+    250   0.393    0.0878     +0.00219    0.00070    2.50%
+    400   0.595    0.0433     +0.00080    0.00021    1.84%
+    550   0.765    0.0233     +0.00038    0.00009    1.61%
+    700   0.893    0.0118     +0.00023    0.00004    1.93%
+    850   0.973    0.0042     +0.00014    0.00002    3.25%
+    975   0.999    0.0003     -0.00001    0.00000   -2.61%
+
+checkpoint cifar_ds_blur_step50000.pt  step 50000  weights EMA
+split      cifar100_domainshift.json  ('gaussian_blur',)  severity 3
+protocol   24 val episodes x 4 noise draws, K_T=1, M_S=64
+where the coordinate pays, by noise level
+  t = diffusion step; sigma = how much of x_t is noise rather than image
+
+      t   sigma    L(own)   delta_task     95% CI   % of L
+  --------------------------------------------------------
+     25   0.051    0.1176     +0.00000    0.00001    0.00%
+    100   0.169    0.0598     +0.00000    0.00000    0.01%
+    250   0.393    0.0327     +0.00001    0.00000    0.03%
+    400   0.595    0.0216     +0.00001    0.00000    0.05%
+    550   0.765    0.0146     +0.00001    0.00001    0.09%
+    700   0.893    0.0090     +0.00002    0.00001    0.18%
+    850   0.973    0.0040     +0.00002    0.00001    0.55%
+    975   0.999    0.0003     +0.00000    0.00000    0.02%
+

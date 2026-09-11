@@ -132,6 +132,31 @@ def losses_on(model, x0, zs: dict[str, torch.Tensor], n_noise: int, seed: int, c
     return out, r_basis
 
 
+@torch.no_grad()
+def losses_at_t(model, x0, zs: dict, t_val: int, n_noise: int, seed: int, cfg):
+    """The same comparison, but with the timestep pinned instead of sampled.
+
+    Training draws t uniformly, so the headline effect is an average over the whole noise
+    schedule. Pinning t asks a different question: *where* in the schedule does knowing
+    the task pay? The prediction under test is that it pays only where the transformation
+    can no longer be read off the noised image itself.
+    """
+    n = x0.shape[0]
+    w, gamma = cfg.diffusion.loss_weighting, cfg.diffusion.min_snr_gamma
+    t = torch.full((n,), int(t_val), device=x0.device, dtype=torch.long)
+    gen = torch.Generator(device=x0.device)
+    out = {k: 0.0 for k in zs}
+    for d in range(n_noise):
+        gen.manual_seed(seed + d)
+        nb = q_sample(model.schedule, x0, t=t, generator=gen)
+        names = list(zs)
+        preds = model.eps_hat_many(nb.x_t, nb.t,
+                                   [zs[k].unsqueeze(0).expand(n, -1) for k in names])
+        for name, pred in zip(names, preds):
+            out[name] += float(denoising_loss(nb.eps, pred, nb.t, model.schedule, w, gamma)) / n_noise
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("ckpt")
@@ -147,6 +172,8 @@ def main() -> None:
     ap.add_argument("--k-shot", type=int, default=1)
     ap.add_argument("--seed", type=int, default=1234)
     ap.add_argument("--no-profile", action="store_true")
+    ap.add_argument("--by-timestep", action="store_true",
+                    help="where in the noise schedule does the coordinate pay?")
     a = ap.parse_args()
 
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -286,6 +313,29 @@ def main() -> None:
                    for s in PROFILE_S)
         print(f"\n  largest excursion along the correct ray  {flat:.5f}")
         print(f"  largest excursion along a wrong ray      {rise:.5f}")
+
+    # ---- pass 4: where in the noise schedule does the coordinate pay? ---------------
+    if a.by_timestep:
+        ab = model.schedule.alphas_cumprod
+        print("")
+        print("where the coordinate pays, by noise level")
+        print("  t = diffusion step; sigma = how much of x_t is noise rather than image")
+        print("")
+        hdr = f"  {'t':>5}{'sigma':>8}{'L(own)':>10}{'delta_task':>13}{'95% CI':>11}{'% of L':>9}"
+        print(hdr)
+        print("  " + "-" * (len(hdr) - 2))
+        for tv in (25, 100, 250, 400, 550, 700, 850, 975):
+            owns, means = [], []
+            for i, e in enumerate(eps_data):
+                vals = losses_at_t(model, e["eval_x0"], {"own": e["z_tld"], "mean": z_bar},
+                                   tv, a.n_noise, a.seed + 1000 * i, cfg)
+                owns.append(vals["own"])
+                means.append(vals["mean"])
+            mu, h = ci95([m - o for m, o in zip(means, owns)])
+            lo = sum(owns) / len(owns)
+            sigma = float((1.0 - ab[tv]).clamp_min(0).sqrt())
+            print(f"  {tv:>5}{sigma:>8.3f}{lo:>10.4f}{mu:>+13.5f}{h:>11.5f}"
+                  f"{100 * mu / max(lo, 1e-9):>8.2f}%")
 
 
 if __name__ == "__main__":
