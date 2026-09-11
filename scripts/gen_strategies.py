@@ -72,6 +72,9 @@ def main() -> None:
     ap.add_argument("--k-shots", type=int, nargs="+", default=[1, 5, 20])
     ap.add_argument("--ddim-steps", type=int, default=50)
     ap.add_argument("--seed", type=int, default=4321)
+    ap.add_argument("--grid-out", default=None,
+                    help="write a paired grid of what each strategy generates, at the "
+                         "smallest K_T, sharing one initial noise down each column")
     a = ap.parse_args()
 
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -116,16 +119,24 @@ def main() -> None:
 
     res = {name: {k: {"sig": [], "sw": [], "mmd": []} for k in a.k_shots}
            for name, _, _ in STRATEGIES}
+    k_grid = min(a.k_shots)
+    grid_rows = {name: [] for name, _, _ in STRATEGIES}
+    grid_real = []
     for i, e in enumerate(episodes):
         b, k = e["batch"], e["k"]
         real = b.tgt_query
         real_sig = transform_signature(real).mean(0)
         seed = a.seed + 100 * i                       # shared across strategies: paired
+        want_grid = a.grid_out and k == k_grid and len(grid_real) < 9
+        if want_grid:
+            grid_real.append(real[:3].cpu())
         for name, strat, _ in STRATEGIES:
             oracle_data = b.tgt_query if strat == "oracle" else None
             st = adapt(strat, model, enc, tr, b, budget,
                        cfg.diffusion.loss_weighting, oracle_data=oracle_data)
             x = generate(model, st.z, a.n_samples, seed, a.ddim_steps, dev)
+            if want_grid:
+                grid_rows[name].append(x[:3].cpu())
             sig = transform_signature(x).mean(0)
             res[name][k]["sig"].append(float((((sig - real_sig) / f_sd) ** 2).sum().sqrt()))
             fa, fb = x.flatten(1), real.flatten(1)
@@ -172,6 +183,30 @@ def main() -> None:
             row += f"{mu:>+11.3f} +-{h:<4.3f}{mark}"
         print(row)
     print("\n  * = the 95% interval excludes zero")
+
+    if a.grid_out:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        labels = [n for n, _, _ in STRATEGIES] + ["real target"]
+        rows = [torch.cat(grid_rows[n], dim=0) for n, _, _ in STRATEGIES]
+        rows.append(torch.cat(grid_real, dim=0))
+        n_show = min(8, rows[0].shape[0])
+        fig, axes = plt.subplots(len(rows), n_show,
+                                 figsize=(n_show * 1.15, len(rows) * 1.28))
+        for r, (lab, row) in enumerate(zip(labels, rows)):
+            for c in range(n_show):
+                ax = axes[r, c]
+                ax.imshow(((row[c].permute(1, 2, 0) + 1) / 2).clamp(0, 1).numpy())
+                ax.set_xticks([]); ax.set_yticks([])
+                if c == 0:
+                    ax.set_ylabel(lab, fontsize=8, rotation=0, ha="right", va="center")
+        fig.suptitle(f"one shared initial noise down each column, K_T = {k_grid}; "
+                     "the bottom row is real target data, not generated", fontsize=9)
+        fig.tight_layout()
+        os.makedirs(os.path.dirname(a.grid_out) or ".", exist_ok=True)
+        fig.savefig(a.grid_out, dpi=130)
+        print(f"\ngrid written to {a.grid_out}")
 
 
 if __name__ == "__main__":
