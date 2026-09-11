@@ -130,4 +130,16 @@ the real sweep runs at integration, on whichever checkpoint passes.
 Not into `artifacts/` — it ignores `*.txt` and `*.png`, and your files would silently
 fail to commit.
 
+## Finishing
+
+```bash
+git add scripts evaluation handoff/Jinjian/results
+git commit -m "E12a and E12: measurement results"
+git push origin jinjian
+```
+
+Push to `jinjian` and nowhere else. Do not merge into `main`, do not rebase onto another
+package's branch, and do not commit a checkpoint — they are 430 MB and `checkpoints/` is
+ignored for that reason.
+
 **Do not write a conclusion.** Deliver the numbers.

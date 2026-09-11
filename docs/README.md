@@ -8,6 +8,7 @@ step-by-step reproduction procedure.
 | File | What it is |
 |---|---|
 | `PROTOCOL_CARD.md` | The fixed values, split checksums and file ownership for the three parallel work packages of the next stage. Read it before starting one |
+| `work_split.tex` / `.pdf` | The same allocation as a five-page hand-out, opening with a table that keys every item to a numbered section of the supervisor's 9 September note. Standalone; `build_combined.py` does not read it |
 | `meta_diffusion_combined.pdf` | The report as read. Built from the two sources below |
 | `meta_diffusion_combined.tex` | **Generated — do not edit.** `build_combined.py` overwrites it |
 | `meta_diffusion_spec.tex` | Part one: the implementation specification, written when stage 1 was the only completed work |

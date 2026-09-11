@@ -1,0 +1,364 @@
+% Meta-Diffusion: work allocation for the next stage
+%
+% Compile:  pdflatex work_split.tex   (twice, for the table of contents)
+% Requires: amsmath amssymb booktabs tabularx enumitem xcolor hyperref caption geometry
+%
+% This document is a hand-out, not part of the report. build_combined.py does not read it.
+
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{hyperref}
+
+\definecolor{shared}{HTML}{1D4E4A}    % shared structure
+\definecolor{coord}{HTML}{B06A14}     % the task coordinate
+\definecolor{addition}{HTML}{8C3A32}  % work that is not in the source note
+
+\hypersetup{colorlinks=true, linkcolor=shared, urlcolor=shared, citecolor=shared}
+
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\dtask}{\Delta_{\mathrm{task}}}
+\newcommand{\KT}{K_{T}}
+\newcommand{\MS}{M_{S}}
+\newcommand{\add}{\textcolor{addition}{\textbf{addition}}}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% Long \texttt file names carry no hyphenation points, so let TeX stretch the line
+% rather than push a path into the margin.
+\setlength{\emergencystretch}{3em}
+\hyphenpenalty=1000
+\tolerance=2000
+
+\setlist[itemize]{leftmargin=1.4em, itemsep=2pt, topsep=3pt}
+\setlist[enumerate]{leftmargin=1.6em, itemsep=2pt, topsep=3pt}
+
+\title{\vspace{-1.5em}Meta-Diffusion: work allocation for the next stage}
+\author{Three parallel packages, mapped to \emph{Immediate Next Steps} (9 September)}
+\date{10 September 2026}
+
+\begin{document}
+\maketitle
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+Repository & \code{CeciliaCaimi/Neural-SDE-Meta-Learning-}, branch \code{meta-diffusion-clean} \\
+Baseline commit & \code{532361d} \\
+Per-package brief & \code{handoff/<Name>/README.md} \\
+Fixed values & \code{docs/PROTOCOL\_CARD.md} \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1em}
+
+% ==========================================================================
+\section{Correspondence with the source note}
+% ==========================================================================
+
+Every item below is keyed to a numbered section of \emph{Meta-Diffusion: Immediate Next
+Steps}, dated 9 September. Two pieces of work are \add s that the note does not ask for;
+both are marked as such here rather than folded in silently, and each is justified where
+it appears.
+
+\vspace{0.6em}
+\noindent
+\begin{tabularx}{\textwidth}{@{}l L{3.4cm} l X@{}}
+\toprule
+\textbf{Note} & \textbf{Work item} & \textbf{Owner} & \textbf{What it produces} \\
+\midrule
+\S1 & Generation-level task specificity (E12) & Jinjian &
+  Four coordinates, one initial noise; four measurements and a paired visual grid \\
+\addlinespace[2pt]
+--- & Post-hoc controls (E12a), \add & Jinjian &
+  The mean-coordinate substitution on the two full-width checkpoints, which no log on
+  disk contains, plus the coordinate-loss profile \\
+\addlinespace[2pt]
+\S2 & Centred coordinate (E13, part one) & Jing Peng &
+  $z_y = \bar z + \delta z_y$, the shared offset absorbed into the base predictor \\
+\addlinespace[2pt]
+\S3 & Four-way panel against step (E13, part two) & Jing Peng &
+  $\mathcal{L}(z_y),\ \mathcal{L}(\bar z),\ \mathcal{L}(z_{\mathrm{shuffled}}),\
+  \mathcal{L}(0)$; $\dtask$; basis usage and coordinate spread \\
+\addlinespace[2pt]
+\S3 & Calibration of $\dtask$ on stage 1, \add & Yu Cao &
+  The same panel in the arm where the mechanism demonstrably works, plus $\dtask$
+  against task distance \\
+\addlinespace[2pt]
+\S4 & Deployment sweeps & Jinjian &
+  The harness, unpinned and extended; the sweep itself runs at integration \\
+\addlinespace[2pt]
+\S5 & Critical novelty test (E15) & Jing Peng &
+  Generic latent conditioning against the reverse-dynamics basis, same transport map \\
+\addlinespace[2pt]
+\S6 & DomainNet gate & --- &
+  Not started, and not startable until both conditions hold \\
+\addlinespace[2pt]
+\S7 & Excluded fixes & all three &
+  A constraint, not a task. See section~\ref{sec:scope} \\
+\addlinespace[2pt]
+\S8 & Output for the next meeting & mapped &
+  See section~\ref{sec:meeting} \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.8em}
+
+\noindent\textbf{Why the two additions.}
+The note's \S1 asks for the generation test \emph{before} changing the model. E12a runs
+first and costs ten minutes: the mean-coordinate substitution has never been applied to
+the two 128-channel checkpoints, because the control was added to the code after every
+CIFAR run had already finished. Its result may reframe \S1 before any generation code is
+written.
+
+The second addition is more consequential. The quantity \S3 makes decisive, $\dtask$, has
+never been measured anywhere it is known to be positive. Stage~1 --- two-dimensional
+Gaussian mixtures --- computes the correct coordinate against zero and against a shuffled
+coordinate, and has never computed the mean-coordinate substitution. A zero on CIFAR
+therefore has no calibration: nobody knows whether this diagnostic can produce a large
+positive number at all, in this codebase, on any domain. Establishing that costs three
+hours of laptop CPU.
+
+\vspace{0.4em}
+\noindent\textbf{Work completed before the split.}
+Four items had to be settled in advance because all three packages depend on them: the
+frozen three-corruption task family \code{artifacts/cifar100\_domainshift\_c3.json}
+(the split builder previously existed for no runner to call); a \code{model\_cls} seam in
+\code{training/loop.py} so the comparison arm needs no edit to the loop both arms share;
+\code{--domainshift-path} on the runners; and \code{CIFAR100\_ROOT} so machines that keep
+the dataset elsewhere need no code change. All are in the baseline commit.
+
+% ==========================================================================
+\section{Allocation, and why}
+% ==========================================================================
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+& \textbf{Machine} & \textbf{Branch} & \textbf{Why this machine} \\
+\midrule
+Jinjian & RTX 5080, local & \code{jinjian} &
+  Holds the only copy of the three trained checkpoints (430\,MB each, not in git) and
+  the CIFAR-100 data. Sampling 20{,}480 images needs a CUDA device, but only for minutes \\
+\addlinespace[3pt]
+Jing Peng & AWS GPU server & \code{jing-peng} &
+  5.5 GPU-hours of training, and the only machine that can run several of them at once \\
+\addlinespace[3pt]
+Yu Cao & Mac, CPU only & \code{yu-cao} &
+  Stage~1 is synthetic, so no dataset and no transfer; measured at 54 iterations per
+  second on CPU, which is 80{,}000 steps in 24 minutes \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.6em}
+\noindent
+The three packages are independent by construction. Everything shared was fixed before
+the split; every judgement is deferred to integration; and each file in the repository
+has exactly one owner. Nobody needs to wait on, or ask, anyone else.
+
+% ==========================================================================
+\section{Rules that apply to all three}
+% ==========================================================================
+
+\begin{itemize}
+  \item \textbf{One owner per file.} The table is in \code{docs/PROTOCOL\_CARD.md}. If a
+    file is not yours, do not edit it, even to fix an obvious bug --- record the bug in
+    your results file instead.
+  \item \textbf{Deliver numbers, not conclusions.} Whether the method passes is decided at
+    integration, against criteria fixed before anyone sees a result.
+  \item \textbf{Report absolute paired differences with 95\,\% intervals, and state the
+    step count.} Do not headline \code{task\_specific\_frac}: its denominator decays
+    towards zero and changes sign, so the ratio is unstable exactly where the reading
+    matters.
+  \item \textbf{Read nothing before the curve has levelled.} Quote the mean over the final
+    fifth of training and the slope over the last 10{,}000 steps.
+  \item \textbf{Pair everything.} All controls share one noising draw. Between-episode
+    variance is roughly sixteen times the effect; the paired difference has a standard
+    deviation sixty-five times smaller than the raw loss, so a raw loss curve cannot show
+    this effect and will mislead anyone who reads it.
+  \item \textbf{Results go in \code{handoff/<Name>/results/}}, which is tracked. Not
+    \code{artifacts/}, which ignores \code{.txt}, \code{.png} and \code{checkpoints/}, so
+    files put there vanish without an error.
+\end{itemize}
+
+% ==========================================================================
+\section{Jinjian --- Measurement}
+% ==========================================================================
+
+\noindent\emph{Answers \S1; prepares \S4. About 5 hours of development, 1.5 hours of GPU.
+No training.}
+
+\begin{enumerate}
+  \item \textbf{Post-hoc controls} (\add, 10 minutes of GPU). Rebuild each model from the
+    checkpoint's own stored configuration, apply the moving-average weights, and evaluate
+    the four coordinates on 24 validation episodes with four noise draws each, reporting
+    per-episode paired differences. Then trace the coordinate-loss profile,
+    $\mathcal{L}(\bar z + s\,(z_y - \bar z))$ against
+    $\mathcal{L}(\bar z + s\,(z_j - \bar z))$ for $s \in \{0,\tfrac12,1,\tfrac32,2\}$.
+    Flat along the correct ray and rising along wrong rays would mean the basis expresses
+    distance from a centroid and nothing else.
+  \item \textbf{Generation-level task specificity} (\S1). Twenty validation classes, four
+    coordinates --- own, mean, shuffled, zero --- and 256 samples each, by DDIM at
+    $\eta = 0$ over 50 steps, with \emph{identical initial noise across all four}. Four
+    measurements: transformation consistency, semantic-class consistency, distributional
+    distance, and task-identification accuracy against a chance baseline of 5\,\%. Plus a
+    paired visual grid, three episodes chosen before looking at the numbers.
+  \item \textbf{Sweep harness} (\S4). Unpin the checkpoint in
+    \code{scripts/phase\_d\_sweeps.sh}, and add the one statistic the table does not
+    currently print: the value of $\KT$ at which target-only overtakes transport.
+    Coordinate space already places that crossover between 5 and 20.
+\end{enumerate}
+
+\noindent\textbf{Departure from the note, to be stated in the results file.} \S1 asks for
+the kernel Inception distance. Inception is a dependency this repository does not carry,
+and with 115 real images per class the estimate would be dominated by its own variance.
+Section~9 of \code{ALGORITHM.md} already prescribes sliced Wasserstein or energy MMD for
+this case. The standard number can be added at integration on pooled samples.
+
+\noindent\textbf{Deliverables.} \code{E12a\_controls.txt}, \code{E12\_generation.txt},
+\code{E14\_harness\_check.txt}, \code{coord\_profile.png}, \code{gen\_grid.png}.
+
+% ==========================================================================
+\section{Jing Peng --- Training}
+% ==========================================================================
+
+\noindent\emph{Answers \S2, \S3 and \S5. About 5.5 hours of development, 5.5 hours of GPU;
+the runs are independent and parallelise across instances.}
+
+\begin{enumerate}
+  \item \textbf{Centred coordinate} (\S2). Write
+    \[
+      \hat\varepsilon_y(x,t)
+      = \underbrace{\big[\hat\varepsilon_0(x,t) + B(x,t)\,\bar z\big]}_{\text{shared predictor}}
+      + B(x,t)\,\delta z_y ,
+    \]
+    as a buffer holding a running mean, subtracted inside the single place every
+    coordinate already passes through. Roughly fifteen lines; no new network. Three
+    consequences must be decided rather than discovered: the null control moves from
+    $z=0$ to $z=\bar z$, so \code{loss\_zero} leaves the centred panel; the bit-for-bit
+    identity assertion in \code{tests/test\_score\_identity.py} is parameterised on the
+    flag rather than deleted; and the drifting buffer is excluded from the
+    moving-average shadow, which otherwise shadows every floating-point entry of the
+    state dictionary and would leave the diagnostics reading a centre training never used.
+  \item \textbf{The decisive diagnostic} (\S3). Log all four losses with per-episode paired
+    differences, alongside $r_{\mathrm{basis}}$, coordinate spread and the norm of the
+    running centre. Raise the diagnostic sample from 8 episodes to 24 and from one noise
+    draw to four. The field names \code{delta\_task} and \code{z\_center\_norm} are an
+    interface: another package's plotting script reads them.
+  \item \textbf{Four runs.} The 32-channel pair first, about an hour together; then the
+    128-channel pair, about two and a half hours. The centring-\emph{off} runs are not
+    optional and not merely a control --- no run on disk has ever logged the
+    mean-coordinate panel, and two of the four deliverables \S8 asks for are that curve.
+  \item \textbf{Critical novelty test} (\S5). Generic latent conditioning entering the
+    U-Net through the feature-wise modulation path that time already uses, with the same
+    transport map, matched on all seven conditions the note lists. Because every
+    downstream component reaches the model through one method, the substitution is a
+    drop-in and the matching holds structurally rather than by bookkeeping. Report both
+    parameter counts rather than asserting the budgets are equal.
+\end{enumerate}
+
+\noindent\textbf{Deliverables.} \code{E13\_panel.txt}, \code{E15\_film\_panel.txt}, and
+copies of the \code{*\_log.jsonl} training logs --- easy to forget, since the originals
+are written where git ignores them, and they are the primary evidence. Checkpoints are
+430\,MB and stay on the server.
+
+% ==========================================================================
+\section{Yu Cao --- Positive control}
+% ==========================================================================
+
+\noindent\emph{Calibrates \S3. About 3 hours of development, 3 hours of CPU. No GPU, no
+dataset, no file from anyone else's machine.}
+
+\begin{enumerate}
+  \item \textbf{The four-way panel on stage 1.} Stage~1 already reports basis usage, the
+    correct coordinate against zero, a shuffled coordinate, and coordinate spread. Add the
+    mean-coordinate substitution, per-task paired intervals, and the coordinate-loss
+    profile. On images the profile is expected to be flat along the correct ray; here a
+    clear minimum at $s=1$ is expected, and the contrast between the two is the point.
+  \item \textbf{Task distance.} The stage-1 family has a dial images do not:
+    \code{--family related --perturb p} interpolates from every task identical to mutually
+    unrelated. The repository states a falsifiable claim --- \emph{the method needs a task
+    family whose members lie farther apart than the shared backbone can absorb} --- which
+    predicts that $\dtask$ rises monotonically with $p$. It has never been tested. Five
+    points, two hours of CPU, and the training script already exists.
+  \item \textbf{The shared plotting tool}, used by everyone at integration. Two panels:
+    $\dtask$ against step with an interval band, visually dominant; below it basis usage,
+    coordinate spread and the centre norm. It must tolerate every new field being absent,
+    since no log currently on disk has any of them, and it must shade the final fifth of
+    training, which is the only window a number may be read from.
+\end{enumerate}
+
+\noindent\textbf{Deliverables.} \code{stage1\_panel.txt}, \code{stage1\_relatedness.txt},
+\code{stage1\_profile.png}, \code{delta\_task\_vs\_distance.png}.
+
+% ==========================================================================
+\section{Output for the next meeting}\label{sec:meeting}
+% ==========================================================================
+
+The four items \S8 requests, and who produces each.
+
+\vspace{0.4em}
+\noindent
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\textbf{\S8} & \textbf{Requested} & \textbf{From} \\
+\midrule
+1 & Generation comparison across $z_y$, $\bar z$, $z_{\mathrm{shuffled}}$, $z = 0$ & Jinjian \\
+2 & One centred-coordinate run showing the four losses against training step & Jing Peng \\
+3 & Basis-usage and coordinate-spread curves & Jing Peng, plotted with Yu Cao's tool \\
+4 & A clear conclusion on whether task specificity survives at convergence & integration \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.6em}
+\noindent
+Item 4 is deliberately nobody's individual deliverable. The three packages deliver
+numbers; the two gates --- does generation differ across coordinates, and is
+$\dtask > 0$ at convergence --- are decided afterwards, against thresholds written down
+before any result was seen. Also at integration: the final deployment sweep on whichever
+checkpoint passes, and Jinjian's generation instruments applied to Jing Peng's comparison
+arm.
+
+Alongside item~4, the stage-1 calibration is what makes it readable. A zero on images
+means one thing if the same measurement is large and positive on Gaussian mixtures, and
+something quite different if it is near zero there too.
+
+% ==========================================================================
+\section{Out of scope}\label{sec:scope}
+% ==========================================================================
+
+\S7 rules out, as the primary fix: a larger $k$; another backbone size; a more complex
+transport network; confidence gates; separate source and target encoders; probabilistic
+latent machinery; and healthcare- or intervention-specific components. Nothing proposed
+above adds a network.
+
+The first two are not merely discouraged --- they are already done, and negative.
+Coordinate dimension $k \in \{16,32,64\}$ was swept at matched steps: the early peak rises
+with $k$ and all three decay to between $0.0004$ and $0.0007$, which is the signature of a
+backbone absorbing the task difference rather than of a coordinate short of capacity.
+Backbone width was swept at fixed $k$: apparent gain rises 725-fold as the backbone
+shrinks, and the mean-coordinate substitution then showed that none of even that was
+task-specific. Both sweeps were read as successes at the time and both readings were
+wrong. Repeating either would cost a day to reproduce a number already in
+\code{artifacts/}.
+
+\S6 keeps DomainNet closed until two conditions hold: $\dtask > 0$ at convergence, and
+generation from $z_y$ measurably different from generation from $\bar z$. Neither has been
+tested yet, and neither becomes more likely with a larger dataset.
+
+% ==========================================================================
+\section*{One open question}
+% ==========================================================================
+
+The allocation assumes the AWS instance carries a GPU, and benefits from more than one.
+If it does not, Jing Peng's package has nowhere to run and the split must be revised
+before anyone starts.
+
+\end{document}

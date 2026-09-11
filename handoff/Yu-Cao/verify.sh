@@ -26,8 +26,9 @@ echo "     everything you measure rests on it)"
 
 echo
 echo "== the rest of the suite =="
-for t in test_score_identity test_backbone_swap test_cifar100_episodes \
-         test_document_conformance; do
+echo "    (tests.test_cifar100_episodes is deliberately not in this list: it loads"
+echo "     CIFAR-100, which this package does not need and this machine does not have)"
+for t in test_score_identity test_backbone_swap test_document_conformance; do
     out=$($PY -m tests.$t 2>&1) || { echo "FAIL: tests.$t"; echo "$out" | tail -20; exit 1; }
     echo "ok  tests.$t  $(echo "$out" | grep -E 'passed' | tail -1)"
 done

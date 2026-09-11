@@ -7,14 +7,23 @@ console logs, which are evidence.
 
 | File | Read by | Contents |
 |---|---|---|
-| `cifar100_domainshift.json` | `episodes/domainshift.py` | The main experiment: the 12/4/4 superclass split and, per fine class, the source and target image pools |
+| `cifar100_domainshift_c3.json` | `episodes/domainshift.py` | **The family all new runs use**: three relations (blur, noise, contrast) at severity 3, the 12/4/4 superclass split, and per fine class the source and target image pools |
+| `cifar100_domainshift.json` | `episodes/domainshift.py` | The same split with a single relation. Kept because three checkpoints on disk were trained against it |
 | `cifar100_split.json` | `episodes/splits.py` | The sibling-class stress test |
 
-Both hold global image indices only, about 350 kB each, and are fully reproducible:
+All hold global image indices only, about 350 kB each, and are fully reproducible:
 
 ```bash
 python -m runner.build_cifar100_splits
+python -m runner.build_cifar100_splits --scheme domainshift
 ```
+
+The two domain-shift files carry **identical image-index streams** — the corruption list
+does not enter index assignment — so they differ only in which relations an episode may
+draw. Their SHA-256 checksums are quoted in `docs/PROTOCOL_CARD.md`, and the builder
+refuses to overwrite an existing split file: it is the shared input of every downstream
+run, and rebuilding one under a different task family would invalidate results already on
+disk.
 
 They are committed anyway, so that a checkout reproduces the *exact* episodes behind
 every number in the report rather than an equivalent draw. The figure in the report is

@@ -159,4 +159,17 @@ where they are written. They are a few hundred kilobytes each.
 Checkpoints themselves are 430 MB and must not be committed. Keep them on the server; say
 in your results file where they are.
 
+## Finishing
+
+```bash
+cp checkpoints/ctr*_log.jsonl checkpoints/film128_log.jsonl handoff/Jing-Peng/results/
+git add models training diagnostics config runner tests baselines handoff/Jing-Peng/results
+git commit -m "E13 centred coordinates and E15 comparison arm"
+git push origin jing-peng
+```
+
+Push to `jing-peng` and nowhere else. Do not merge into `main`, do not rebase onto another
+package's branch, and check `git status` for a stray `.pt` before committing — a
+checkpoint that slips past the ignore rule is painful to remove from history.
+
 **Do not write a conclusion.** Deliver the numbers.

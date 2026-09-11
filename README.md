@@ -48,6 +48,21 @@ is easy to repeat and the diagnostic that catches it costs one extra forward pas
 
 ---
 
+## Working on the next stage
+
+The next round is split into three packages running in parallel on three machines, with no
+dependency between them. If you have been given one:
+
+| | Read first |
+|---|---|
+| Your package | `handoff/<YourName>/README.md`, and `handoff/<YourName>/CLAUDE.md` if an agent is doing the work |
+| What everyone shares | [`docs/PROTOCOL_CARD.md`](docs/PROTOCOL_CARD.md) — fixed hyperparameters, split checksums, one owner per file |
+| How it maps to the brief | [`docs/work_split.pdf`](docs/work_split.pdf) — each item keyed to the supervisor's numbered note |
+
+Start with `bash handoff/<YourName>/verify.sh`.
+
+---
+
 ## Quick start
 
 Requires Python 3.11+, PyTorch with CUDA, and roughly 2 GB of GPU memory.
@@ -117,6 +132,7 @@ scripts/         analysis, figures and sweep drivers -- see scripts/README.md
 tests/           72 assertions, including conformance to the source specification
 artifacts/       the split files the code reads, and the stage-1 logs behind the tables
 docs/            the 28-page report, its LaTeX sources, and the script that builds it
+handoff/         the next stage, split three ways: one folder per person
 ```
 
 Four files worth knowing about before anything else:

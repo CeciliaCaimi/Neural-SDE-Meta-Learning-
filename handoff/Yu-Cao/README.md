@@ -128,4 +128,17 @@ Not into `artifacts/` — it ignores `*.txt` and `*.png`, and your files would s
 to commit. The stage-1 console logs are the exception: `artifacts/*.log` is tracked, and
 the sweep script writes there already.
 
+## Finishing
+
+```bash
+git add scripts runner artifacts/*.log handoff/Yu-Cao/results
+git commit -m "Stage-1 positive control and the task-distance sweep"
+git push origin yu-cao
+```
+
+Push to `yu-cao` and nowhere else. Do not merge into `main` and do not rebase onto another
+package's branch. Stage-1 checkpoints are small, but they still live under
+`checkpoints/`, which is ignored — the console logs in `artifacts/` are the evidence that
+travels.
+
 **Do not write a conclusion.** Deliver the numbers.
