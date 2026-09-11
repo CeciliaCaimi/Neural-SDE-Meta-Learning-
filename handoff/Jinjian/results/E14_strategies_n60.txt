@@ -1,0 +1,42 @@
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 64 samples per cell
+
+120 episodes: 20 classes x 3 transformations x 2 values of K_T
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1          K_T=20
+  ----------------------------------------------------
+  no adaptation            1.618 +-0.089     1.637 +-0.094
+  reuse z_S                1.448 +-0.110     0.575 +-0.059
+  transport                0.316 +-0.045     0.346 +-0.045
+  transport + refine       0.314 +-0.046     0.357 +-0.050
+  target only              0.377 +-0.054     0.328 +-0.044
+  oracle                   0.298 +-0.043     0.302 +-0.041
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1          K_T=20
+  ----------------------------------------------------
+  no adaptation            0.266 +-0.020     0.269 +-0.019
+  reuse z_S                0.251 +-0.018     0.239 +-0.019
+  transport                0.215 +-0.019     0.220 +-0.018
+  transport + refine       0.216 +-0.019     0.214 +-0.017
+  target only              0.234 +-0.019     0.215 +-0.018
+  oracle                   0.191 +-0.020     0.188 +-0.015
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison                                 K_T=1            K_T=20
+  ------------------------------------------------------------------
+  transport vs reuse z_S             +1.132 +-0.114*     +0.230 +-0.056*
+  transport vs target only           +0.060 +-0.047*     -0.017 +-0.044 
+  refinement: off vs on              +0.002 +-0.013      -0.012 +-0.044 
+  transport + refine vs oracle       +0.016 +-0.038      +0.055 +-0.045*
+
+  * = the 95% interval excludes zero

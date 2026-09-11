@@ -41,8 +41,8 @@
 {\Large\bfseries What the loss hid}\\[2pt]
 {\small The task coordinate was written off on the strength of a denoising loss that
 barely moves. In generated samples it decides the outcome every time.}\\[4pt]
-{\footnotesize\ttfamily cifar\_ds3 @ 50k $\cdot$ validation $\cdot$ 24 episodes $\cdot$
-128 samples per cell $\cdot$ DDIM $\eta=0$, 50 steps}
+{\footnotesize\ttfamily cifar\_ds3 @ 50k $\cdot$ validation $\cdot$ DDIM $\eta=0$, 50 steps
+$\cdot$ generation test $24\times128$ $\cdot$ strategy table $60\times64$}
 \end{center}
 
 \vspace{2pt}
@@ -61,7 +61,7 @@ episode's own coordinate --- against 33\,\% chance}
 project has been reading}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.31\textwidth}
-{\Large\bfseries\color{accent} 5.7$\times$}\\[2pt]
+{\Large\bfseries\color{accent} 4.6$\times$}\\[2pt]
 {\footnotesize closer to the target domain than reusing the source coordinate, at
 $\KT = 1$}
 \end{minipage}
@@ -74,7 +74,7 @@ $\KT = 1$}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.80\textwidth]{figures/gen_grid.png}
+\includegraphics[width=0.70\textwidth]{figures/gen_grid.png}
 \caption{Each column starts from \textbf{one shared initial noise}, so composition is
 fixed down the column and only the coordinate changes. Columns 1--6 are blur tasks,
 7--8 noise tasks. The \code{own} row follows the task; \code{mean} and \code{zero}
@@ -125,36 +125,45 @@ not run through the coordinate.}
 
 \section*{Deployment strategies, re-run in this metric}
 
-\noindent Distance from the real target domain, lower is better. The denoising loss puts
-all six rows on the same number.
+\noindent Distance from the real target domain, lower is better, over 60 episodes per
+$\KT$. The denoising loss puts all six rows on the same number.
 
 \vspace{4pt}
 \noindent
-\begin{tabular}{@{}lrrr@{}}
+\begin{tabular}{@{}lrr@{}}
 \toprule
-strategy & $\KT = 1$ & $\KT = 5$ & $\KT = 20$ \\
+strategy & $\KT = 1$ & $\KT = 20$ \\
 \midrule
-no adaptation            & 1.577 & 1.614 & 1.607 \\
-reuse $z_S$              & 1.410 & 0.805 & 0.484 \\
-\textbf{transport}       & \textbf{0.249} & \textbf{0.272} & \textbf{0.271} \\
-transport + refine       & 0.245 & 0.300 & \textcolor{bad}{\textbf{0.356}} \\
-target only              & 0.276 & 0.285 & 0.253 \\
-oracle                   & 0.258 & 0.253 & 0.249 \\
+no adaptation            & 1.618 & 1.637 \\
+reuse $z_S$              & 1.448 & 0.575 \\
+\textbf{transport}       & \textbf{0.316} & \textbf{0.346} \\
+transport + refine       & 0.314 & 0.357 \\
+target only              & 0.377 & 0.328 \\
+oracle                   & 0.298 & 0.302 \\
 \bottomrule
 \end{tabular}
 
 \vspace{8pt}
 \begin{itemize}
-  \item \textbf{Transport beats reusing the source coordinate} by $+1.161 \pm 0.233$ at
-    $\KT = 1$, shrinking to $+0.213$ at $\KT = 20$ --- the shape the method predicts, and
-    the shape stage 1 produced on Gaussian mixtures.
-  \item \textbf{Transport does not beat encoding one target image} ($+0.027 \pm 0.096$).
-    The transformation is too easy to read from a single sample for source information to
-    add anything.
-  \item \textbf{Refinement makes samples worse, and worse with more data}
-    ($0.245 \to 0.300 \to 0.356$). It optimises the loss, and the loss is the thing that
-    disagrees with the samples.
+  \item \textbf{Transport beats reusing the source coordinate} by $+1.132 \pm 0.114$ at
+    $\KT = 1$, falling to $+0.230 \pm 0.056$ at $\KT = 20$. Both intervals clear of zero.
+  \item \textbf{Transport also beats encoding the target images, but only while they are
+    scarce}: $+0.060 \pm 0.047$ at $\KT = 1$ --- clear of zero --- and
+    $-0.017 \pm 0.044$ at $\KT = 20$, where target-only has caught up. That crossing is
+    the regime the method claims to own, and it is the first time it has been seen on
+    images.
+  \item \textbf{Refinement changes nothing measurable} ($+0.002 \pm 0.013$ and
+    $-0.012 \pm 0.044$). It costs 25 optimisation steps per deployment and buys no
+    improvement in the samples.
 \end{itemize}
+
+\vspace{2pt}
+\noindent\fcolorbox{rulegrey}{white}{\parbox{0.985\textwidth}{\footnotesize
+\textbf{A correction worth recording.} An earlier pass with 12 episodes per $\KT$ got both
+of those readings wrong, in opposite directions: it put transport level with target-only
+($+0.027 \pm 0.096$) and made refinement look actively harmful ($-0.085 \pm 0.074$ at
+$\KT = 20$). Neither survived five times the sample. At that size the interval on this
+comparison is wider than the effect, so both the null and the trend were over-read.}}
 
 \section*{What this changes}
 
@@ -164,8 +173,11 @@ oracle                   & 0.258 & 0.253 & 0.249 \\
     result reproduces exactly on the arm it was measured on --- one transformation, 32
     channels --- and does not generalise to the arm where tasks differ in something
     denoising depends on.
-  \item \textbf{Switch refinement off} in this setting, or re-point it at an objective
-    that agrees with the samples.
+  \item \textbf{The claim the method is built on now has evidence on images.}
+    Source-informed transport beats both baselines at $\KT = 1$ and is overtaken as target
+    evidence grows --- the shape stage 1 produced analytically, reproduced where it counts.
+  \item \textbf{Refinement can be switched off} in this setting. It is not harmful, but it
+    buys nothing and costs 25 optimisation steps per deployment.
   \item \textbf{The centring change is no longer the indicated fix.} It was the remedy
     for a representation with no task-specific content, and that diagnosis has not
     survived.
