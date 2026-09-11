@@ -17,6 +17,13 @@ any code.**
 | `jing-peng` | Training — centred coordinates, the four-way panel, the generic-latent arm | `handoff/Jing-Peng/CLAUDE.md`, `handoff/Jing-Peng/README.md` |
 | `yu-cao` | Positive control — the stage-1 panel and the task-distance sweep | `handoff/Yu-Cao/CLAUDE.md`, `handoff/Yu-Cao/README.md` |
 
+Clone by branch name — the repository's default branch is `main`, which is a different
+project and has no `handoff/` directory:
+
+```bash
+git clone -b <your-branch> https://github.com/CeciliaCaimi/Neural-SDE-Meta-Learning-.git
+```
+
 `docs/PROTOCOL_CARD.md` fixes everything the three share: hyperparameters, split-file
 checksums, reporting rules, and one owner per file. Nothing in it may be changed locally.
 `docs/work_split.pdf` is the same allocation keyed to the supervisor's numbered note.

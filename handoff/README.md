@@ -39,9 +39,7 @@ the domain that fits on a laptop and happens to be the scientifically decisive c
    separates the coordinates, and whether the task-specific effect clears zero, is decided
    at integration against criteria that are written down *before* anyone sees a result.
 
-## Branches
-
-Cut from the commit that introduces this directory. Do not rebase onto each other.
+## Branches, and how to clone
 
 | Person | Branch |
 |---|---|
@@ -49,9 +47,16 @@ Cut from the commit that introduces this directory. Do not rebase onto each othe
 | Jing Peng | `jing-peng` |
 | Yu Cao | `yu-cao` |
 
+**Clone your branch by name.** A plain `git clone` checks out this repository's default
+branch, which is `main` and is *not* this project — you would get a tree with no
+`handoff/` directory and wonder where the work went.
+
 ```bash
-git checkout -b jinjian origin/meta-diffusion-clean
+git clone -b jinjian https://github.com/CeciliaCaimi/Neural-SDE-Meta-Learning-.git
 ```
+
+The three branches and `meta-diffusion-clean` all point at the same commit today. Work on
+yours, push to yours, and do not rebase onto anyone else's.
 
 ## Where results go
 
