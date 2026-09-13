@@ -1,0 +1,1141 @@
+device cuda | backbone small_unet | k=16
+φ 27.80M + encoder 0.33M + transport 6.8K
+training episode combinations 900 | 50000 steps
+
+step      1  L=3.2937  src=1.0986  tgt=1.0976  trans=1.0975  gain=+0.0001  |dz|=0.014  0.9 it/s
+step     50  L=1.0772  src=0.3950  tgt=0.3399  trans=0.3422  gain=-0.0024  |dz|=0.016  5.9 it/s
+step    100  L=0.5073  src=0.2004  tgt=0.1533  trans=0.1531  gain=+0.0001  |dz|=0.029  6.2 it/s
+step    150  L=0.3242  src=0.1490  tgt=0.0869  trans=0.0876  gain=-0.0006  |dz|=0.033  6.4 it/s
+step    200  L=0.2328  src=0.0903  tgt=0.0706  trans=0.0709  gain=-0.0004  |dz|=0.046  6.4 it/s
+step    250  L=0.2166  src=0.0839  tgt=0.0660  trans=0.0658  gain=+0.0002  |dz|=0.038  6.5 it/s
+step    300  L=0.3144  src=0.0988  tgt=0.1074  trans=0.1074  gain=+0.0000  |dz|=0.055  6.5 it/s
+step    350  L=0.6284  src=0.1298  tgt=0.2505  trans=0.2475  gain=+0.0030  |dz|=0.160  6.5 it/s
+step    400  L=0.4807  src=0.0845  tgt=0.1980  trans=0.1977  gain=+0.0002  |dz|=0.178  6.5 it/s
+step    450  L=0.5860  src=0.0808  tgt=0.2533  trans=0.2514  gain=+0.0018  |dz|=0.130  6.5 it/s
+step    500  L=0.2633  src=0.0887  tgt=0.0872  trans=0.0871  gain=+0.0002  |dz|=0.059  6.5 it/s
+  [diagnostics @ 500] loss_correct=0.3693  loss_zero=0.4231  loss_shuffled=0.3693  loss_random=0.4236  loss_target_only=0.3675  loss_mean_z=0.3088  r_basis=0.1108  |dz_transport|=0.0247  z_s_vs_enc_rel=0.0738  z_spread_rel=0.0529  gain_vs_zero=0.0539  gain_vs_shuffled=0.0000  gain_vs_target_only=-0.0018  gain_vs_mean_z=-0.0605  delta_task=-0.0605  z_center_norm=1.5975  task_specific_frac=-1.1231
+    ⚠ gain_vs_zero=0.0539 looks healthy but only -112.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step    550  L=0.1480  src=0.0682  tgt=0.0395  trans=0.0400  gain=-0.0005  |dz|=0.066  6.1 it/s
+step    600  L=0.4119  src=0.1029  tgt=0.1543  trans=0.1544  gain=-0.0001  |dz|=0.168  6.1 it/s
+step    650  L=0.4473  src=0.0665  tgt=0.1915  trans=0.1891  gain=+0.0023  |dz|=0.179  6.2 it/s
+step    700  L=0.5698  src=0.0545  tgt=0.2577  trans=0.2574  gain=+0.0004  |dz|=0.140  6.2 it/s
+step    750  L=0.3462  src=0.0761  tgt=0.1345  trans=0.1354  gain=-0.0009  |dz|=0.138  6.2 it/s
+step    800  L=0.1748  src=0.0528  tgt=0.0607  trans=0.0610  gain=-0.0004  |dz|=0.076  6.2 it/s
+step    850  L=0.1412  src=0.0746  tgt=0.0330  trans=0.0334  gain=-0.0004  |dz|=0.070  6.3 it/s
+step    900  L=0.1971  src=0.0966  tgt=0.0502  trans=0.0501  gain=+0.0000  |dz|=0.078  6.3 it/s
+step    950  L=0.1457  src=0.0526  tgt=0.0464  trans=0.0465  gain=-0.0001  |dz|=0.081  6.3 it/s
+step   1000  L=0.1578  src=0.0905  tgt=0.0336  trans=0.0335  gain=+0.0001  |dz|=0.079  6.3 it/s
+  [diagnostics @ 1000] loss_correct=0.1561  loss_zero=0.2309  loss_shuffled=0.1564  loss_random=0.2321  loss_target_only=0.1551  loss_mean_z=0.1567  r_basis=0.2052  |dz_transport|=0.0455  z_s_vs_enc_rel=0.0540  z_spread_rel=0.0539  gain_vs_zero=0.0747  gain_vs_shuffled=0.0003  gain_vs_target_only=-0.0010  gain_vs_mean_z=0.0006  delta_task=0.0006  z_center_norm=0.9135  task_specific_frac=0.0082
+    ⚠ gain_vs_zero=0.0747 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   1050  L=0.1645  src=0.0691  tgt=0.0475  trans=0.0477  gain=-0.0001  |dz|=0.085  6.1 it/s
+step   1100  L=0.3925  src=0.1037  tgt=0.1448  trans=0.1438  gain=+0.0009  |dz|=0.163  6.1 it/s
+step   1150  L=0.2243  src=0.1396  tgt=0.0423  trans=0.0423  gain=-0.0000  |dz|=0.106  6.1 it/s
+step   1200  L=0.4116  src=0.0417  tgt=0.1852  trans=0.1847  gain=+0.0005  |dz|=0.181  6.2 it/s
+step   1250  L=0.1450  src=0.0511  tgt=0.0469  trans=0.0469  gain=-0.0000  |dz|=0.093  6.2 it/s
+step   1300  L=0.1059  src=0.0469  tgt=0.0295  trans=0.0294  gain=+0.0001  |dz|=0.123  6.2 it/s
+step   1350  L=0.1627  src=0.1005  tgt=0.0310  trans=0.0311  gain=-0.0002  |dz|=0.100  6.2 it/s
+step   1400  L=0.1344  src=0.0592  tgt=0.0375  trans=0.0375  gain=+0.0000  |dz|=0.103  6.2 it/s
+step   1450  L=0.1536  src=0.0826  tgt=0.0355  trans=0.0354  gain=+0.0001  |dz|=0.135  6.2 it/s
+step   1500  L=0.1407  src=0.0525  tgt=0.0440  trans=0.0441  gain=-0.0000  |dz|=0.108  6.2 it/s
+  [diagnostics @ 1500] loss_correct=0.1242  loss_zero=0.2007  loss_shuffled=0.1246  loss_random=0.2038  loss_target_only=0.1236  loss_mean_z=0.1321  r_basis=0.2636  |dz_transport|=0.0774  z_s_vs_enc_rel=0.0483  z_spread_rel=0.0771  gain_vs_zero=0.0765  gain_vs_shuffled=0.0004  gain_vs_target_only=-0.0006  gain_vs_mean_z=0.0079  delta_task=0.0079  z_center_norm=0.7178  task_specific_frac=0.1026
+    ⚠ z_S and z^enc_T are only 0.048 apart relatively -- the encoder is not separating the source set from the target set
+step   1550  L=0.1550  src=0.0730  tgt=0.0410  trans=0.0409  gain=+0.0001  |dz|=0.150  6.1 it/s
+step   1600  L=0.1003  src=0.0637  tgt=0.0182  trans=0.0183  gain=-0.0001  |dz|=0.111  6.1 it/s
+step   1650  L=0.1747  src=0.0694  tgt=0.0527  trans=0.0526  gain=+0.0001  |dz|=0.149  6.1 it/s
+step   1700  L=0.3855  src=0.0444  tgt=0.1704  trans=0.1706  gain=-0.0003  |dz|=0.210  6.1 it/s
+step   1750  L=0.1486  src=0.0693  tgt=0.0396  trans=0.0396  gain=+0.0000  |dz|=0.104  6.2 it/s
+step   1800  L=0.1509  src=0.0823  tgt=0.0342  trans=0.0343  gain=-0.0000  |dz|=0.106  6.2 it/s
+step   1850  L=0.1405  src=0.0686  tgt=0.0359  trans=0.0359  gain=+0.0000  |dz|=0.109  6.2 it/s
+step   1900  L=0.1455  src=0.0606  tgt=0.0425  trans=0.0424  gain=+0.0001  |dz|=0.113  6.2 it/s
+step   1950  L=0.2742  src=0.0643  tgt=0.1049  trans=0.1049  gain=-0.0000  |dz|=0.218  6.2 it/s
+step   2000  L=0.3385  src=0.0878  tgt=0.1255  trans=0.1251  gain=+0.0003  |dz|=0.220  6.2 it/s
+  [diagnostics @ 2000] loss_correct=0.1183  loss_zero=0.1883  loss_shuffled=0.1187  loss_random=0.1916  loss_target_only=0.1180  loss_mean_z=0.1256  r_basis=0.2907  |dz_transport|=0.1130  z_s_vs_enc_rel=0.0613  z_spread_rel=0.1146  gain_vs_zero=0.0700  gain_vs_shuffled=0.0004  gain_vs_target_only=-0.0002  gain_vs_mean_z=0.0073  delta_task=0.0073  z_center_norm=0.5947  task_specific_frac=0.1048
+  saved /opt/ml/code/checkpoints/ctr128_off_step2000.pt
+step   2050  L=0.1008  src=0.0547  tgt=0.0230  trans=0.0230  gain=-0.0000  |dz|=0.115  6.1 it/s
+step   2100  L=0.1863  src=0.0620  tgt=0.0621  trans=0.0622  gain=-0.0000  |dz|=0.111  6.1 it/s
+step   2150  L=0.1565  src=0.0854  tgt=0.0354  trans=0.0356  gain=-0.0002  |dz|=0.110  6.1 it/s
+step   2200  L=0.0769  src=0.0409  tgt=0.0181  trans=0.0179  gain=+0.0002  |dz|=0.156  6.1 it/s
+step   2250  L=0.1128  src=0.0666  tgt=0.0231  trans=0.0231  gain=-0.0000  |dz|=0.114  6.1 it/s
+step   2300  L=0.1608  src=0.0936  tgt=0.0336  trans=0.0336  gain=+0.0001  |dz|=0.113  6.2 it/s
+step   2350  L=0.1180  src=0.0559  tgt=0.0312  trans=0.0310  gain=+0.0002  |dz|=0.110  6.2 it/s
+step   2400  L=0.4279  src=0.0553  tgt=0.1864  trans=0.1861  gain=+0.0004  |dz|=0.221  6.2 it/s
+step   2450  L=0.0881  src=0.0518  tgt=0.0180  trans=0.0183  gain=-0.0003  |dz|=0.173  6.2 it/s
+step   2500  L=0.1352  src=0.0772  tgt=0.0290  trans=0.0290  gain=+0.0000  |dz|=0.172  6.2 it/s
+  [diagnostics @ 2500] loss_correct=0.0887  loss_zero=0.1504  loss_shuffled=0.0890  loss_random=0.1534  loss_target_only=0.0887  loss_mean_z=0.0938  r_basis=0.2967  |dz_transport|=0.1334  z_s_vs_enc_rel=0.0734  z_spread_rel=0.1470  gain_vs_zero=0.0617  gain_vs_shuffled=0.0003  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0051  delta_task=0.0051  z_center_norm=0.5183  task_specific_frac=0.0824
+step   2550  L=0.0813  src=0.0345  tgt=0.0235  trans=0.0233  gain=+0.0002  |dz|=0.176  6.1 it/s
+step   2600  L=0.0828  src=0.0356  tgt=0.0237  trans=0.0235  gain=+0.0002  |dz|=0.110  6.1 it/s
+step   2650  L=0.1622  src=0.0963  tgt=0.0330  trans=0.0329  gain=+0.0001  |dz|=0.168  6.1 it/s
+step   2700  L=0.1482  src=0.0786  tgt=0.0347  trans=0.0347  gain=+0.0000  |dz|=0.111  6.1 it/s
+step   2750  L=0.1094  src=0.0636  tgt=0.0230  trans=0.0228  gain=+0.0002  |dz|=0.112  6.1 it/s
+step   2800  L=0.1523  src=0.0798  tgt=0.0363  trans=0.0361  gain=+0.0002  |dz|=0.171  6.1 it/s
+step   2850  L=0.3224  src=0.0645  tgt=0.1289  trans=0.1289  gain=+0.0000  |dz|=0.212  6.2 it/s
+step   2900  L=0.0922  src=0.0393  tgt=0.0265  trans=0.0264  gain=+0.0001  |dz|=0.170  6.2 it/s
+step   2950  L=0.4716  src=0.0590  tgt=0.2061  trans=0.2064  gain=-0.0003  |dz|=0.214  6.2 it/s
+step   3000  L=0.1408  src=0.0619  tgt=0.0396  trans=0.0393  gain=+0.0003  |dz|=0.172  6.2 it/s
+  [diagnostics @ 3000] loss_correct=0.0513  loss_zero=0.1071  loss_shuffled=0.0515  loss_random=0.1105  loss_target_only=0.0514  loss_mean_z=0.0553  r_basis=0.2911  |dz_transport|=0.1275  z_s_vs_enc_rel=0.1091  z_spread_rel=0.1252  gain_vs_zero=0.0558  gain_vs_shuffled=0.0002  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0040  delta_task=0.0040  z_center_norm=0.4530  task_specific_frac=0.0712
+step   3050  L=0.2996  src=0.0384  tgt=0.1306  trans=0.1305  gain=+0.0001  |dz|=0.203  6.1 it/s
+step   3100  L=0.1530  src=0.0851  tgt=0.0339  trans=0.0340  gain=-0.0000  |dz|=0.109  6.1 it/s
+step   3150  L=0.1608  src=0.0837  tgt=0.0385  trans=0.0386  gain=-0.0000  |dz|=0.108  6.1 it/s
+step   3200  L=0.1462  src=0.0557  tgt=0.0453  trans=0.0453  gain=-0.0000  |dz|=0.106  6.1 it/s
+step   3250  L=0.1202  src=0.0510  tgt=0.0346  trans=0.0346  gain=+0.0000  |dz|=0.107  6.1 it/s
+step   3300  L=0.2663  src=0.0483  tgt=0.1091  trans=0.1088  gain=+0.0003  |dz|=0.194  6.1 it/s
+step   3350  L=0.3363  src=0.0488  tgt=0.1437  trans=0.1438  gain=-0.0001  |dz|=0.195  6.1 it/s
+step   3400  L=0.1038  src=0.0575  tgt=0.0231  trans=0.0232  gain=-0.0001  |dz|=0.174  6.2 it/s
+step   3450  L=0.0777  src=0.0548  tgt=0.0115  trans=0.0115  gain=-0.0000  |dz|=0.110  6.2 it/s
+step   3500  L=0.1393  src=0.0474  tgt=0.0459  trans=0.0460  gain=-0.0001  |dz|=0.110  6.2 it/s
+  [diagnostics @ 3500] loss_correct=0.0799  loss_zero=0.1244  loss_shuffled=0.0803  loss_random=0.1276  loss_target_only=0.0800  loss_mean_z=0.0822  r_basis=0.2694  |dz_transport|=0.1502  z_s_vs_enc_rel=0.1343  z_spread_rel=0.2290  gain_vs_zero=0.0445  gain_vs_shuffled=0.0004  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.3958  task_specific_frac=0.0507
+step   3550  L=0.4845  src=0.0857  tgt=0.1994  trans=0.1993  gain=+0.0001  |dz|=0.205  6.1 it/s
+step   3600  L=0.1418  src=0.0978  tgt=0.0221  trans=0.0219  gain=+0.0002  |dz|=0.174  6.1 it/s
+step   3650  L=0.1475  src=0.0687  tgt=0.0394  trans=0.0395  gain=-0.0001  |dz|=0.178  6.1 it/s
+step   3700  L=0.4897  src=0.1210  tgt=0.1844  trans=0.1843  gain=+0.0001  |dz|=0.200  6.1 it/s
+step   3750  L=0.1288  src=0.0810  tgt=0.0239  trans=0.0239  gain=+0.0000  |dz|=0.179  6.1 it/s
+step   3800  L=0.4643  src=0.0840  tgt=0.1903  trans=0.1899  gain=+0.0004  |dz|=0.226  6.1 it/s
+step   3850  L=0.1666  src=0.0605  tgt=0.0531  trans=0.0530  gain=+0.0001  |dz|=0.114  6.1 it/s
+step   3900  L=0.0910  src=0.0494  tgt=0.0208  trans=0.0208  gain=-0.0000  |dz|=0.113  6.1 it/s
+step   3950  L=0.3382  src=0.0474  tgt=0.1454  trans=0.1454  gain=+0.0000  |dz|=0.233  6.2 it/s
+step   4000  L=0.0785  src=0.0305  tgt=0.0240  trans=0.0240  gain=+0.0000  |dz|=0.113  6.2 it/s
+  [diagnostics @ 4000] loss_correct=0.0775  loss_zero=0.1149  loss_shuffled=0.0779  loss_random=0.1173  loss_target_only=0.0776  loss_mean_z=0.0790  r_basis=0.2474  |dz_transport|=0.1613  z_s_vs_enc_rel=0.1579  z_spread_rel=0.2903  gain_vs_zero=0.0375  gain_vs_shuffled=0.0005  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0016  delta_task=0.0016  z_center_norm=0.3517  task_specific_frac=0.0420
+    ⚠ gain_vs_zero=0.0375 looks healthy but only 4.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr128_off_step4000.pt
+step   4050  L=0.1128  src=0.0626  tgt=0.0252  trans=0.0250  gain=+0.0002  |dz|=0.185  6.1 it/s
+step   4100  L=0.1117  src=0.0368  tgt=0.0375  trans=0.0373  gain=+0.0002  |dz|=0.180  6.1 it/s
+step   4150  L=0.0831  src=0.0545  tgt=0.0143  trans=0.0143  gain=-0.0000  |dz|=0.180  6.1 it/s
+step   4200  L=0.3697  src=0.0574  tgt=0.1562  trans=0.1561  gain=+0.0000  |dz|=0.214  6.1 it/s
+step   4250  L=0.1006  src=0.0578  tgt=0.0214  trans=0.0214  gain=-0.0000  |dz|=0.178  6.1 it/s
+step   4300  L=0.3996  src=0.0502  tgt=0.1747  trans=0.1746  gain=+0.0001  |dz|=0.207  6.1 it/s
+step   4350  L=0.1199  src=0.0738  tgt=0.0231  trans=0.0229  gain=+0.0002  |dz|=0.185  6.1 it/s
+step   4400  L=0.1243  src=0.0625  tgt=0.0309  trans=0.0309  gain=-0.0000  |dz|=0.187  6.1 it/s
+step   4450  L=0.1286  src=0.0678  tgt=0.0304  trans=0.0304  gain=-0.0000  |dz|=0.114  6.1 it/s
+step   4500  L=0.1186  src=0.0560  tgt=0.0312  trans=0.0314  gain=-0.0002  |dz|=0.180  6.2 it/s
+  [diagnostics @ 4500] loss_correct=0.0911  loss_zero=0.1222  loss_shuffled=0.0914  loss_random=0.1246  loss_target_only=0.0912  loss_mean_z=0.0921  r_basis=0.2244  |dz_transport|=0.1681  z_s_vs_enc_rel=0.2386  z_spread_rel=0.3433  gain_vs_zero=0.0311  gain_vs_shuffled=0.0003  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0010  delta_task=0.0010  z_center_norm=0.3193  task_specific_frac=0.0327
+    ⚠ gain_vs_zero=0.0311 looks healthy but only 3.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   4550  L=0.1537  src=0.0906  tgt=0.0315  trans=0.0316  gain=-0.0001  |dz|=0.192  6.1 it/s
+step   4600  L=0.1242  src=0.0501  tgt=0.0371  trans=0.0371  gain=+0.0000  |dz|=0.113  6.1 it/s
+step   4650  L=0.3266  src=0.0924  tgt=0.1171  trans=0.1170  gain=+0.0001  |dz|=0.191  6.1 it/s
+step   4700  L=0.0879  src=0.0433  tgt=0.0223  trans=0.0222  gain=+0.0001  |dz|=0.115  6.1 it/s
+step   4750  L=0.1332  src=0.0696  tgt=0.0318  trans=0.0318  gain=-0.0000  |dz|=0.110  6.1 it/s
+step   4800  L=0.2852  src=0.0531  tgt=0.1161  trans=0.1160  gain=+0.0000  |dz|=0.201  6.1 it/s
+step   4850  L=0.1197  src=0.0468  tgt=0.0365  trans=0.0365  gain=-0.0000  |dz|=0.111  6.1 it/s
+step   4900  L=0.3214  src=0.0611  tgt=0.1303  trans=0.1300  gain=+0.0003  |dz|=0.213  6.1 it/s
+step   4950  L=0.0887  src=0.0373  tgt=0.0257  trans=0.0257  gain=+0.0001  |dz|=0.174  6.1 it/s
+step   5000  L=0.3809  src=0.0713  tgt=0.1547  trans=0.1549  gain=-0.0002  |dz|=0.322  6.1 it/s
+  [diagnostics @ 5000] loss_correct=0.0927  loss_zero=0.1184  loss_shuffled=0.0932  loss_random=0.1201  loss_target_only=0.0927  loss_mean_z=0.0935  r_basis=0.2007  |dz_transport|=0.1777  z_s_vs_enc_rel=0.2852  z_spread_rel=0.3868  gain_vs_zero=0.0258  gain_vs_shuffled=0.0005  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.2803  task_specific_frac=0.0325
+    ⚠ gain_vs_zero=0.0258 looks healthy but only 3.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   5050  L=0.0901  src=0.0372  tgt=0.0264  trans=0.0264  gain=-0.0000  |dz|=0.172  6.1 it/s
+step   5100  L=0.1162  src=0.0744  tgt=0.0210  trans=0.0208  gain=+0.0001  |dz|=0.169  6.1 it/s
+step   5150  L=0.4441  src=0.0576  tgt=0.1933  trans=0.1932  gain=+0.0002  |dz|=0.277  6.1 it/s
+step   5200  L=0.1784  src=0.1141  tgt=0.0322  trans=0.0321  gain=+0.0001  |dz|=0.162  6.1 it/s
+step   5250  L=0.2928  src=0.0430  tgt=0.1249  trans=0.1249  gain=-0.0000  |dz|=0.277  6.1 it/s
+step   5300  L=0.5102  src=0.0691  tgt=0.2205  trans=0.2205  gain=-0.0000  |dz|=0.258  6.1 it/s
+step   5350  L=0.1751  src=0.0980  tgt=0.0385  trans=0.0385  gain=+0.0000  |dz|=0.165  6.1 it/s
+step   5400  L=0.1100  src=0.0611  tgt=0.0245  trans=0.0244  gain=+0.0001  |dz|=0.107  6.1 it/s
+step   5450  L=0.4822  src=0.0802  tgt=0.2010  trans=0.2010  gain=+0.0000  |dz|=0.254  6.1 it/s
+step   5500  L=0.0951  src=0.0467  tgt=0.0242  trans=0.0241  gain=+0.0001  |dz|=0.167  6.1 it/s
+  [diagnostics @ 5500] loss_correct=0.0903  loss_zero=0.1115  loss_shuffled=0.0909  loss_random=0.1133  loss_target_only=0.0904  loss_mean_z=0.0910  r_basis=0.1819  |dz_transport|=0.1737  z_s_vs_enc_rel=0.3758  z_spread_rel=0.4463  gain_vs_zero=0.0212  gain_vs_shuffled=0.0006  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.2543  task_specific_frac=0.0327
+    ⚠ gain_vs_zero=0.0212 looks healthy but only 3.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   5550  L=0.2161  src=0.0838  tgt=0.0661  trans=0.0661  gain=+0.0000  |dz|=0.110  6.1 it/s
+step   5600  L=0.0862  src=0.0300  tgt=0.0281  trans=0.0281  gain=-0.0000  |dz|=0.109  6.1 it/s
+step   5650  L=0.1319  src=0.0626  tgt=0.0347  trans=0.0347  gain=+0.0000  |dz|=0.113  6.1 it/s
+step   5700  L=0.1168  src=0.0576  tgt=0.0296  trans=0.0296  gain=+0.0001  |dz|=0.177  6.1 it/s
+step   5750  L=0.1414  src=0.0577  tgt=0.0419  trans=0.0418  gain=+0.0001  |dz|=0.174  6.1 it/s
+step   5800  L=0.4026  src=0.0765  tgt=0.1631  trans=0.1630  gain=+0.0002  |dz|=0.237  6.1 it/s
+step   5850  L=0.1296  src=0.0535  tgt=0.0381  trans=0.0380  gain=+0.0001  |dz|=0.158  6.1 it/s
+step   5900  L=0.0881  src=0.0486  tgt=0.0197  trans=0.0198  gain=-0.0001  |dz|=0.164  6.1 it/s
+step   5950  L=0.4473  src=0.0634  tgt=0.1920  trans=0.1920  gain=-0.0000  |dz|=0.241  6.1 it/s
+step   6000  L=0.1310  src=0.0818  tgt=0.0246  trans=0.0246  gain=-0.0000  |dz|=0.164  6.1 it/s
+  [diagnostics @ 6000] loss_correct=0.0791  loss_zero=0.0979  loss_shuffled=0.0799  loss_random=0.0997  loss_target_only=0.0792  loss_mean_z=0.0799  r_basis=0.1650  |dz_transport|=0.1817  z_s_vs_enc_rel=0.4716  z_spread_rel=0.4918  gain_vs_zero=0.0188  gain_vs_shuffled=0.0007  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.2279  task_specific_frac=0.0375
+    ⚠ gain_vs_zero=0.0188 looks healthy but only 3.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr128_off_step6000.pt
+step   6050  L=0.4411  src=0.0576  tgt=0.1918  trans=0.1917  gain=+0.0001  |dz|=0.245  6.1 it/s
+step   6100  L=0.3952  src=0.0580  tgt=0.1686  trans=0.1686  gain=-0.0000  |dz|=0.232  6.1 it/s
+step   6150  L=0.1124  src=0.0580  tgt=0.0272  trans=0.0271  gain=+0.0001  |dz|=0.167  6.1 it/s
+step   6200  L=0.0968  src=0.0414  tgt=0.0277  trans=0.0277  gain=+0.0000  |dz|=0.172  6.1 it/s
+step   6250  L=0.3118  src=0.0457  tgt=0.1331  trans=0.1329  gain=+0.0001  |dz|=0.225  6.1 it/s
+step   6300  L=0.0912  src=0.0453  tgt=0.0230  trans=0.0229  gain=+0.0000  |dz|=0.166  6.1 it/s
+step   6350  L=0.4781  src=0.0489  tgt=0.2146  trans=0.2146  gain=-0.0000  |dz|=0.236  6.1 it/s
+step   6400  L=0.1420  src=0.0551  tgt=0.0435  trans=0.0434  gain=+0.0000  |dz|=0.110  6.1 it/s
+step   6450  L=0.1169  src=0.0670  tgt=0.0249  trans=0.0250  gain=-0.0001  |dz|=0.110  6.1 it/s
+step   6500  L=0.3735  src=0.0488  tgt=0.1624  trans=0.1623  gain=+0.0001  |dz|=0.215  6.1 it/s
+  [diagnostics @ 6500] loss_correct=0.0766  loss_zero=0.0930  loss_shuffled=0.0772  loss_random=0.0944  loss_target_only=0.0766  loss_mean_z=0.0773  r_basis=0.1515  |dz_transport|=0.1754  z_s_vs_enc_rel=0.5382  z_spread_rel=0.5452  gain_vs_zero=0.0164  gain_vs_shuffled=0.0006  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.2051  task_specific_frac=0.0414
+    ⚠ gain_vs_zero=0.0164 looks healthy but only 4.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   6550  L=0.1718  src=0.1032  tgt=0.0343  trans=0.0343  gain=-0.0001  |dz|=0.105  6.1 it/s
+step   6600  L=0.3354  src=0.0728  tgt=0.1312  trans=0.1313  gain=-0.0001  |dz|=0.203  6.1 it/s
+step   6650  L=0.1050  src=0.0626  tgt=0.0212  trans=0.0212  gain=+0.0000  |dz|=0.165  6.1 it/s
+step   6700  L=0.0991  src=0.0553  tgt=0.0219  trans=0.0219  gain=+0.0000  |dz|=0.109  6.1 it/s
+step   6750  L=0.0779  src=0.0337  tgt=0.0221  trans=0.0220  gain=+0.0001  |dz|=0.176  6.1 it/s
+step   6800  L=0.1731  src=0.0824  tgt=0.0453  trans=0.0454  gain=-0.0001  |dz|=0.165  6.1 it/s
+step   6850  L=0.1103  src=0.0399  tgt=0.0353  trans=0.0351  gain=+0.0002  |dz|=0.108  6.1 it/s
+step   6900  L=0.1621  src=0.0791  tgt=0.0415  trans=0.0415  gain=+0.0000  |dz|=0.108  6.1 it/s
+step   6950  L=0.1215  src=0.0527  tgt=0.0344  trans=0.0345  gain=-0.0001  |dz|=0.162  6.1 it/s
+step   7000  L=0.1018  src=0.0667  tgt=0.0176  trans=0.0175  gain=+0.0001  |dz|=0.162  6.1 it/s
+  [diagnostics @ 7000] loss_correct=0.0589  loss_zero=0.0736  loss_shuffled=0.0593  loss_random=0.0749  loss_target_only=0.0589  loss_mean_z=0.0597  r_basis=0.1399  |dz_transport|=0.1611  z_s_vs_enc_rel=0.5696  z_spread_rel=0.5025  gain_vs_zero=0.0146  gain_vs_shuffled=0.0004  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.1805  task_specific_frac=0.0516
+step   7050  L=0.1266  src=0.0661  tgt=0.0303  trans=0.0303  gain=+0.0000  |dz|=0.112  6.1 it/s
+step   7100  L=0.1176  src=0.0663  tgt=0.0256  trans=0.0256  gain=+0.0000  |dz|=0.117  6.1 it/s
+step   7150  L=0.1634  src=0.0863  tgt=0.0386  trans=0.0385  gain=+0.0001  |dz|=0.157  6.1 it/s
+step   7200  L=0.0911  src=0.0495  tgt=0.0208  trans=0.0209  gain=-0.0001  |dz|=0.157  6.1 it/s
+step   7250  L=0.0604  src=0.0318  tgt=0.0144  trans=0.0142  gain=+0.0002  |dz|=0.113  6.1 it/s
+step   7300  L=0.1384  src=0.0575  tgt=0.0404  trans=0.0405  gain=-0.0000  |dz|=0.113  6.1 it/s
+step   7350  L=0.3489  src=0.0847  tgt=0.1322  trans=0.1321  gain=+0.0001  |dz|=0.222  6.1 it/s
+step   7400  L=0.1051  src=0.0608  tgt=0.0222  trans=0.0222  gain=-0.0000  |dz|=0.150  6.1 it/s
+step   7450  L=0.1303  src=0.0689  tgt=0.0308  trans=0.0306  gain=+0.0002  |dz|=0.142  6.1 it/s
+step   7500  L=0.1271  src=0.0489  tgt=0.0391  trans=0.0391  gain=+0.0000  |dz|=0.148  6.1 it/s
+  [diagnostics @ 7500] loss_correct=0.0787  loss_zero=0.0898  loss_shuffled=0.0795  loss_random=0.0910  loss_target_only=0.0788  loss_mean_z=0.0794  r_basis=0.1210  |dz_transport|=0.1805  z_s_vs_enc_rel=0.7081  z_spread_rel=0.5988  gain_vs_zero=0.0111  gain_vs_shuffled=0.0008  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.1627  task_specific_frac=0.0592
+step   7550  L=0.1184  src=0.0415  tgt=0.0384  trans=0.0385  gain=-0.0001  |dz|=0.109  6.1 it/s
+step   7600  L=0.3910  src=0.0418  tgt=0.1746  trans=0.1746  gain=+0.0000  |dz|=0.242  6.1 it/s
+step   7650  L=0.0977  src=0.0504  tgt=0.0237  trans=0.0236  gain=+0.0001  |dz|=0.151  6.1 it/s
+step   7700  L=0.4256  src=0.0599  tgt=0.1828  trans=0.1828  gain=-0.0000  |dz|=0.226  6.1 it/s
+step   7750  L=0.1746  src=0.0560  tgt=0.0593  trans=0.0593  gain=-0.0001  |dz|=0.166  6.1 it/s
+step   7800  L=0.2425  src=0.0840  tgt=0.0792  trans=0.0793  gain=-0.0001  |dz|=0.113  6.1 it/s
+step   7850  L=0.1062  src=0.0519  tgt=0.0271  trans=0.0271  gain=-0.0001  |dz|=0.161  6.1 it/s
+step   7900  L=0.6162  src=0.0862  tgt=0.2651  trans=0.2650  gain=+0.0001  |dz|=0.189  6.1 it/s
+step   7950  L=0.1257  src=0.0348  tgt=0.0455  trans=0.0454  gain=+0.0001  |dz|=0.113  6.1 it/s
+step   8000  L=0.3744  src=0.0622  tgt=0.1561  trans=0.1561  gain=+0.0001  |dz|=0.199  6.1 it/s
+  [diagnostics @ 8000] loss_correct=0.0759  loss_zero=0.0852  loss_shuffled=0.0768  loss_random=0.0860  loss_target_only=0.0759  loss_mean_z=0.0764  r_basis=0.1087  |dz_transport|=0.1726  z_s_vs_enc_rel=0.7519  z_spread_rel=0.6581  gain_vs_zero=0.0093  gain_vs_shuffled=0.0009  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0006  delta_task=0.0006  z_center_norm=0.1527  task_specific_frac=0.0618
+  saved /opt/ml/code/checkpoints/ctr128_off_step8000.pt
+step   8050  L=0.4833  src=0.0656  tgt=0.2088  trans=0.2089  gain=-0.0001  |dz|=0.218  6.1 it/s
+step   8100  L=0.3219  src=0.0384  tgt=0.1418  trans=0.1417  gain=+0.0000  |dz|=0.238  6.1 it/s
+step   8150  L=0.1558  src=0.0656  tgt=0.0451  trans=0.0451  gain=+0.0000  |dz|=0.110  6.1 it/s
+step   8200  L=0.1268  src=0.0695  tgt=0.0287  trans=0.0286  gain=+0.0001  |dz|=0.107  6.1 it/s
+step   8250  L=0.1888  src=0.0681  tgt=0.0604  trans=0.0604  gain=-0.0000  |dz|=0.106  6.1 it/s
+step   8300  L=0.2018  src=0.0575  tgt=0.0722  trans=0.0722  gain=+0.0000  |dz|=0.191  6.1 it/s
+step   8350  L=0.3731  src=0.0464  tgt=0.1633  trans=0.1634  gain=-0.0000  |dz|=0.201  6.1 it/s
+step   8400  L=0.1117  src=0.0604  tgt=0.0256  trans=0.0256  gain=-0.0000  |dz|=0.162  6.1 it/s
+step   8450  L=0.1614  src=0.0898  tgt=0.0358  trans=0.0358  gain=-0.0000  |dz|=0.112  6.1 it/s
+step   8500  L=0.1092  src=0.0424  tgt=0.0334  trans=0.0334  gain=+0.0000  |dz|=0.107  6.1 it/s
+  [diagnostics @ 8500] loss_correct=0.0821  loss_zero=0.0902  loss_shuffled=0.0832  loss_random=0.0910  loss_target_only=0.0822  loss_mean_z=0.0827  r_basis=0.1002  |dz_transport|=0.1613  z_s_vs_enc_rel=0.8489  z_spread_rel=0.6812  gain_vs_zero=0.0080  gain_vs_shuffled=0.0010  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0006  delta_task=0.0006  z_center_norm=0.1388  task_specific_frac=0.0707
+step   8550  L=0.1490  src=0.0608  tgt=0.0441  trans=0.0441  gain=-0.0000  |dz|=0.106  6.1 it/s
+step   8600  L=0.0936  src=0.0358  tgt=0.0289  trans=0.0289  gain=-0.0001  |dz|=0.147  6.1 it/s
+step   8650  L=0.3246  src=0.0510  tgt=0.1368  trans=0.1368  gain=+0.0000  |dz|=0.200  6.1 it/s
+step   8700  L=0.1318  src=0.0526  tgt=0.0396  trans=0.0396  gain=+0.0000  |dz|=0.150  6.1 it/s
+step   8750  L=0.1146  src=0.0596  tgt=0.0275  trans=0.0274  gain=+0.0001  |dz|=0.151  6.1 it/s
+step   8800  L=0.4950  src=0.0407  tgt=0.2270  trans=0.2273  gain=-0.0003  |dz|=0.189  6.1 it/s
+step   8850  L=0.3199  src=0.0893  tgt=0.1153  trans=0.1153  gain=-0.0000  |dz|=0.205  6.1 it/s
+step   8900  L=0.0854  src=0.0623  tgt=0.0116  trans=0.0115  gain=+0.0001  |dz|=0.108  6.1 it/s
+step   8950  L=0.3750  src=0.0618  tgt=0.1566  trans=0.1566  gain=-0.0001  |dz|=0.195  6.1 it/s
+step   9000  L=0.0872  src=0.0408  tgt=0.0232  trans=0.0232  gain=-0.0000  |dz|=0.101  6.1 it/s
+  [diagnostics @ 9000] loss_correct=0.0912  loss_zero=0.0980  loss_shuffled=0.0918  loss_random=0.0989  loss_target_only=0.0912  loss_mean_z=0.0917  r_basis=0.0923  |dz_transport|=0.1595  z_s_vs_enc_rel=0.8839  z_spread_rel=0.7178  gain_vs_zero=0.0068  gain_vs_shuffled=0.0007  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0006  delta_task=0.0006  z_center_norm=0.1284  task_specific_frac=0.0834
+step   9050  L=0.0645  src=0.0371  tgt=0.0137  trans=0.0137  gain=+0.0000  |dz|=0.097  6.1 it/s
+step   9100  L=0.2619  src=0.0401  tgt=0.1109  trans=0.1109  gain=-0.0000  |dz|=0.183  6.1 it/s
+step   9150  L=0.1300  src=0.0503  tgt=0.0398  trans=0.0399  gain=-0.0001  |dz|=0.097  6.1 it/s
+step   9200  L=0.5839  src=0.0656  tgt=0.2591  trans=0.2592  gain=-0.0000  |dz|=0.193  6.1 it/s
+step   9250  L=0.0842  src=0.0440  tgt=0.0201  trans=0.0201  gain=+0.0000  |dz|=0.105  6.1 it/s
+step   9300  L=0.4028  src=0.0455  tgt=0.1787  trans=0.1786  gain=+0.0001  |dz|=0.209  6.1 it/s
+step   9350  L=0.1209  src=0.0772  tgt=0.0219  trans=0.0218  gain=+0.0000  |dz|=0.102  6.1 it/s
+step   9400  L=0.4394  src=0.0654  tgt=0.1871  trans=0.1868  gain=+0.0003  |dz|=0.269  6.1 it/s
+step   9450  L=0.4243  src=0.0395  tgt=0.1933  trans=0.1915  gain=+0.0018  |dz|=0.244  6.1 it/s
+step   9500  L=0.1423  src=0.0526  tgt=0.0448  trans=0.0449  gain=-0.0001  |dz|=0.101  6.1 it/s
+  [diagnostics @ 9500] loss_correct=0.0874  loss_zero=0.0933  loss_shuffled=0.0888  loss_random=0.0939  loss_target_only=0.0874  loss_mean_z=0.0880  r_basis=0.0848  |dz_transport|=0.1596  z_s_vs_enc_rel=0.9535  z_spread_rel=0.7406  gain_vs_zero=0.0059  gain_vs_shuffled=0.0015  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0006  delta_task=0.0006  z_center_norm=0.1162  task_specific_frac=0.1041
+step   9550  L=0.0993  src=0.0510  tgt=0.0242  trans=0.0242  gain=-0.0000  |dz|=0.101  6.1 it/s
+step   9600  L=0.0973  src=0.0480  tgt=0.0247  trans=0.0247  gain=+0.0000  |dz|=0.100  6.1 it/s
+step   9650  L=0.1282  src=0.0720  tgt=0.0281  trans=0.0281  gain=+0.0000  |dz|=0.147  6.1 it/s
+step   9700  L=0.5714  src=0.0518  tgt=0.2599  trans=0.2598  gain=+0.0001  |dz|=0.201  6.1 it/s
+step   9750  L=0.4034  src=0.0826  tgt=0.1605  trans=0.1604  gain=+0.0000  |dz|=0.200  6.1 it/s
+step   9800  L=0.3214  src=0.0590  tgt=0.1312  trans=0.1312  gain=+0.0000  |dz|=0.191  6.1 it/s
+step   9850  L=0.1298  src=0.0704  tgt=0.0296  trans=0.0297  gain=-0.0001  |dz|=0.138  6.1 it/s
+step   9900  L=0.0845  src=0.0383  tgt=0.0232  trans=0.0230  gain=+0.0001  |dz|=0.089  6.1 it/s
+step   9950  L=0.1012  src=0.0588  tgt=0.0212  trans=0.0212  gain=+0.0000  |dz|=0.085  6.1 it/s
+step  10000  L=0.4359  src=0.0439  tgt=0.1960  trans=0.1960  gain=-0.0000  |dz|=0.166  6.1 it/s
+  [diagnostics @ 10000] loss_correct=0.0704  loss_zero=0.0758  loss_shuffled=0.0714  loss_random=0.0764  loss_target_only=0.0704  loss_mean_z=0.0709  r_basis=0.0816  |dz_transport|=0.1401  z_s_vs_enc_rel=0.8629  z_spread_rel=0.7134  gain_vs_zero=0.0054  gain_vs_shuffled=0.0010  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0005  delta_task=0.0005  z_center_norm=0.1119  task_specific_frac=0.0951
+  saved /opt/ml/code/checkpoints/ctr128_off_step10000.pt
+step  10050  L=0.1415  src=0.0884  tgt=0.0265  trans=0.0265  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  10100  L=0.1432  src=0.0997  tgt=0.0218  trans=0.0217  gain=+0.0001  |dz|=0.090  6.1 it/s
+step  10150  L=0.3870  src=0.0941  tgt=0.1464  trans=0.1464  gain=+0.0000  |dz|=0.164  6.1 it/s
+step  10200  L=0.0757  src=0.0345  tgt=0.0205  trans=0.0206  gain=-0.0001  |dz|=0.121  6.1 it/s
+step  10250  L=0.3547  src=0.0507  tgt=0.1520  trans=0.1520  gain=+0.0000  |dz|=0.173  6.1 it/s
+step  10300  L=0.0933  src=0.0412  tgt=0.0260  trans=0.0260  gain=-0.0001  |dz|=0.136  6.1 it/s
+step  10350  L=0.4171  src=0.0599  tgt=0.1786  trans=0.1786  gain=-0.0000  |dz|=0.172  6.1 it/s
+step  10400  L=0.1696  src=0.0729  tgt=0.0483  trans=0.0483  gain=+0.0000  |dz|=0.133  6.1 it/s
+step  10450  L=0.3671  src=0.0531  tgt=0.1570  trans=0.1570  gain=-0.0000  |dz|=0.192  6.1 it/s
+step  10500  L=0.1515  src=0.0499  tgt=0.0508  trans=0.0508  gain=-0.0001  |dz|=0.088  6.1 it/s
+  [diagnostics @ 10500] loss_correct=0.0826  loss_zero=0.0870  loss_shuffled=0.0837  loss_random=0.0876  loss_target_only=0.0826  loss_mean_z=0.0832  r_basis=0.0723  |dz_transport|=0.1453  z_s_vs_enc_rel=0.9490  z_spread_rel=0.7913  gain_vs_zero=0.0044  gain_vs_shuffled=0.0012  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0006  delta_task=0.0006  z_center_norm=0.1014  task_specific_frac=0.1390
+step  10550  L=0.1202  src=0.0460  tgt=0.0371  trans=0.0371  gain=-0.0000  |dz|=0.086  6.1 it/s
+step  10600  L=0.1271  src=0.0898  tgt=0.0187  trans=0.0186  gain=+0.0000  |dz|=0.086  6.1 it/s
+step  10650  L=0.1245  src=0.0721  tgt=0.0262  trans=0.0262  gain=+0.0000  |dz|=0.135  6.1 it/s
+step  10700  L=0.0503  src=0.0248  tgt=0.0127  trans=0.0128  gain=-0.0001  |dz|=0.083  6.1 it/s
+step  10750  L=0.1144  src=0.0606  tgt=0.0269  trans=0.0269  gain=+0.0000  |dz|=0.129  6.1 it/s
+step  10800  L=0.3858  src=0.0619  tgt=0.1619  trans=0.1620  gain=-0.0000  |dz|=0.190  6.1 it/s
+step  10850  L=0.1433  src=0.0463  tgt=0.0485  trans=0.0485  gain=-0.0000  |dz|=0.084  6.1 it/s
+step  10900  L=0.1287  src=0.0767  tgt=0.0260  trans=0.0260  gain=+0.0001  |dz|=0.088  6.1 it/s
+step  10950  L=0.3340  src=0.0905  tgt=0.1218  trans=0.1217  gain=+0.0001  |dz|=0.191  6.1 it/s
+step  11000  L=0.1353  src=0.0604  tgt=0.0374  trans=0.0375  gain=-0.0002  |dz|=0.088  6.1 it/s
+  [diagnostics @ 11000] loss_correct=0.1071  loss_zero=0.1104  loss_shuffled=0.1082  loss_random=0.1109  loss_target_only=0.1071  loss_mean_z=0.1079  r_basis=0.0628  |dz_transport|=0.1517  z_s_vs_enc_rel=1.1113  z_spread_rel=0.8234  gain_vs_zero=0.0034  gain_vs_shuffled=0.0012  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0986  task_specific_frac=0.2485
+step  11050  L=0.1382  src=0.0664  tgt=0.0359  trans=0.0359  gain=+0.0000  |dz|=0.077  6.1 it/s
+step  11100  L=0.3502  src=0.0233  tgt=0.1635  trans=0.1634  gain=+0.0001  |dz|=0.224  6.1 it/s
+step  11150  L=0.1066  src=0.0661  tgt=0.0202  trans=0.0202  gain=-0.0000  |dz|=0.129  6.1 it/s
+step  11200  L=0.0770  src=0.0400  tgt=0.0184  trans=0.0186  gain=-0.0002  |dz|=0.071  6.1 it/s
+step  11250  L=0.5030  src=0.0547  tgt=0.2242  trans=0.2241  gain=+0.0000  |dz|=0.170  6.1 it/s
+step  11300  L=0.4229  src=0.0749  tgt=0.1741  trans=0.1740  gain=+0.0001  |dz|=0.194  6.1 it/s
+step  11350  L=0.0783  src=0.0417  tgt=0.0183  trans=0.0183  gain=-0.0000  |dz|=0.141  6.1 it/s
+step  11400  L=0.3378  src=0.0596  tgt=0.1392  trans=0.1391  gain=+0.0001  |dz|=0.193  6.1 it/s
+step  11450  L=0.4873  src=0.0276  tgt=0.2299  trans=0.2298  gain=+0.0001  |dz|=0.180  6.1 it/s
+step  11500  L=0.1468  src=0.0478  tgt=0.0496  trans=0.0494  gain=+0.0001  |dz|=0.073  6.1 it/s
+  [diagnostics @ 11500] loss_correct=0.0611  loss_zero=0.0649  loss_shuffled=0.0626  loss_random=0.0655  loss_target_only=0.0611  loss_mean_z=0.0618  r_basis=0.0658  |dz_transport|=0.1277  z_s_vs_enc_rel=0.9494  z_spread_rel=0.7616  gain_vs_zero=0.0038  gain_vs_shuffled=0.0015  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.0896  task_specific_frac=0.1885
+step  11550  L=0.1579  src=0.0763  tgt=0.0409  trans=0.0408  gain=+0.0001  |dz|=0.071  6.1 it/s
+step  11600  L=0.4142  src=0.0631  tgt=0.1755  trans=0.1756  gain=-0.0000  |dz|=0.178  6.1 it/s
+step  11650  L=0.5176  src=0.0555  tgt=0.2311  trans=0.2311  gain=+0.0000  |dz|=0.178  6.1 it/s
+step  11700  L=0.3263  src=0.0368  tgt=0.1447  trans=0.1448  gain=-0.0001  |dz|=0.180  6.1 it/s
+step  11750  L=0.1023  src=0.0433  tgt=0.0296  trans=0.0294  gain=+0.0002  |dz|=0.073  6.1 it/s
+step  11800  L=0.0915  src=0.0307  tgt=0.0304  trans=0.0304  gain=-0.0000  |dz|=0.132  6.1 it/s
+step  11850  L=0.1134  src=0.0586  tgt=0.0274  trans=0.0273  gain=+0.0002  |dz|=0.077  6.1 it/s
+step  11900  L=0.4591  src=0.0433  tgt=0.2079  trans=0.2078  gain=+0.0001  |dz|=0.154  6.1 it/s
+step  11950  L=0.4614  src=0.0454  tgt=0.2081  trans=0.2080  gain=+0.0001  |dz|=0.160  6.1 it/s
+step  12000  L=0.1069  src=0.0390  tgt=0.0340  trans=0.0340  gain=+0.0000  |dz|=0.127  6.1 it/s
+  [diagnostics @ 12000] loss_correct=0.0919  loss_zero=0.0947  loss_shuffled=0.0934  loss_random=0.0951  loss_target_only=0.0919  loss_mean_z=0.0929  r_basis=0.0556  |dz_transport|=0.1482  z_s_vs_enc_rel=1.1620  z_spread_rel=0.8508  gain_vs_zero=0.0028  gain_vs_shuffled=0.0016  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0010  delta_task=0.0010  z_center_norm=0.0835  task_specific_frac=0.3580
+  saved /opt/ml/code/checkpoints/ctr128_off_step12000.pt
+step  12050  L=0.1140  src=0.0690  tgt=0.0225  trans=0.0225  gain=+0.0000  |dz|=0.128  6.1 it/s
+step  12100  L=0.1247  src=0.0456  tgt=0.0395  trans=0.0395  gain=+0.0000  |dz|=0.075  6.1 it/s
+step  12150  L=0.2009  src=0.1044  tgt=0.0482  trans=0.0483  gain=-0.0001  |dz|=0.073  6.1 it/s
+step  12200  L=0.4917  src=0.0497  tgt=0.2210  trans=0.2210  gain=-0.0000  |dz|=0.160  6.1 it/s
+step  12250  L=0.1215  src=0.0604  tgt=0.0306  trans=0.0305  gain=+0.0001  |dz|=0.121  6.1 it/s
+step  12300  L=0.3806  src=0.0752  tgt=0.1527  trans=0.1527  gain=-0.0000  |dz|=0.165  6.1 it/s
+step  12350  L=0.1143  src=0.0668  tgt=0.0237  trans=0.0237  gain=+0.0000  |dz|=0.124  6.1 it/s
+step  12400  L=0.1001  src=0.0434  tgt=0.0284  trans=0.0284  gain=-0.0000  |dz|=0.125  6.1 it/s
+step  12450  L=0.1534  src=0.0721  tgt=0.0408  trans=0.0406  gain=+0.0002  |dz|=0.105  6.1 it/s
+step  12500  L=0.1161  src=0.0697  tgt=0.0232  trans=0.0232  gain=+0.0000  |dz|=0.067  6.1 it/s
+  [diagnostics @ 12500] loss_correct=0.0686  loss_zero=0.0713  loss_shuffled=0.0698  loss_random=0.0717  loss_target_only=0.0686  loss_mean_z=0.0693  r_basis=0.0556  |dz_transport|=0.1201  z_s_vs_enc_rel=0.9984  z_spread_rel=0.8248  gain_vs_zero=0.0027  gain_vs_shuffled=0.0013  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.0749  task_specific_frac=0.2572
+step  12550  L=0.3991  src=0.0523  tgt=0.1734  trans=0.1734  gain=-0.0000  |dz|=0.163  6.1 it/s
+step  12600  L=0.1188  src=0.0679  tgt=0.0254  trans=0.0255  gain=-0.0000  |dz|=0.071  6.1 it/s
+step  12650  L=0.1293  src=0.0510  tgt=0.0392  trans=0.0391  gain=+0.0001  |dz|=0.074  6.1 it/s
+step  12700  L=0.1270  src=0.0663  tgt=0.0304  trans=0.0303  gain=+0.0000  |dz|=0.075  6.1 it/s
+step  12750  L=0.0938  src=0.0472  tgt=0.0234  trans=0.0232  gain=+0.0002  |dz|=0.072  6.1 it/s
+step  12800  L=0.1197  src=0.0664  tgt=0.0268  trans=0.0265  gain=+0.0003  |dz|=0.109  6.1 it/s
+step  12850  L=0.4237  src=0.0310  tgt=0.1963  trans=0.1963  gain=+0.0000  |dz|=0.158  6.1 it/s
+step  12900  L=0.0839  src=0.0406  tgt=0.0217  trans=0.0217  gain=+0.0001  |dz|=0.113  6.1 it/s
+step  12950  L=0.0944  src=0.0449  tgt=0.0248  trans=0.0247  gain=+0.0001  |dz|=0.113  6.1 it/s
+step  13000  L=0.0969  src=0.0551  tgt=0.0209  trans=0.0208  gain=+0.0000  |dz|=0.074  6.1 it/s
+  [diagnostics @ 13000] loss_correct=0.0529  loss_zero=0.0556  loss_shuffled=0.0538  loss_random=0.0561  loss_target_only=0.0529  loss_mean_z=0.0535  r_basis=0.0553  |dz_transport|=0.1057  z_s_vs_enc_rel=0.9314  z_spread_rel=0.7184  gain_vs_zero=0.0027  gain_vs_shuffled=0.0009  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0006  delta_task=0.0006  z_center_norm=0.0712  task_specific_frac=0.2079
+step  13050  L=0.1318  src=0.0578  tgt=0.0369  trans=0.0370  gain=-0.0001  |dz|=0.070  6.1 it/s
+step  13100  L=0.1314  src=0.0627  tgt=0.0344  trans=0.0344  gain=-0.0000  |dz|=0.117  6.1 it/s
+step  13150  L=0.2891  src=0.0482  tgt=0.1204  trans=0.1204  gain=-0.0000  |dz|=0.141  6.1 it/s
+step  13200  L=0.5428  src=0.0801  tgt=0.2313  trans=0.2314  gain=-0.0000  |dz|=0.144  6.1 it/s
+step  13250  L=0.5199  src=0.0885  tgt=0.2157  trans=0.2158  gain=-0.0001  |dz|=0.143  6.1 it/s
+step  13300  L=0.4214  src=0.0766  tgt=0.1725  trans=0.1722  gain=+0.0003  |dz|=0.156  6.1 it/s
+step  13350  L=0.1304  src=0.0629  tgt=0.0338  trans=0.0338  gain=+0.0000  |dz|=0.121  6.1 it/s
+step  13400  L=0.1071  src=0.0592  tgt=0.0239  trans=0.0239  gain=+0.0000  |dz|=0.115  6.1 it/s
+step  13450  L=0.1372  src=0.0711  tgt=0.0330  trans=0.0330  gain=+0.0000  |dz|=0.120  6.1 it/s
+step  13500  L=0.1566  src=0.0802  tgt=0.0382  trans=0.0382  gain=-0.0000  |dz|=0.068  6.1 it/s
+  [diagnostics @ 13500] loss_correct=0.0807  loss_zero=0.0828  loss_shuffled=0.0825  loss_random=0.0833  loss_target_only=0.0807  loss_mean_z=0.0816  r_basis=0.0468  |dz_transport|=0.1199  z_s_vs_enc_rel=1.1351  z_spread_rel=0.9003  gain_vs_zero=0.0021  gain_vs_shuffled=0.0017  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0680  task_specific_frac=0.4027
+step  13550  L=0.1254  src=0.0662  tgt=0.0296  trans=0.0296  gain=-0.0000  |dz|=0.072  6.1 it/s
+step  13600  L=0.1144  src=0.0447  tgt=0.0350  trans=0.0347  gain=+0.0003  |dz|=0.068  6.1 it/s
+step  13650  L=0.3485  src=0.0619  tgt=0.1433  trans=0.1433  gain=+0.0000  |dz|=0.167  6.1 it/s
+step  13700  L=0.1169  src=0.0560  tgt=0.0305  trans=0.0304  gain=+0.0001  |dz|=0.118  6.1 it/s
+step  13750  L=0.4039  src=0.0396  tgt=0.1821  trans=0.1822  gain=-0.0000  |dz|=0.159  6.1 it/s
+step  13800  L=0.4605  src=0.0345  tgt=0.2130  trans=0.2130  gain=-0.0000  |dz|=0.155  6.1 it/s
+step  13850  L=0.1215  src=0.0576  tgt=0.0320  trans=0.0319  gain=+0.0000  |dz|=0.069  6.1 it/s
+step  13900  L=0.0925  src=0.0491  tgt=0.0217  trans=0.0216  gain=+0.0001  |dz|=0.112  6.1 it/s
+step  13950  L=0.0796  src=0.0507  tgt=0.0145  trans=0.0144  gain=+0.0000  |dz|=0.070  6.1 it/s
+step  14000  L=0.0956  src=0.0454  tgt=0.0252  trans=0.0250  gain=+0.0001  |dz|=0.113  6.1 it/s
+  [diagnostics @ 14000] loss_correct=0.0810  loss_zero=0.0828  loss_shuffled=0.0825  loss_random=0.0832  loss_target_only=0.0810  loss_mean_z=0.0819  r_basis=0.0450  |dz_transport|=0.1131  z_s_vs_enc_rel=1.1148  z_spread_rel=0.9268  gain_vs_zero=0.0018  gain_vs_shuffled=0.0015  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0009  delta_task=0.0009  z_center_norm=0.0651  task_specific_frac=0.4735
+  saved /opt/ml/code/checkpoints/ctr128_off_step14000.pt
+step  14050  L=0.1105  src=0.0804  tgt=0.0150  trans=0.0150  gain=-0.0000  |dz|=0.068  6.1 it/s
+step  14100  L=0.0957  src=0.0469  tgt=0.0244  trans=0.0244  gain=+0.0000  |dz|=0.112  6.1 it/s
+step  14150  L=0.1114  src=0.0674  tgt=0.0220  trans=0.0220  gain=+0.0000  |dz|=0.064  6.1 it/s
+step  14200  L=0.5557  src=0.0353  tgt=0.2603  trans=0.2601  gain=+0.0002  |dz|=0.152  6.1 it/s
+step  14250  L=0.0697  src=0.0434  tgt=0.0132  trans=0.0131  gain=+0.0000  |dz|=0.064  6.1 it/s
+step  14300  L=0.3105  src=0.0578  tgt=0.1263  trans=0.1263  gain=+0.0000  |dz|=0.190  6.1 it/s
+step  14350  L=0.0502  src=0.0165  tgt=0.0169  trans=0.0169  gain=+0.0000  |dz|=0.107  6.1 it/s
+step  14400  L=0.4454  src=0.0540  tgt=0.1957  trans=0.1957  gain=-0.0000  |dz|=0.161  6.1 it/s
+step  14450  L=0.0882  src=0.0355  tgt=0.0264  trans=0.0264  gain=+0.0000  |dz|=0.063  6.1 it/s
+step  14500  L=0.3309  src=0.0537  tgt=0.1386  trans=0.1386  gain=-0.0000  |dz|=0.153  6.1 it/s
+  [diagnostics @ 14500] loss_correct=0.0531  loss_zero=0.0551  loss_shuffled=0.0542  loss_random=0.0555  loss_target_only=0.0531  loss_mean_z=0.0538  r_basis=0.0465  |dz_transport|=0.1033  z_s_vs_enc_rel=1.0316  z_spread_rel=0.7965  gain_vs_zero=0.0020  gain_vs_shuffled=0.0011  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.0569  task_specific_frac=0.3457
+step  14550  L=0.1455  src=0.0803  tgt=0.0326  trans=0.0326  gain=+0.0000  |dz|=0.064  6.1 it/s
+step  14600  L=0.2540  src=0.0487  tgt=0.1027  trans=0.1026  gain=+0.0000  |dz|=0.148  6.1 it/s
+step  14650  L=0.4510  src=0.0622  tgt=0.1944  trans=0.1944  gain=+0.0000  |dz|=0.148  6.1 it/s
+step  14700  L=0.0753  src=0.0393  tgt=0.0180  trans=0.0180  gain=+0.0000  |dz|=0.108  6.1 it/s
+step  14750  L=0.1343  src=0.0997  tgt=0.0173  trans=0.0173  gain=-0.0000  |dz|=0.108  6.1 it/s
+step  14800  L=0.1492  src=0.0809  tgt=0.0342  trans=0.0342  gain=-0.0000  |dz|=0.063  6.1 it/s
+step  14850  L=0.0717  src=0.0276  tgt=0.0220  trans=0.0221  gain=-0.0000  |dz|=0.113  6.1 it/s
+step  14900  L=0.3384  src=0.1028  tgt=0.1178  trans=0.1177  gain=+0.0001  |dz|=0.132  6.1 it/s
+step  14950  L=0.1115  src=0.0450  tgt=0.0332  trans=0.0332  gain=-0.0000  |dz|=0.060  6.1 it/s
+step  15000  L=0.1146  src=0.0598  tgt=0.0274  trans=0.0274  gain=-0.0000  |dz|=0.108  6.1 it/s
+  [diagnostics @ 15000] loss_correct=0.0560  loss_zero=0.0578  loss_shuffled=0.0572  loss_random=0.0582  loss_target_only=0.0560  loss_mean_z=0.0567  r_basis=0.0433  |dz_transport|=0.1051  z_s_vs_enc_rel=1.1528  z_spread_rel=0.8274  gain_vs_zero=0.0018  gain_vs_shuffled=0.0012  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.0566  task_specific_frac=0.3884
+step  15050  L=0.1056  src=0.0590  tgt=0.0233  trans=0.0233  gain=-0.0000  |dz|=0.110  6.1 it/s
+step  15100  L=0.1014  src=0.0575  tgt=0.0220  trans=0.0220  gain=+0.0000  |dz|=0.105  6.1 it/s
+step  15150  L=0.0913  src=0.0511  tgt=0.0201  trans=0.0201  gain=+0.0001  |dz|=0.103  6.1 it/s
+step  15200  L=0.0828  src=0.0512  tgt=0.0159  trans=0.0157  gain=+0.0001  |dz|=0.062  6.1 it/s
+step  15250  L=0.1112  src=0.0779  tgt=0.0166  trans=0.0167  gain=-0.0000  |dz|=0.062  6.1 it/s
+step  15300  L=0.1296  src=0.0735  tgt=0.0281  trans=0.0281  gain=-0.0000  |dz|=0.109  6.1 it/s
+step  15350  L=0.0679  src=0.0225  tgt=0.0227  trans=0.0226  gain=+0.0001  |dz|=0.107  6.1 it/s
+step  15400  L=0.0854  src=0.0376  tgt=0.0239  trans=0.0239  gain=-0.0000  |dz|=0.063  6.1 it/s
+step  15450  L=0.3415  src=0.0614  tgt=0.1401  trans=0.1401  gain=-0.0000  |dz|=0.135  6.1 it/s
+step  15500  L=0.1074  src=0.0713  tgt=0.0181  trans=0.0181  gain=+0.0000  |dz|=0.064  6.1 it/s
+  [diagnostics @ 15500] loss_correct=0.0676  loss_zero=0.0690  loss_shuffled=0.0695  loss_random=0.0693  loss_target_only=0.0676  loss_mean_z=0.0683  r_basis=0.0378  |dz_transport|=0.1058  z_s_vs_enc_rel=1.1840  z_spread_rel=0.9626  gain_vs_zero=0.0014  gain_vs_shuffled=0.0020  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0543  task_specific_frac=0.5463
+step  15550  L=0.0966  src=0.0587  tgt=0.0190  trans=0.0189  gain=+0.0000  |dz|=0.109  6.1 it/s
+step  15600  L=0.0600  src=0.0337  tgt=0.0131  trans=0.0131  gain=-0.0000  |dz|=0.065  6.1 it/s
+step  15650  L=0.2800  src=0.0372  tgt=0.1214  trans=0.1214  gain=+0.0001  |dz|=0.144  6.1 it/s
+step  15700  L=0.1128  src=0.0683  tgt=0.0222  trans=0.0222  gain=+0.0000  |dz|=0.107  6.1 it/s
+step  15750  L=0.0906  src=0.0503  tgt=0.0202  trans=0.0201  gain=+0.0001  |dz|=0.107  6.1 it/s
+step  15800  L=0.3283  src=0.0485  tgt=0.1399  trans=0.1399  gain=-0.0000  |dz|=0.149  6.1 it/s
+step  15850  L=0.4100  src=0.0423  tgt=0.1838  trans=0.1838  gain=+0.0001  |dz|=0.184  6.1 it/s
+step  15900  L=0.0914  src=0.0612  tgt=0.0151  trans=0.0151  gain=+0.0000  |dz|=0.112  6.1 it/s
+step  15950  L=0.0794  src=0.0495  tgt=0.0149  trans=0.0149  gain=+0.0001  |dz|=0.065  6.1 it/s
+step  16000  L=0.0801  src=0.0383  tgt=0.0209  trans=0.0209  gain=-0.0000  |dz|=0.062  6.1 it/s
+  [diagnostics @ 16000] loss_correct=0.0633  loss_zero=0.0647  loss_shuffled=0.0648  loss_random=0.0650  loss_target_only=0.0633  loss_mean_z=0.0640  r_basis=0.0380  |dz_transport|=0.0967  z_s_vs_enc_rel=1.0850  z_spread_rel=0.9522  gain_vs_zero=0.0014  gain_vs_shuffled=0.0014  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0007  delta_task=0.0007  z_center_norm=0.0511  task_specific_frac=0.5014
+  saved /opt/ml/code/checkpoints/ctr128_off_step16000.pt
+step  16050  L=0.0971  src=0.0519  tgt=0.0226  trans=0.0226  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  16100  L=0.1044  src=0.0637  tgt=0.0203  trans=0.0204  gain=-0.0000  |dz|=0.062  6.1 it/s
+step  16150  L=0.3879  src=0.0390  tgt=0.1744  trans=0.1745  gain=-0.0000  |dz|=0.137  6.1 it/s
+step  16200  L=0.1705  src=0.0629  tgt=0.0538  trans=0.0538  gain=-0.0000  |dz|=0.065  6.1 it/s
+step  16250  L=0.3015  src=0.0434  tgt=0.1291  trans=0.1290  gain=+0.0000  |dz|=0.130  6.1 it/s
+step  16300  L=0.1601  src=0.0767  tgt=0.0417  trans=0.0417  gain=-0.0000  |dz|=0.062  6.1 it/s
+step  16350  L=0.1467  src=0.0557  tgt=0.0455  trans=0.0455  gain=-0.0000  |dz|=0.064  6.1 it/s
+step  16400  L=0.1181  src=0.0486  tgt=0.0348  trans=0.0347  gain=+0.0000  |dz|=0.122  6.1 it/s
+step  16450  L=0.1703  src=0.0989  tgt=0.0357  trans=0.0357  gain=+0.0001  |dz|=0.061  6.1 it/s
+step  16500  L=0.1301  src=0.0675  tgt=0.0313  trans=0.0313  gain=+0.0000  |dz|=0.116  6.1 it/s
+  [diagnostics @ 16500] loss_correct=0.0597  loss_zero=0.0611  loss_shuffled=0.0611  loss_random=0.0615  loss_target_only=0.0597  loss_mean_z=0.0605  r_basis=0.0376  |dz_transport|=0.1034  z_s_vs_enc_rel=1.2324  z_spread_rel=0.9508  gain_vs_zero=0.0014  gain_vs_shuffled=0.0014  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0466  task_specific_frac=0.5642
+step  16550  L=0.1071  src=0.0596  tgt=0.0238  trans=0.0237  gain=+0.0001  |dz|=0.059  6.1 it/s
+step  16600  L=0.3253  src=0.0751  tgt=0.1252  trans=0.1250  gain=+0.0001  |dz|=0.133  6.1 it/s
+step  16650  L=0.1056  src=0.0471  tgt=0.0293  trans=0.0292  gain=+0.0001  |dz|=0.106  6.1 it/s
+step  16700  L=0.1174  src=0.0641  tgt=0.0266  trans=0.0266  gain=+0.0000  |dz|=0.061  6.1 it/s
+step  16750  L=0.3365  src=0.0605  tgt=0.1380  trans=0.1379  gain=+0.0001  |dz|=0.140  6.1 it/s
+step  16800  L=0.0983  src=0.0611  tgt=0.0186  trans=0.0186  gain=+0.0000  |dz|=0.113  6.1 it/s
+step  16850  L=0.1640  src=0.0710  tgt=0.0465  trans=0.0465  gain=-0.0000  |dz|=0.060  6.1 it/s
+step  16900  L=0.4093  src=0.0597  tgt=0.1748  trans=0.1748  gain=-0.0001  |dz|=0.203  6.1 it/s
+step  16950  L=0.1177  src=0.0651  tgt=0.0263  trans=0.0263  gain=+0.0000  |dz|=0.105  6.1 it/s
+step  17000  L=0.3995  src=0.0465  tgt=0.1765  trans=0.1765  gain=+0.0001  |dz|=0.170  6.1 it/s
+  [diagnostics @ 17000] loss_correct=0.0710  loss_zero=0.0723  loss_shuffled=0.0732  loss_random=0.0727  loss_target_only=0.0710  loss_mean_z=0.0722  r_basis=0.0358  |dz_transport|=0.1099  z_s_vs_enc_rel=1.3206  z_spread_rel=1.0586  gain_vs_zero=0.0013  gain_vs_shuffled=0.0022  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0496  task_specific_frac=0.8930
+step  17050  L=0.3525  src=0.0864  tgt=0.1331  trans=0.1331  gain=+0.0000  |dz|=0.164  6.1 it/s
+step  17100  L=0.1243  src=0.0566  tgt=0.0338  trans=0.0338  gain=+0.0000  |dz|=0.060  6.1 it/s
+step  17150  L=0.0876  src=0.0430  tgt=0.0223  trans=0.0223  gain=+0.0001  |dz|=0.058  6.1 it/s
+step  17200  L=0.2753  src=0.0683  tgt=0.1035  trans=0.1035  gain=+0.0001  |dz|=0.154  6.1 it/s
+step  17250  L=0.1594  src=0.0726  tgt=0.0434  trans=0.0434  gain=+0.0000  |dz|=0.059  6.1 it/s
+step  17300  L=0.0798  src=0.0368  tgt=0.0215  trans=0.0216  gain=-0.0001  |dz|=0.103  6.1 it/s
+step  17350  L=0.1112  src=0.0662  tgt=0.0225  trans=0.0225  gain=-0.0001  |dz|=0.105  6.1 it/s
+step  17400  L=0.1222  src=0.0773  tgt=0.0225  trans=0.0225  gain=-0.0000  |dz|=0.058  6.1 it/s
+step  17450  L=0.2064  src=0.0837  tgt=0.0614  trans=0.0613  gain=+0.0000  |dz|=0.060  6.1 it/s
+step  17500  L=0.0852  src=0.0378  tgt=0.0237  trans=0.0237  gain=+0.0000  |dz|=0.111  6.1 it/s
+  [diagnostics @ 17500] loss_correct=0.0644  loss_zero=0.0657  loss_shuffled=0.0657  loss_random=0.0660  loss_target_only=0.0644  loss_mean_z=0.0654  r_basis=0.0360  |dz_transport|=0.1053  z_s_vs_enc_rel=1.2639  z_spread_rel=1.0274  gain_vs_zero=0.0013  gain_vs_shuffled=0.0013  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0010  delta_task=0.0010  z_center_norm=0.0480  task_specific_frac=0.7604
+step  17550  L=0.1594  src=0.0516  tgt=0.0539  trans=0.0539  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  17600  L=0.1292  src=0.0660  tgt=0.0316  trans=0.0317  gain=-0.0000  |dz|=0.105  6.1 it/s
+step  17650  L=0.3377  src=0.0420  tgt=0.1478  trans=0.1479  gain=-0.0001  |dz|=0.141  6.1 it/s
+step  17700  L=0.1467  src=0.0542  tgt=0.0462  trans=0.0462  gain=-0.0000  |dz|=0.058  6.1 it/s
+step  17750  L=0.1400  src=0.0663  tgt=0.0369  trans=0.0369  gain=-0.0000  |dz|=0.060  6.1 it/s
+step  17800  L=0.0953  src=0.0362  tgt=0.0296  trans=0.0295  gain=+0.0000  |dz|=0.062  6.1 it/s
+step  17850  L=0.0908  src=0.0422  tgt=0.0244  trans=0.0241  gain=+0.0003  |dz|=0.101  6.1 it/s
+step  17900  L=0.1172  src=0.0583  tgt=0.0294  trans=0.0295  gain=-0.0001  |dz|=0.059  6.1 it/s
+step  17950  L=0.5808  src=0.0669  tgt=0.2570  trans=0.2570  gain=-0.0000  |dz|=0.144  6.1 it/s
+step  18000  L=0.4413  src=0.0414  tgt=0.1999  trans=0.1999  gain=+0.0000  |dz|=0.139  6.1 it/s
+  [diagnostics @ 18000] loss_correct=0.0923  loss_zero=0.0935  loss_shuffled=0.0945  loss_random=0.0937  loss_target_only=0.0923  loss_mean_z=0.0936  r_basis=0.0336  |dz_transport|=0.1113  z_s_vs_enc_rel=1.3442  z_spread_rel=1.1296  gain_vs_zero=0.0011  gain_vs_shuffled=0.0022  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0423  task_specific_frac=1.1063
+  saved /opt/ml/code/checkpoints/ctr128_off_step18000.pt
+step  18050  L=0.4669  src=0.0616  tgt=0.2027  trans=0.2027  gain=-0.0000  |dz|=0.140  6.1 it/s
+step  18100  L=0.0848  src=0.0322  tgt=0.0263  trans=0.0263  gain=+0.0001  |dz|=0.056  6.1 it/s
+step  18150  L=0.0979  src=0.0546  tgt=0.0217  trans=0.0216  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  18200  L=0.2499  src=0.0397  tgt=0.1051  trans=0.1051  gain=+0.0000  |dz|=0.136  6.1 it/s
+step  18250  L=0.0973  src=0.0452  tgt=0.0261  trans=0.0261  gain=-0.0000  |dz|=0.104  6.1 it/s
+step  18300  L=0.1014  src=0.0604  tgt=0.0205  trans=0.0205  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  18350  L=0.3779  src=0.0378  tgt=0.1700  trans=0.1701  gain=-0.0001  |dz|=0.134  6.1 it/s
+step  18400  L=0.3743  src=0.0578  tgt=0.1582  trans=0.1583  gain=-0.0000  |dz|=0.126  6.1 it/s
+step  18450  L=0.1150  src=0.0644  tgt=0.0253  trans=0.0253  gain=+0.0000  |dz|=0.099  6.1 it/s
+step  18500  L=0.0800  src=0.0463  tgt=0.0169  trans=0.0168  gain=+0.0001  |dz|=0.058  6.1 it/s
+  [diagnostics @ 18500] loss_correct=0.0604  loss_zero=0.0615  loss_shuffled=0.0624  loss_random=0.0618  loss_target_only=0.0604  loss_mean_z=0.0612  r_basis=0.0345  |dz_transport|=0.0951  z_s_vs_enc_rel=1.1888  z_spread_rel=1.0312  gain_vs_zero=0.0012  gain_vs_shuffled=0.0020  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0434  task_specific_frac=0.7159
+step  18550  L=0.1124  src=0.0662  tgt=0.0231  trans=0.0231  gain=+0.0000  |dz|=0.103  6.1 it/s
+step  18600  L=0.0911  src=0.0517  tgt=0.0196  trans=0.0197  gain=-0.0000  |dz|=0.057  6.1 it/s
+step  18650  L=0.3506  src=0.0511  tgt=0.1498  trans=0.1498  gain=-0.0000  |dz|=0.127  6.1 it/s
+step  18700  L=0.0723  src=0.0297  tgt=0.0213  trans=0.0213  gain=+0.0000  |dz|=0.098  6.1 it/s
+step  18750  L=0.0840  src=0.0380  tgt=0.0231  trans=0.0230  gain=+0.0001  |dz|=0.100  6.1 it/s
+step  18800  L=0.1807  src=0.0863  tgt=0.0472  trans=0.0472  gain=-0.0000  |dz|=0.059  6.1 it/s
+step  18850  L=0.2325  src=0.0401  tgt=0.0962  trans=0.0962  gain=-0.0000  |dz|=0.129  6.1 it/s
+step  18900  L=0.1156  src=0.0364  tgt=0.0396  trans=0.0396  gain=-0.0000  |dz|=0.059  6.1 it/s
+step  18950  L=0.3381  src=0.0536  tgt=0.1422  trans=0.1423  gain=-0.0000  |dz|=0.131  6.1 it/s
+step  19000  L=0.4295  src=0.0958  tgt=0.1669  trans=0.1669  gain=+0.0000  |dz|=0.134  6.1 it/s
+  [diagnostics @ 19000] loss_correct=0.0947  loss_zero=0.0958  loss_shuffled=0.0962  loss_random=0.0961  loss_target_only=0.0947  loss_mean_z=0.0961  r_basis=0.0323  |dz_transport|=0.1144  z_s_vs_enc_rel=1.5256  z_spread_rel=1.0709  gain_vs_zero=0.0011  gain_vs_shuffled=0.0015  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0400  task_specific_frac=1.2092
+step  19050  L=0.3390  src=0.0469  tgt=0.1461  trans=0.1461  gain=+0.0000  |dz|=0.132  6.1 it/s
+step  19100  L=0.1520  src=0.0910  tgt=0.0305  trans=0.0305  gain=+0.0000  |dz|=0.102  6.1 it/s
+step  19150  L=0.1737  src=0.0830  tgt=0.0454  trans=0.0453  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  19200  L=0.1408  src=0.0802  tgt=0.0303  trans=0.0303  gain=-0.0000  |dz|=0.059  6.1 it/s
+step  19250  L=0.4943  src=0.0489  tgt=0.2227  trans=0.2227  gain=-0.0000  |dz|=0.126  6.1 it/s
+step  19300  L=0.0940  src=0.0411  tgt=0.0265  trans=0.0265  gain=-0.0000  |dz|=0.099  6.1 it/s
+step  19350  L=0.4056  src=0.0241  tgt=0.1907  trans=0.1908  gain=-0.0001  |dz|=0.124  6.1 it/s
+step  19400  L=0.0893  src=0.0503  tgt=0.0195  trans=0.0195  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  19450  L=0.4615  src=0.0727  tgt=0.1944  trans=0.1943  gain=+0.0001  |dz|=0.119  6.1 it/s
+step  19500  L=0.1189  src=0.0826  tgt=0.0182  trans=0.0182  gain=-0.0000  |dz|=0.059  6.1 it/s
+  [diagnostics @ 19500] loss_correct=0.0782  loss_zero=0.0793  loss_shuffled=0.0801  loss_random=0.0795  loss_target_only=0.0782  loss_mean_z=0.0793  r_basis=0.0318  |dz_transport|=0.0971  z_s_vs_enc_rel=1.2936  z_spread_rel=1.1285  gain_vs_zero=0.0011  gain_vs_shuffled=0.0019  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0378  task_specific_frac=1.0204
+step  19550  L=0.2885  src=0.0236  tgt=0.1324  trans=0.1325  gain=-0.0001  |dz|=0.119  6.1 it/s
+step  19600  L=0.0915  src=0.0284  tgt=0.0315  trans=0.0316  gain=-0.0000  |dz|=0.059  6.1 it/s
+step  19650  L=0.4253  src=0.0497  tgt=0.1878  trans=0.1878  gain=+0.0000  |dz|=0.127  6.1 it/s
+step  19700  L=0.4085  src=0.0508  tgt=0.1789  trans=0.1788  gain=+0.0001  |dz|=0.126  6.1 it/s
+step  19750  L=0.2806  src=0.0528  tgt=0.1139  trans=0.1138  gain=+0.0001  |dz|=0.127  6.1 it/s
+step  19800  L=0.4484  src=0.0420  tgt=0.2032  trans=0.2032  gain=+0.0000  |dz|=0.119  6.1 it/s
+step  19850  L=0.0973  src=0.0298  tgt=0.0337  trans=0.0337  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  19900  L=0.1017  src=0.0508  tgt=0.0254  trans=0.0254  gain=+0.0000  |dz|=0.059  6.1 it/s
+step  19950  L=0.4957  src=0.0445  tgt=0.2255  trans=0.2256  gain=-0.0001  |dz|=0.111  6.1 it/s
+step  20000  L=0.0968  src=0.0539  tgt=0.0214  trans=0.0214  gain=+0.0000  |dz|=0.094  6.1 it/s
+  [diagnostics @ 20000] loss_correct=0.0602  loss_zero=0.0613  loss_shuffled=0.0614  loss_random=0.0615  loss_target_only=0.0602  loss_mean_z=0.0610  r_basis=0.0317  |dz_transport|=0.0833  z_s_vs_enc_rel=1.1192  z_spread_rel=0.9959  gain_vs_zero=0.0010  gain_vs_shuffled=0.0012  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0368  task_specific_frac=0.7268
+  saved /opt/ml/code/checkpoints/ctr128_off_step20000.pt
+step  20050  L=0.1144  src=0.0533  tgt=0.0306  trans=0.0306  gain=-0.0000  |dz|=0.099  6.1 it/s
+step  20100  L=0.1223  src=0.0642  tgt=0.0291  trans=0.0290  gain=+0.0000  |dz|=0.096  6.1 it/s
+step  20150  L=0.1177  src=0.0433  tgt=0.0372  trans=0.0372  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  20200  L=0.1049  src=0.0644  tgt=0.0202  trans=0.0202  gain=-0.0000  |dz|=0.103  6.1 it/s
+step  20250  L=0.3900  src=0.0584  tgt=0.1659  trans=0.1658  gain=+0.0001  |dz|=0.151  6.1 it/s
+step  20300  L=0.1315  src=0.0393  tgt=0.0461  trans=0.0461  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  20350  L=0.4101  src=0.0286  tgt=0.1908  trans=0.1907  gain=+0.0001  |dz|=0.136  6.1 it/s
+step  20400  L=0.0983  src=0.0506  tgt=0.0238  trans=0.0239  gain=-0.0001  |dz|=0.101  6.1 it/s
+step  20450  L=0.4791  src=0.0543  tgt=0.2125  trans=0.2124  gain=+0.0001  |dz|=0.129  6.1 it/s
+step  20500  L=0.4353  src=0.0721  tgt=0.1816  trans=0.1816  gain=+0.0000  |dz|=0.127  6.1 it/s
+  [diagnostics @ 20500] loss_correct=0.0880  loss_zero=0.0892  loss_shuffled=0.0905  loss_random=0.0895  loss_target_only=0.0880  loss_mean_z=0.0893  r_basis=0.0341  |dz_transport|=0.1046  z_s_vs_enc_rel=1.4680  z_spread_rel=1.1233  gain_vs_zero=0.0012  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0354  task_specific_frac=1.0840
+step  20550  L=0.3710  src=0.0639  tgt=0.1536  trans=0.1536  gain=+0.0000  |dz|=0.130  6.1 it/s
+step  20600  L=0.4760  src=0.0732  tgt=0.2014  trans=0.2014  gain=+0.0000  |dz|=0.129  6.1 it/s
+step  20650  L=0.1595  src=0.0359  tgt=0.0618  trans=0.0618  gain=+0.0000  |dz|=0.059  6.1 it/s
+step  20700  L=0.0878  src=0.0372  tgt=0.0253  trans=0.0253  gain=-0.0000  |dz|=0.060  6.1 it/s
+step  20750  L=0.5139  src=0.0354  tgt=0.2392  trans=0.2392  gain=-0.0000  |dz|=0.126  6.1 it/s
+step  20800  L=0.3578  src=0.0529  tgt=0.1524  trans=0.1524  gain=-0.0000  |dz|=0.122  6.1 it/s
+step  20850  L=0.0939  src=0.0425  tgt=0.0257  trans=0.0257  gain=+0.0000  |dz|=0.097  6.1 it/s
+step  20900  L=0.1210  src=0.0691  tgt=0.0259  trans=0.0259  gain=+0.0000  |dz|=0.062  6.1 it/s
+step  20950  L=0.1737  src=0.0383  tgt=0.0677  trans=0.0677  gain=+0.0000  |dz|=0.115  6.1 it/s
+step  21000  L=0.2933  src=0.0441  tgt=0.1246  trans=0.1246  gain=+0.0001  |dz|=0.114  6.1 it/s
+  [diagnostics @ 21000] loss_correct=0.0745  loss_zero=0.0756  loss_shuffled=0.0766  loss_random=0.0758  loss_target_only=0.0745  loss_mean_z=0.0756  r_basis=0.0319  |dz_transport|=0.0952  z_s_vs_enc_rel=1.3529  z_spread_rel=1.1331  gain_vs_zero=0.0011  gain_vs_shuffled=0.0021  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0357  task_specific_frac=0.9997
+step  21050  L=0.0873  src=0.0373  tgt=0.0250  trans=0.0250  gain=+0.0001  |dz|=0.096  6.1 it/s
+step  21100  L=0.1060  src=0.0412  tgt=0.0324  trans=0.0324  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  21150  L=0.5252  src=0.0487  tgt=0.2383  trans=0.2383  gain=-0.0000  |dz|=0.115  6.1 it/s
+step  21200  L=0.0965  src=0.0374  tgt=0.0296  trans=0.0296  gain=+0.0000  |dz|=0.096  6.1 it/s
+step  21250  L=0.2690  src=0.0469  tgt=0.1111  trans=0.1111  gain=+0.0000  |dz|=0.120  6.1 it/s
+step  21300  L=0.3138  src=0.0411  tgt=0.1363  trans=0.1364  gain=-0.0000  |dz|=0.118  6.1 it/s
+step  21350  L=0.0997  src=0.0545  tgt=0.0226  trans=0.0226  gain=-0.0000  |dz|=0.095  6.1 it/s
+step  21400  L=0.1090  src=0.0589  tgt=0.0251  trans=0.0251  gain=-0.0000  |dz|=0.100  6.1 it/s
+step  21450  L=0.1100  src=0.0440  tgt=0.0330  trans=0.0330  gain=-0.0000  |dz|=0.099  6.1 it/s
+step  21500  L=0.0622  src=0.0419  tgt=0.0102  trans=0.0102  gain=-0.0000  |dz|=0.056  6.1 it/s
+  [diagnostics @ 21500] loss_correct=0.0856  loss_zero=0.0866  loss_shuffled=0.0879  loss_random=0.0868  loss_target_only=0.0856  loss_mean_z=0.0868  r_basis=0.0306  |dz_transport|=0.0957  z_s_vs_enc_rel=1.3967  z_spread_rel=1.1776  gain_vs_zero=0.0010  gain_vs_shuffled=0.0023  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0330  task_specific_frac=1.1872
+step  21550  L=0.0749  src=0.0279  tgt=0.0235  trans=0.0235  gain=-0.0000  |dz|=0.102  6.1 it/s
+step  21600  L=0.5525  src=0.0816  tgt=0.2354  trans=0.2355  gain=-0.0001  |dz|=0.116  6.1 it/s
+step  21650  L=0.1561  src=0.0739  tgt=0.0412  trans=0.0411  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  21700  L=0.4307  src=0.0631  tgt=0.1838  trans=0.1838  gain=+0.0000  |dz|=0.119  6.1 it/s
+step  21750  L=0.1126  src=0.0599  tgt=0.0263  trans=0.0264  gain=-0.0001  |dz|=0.057  6.1 it/s
+step  21800  L=0.1059  src=0.0334  tgt=0.0362  trans=0.0362  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  21850  L=0.1304  src=0.0469  tgt=0.0417  trans=0.0417  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  21900  L=0.1036  src=0.0574  tgt=0.0231  trans=0.0231  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  21950  L=0.1181  src=0.0596  tgt=0.0292  trans=0.0292  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  22000  L=0.3493  src=0.0478  tgt=0.1508  trans=0.1507  gain=+0.0000  |dz|=0.114  6.1 it/s
+  [diagnostics @ 22000] loss_correct=0.0898  loss_zero=0.0909  loss_shuffled=0.0922  loss_random=0.0912  loss_target_only=0.0898  loss_mean_z=0.0911  r_basis=0.0334  |dz_transport|=0.0968  z_s_vs_enc_rel=1.4147  z_spread_rel=1.1565  gain_vs_zero=0.0012  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0314  task_specific_frac=1.1525
+  saved /opt/ml/code/checkpoints/ctr128_off_step22000.pt
+step  22050  L=0.1303  src=0.0754  tgt=0.0275  trans=0.0274  gain=+0.0000  |dz|=0.100  6.1 it/s
+step  22100  L=0.3541  src=0.0711  tgt=0.1415  trans=0.1415  gain=+0.0000  |dz|=0.118  6.1 it/s
+step  22150  L=0.3216  src=0.0726  tgt=0.1245  trans=0.1245  gain=-0.0000  |dz|=0.118  6.1 it/s
+step  22200  L=0.0696  src=0.0296  tgt=0.0200  trans=0.0200  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  22250  L=0.1127  src=0.0457  tgt=0.0336  trans=0.0335  gain=+0.0001  |dz|=0.059  6.1 it/s
+step  22300  L=0.1059  src=0.0606  tgt=0.0226  trans=0.0226  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  22350  L=0.1301  src=0.0628  tgt=0.0337  trans=0.0337  gain=+0.0000  |dz|=0.096  6.1 it/s
+step  22400  L=0.1145  src=0.0686  tgt=0.0229  trans=0.0229  gain=+0.0000  |dz|=0.097  6.1 it/s
+step  22450  L=0.0925  src=0.0402  tgt=0.0262  trans=0.0261  gain=+0.0001  |dz|=0.094  6.1 it/s
+step  22500  L=0.4000  src=0.0563  tgt=0.1718  trans=0.1718  gain=+0.0000  |dz|=0.124  6.1 it/s
+  [diagnostics @ 22500] loss_correct=0.0565  loss_zero=0.0575  loss_shuffled=0.0583  loss_random=0.0578  loss_target_only=0.0565  loss_mean_z=0.0573  r_basis=0.0315  |dz_transport|=0.0868  z_s_vs_enc_rel=1.2380  z_spread_rel=1.0388  gain_vs_zero=0.0011  gain_vs_shuffled=0.0018  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0009  delta_task=0.0009  z_center_norm=0.0318  task_specific_frac=0.8125
+step  22550  L=0.1106  src=0.0262  tgt=0.0423  trans=0.0422  gain=+0.0001  |dz|=0.097  6.1 it/s
+step  22600  L=0.0829  src=0.0458  tgt=0.0185  trans=0.0186  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  22650  L=0.4529  src=0.0574  tgt=0.1978  trans=0.1977  gain=+0.0000  |dz|=0.126  6.1 it/s
+step  22700  L=0.0805  src=0.0368  tgt=0.0219  trans=0.0218  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  22750  L=0.1012  src=0.0516  tgt=0.0248  trans=0.0248  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  22800  L=0.1274  src=0.0591  tgt=0.0342  trans=0.0341  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  22850  L=0.3012  src=0.0475  tgt=0.1268  trans=0.1268  gain=+0.0001  |dz|=0.113  6.1 it/s
+step  22900  L=0.4114  src=0.0616  tgt=0.1749  trans=0.1749  gain=-0.0000  |dz|=0.112  6.1 it/s
+step  22950  L=0.3477  src=0.0701  tgt=0.1388  trans=0.1388  gain=+0.0000  |dz|=0.112  6.1 it/s
+step  23000  L=0.0903  src=0.0342  tgt=0.0281  trans=0.0281  gain=+0.0001  |dz|=0.055  6.1 it/s
+  [diagnostics @ 23000] loss_correct=0.0810  loss_zero=0.0821  loss_shuffled=0.0831  loss_random=0.0823  loss_target_only=0.0810  loss_mean_z=0.0822  r_basis=0.0312  |dz_transport|=0.0924  z_s_vs_enc_rel=1.3403  z_spread_rel=1.1715  gain_vs_zero=0.0010  gain_vs_shuffled=0.0021  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0300  task_specific_frac=1.1041
+step  23050  L=0.0857  src=0.0435  tgt=0.0211  trans=0.0211  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  23100  L=0.1173  src=0.0545  tgt=0.0314  trans=0.0314  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  23150  L=0.4199  src=0.0711  tgt=0.1744  trans=0.1744  gain=-0.0000  |dz|=0.134  6.1 it/s
+step  23200  L=0.1237  src=0.0821  tgt=0.0208  trans=0.0208  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  23250  L=0.0894  src=0.0521  tgt=0.0186  trans=0.0186  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  23300  L=0.0691  src=0.0287  tgt=0.0202  trans=0.0202  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  23350  L=0.1349  src=0.0449  tgt=0.0450  trans=0.0450  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  23400  L=0.3018  src=0.0673  tgt=0.1173  trans=0.1173  gain=+0.0000  |dz|=0.110  6.1 it/s
+step  23450  L=0.0916  src=0.0447  tgt=0.0235  trans=0.0234  gain=+0.0000  |dz|=0.096  6.1 it/s
+step  23500  L=0.4178  src=0.0550  tgt=0.1814  trans=0.1814  gain=+0.0000  |dz|=0.114  6.1 it/s
+  [diagnostics @ 23500] loss_correct=0.0857  loss_zero=0.0868  loss_shuffled=0.0882  loss_random=0.0870  loss_target_only=0.0857  loss_mean_z=0.0870  r_basis=0.0322  |dz_transport|=0.0956  z_s_vs_enc_rel=1.3820  z_spread_rel=1.1696  gain_vs_zero=0.0011  gain_vs_shuffled=0.0026  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0318  task_specific_frac=1.1739
+step  23550  L=0.4448  src=0.0554  tgt=0.1947  trans=0.1947  gain=-0.0000  |dz|=0.109  6.1 it/s
+step  23600  L=0.0678  src=0.0369  tgt=0.0154  trans=0.0155  gain=-0.0000  |dz|=0.060  6.1 it/s
+step  23650  L=0.3337  src=0.0693  tgt=0.1322  trans=0.1322  gain=-0.0000  |dz|=0.118  6.1 it/s
+step  23700  L=0.3474  src=0.0364  tgt=0.1556  trans=0.1554  gain=+0.0003  |dz|=0.146  6.1 it/s
+step  23750  L=0.4515  src=0.0564  tgt=0.1976  trans=0.1975  gain=+0.0001  |dz|=0.127  6.1 it/s
+step  23800  L=0.1182  src=0.0680  tgt=0.0251  trans=0.0251  gain=-0.0000  |dz|=0.095  6.1 it/s
+step  23850  L=0.0588  src=0.0304  tgt=0.0142  trans=0.0142  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  23900  L=0.1411  src=0.0554  tgt=0.0429  trans=0.0429  gain=-0.0000  |dz|=0.057  6.1 it/s
+step  23950  L=0.4010  src=0.0559  tgt=0.1725  trans=0.1725  gain=+0.0000  |dz|=0.116  6.1 it/s
+step  24000  L=0.6305  src=0.0558  tgt=0.2873  trans=0.2873  gain=+0.0000  |dz|=0.118  6.1 it/s
+  [diagnostics @ 24000] loss_correct=0.0704  loss_zero=0.0715  loss_shuffled=0.0722  loss_random=0.0717  loss_target_only=0.0704  loss_mean_z=0.0715  r_basis=0.0317  |dz_transport|=0.0862  z_s_vs_enc_rel=1.3056  z_spread_rel=1.1349  gain_vs_zero=0.0011  gain_vs_shuffled=0.0018  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0310  task_specific_frac=0.9978
+  saved /opt/ml/code/checkpoints/ctr128_off_step24000.pt
+step  24050  L=0.2584  src=0.0509  tgt=0.1038  trans=0.1038  gain=+0.0000  |dz|=0.117  6.1 it/s
+step  24100  L=0.5729  src=0.0612  tgt=0.2558  trans=0.2558  gain=+0.0000  |dz|=0.116  6.1 it/s
+step  24150  L=0.4539  src=0.0415  tgt=0.2062  trans=0.2062  gain=-0.0000  |dz|=0.116  6.1 it/s
+step  24200  L=0.4010  src=0.0525  tgt=0.1744  trans=0.1742  gain=+0.0002  |dz|=0.126  6.1 it/s
+step  24250  L=0.0903  src=0.0622  tgt=0.0141  trans=0.0141  gain=-0.0000  |dz|=0.057  6.1 it/s
+step  24300  L=0.3664  src=0.0462  tgt=0.1601  trans=0.1600  gain=+0.0001  |dz|=0.117  6.1 it/s
+step  24350  L=0.3696  src=0.0429  tgt=0.1633  trans=0.1633  gain=+0.0000  |dz|=0.115  6.1 it/s
+step  24400  L=0.1154  src=0.0650  tgt=0.0252  trans=0.0252  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  24450  L=0.0971  src=0.0453  tgt=0.0259  trans=0.0259  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  24500  L=0.1418  src=0.0588  tgt=0.0415  trans=0.0415  gain=-0.0000  |dz|=0.052  6.1 it/s
+  [diagnostics @ 24500] loss_correct=0.0663  loss_zero=0.0675  loss_shuffled=0.0680  loss_random=0.0677  loss_target_only=0.0663  loss_mean_z=0.0674  r_basis=0.0337  |dz_transport|=0.0891  z_s_vs_enc_rel=1.3220  z_spread_rel=1.0647  gain_vs_zero=0.0012  gain_vs_shuffled=0.0017  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0326  task_specific_frac=0.9117
+step  24550  L=0.1030  src=0.0483  tgt=0.0273  trans=0.0273  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  24600  L=0.0829  src=0.0428  tgt=0.0201  trans=0.0201  gain=-0.0000  |dz|=0.053  6.1 it/s
+step  24650  L=0.2904  src=0.0488  tgt=0.1208  trans=0.1208  gain=+0.0000  |dz|=0.118  6.1 it/s
+step  24700  L=0.3436  src=0.0487  tgt=0.1474  trans=0.1474  gain=-0.0000  |dz|=0.119  6.1 it/s
+step  24750  L=0.1283  src=0.0340  tgt=0.0472  trans=0.0471  gain=+0.0001  |dz|=0.094  6.1 it/s
+step  24800  L=0.4467  src=0.0550  tgt=0.1959  trans=0.1958  gain=+0.0000  |dz|=0.113  6.1 it/s
+step  24850  L=0.1479  src=0.0603  tgt=0.0438  trans=0.0438  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  24900  L=0.1065  src=0.0645  tgt=0.0210  trans=0.0210  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  24950  L=0.1158  src=0.0571  tgt=0.0294  trans=0.0293  gain=+0.0001  |dz|=0.091  6.1 it/s
+step  25000  L=0.4017  src=0.0594  tgt=0.1712  trans=0.1711  gain=+0.0000  |dz|=0.108  6.1 it/s
+  [diagnostics @ 25000] loss_correct=0.0877  loss_zero=0.0888  loss_shuffled=0.0903  loss_random=0.0891  loss_target_only=0.0877  loss_mean_z=0.0889  r_basis=0.0331  |dz_transport|=0.0894  z_s_vs_enc_rel=1.3770  z_spread_rel=1.1936  gain_vs_zero=0.0011  gain_vs_shuffled=0.0027  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0301  task_specific_frac=1.1450
+step  25050  L=0.3196  src=0.0464  tgt=0.1366  trans=0.1366  gain=-0.0000  |dz|=0.112  6.1 it/s
+step  25100  L=0.1115  src=0.0459  tgt=0.0328  trans=0.0328  gain=+0.0001  |dz|=0.053  6.1 it/s
+step  25150  L=0.0816  src=0.0543  tgt=0.0137  trans=0.0136  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  25200  L=0.0968  src=0.0410  tgt=0.0279  trans=0.0279  gain=-0.0000  |dz|=0.095  6.1 it/s
+step  25250  L=0.1402  src=0.0484  tgt=0.0459  trans=0.0459  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  25300  L=0.1146  src=0.0575  tgt=0.0286  trans=0.0286  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  25350  L=0.1053  src=0.0630  tgt=0.0212  trans=0.0212  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  25400  L=0.2872  src=0.0383  tgt=0.1244  trans=0.1244  gain=+0.0000  |dz|=0.110  6.1 it/s
+step  25450  L=0.1314  src=0.0792  tgt=0.0261  trans=0.0261  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  25500  L=0.0824  src=0.0361  tgt=0.0232  trans=0.0232  gain=-0.0000  |dz|=0.091  6.1 it/s
+  [diagnostics @ 25500] loss_correct=0.0690  loss_zero=0.0700  loss_shuffled=0.0711  loss_random=0.0703  loss_target_only=0.0690  loss_mean_z=0.0700  r_basis=0.0312  |dz_transport|=0.0848  z_s_vs_enc_rel=1.3079  z_spread_rel=1.1571  gain_vs_zero=0.0010  gain_vs_shuffled=0.0022  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0010  delta_task=0.0010  z_center_norm=0.0323  task_specific_frac=1.0047
+step  25550  L=0.2756  src=0.0649  tgt=0.1054  trans=0.1053  gain=+0.0001  |dz|=0.111  6.1 it/s
+step  25600  L=0.0892  src=0.0510  tgt=0.0191  trans=0.0191  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  25650  L=0.1126  src=0.0480  tgt=0.0323  trans=0.0323  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  25700  L=0.4603  src=0.0517  tgt=0.2043  trans=0.2044  gain=-0.0001  |dz|=0.109  6.1 it/s
+step  25750  L=0.4947  src=0.0661  tgt=0.2143  trans=0.2143  gain=-0.0000  |dz|=0.112  6.1 it/s
+step  25800  L=0.1420  src=0.0581  tgt=0.0419  trans=0.0419  gain=-0.0000  |dz|=0.057  6.1 it/s
+step  25850  L=0.1614  src=0.0715  tgt=0.0449  trans=0.0450  gain=-0.0000  |dz|=0.057  6.1 it/s
+step  25900  L=0.4103  src=0.0424  tgt=0.1840  trans=0.1839  gain=+0.0000  |dz|=0.112  6.1 it/s
+step  25950  L=0.0974  src=0.0594  tgt=0.0190  trans=0.0190  gain=-0.0001  |dz|=0.091  6.1 it/s
+step  26000  L=0.0916  src=0.0443  tgt=0.0236  trans=0.0236  gain=-0.0000  |dz|=0.054  6.1 it/s
+  [diagnostics @ 26000] loss_correct=0.0626  loss_zero=0.0635  loss_shuffled=0.0647  loss_random=0.0638  loss_target_only=0.0626  loss_mean_z=0.0634  r_basis=0.0293  |dz_transport|=0.0772  z_s_vs_enc_rel=1.2072  z_spread_rel=1.1019  gain_vs_zero=0.0009  gain_vs_shuffled=0.0021  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0294  task_specific_frac=0.8872
+  saved /opt/ml/code/checkpoints/ctr128_off_step26000.pt
+step  26050  L=0.0808  src=0.0526  tgt=0.0141  trans=0.0141  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  26100  L=0.3215  src=0.0451  tgt=0.1382  trans=0.1382  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  26150  L=0.0902  src=0.0491  tgt=0.0205  trans=0.0205  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  26200  L=0.0724  src=0.0308  tgt=0.0208  trans=0.0208  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  26250  L=0.3307  src=0.0416  tgt=0.1446  trans=0.1445  gain=+0.0001  |dz|=0.124  6.1 it/s
+step  26300  L=0.4370  src=0.0398  tgt=0.1986  trans=0.1986  gain=+0.0000  |dz|=0.115  6.1 it/s
+step  26350  L=0.1551  src=0.0725  tgt=0.0413  trans=0.0413  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  26400  L=0.0844  src=0.0335  tgt=0.0254  trans=0.0254  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  26450  L=0.1223  src=0.0767  tgt=0.0228  trans=0.0228  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  26500  L=0.0727  src=0.0308  tgt=0.0209  trans=0.0209  gain=+0.0000  |dz|=0.055  6.1 it/s
+  [diagnostics @ 26500] loss_correct=0.0679  loss_zero=0.0692  loss_shuffled=0.0696  loss_random=0.0694  loss_target_only=0.0679  loss_mean_z=0.0692  r_basis=0.0332  |dz_transport|=0.0891  z_s_vs_enc_rel=1.4105  z_spread_rel=1.1025  gain_vs_zero=0.0012  gain_vs_shuffled=0.0017  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0307  task_specific_frac=0.9994
+step  26550  L=0.1304  src=0.0546  tgt=0.0379  trans=0.0379  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  26600  L=0.3204  src=0.0480  tgt=0.1362  trans=0.1362  gain=+0.0000  |dz|=0.112  6.1 it/s
+step  26650  L=0.1089  src=0.0699  tgt=0.0196  trans=0.0195  gain=+0.0001  |dz|=0.057  6.1 it/s
+step  26700  L=0.0962  src=0.0532  tgt=0.0215  trans=0.0215  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  26750  L=0.1551  src=0.0451  tgt=0.0550  trans=0.0550  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  26800  L=0.2166  src=0.0403  tgt=0.0882  trans=0.0882  gain=+0.0000  |dz|=0.113  6.1 it/s
+step  26850  L=0.3580  src=0.0678  tgt=0.1451  trans=0.1451  gain=+0.0000  |dz|=0.110  6.1 it/s
+step  26900  L=0.0877  src=0.0494  tgt=0.0191  trans=0.0191  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  26950  L=0.4853  src=0.0615  tgt=0.2119  trans=0.2119  gain=-0.0000  |dz|=0.111  6.1 it/s
+step  27000  L=0.1962  src=0.0703  tgt=0.0630  trans=0.0629  gain=+0.0000  |dz|=0.056  6.1 it/s
+  [diagnostics @ 27000] loss_correct=0.0854  loss_zero=0.0864  loss_shuffled=0.0874  loss_random=0.0867  loss_target_only=0.0854  loss_mean_z=0.0866  r_basis=0.0328  |dz_transport|=0.0858  z_s_vs_enc_rel=1.3614  z_spread_rel=1.1931  gain_vs_zero=0.0011  gain_vs_shuffled=0.0020  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0292  task_specific_frac=1.1428
+step  27050  L=0.3768  src=0.0597  tgt=0.1585  trans=0.1585  gain=-0.0000  |dz|=0.105  6.1 it/s
+step  27100  L=0.3140  src=0.0613  tgt=0.1263  trans=0.1263  gain=-0.0000  |dz|=0.103  6.1 it/s
+step  27150  L=0.0903  src=0.0470  tgt=0.0217  trans=0.0216  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  27200  L=0.1169  src=0.0664  tgt=0.0253  trans=0.0253  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  27250  L=0.1192  src=0.0586  tgt=0.0303  trans=0.0303  gain=+0.0000  |dz|=0.096  6.1 it/s
+step  27300  L=0.0854  src=0.0354  tgt=0.0250  trans=0.0250  gain=-0.0000  |dz|=0.058  6.1 it/s
+step  27350  L=0.1150  src=0.0536  tgt=0.0307  trans=0.0307  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  27400  L=0.1066  src=0.0446  tgt=0.0310  trans=0.0310  gain=+0.0000  |dz|=0.088  6.1 it/s
+step  27450  L=0.1390  src=0.0753  tgt=0.0318  trans=0.0318  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  27500  L=0.2884  src=0.0457  tgt=0.1214  trans=0.1214  gain=-0.0000  |dz|=0.116  6.1 it/s
+  [diagnostics @ 27500] loss_correct=0.0579  loss_zero=0.0590  loss_shuffled=0.0602  loss_random=0.0593  loss_target_only=0.0579  loss_mean_z=0.0590  r_basis=0.0329  |dz_transport|=0.0855  z_s_vs_enc_rel=1.3573  z_spread_rel=1.0351  gain_vs_zero=0.0012  gain_vs_shuffled=0.0023  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0295  task_specific_frac=0.9309
+step  27550  L=0.1088  src=0.0643  tgt=0.0223  trans=0.0222  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  27600  L=0.0883  src=0.0428  tgt=0.0228  trans=0.0228  gain=+0.0000  |dz|=0.087  6.1 it/s
+step  27650  L=0.1200  src=0.0327  tgt=0.0437  trans=0.0436  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  27700  L=0.1265  src=0.0592  tgt=0.0337  trans=0.0337  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  27750  L=0.1021  src=0.0521  tgt=0.0250  trans=0.0249  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  27800  L=0.0792  src=0.0365  tgt=0.0213  trans=0.0214  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  27850  L=0.0783  src=0.0347  tgt=0.0218  trans=0.0218  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  27900  L=0.1278  src=0.0469  tgt=0.0405  trans=0.0405  gain=+0.0000  |dz|=0.088  6.1 it/s
+step  27950  L=0.1830  src=0.1069  tgt=0.0381  trans=0.0380  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  28000  L=0.0933  src=0.0473  tgt=0.0230  trans=0.0230  gain=+0.0000  |dz|=0.094  6.1 it/s
+  [diagnostics @ 28000] loss_correct=0.0489  loss_zero=0.0499  loss_shuffled=0.0499  loss_random=0.0502  loss_target_only=0.0489  loss_mean_z=0.0497  r_basis=0.0295  |dz_transport|=0.0742  z_s_vs_enc_rel=1.1576  z_spread_rel=0.9751  gain_vs_zero=0.0010  gain_vs_shuffled=0.0010  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0008  delta_task=0.0008  z_center_norm=0.0314  task_specific_frac=0.7909
+  saved /opt/ml/code/checkpoints/ctr128_off_step28000.pt
+step  28050  L=0.0786  src=0.0327  tgt=0.0229  trans=0.0229  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  28100  L=0.1311  src=0.0712  tgt=0.0300  trans=0.0300  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  28150  L=0.1951  src=0.1390  tgt=0.0280  trans=0.0280  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  28200  L=0.0726  src=0.0271  tgt=0.0228  trans=0.0227  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  28250  L=0.2950  src=0.0413  tgt=0.1269  trans=0.1268  gain=+0.0001  |dz|=0.123  6.1 it/s
+step  28300  L=0.3147  src=0.0758  tgt=0.1194  trans=0.1194  gain=-0.0000  |dz|=0.123  6.1 it/s
+step  28350  L=0.5908  src=0.0488  tgt=0.2710  trans=0.2710  gain=+0.0000  |dz|=0.118  6.1 it/s
+step  28400  L=0.3221  src=0.0599  tgt=0.1311  trans=0.1311  gain=+0.0000  |dz|=0.114  6.1 it/s
+step  28450  L=0.3576  src=0.0502  tgt=0.1537  trans=0.1537  gain=-0.0000  |dz|=0.116  6.1 it/s
+step  28500  L=0.1188  src=0.0505  tgt=0.0341  trans=0.0341  gain=+0.0000  |dz|=0.056  6.1 it/s
+  [diagnostics @ 28500] loss_correct=0.0815  loss_zero=0.0830  loss_shuffled=0.0861  loss_random=0.0833  loss_target_only=0.0815  loss_mean_z=0.0833  r_basis=0.0351  |dz_transport|=0.0910  z_s_vs_enc_rel=1.4277  z_spread_rel=1.1922  gain_vs_zero=0.0015  gain_vs_shuffled=0.0045  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0018  delta_task=0.0018  z_center_norm=0.0291  task_specific_frac=1.1741
+step  28550  L=0.1318  src=0.0652  tgt=0.0333  trans=0.0333  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  28600  L=0.2658  src=0.0519  tgt=0.1070  trans=0.1069  gain=+0.0000  |dz|=0.113  6.1 it/s
+step  28650  L=0.4881  src=0.0667  tgt=0.2107  trans=0.2107  gain=+0.0000  |dz|=0.115  6.1 it/s
+step  28700  L=0.0784  src=0.0441  tgt=0.0172  trans=0.0172  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  28750  L=0.1182  src=0.0438  tgt=0.0372  trans=0.0372  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  28800  L=0.3645  src=0.0335  tgt=0.1655  trans=0.1655  gain=-0.0000  |dz|=0.111  6.1 it/s
+step  28850  L=0.1289  src=0.0889  tgt=0.0200  trans=0.0199  gain=+0.0000  |dz|=0.088  6.1 it/s
+step  28900  L=0.0842  src=0.0387  tgt=0.0227  trans=0.0227  gain=-0.0000  |dz|=0.087  6.1 it/s
+step  28950  L=0.3246  src=0.0644  tgt=0.1301  trans=0.1301  gain=+0.0000  |dz|=0.113  6.1 it/s
+step  29000  L=0.2483  src=0.0329  tgt=0.1077  trans=0.1077  gain=-0.0000  |dz|=0.113  6.1 it/s
+  [diagnostics @ 29000] loss_correct=0.0702  loss_zero=0.0716  loss_shuffled=0.0728  loss_random=0.0719  loss_target_only=0.0702  loss_mean_z=0.0716  r_basis=0.0352  |dz_transport|=0.0878  z_s_vs_enc_rel=1.4121  z_spread_rel=1.1473  gain_vs_zero=0.0014  gain_vs_shuffled=0.0026  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0274  task_specific_frac=1.0167
+step  29050  L=0.0744  src=0.0349  tgt=0.0197  trans=0.0197  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  29100  L=0.0915  src=0.0476  tgt=0.0220  trans=0.0220  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  29150  L=0.1094  src=0.0753  tgt=0.0171  trans=0.0170  gain=+0.0001  |dz|=0.093  6.1 it/s
+step  29200  L=0.1907  src=0.1031  tgt=0.0438  trans=0.0438  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  29250  L=0.0798  src=0.0234  tgt=0.0282  trans=0.0282  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  29300  L=0.1243  src=0.0840  tgt=0.0201  trans=0.0201  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  29350  L=0.3855  src=0.0473  tgt=0.1691  trans=0.1691  gain=+0.0000  |dz|=0.111  6.1 it/s
+step  29400  L=0.3949  src=0.0459  tgt=0.1745  trans=0.1746  gain=-0.0000  |dz|=0.110  6.1 it/s
+step  29450  L=0.0811  src=0.0404  tgt=0.0203  trans=0.0203  gain=-0.0000  |dz|=0.089  6.1 it/s
+step  29500  L=0.0948  src=0.0432  tgt=0.0258  trans=0.0258  gain=+0.0001  |dz|=0.094  6.1 it/s
+  [diagnostics @ 29500] loss_correct=0.0729  loss_zero=0.0741  loss_shuffled=0.0754  loss_random=0.0744  loss_target_only=0.0729  loss_mean_z=0.0743  r_basis=0.0335  |dz_transport|=0.0852  z_s_vs_enc_rel=1.4125  z_spread_rel=1.1947  gain_vs_zero=0.0012  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0288  task_specific_frac=1.1036
+step  29550  L=0.2870  src=0.0566  tgt=0.1152  trans=0.1152  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  29600  L=0.0958  src=0.0481  tgt=0.0239  trans=0.0239  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  29650  L=0.1661  src=0.0919  tgt=0.0372  trans=0.0371  gain=+0.0001  |dz|=0.091  6.1 it/s
+step  29700  L=0.5768  src=0.0704  tgt=0.2532  trans=0.2532  gain=-0.0000  |dz|=0.108  6.1 it/s
+step  29750  L=0.1322  src=0.0626  tgt=0.0348  trans=0.0348  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  29800  L=0.3447  src=0.0350  tgt=0.1548  trans=0.1549  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  29850  L=0.1148  src=0.0680  tgt=0.0234  trans=0.0234  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  29900  L=0.4340  src=0.0384  tgt=0.1978  trans=0.1978  gain=-0.0001  |dz|=0.123  6.1 it/s
+step  29950  L=0.1203  src=0.0586  tgt=0.0309  trans=0.0309  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  30000  L=0.1745  src=0.1137  tgt=0.0304  trans=0.0304  gain=+0.0000  |dz|=0.055  6.1 it/s
+  [diagnostics @ 30000] loss_correct=0.0597  loss_zero=0.0609  loss_shuffled=0.0622  loss_random=0.0612  loss_target_only=0.0597  loss_mean_z=0.0608  r_basis=0.0326  |dz_transport|=0.0805  z_s_vs_enc_rel=1.3054  z_spread_rel=1.0965  gain_vs_zero=0.0012  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0261  task_specific_frac=0.9149
+  saved /opt/ml/code/checkpoints/ctr128_off_step30000.pt
+step  30050  L=0.1217  src=0.0481  tgt=0.0368  trans=0.0368  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  30100  L=0.1181  src=0.0822  tgt=0.0179  trans=0.0179  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  30150  L=0.5019  src=0.0389  tgt=0.2315  trans=0.2314  gain=+0.0001  |dz|=0.106  6.1 it/s
+step  30200  L=0.1372  src=0.0509  tgt=0.0431  trans=0.0431  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  30250  L=0.1000  src=0.0423  tgt=0.0288  trans=0.0288  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  30300  L=0.1089  src=0.0521  tgt=0.0284  trans=0.0284  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  30350  L=0.1136  src=0.0601  tgt=0.0268  trans=0.0267  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  30400  L=0.1438  src=0.0584  tgt=0.0427  trans=0.0427  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  30450  L=0.0595  src=0.0241  tgt=0.0178  trans=0.0177  gain=+0.0001  |dz|=0.088  6.1 it/s
+step  30500  L=0.3718  src=0.0462  tgt=0.1628  trans=0.1628  gain=-0.0000  |dz|=0.112  6.1 it/s
+  [diagnostics @ 30500] loss_correct=0.0972  loss_zero=0.0986  loss_shuffled=0.1003  loss_random=0.0989  loss_target_only=0.0972  loss_mean_z=0.0991  r_basis=0.0360  |dz_transport|=0.0952  z_s_vs_enc_rel=1.5891  z_spread_rel=1.1499  gain_vs_zero=0.0014  gain_vs_shuffled=0.0031  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0019  delta_task=0.0019  z_center_norm=0.0271  task_specific_frac=1.2992
+step  30550  L=0.2548  src=0.0339  tgt=0.1105  trans=0.1105  gain=+0.0000  |dz|=0.108  6.1 it/s
+step  30600  L=0.1071  src=0.0440  tgt=0.0316  trans=0.0315  gain=+0.0001  |dz|=0.093  6.1 it/s
+step  30650  L=0.1240  src=0.0899  tgt=0.0170  trans=0.0170  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  30700  L=0.1635  src=0.0624  tgt=0.0506  trans=0.0506  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  30750  L=0.0571  src=0.0276  tgt=0.0148  trans=0.0147  gain=+0.0001  |dz|=0.091  6.1 it/s
+step  30800  L=0.2330  src=0.0475  tgt=0.0927  trans=0.0927  gain=-0.0000  |dz|=0.105  6.1 it/s
+step  30850  L=0.1128  src=0.0632  tgt=0.0248  trans=0.0248  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  30900  L=0.0855  src=0.0324  tgt=0.0266  trans=0.0266  gain=-0.0000  |dz|=0.089  6.1 it/s
+step  30950  L=0.0981  src=0.0408  tgt=0.0287  trans=0.0287  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  31000  L=0.1159  src=0.0707  tgt=0.0226  trans=0.0226  gain=+0.0000  |dz|=0.053  6.1 it/s
+  [diagnostics @ 31000] loss_correct=0.0584  loss_zero=0.0595  loss_shuffled=0.0602  loss_random=0.0598  loss_target_only=0.0584  loss_mean_z=0.0594  r_basis=0.0318  |dz_transport|=0.0752  z_s_vs_enc_rel=1.2384  z_spread_rel=1.0844  gain_vs_zero=0.0011  gain_vs_shuffled=0.0018  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0010  delta_task=0.0010  z_center_norm=0.0289  task_specific_frac=0.8907
+step  31050  L=0.0715  src=0.0325  tgt=0.0195  trans=0.0195  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  31100  L=0.0767  src=0.0411  tgt=0.0178  trans=0.0178  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  31150  L=0.1298  src=0.0869  tgt=0.0214  trans=0.0214  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  31200  L=0.4597  src=0.0994  tgt=0.1801  trans=0.1801  gain=-0.0000  |dz|=0.110  6.1 it/s
+step  31250  L=0.1323  src=0.0508  tgt=0.0408  trans=0.0408  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  31300  L=0.0869  src=0.0598  tgt=0.0136  trans=0.0135  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  31350  L=0.4405  src=0.0762  tgt=0.1822  trans=0.1822  gain=-0.0000  |dz|=0.106  6.1 it/s
+step  31400  L=0.1411  src=0.0729  tgt=0.0341  trans=0.0341  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  31450  L=0.0925  src=0.0348  tgt=0.0289  trans=0.0288  gain=+0.0001  |dz|=0.089  6.1 it/s
+step  31500  L=0.0834  src=0.0341  tgt=0.0246  trans=0.0247  gain=-0.0000  |dz|=0.090  6.1 it/s
+  [diagnostics @ 31500] loss_correct=0.0747  loss_zero=0.0760  loss_shuffled=0.0769  loss_random=0.0762  loss_target_only=0.0748  loss_mean_z=0.0761  r_basis=0.0333  |dz_transport|=0.0833  z_s_vs_enc_rel=1.3971  z_spread_rel=1.1917  gain_vs_zero=0.0012  gain_vs_shuffled=0.0021  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0297  task_specific_frac=1.1022
+step  31550  L=0.1062  src=0.0676  tgt=0.0193  trans=0.0193  gain=+0.0001  |dz|=0.053  6.1 it/s
+step  31600  L=0.1120  src=0.0500  tgt=0.0310  trans=0.0310  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  31650  L=0.0675  src=0.0266  tgt=0.0204  trans=0.0205  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  31700  L=0.0895  src=0.0283  tgt=0.0306  trans=0.0306  gain=-0.0000  |dz|=0.053  6.1 it/s
+step  31750  L=0.1044  src=0.0469  tgt=0.0288  trans=0.0287  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  31800  L=0.1117  src=0.0445  tgt=0.0336  trans=0.0336  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  31850  L=0.1070  src=0.0440  tgt=0.0315  trans=0.0315  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  31900  L=0.1154  src=0.0561  tgt=0.0296  trans=0.0296  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  31950  L=0.0920  src=0.0324  tgt=0.0299  trans=0.0298  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  32000  L=0.1222  src=0.0570  tgt=0.0326  trans=0.0326  gain=-0.0000  |dz|=0.092  6.1 it/s
+  [diagnostics @ 32000] loss_correct=0.0859  loss_zero=0.0873  loss_shuffled=0.0879  loss_random=0.0876  loss_target_only=0.0860  loss_mean_z=0.0875  r_basis=0.0354  |dz_transport|=0.0899  z_s_vs_enc_rel=1.4649  z_spread_rel=1.1804  gain_vs_zero=0.0014  gain_vs_shuffled=0.0020  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0016  delta_task=0.0016  z_center_norm=0.0242  task_specific_frac=1.1531
+  saved /opt/ml/code/checkpoints/ctr128_off_step32000.pt
+step  32050  L=0.1126  src=0.0467  tgt=0.0330  trans=0.0330  gain=-0.0000  |dz|=0.089  6.1 it/s
+step  32100  L=0.3047  src=0.0378  tgt=0.1335  trans=0.1334  gain=+0.0000  |dz|=0.111  6.1 it/s
+step  32150  L=0.1042  src=0.0599  tgt=0.0222  trans=0.0221  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  32200  L=0.4854  src=0.0356  tgt=0.2249  trans=0.2249  gain=+0.0001  |dz|=0.100  6.1 it/s
+step  32250  L=0.1158  src=0.0532  tgt=0.0313  trans=0.0313  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  32300  L=0.2219  src=0.0475  tgt=0.0873  trans=0.0872  gain=+0.0001  |dz|=0.103  6.1 it/s
+step  32350  L=0.0772  src=0.0440  tgt=0.0167  trans=0.0166  gain=+0.0001  |dz|=0.052  6.1 it/s
+step  32400  L=0.3642  src=0.0870  tgt=0.1386  trans=0.1386  gain=+0.0000  |dz|=0.104  6.1 it/s
+step  32450  L=0.1619  src=0.0494  tgt=0.0563  trans=0.0562  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  32500  L=0.0996  src=0.0387  tgt=0.0304  trans=0.0304  gain=+0.0000  |dz|=0.089  6.1 it/s
+  [diagnostics @ 32500] loss_correct=0.0787  loss_zero=0.0799  loss_shuffled=0.0807  loss_random=0.0802  loss_target_only=0.0787  loss_mean_z=0.0801  r_basis=0.0333  |dz_transport|=0.0820  z_s_vs_enc_rel=1.3898  z_spread_rel=1.1981  gain_vs_zero=0.0013  gain_vs_shuffled=0.0020  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0263  task_specific_frac=1.1080
+step  32550  L=0.5048  src=0.0454  tgt=0.2297  trans=0.2297  gain=-0.0000  |dz|=0.103  6.1 it/s
+step  32600  L=0.0779  src=0.0303  tgt=0.0238  trans=0.0238  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  32650  L=0.1262  src=0.0412  tgt=0.0425  trans=0.0425  gain=-0.0000  |dz|=0.089  6.1 it/s
+step  32700  L=0.1526  src=0.0737  tgt=0.0394  trans=0.0394  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  32750  L=0.4230  src=0.0699  tgt=0.1766  trans=0.1765  gain=+0.0000  |dz|=0.100  6.1 it/s
+step  32800  L=0.1510  src=0.0549  tgt=0.0481  trans=0.0481  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  32850  L=0.3143  src=0.0186  tgt=0.1479  trans=0.1478  gain=+0.0001  |dz|=0.103  6.1 it/s
+step  32900  L=0.4213  src=0.0627  tgt=0.1793  trans=0.1793  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  32950  L=0.1269  src=0.0537  tgt=0.0366  trans=0.0366  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  33000  L=0.1338  src=0.0633  tgt=0.0353  trans=0.0352  gain=+0.0000  |dz|=0.054  6.1 it/s
+  [diagnostics @ 33000] loss_correct=0.0707  loss_zero=0.0720  loss_shuffled=0.0732  loss_random=0.0724  loss_target_only=0.0707  loss_mean_z=0.0721  r_basis=0.0340  |dz_transport|=0.0890  z_s_vs_enc_rel=1.5292  z_spread_rel=1.1073  gain_vs_zero=0.0013  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0288  task_specific_frac=1.0810
+step  33050  L=0.0922  src=0.0583  tgt=0.0170  trans=0.0170  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  33100  L=0.3000  src=0.0364  tgt=0.1318  trans=0.1318  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  33150  L=0.1081  src=0.0641  tgt=0.0220  trans=0.0220  gain=-0.0000  |dz|=0.088  6.1 it/s
+step  33200  L=0.0926  src=0.0375  tgt=0.0275  trans=0.0275  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  33250  L=0.1110  src=0.0455  tgt=0.0328  trans=0.0327  gain=+0.0001  |dz|=0.091  6.1 it/s
+step  33300  L=0.5129  src=0.0536  tgt=0.2297  trans=0.2296  gain=+0.0001  |dz|=0.101  6.1 it/s
+step  33350  L=0.4075  src=0.0430  tgt=0.1824  trans=0.1822  gain=+0.0002  |dz|=0.100  6.1 it/s
+step  33400  L=0.1112  src=0.0418  tgt=0.0347  trans=0.0347  gain=-0.0001  |dz|=0.092  6.1 it/s
+step  33450  L=0.2253  src=0.0349  tgt=0.0952  trans=0.0952  gain=-0.0000  |dz|=0.103  6.1 it/s
+step  33500  L=0.4142  src=0.0603  tgt=0.1770  trans=0.1770  gain=-0.0000  |dz|=0.103  6.1 it/s
+  [diagnostics @ 33500] loss_correct=0.0665  loss_zero=0.0677  loss_shuffled=0.0693  loss_random=0.0680  loss_target_only=0.0665  loss_mean_z=0.0677  r_basis=0.0331  |dz_transport|=0.0802  z_s_vs_enc_rel=1.3366  z_spread_rel=1.1617  gain_vs_zero=0.0012  gain_vs_shuffled=0.0028  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0271  task_specific_frac=1.0095
+step  33550  L=0.0811  src=0.0333  tgt=0.0239  trans=0.0239  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  33600  L=0.3102  src=0.0570  tgt=0.1266  trans=0.1266  gain=+0.0001  |dz|=0.110  6.1 it/s
+step  33650  L=0.3730  src=0.0475  tgt=0.1627  trans=0.1627  gain=+0.0000  |dz|=0.107  6.1 it/s
+step  33700  L=0.1405  src=0.0830  tgt=0.0287  trans=0.0288  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  33750  L=0.1335  src=0.0546  tgt=0.0395  trans=0.0394  gain=+0.0001  |dz|=0.054  6.1 it/s
+step  33800  L=0.1191  src=0.0517  tgt=0.0337  trans=0.0337  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  33850  L=0.3652  src=0.0728  tgt=0.1463  trans=0.1461  gain=+0.0001  |dz|=0.104  6.1 it/s
+step  33900  L=0.3043  src=0.0713  tgt=0.1165  trans=0.1164  gain=+0.0000  |dz|=0.104  6.1 it/s
+step  33950  L=0.0540  src=0.0258  tgt=0.0141  trans=0.0141  gain=-0.0000  |dz|=0.088  6.1 it/s
+step  34000  L=0.4402  src=0.0509  tgt=0.1947  trans=0.1947  gain=+0.0000  |dz|=0.106  6.1 it/s
+  [diagnostics @ 34000] loss_correct=0.0840  loss_zero=0.0852  loss_shuffled=0.0862  loss_random=0.0854  loss_target_only=0.0841  loss_mean_z=0.0854  r_basis=0.0326  |dz_transport|=0.0828  z_s_vs_enc_rel=1.3944  z_spread_rel=1.2299  gain_vs_zero=0.0011  gain_vs_shuffled=0.0022  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0264  task_specific_frac=1.1956
+  saved /opt/ml/code/checkpoints/ctr128_off_step34000.pt
+step  34050  L=0.5243  src=0.0441  tgt=0.2401  trans=0.2401  gain=+0.0000  |dz|=0.107  6.1 it/s
+step  34100  L=0.0979  src=0.0450  tgt=0.0264  trans=0.0264  gain=-0.0000  |dz|=0.053  6.1 it/s
+step  34150  L=0.1373  src=0.0791  tgt=0.0290  trans=0.0291  gain=-0.0000  |dz|=0.053  6.1 it/s
+step  34200  L=0.4907  src=0.0614  tgt=0.2147  trans=0.2147  gain=-0.0000  |dz|=0.102  6.1 it/s
+step  34250  L=0.1374  src=0.0881  tgt=0.0246  trans=0.0246  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  34300  L=0.0597  src=0.0350  tgt=0.0124  trans=0.0123  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  34350  L=0.1231  src=0.0556  tgt=0.0337  trans=0.0337  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  34400  L=0.0756  src=0.0425  tgt=0.0165  trans=0.0165  gain=-0.0000  |dz|=0.086  6.1 it/s
+step  34450  L=0.0821  src=0.0460  tgt=0.0180  trans=0.0180  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  34500  L=0.1037  src=0.0747  tgt=0.0145  trans=0.0145  gain=-0.0000  |dz|=0.087  6.1 it/s
+  [diagnostics @ 34500] loss_correct=0.0885  loss_zero=0.0898  loss_shuffled=0.0909  loss_random=0.0901  loss_target_only=0.0885  loss_mean_z=0.0901  r_basis=0.0353  |dz_transport|=0.0883  z_s_vs_enc_rel=1.4798  z_spread_rel=1.2003  gain_vs_zero=0.0013  gain_vs_shuffled=0.0024  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0016  delta_task=0.0016  z_center_norm=0.0253  task_specific_frac=1.2215
+step  34550  L=0.0763  src=0.0321  tgt=0.0221  trans=0.0221  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  34600  L=0.1058  src=0.0514  tgt=0.0272  trans=0.0272  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  34650  L=0.4284  src=0.0616  tgt=0.1834  trans=0.1834  gain=+0.0000  |dz|=0.108  6.1 it/s
+step  34700  L=0.0858  src=0.0377  tgt=0.0241  trans=0.0241  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  34750  L=0.3916  src=0.0251  tgt=0.1833  trans=0.1833  gain=-0.0000  |dz|=0.103  6.1 it/s
+step  34800  L=0.1162  src=0.0533  tgt=0.0314  trans=0.0314  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  34850  L=0.1051  src=0.0371  tgt=0.0340  trans=0.0340  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  34900  L=0.2458  src=0.0180  tgt=0.1139  trans=0.1139  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  34950  L=0.1270  src=0.0716  tgt=0.0277  trans=0.0277  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  35000  L=0.1210  src=0.0754  tgt=0.0228  trans=0.0228  gain=-0.0000  |dz|=0.088  6.1 it/s
+  [diagnostics @ 35000] loss_correct=0.0796  loss_zero=0.0808  loss_shuffled=0.0825  loss_random=0.0810  loss_target_only=0.0796  loss_mean_z=0.0810  r_basis=0.0326  |dz_transport|=0.0782  z_s_vs_enc_rel=1.3387  z_spread_rel=1.2061  gain_vs_zero=0.0012  gain_vs_shuffled=0.0029  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0292  task_specific_frac=1.2046
+step  35050  L=0.3815  src=0.0414  tgt=0.1701  trans=0.1700  gain=+0.0000  |dz|=0.104  6.1 it/s
+step  35100  L=0.0882  src=0.0423  tgt=0.0229  trans=0.0229  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  35150  L=0.0923  src=0.0247  tgt=0.0338  trans=0.0338  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  35200  L=0.3290  src=0.0490  tgt=0.1400  trans=0.1400  gain=-0.0000  |dz|=0.102  6.1 it/s
+step  35250  L=0.1241  src=0.0781  tgt=0.0230  trans=0.0230  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  35300  L=0.1281  src=0.0497  tgt=0.0392  trans=0.0392  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  35350  L=0.0912  src=0.0502  tgt=0.0205  trans=0.0205  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  35400  L=0.2088  src=0.0638  tgt=0.0725  trans=0.0725  gain=-0.0000  |dz|=0.104  6.1 it/s
+step  35450  L=0.0860  src=0.0363  tgt=0.0248  trans=0.0248  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  35500  L=0.4179  src=0.0797  tgt=0.1691  trans=0.1691  gain=+0.0000  |dz|=0.103  6.1 it/s
+  [diagnostics @ 35500] loss_correct=0.0757  loss_zero=0.0770  loss_shuffled=0.0783  loss_random=0.0773  loss_target_only=0.0757  loss_mean_z=0.0771  r_basis=0.0355  |dz_transport|=0.0857  z_s_vs_enc_rel=1.4266  z_spread_rel=1.1261  gain_vs_zero=0.0013  gain_vs_shuffled=0.0026  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0242  task_specific_frac=1.0226
+step  35550  L=0.1538  src=0.0716  tgt=0.0411  trans=0.0411  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  35600  L=0.1370  src=0.0420  tgt=0.0475  trans=0.0475  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  35650  L=0.4739  src=0.0368  tgt=0.2186  trans=0.2185  gain=+0.0000  |dz|=0.103  6.1 it/s
+step  35700  L=0.4089  src=0.0574  tgt=0.1758  trans=0.1758  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  35750  L=0.4071  src=0.0529  tgt=0.1771  trans=0.1771  gain=+0.0000  |dz|=0.101  6.1 it/s
+step  35800  L=0.1064  src=0.0618  tgt=0.0223  trans=0.0223  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  35850  L=0.0870  src=0.0550  tgt=0.0160  trans=0.0160  gain=+0.0000  |dz|=0.087  6.1 it/s
+step  35900  L=0.1321  src=0.0829  tgt=0.0246  trans=0.0246  gain=+0.0001  |dz|=0.054  6.1 it/s
+step  35950  L=0.0928  src=0.0602  tgt=0.0163  trans=0.0163  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  36000  L=0.2280  src=0.0492  tgt=0.0895  trans=0.0893  gain=+0.0002  |dz|=0.116  6.1 it/s
+  [diagnostics @ 36000] loss_correct=0.0684  loss_zero=0.0696  loss_shuffled=0.0709  loss_random=0.0699  loss_target_only=0.0684  loss_mean_z=0.0696  r_basis=0.0340  |dz_transport|=0.0827  z_s_vs_enc_rel=1.4043  z_spread_rel=1.1664  gain_vs_zero=0.0012  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0262  task_specific_frac=1.0350
+  saved /opt/ml/code/checkpoints/ctr128_off_step36000.pt
+step  36050  L=0.0905  src=0.0616  tgt=0.0145  trans=0.0145  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  36100  L=0.0987  src=0.0425  tgt=0.0281  trans=0.0280  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  36150  L=0.4632  src=0.0618  tgt=0.2007  trans=0.2006  gain=+0.0001  |dz|=0.127  6.1 it/s
+step  36200  L=0.1300  src=0.0640  tgt=0.0330  trans=0.0330  gain=-0.0000  |dz|=0.053  6.1 it/s
+step  36250  L=0.0931  src=0.0576  tgt=0.0177  trans=0.0178  gain=-0.0000  |dz|=0.053  6.1 it/s
+step  36300  L=0.0851  src=0.0397  tgt=0.0227  trans=0.0227  gain=-0.0000  |dz|=0.089  6.1 it/s
+step  36350  L=0.1428  src=0.0715  tgt=0.0356  trans=0.0356  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  36400  L=0.0346  src=0.0182  tgt=0.0082  trans=0.0082  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  36450  L=0.3387  src=0.0564  tgt=0.1412  trans=0.1412  gain=+0.0000  |dz|=0.117  6.1 it/s
+step  36500  L=0.0501  src=0.0214  tgt=0.0143  trans=0.0143  gain=-0.0000  |dz|=0.054  6.1 it/s
+  [diagnostics @ 36500] loss_correct=0.0746  loss_zero=0.0760  loss_shuffled=0.0778  loss_random=0.0763  loss_target_only=0.0746  loss_mean_z=0.0762  r_basis=0.0349  |dz_transport|=0.0886  z_s_vs_enc_rel=1.4962  z_spread_rel=1.1658  gain_vs_zero=0.0014  gain_vs_shuffled=0.0033  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0016  delta_task=0.0016  z_center_norm=0.0262  task_specific_frac=1.1199
+step  36550  L=0.1223  src=0.0699  tgt=0.0263  trans=0.0262  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  36600  L=0.1081  src=0.0349  tgt=0.0366  trans=0.0366  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  36650  L=0.1000  src=0.0280  tgt=0.0360  trans=0.0360  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  36700  L=0.3704  src=0.0567  tgt=0.1569  trans=0.1568  gain=+0.0000  |dz|=0.109  6.1 it/s
+step  36750  L=0.1077  src=0.0536  tgt=0.0270  trans=0.0270  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  36800  L=0.1278  src=0.0651  tgt=0.0314  trans=0.0313  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  36850  L=0.1147  src=0.0674  tgt=0.0237  trans=0.0237  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  36900  L=0.1048  src=0.0411  tgt=0.0318  trans=0.0318  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  36950  L=0.3812  src=0.0763  tgt=0.1525  trans=0.1524  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  37000  L=0.1632  src=0.0483  tgt=0.0574  trans=0.0575  gain=-0.0000  |dz|=0.057  6.1 it/s
+  [diagnostics @ 37000] loss_correct=0.0676  loss_zero=0.0688  loss_shuffled=0.0697  loss_random=0.0691  loss_target_only=0.0676  loss_mean_z=0.0689  r_basis=0.0340  |dz_transport|=0.0847  z_s_vs_enc_rel=1.3986  z_spread_rel=1.1551  gain_vs_zero=0.0013  gain_vs_shuffled=0.0021  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0249  task_specific_frac=1.0349
+step  37050  L=0.0648  src=0.0338  tgt=0.0155  trans=0.0155  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  37100  L=0.0794  src=0.0417  tgt=0.0189  trans=0.0189  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  37150  L=0.0948  src=0.0396  tgt=0.0276  trans=0.0276  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  37200  L=0.1317  src=0.0743  tgt=0.0287  trans=0.0287  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  37250  L=0.3906  src=0.0642  tgt=0.1632  trans=0.1632  gain=-0.0000  |dz|=0.111  6.1 it/s
+step  37300  L=0.1141  src=0.0586  tgt=0.0278  trans=0.0277  gain=+0.0001  |dz|=0.092  6.1 it/s
+step  37350  L=0.1085  src=0.0673  tgt=0.0206  trans=0.0206  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  37400  L=0.1260  src=0.0858  tgt=0.0201  trans=0.0201  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  37450  L=0.1052  src=0.0583  tgt=0.0234  trans=0.0235  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  37500  L=0.1029  src=0.0301  tgt=0.0364  trans=0.0364  gain=+0.0000  |dz|=0.054  6.1 it/s
+  [diagnostics @ 37500] loss_correct=0.0577  loss_zero=0.0591  loss_shuffled=0.0595  loss_random=0.0595  loss_target_only=0.0577  loss_mean_z=0.0590  r_basis=0.0356  |dz_transport|=0.0844  z_s_vs_enc_rel=1.4053  z_spread_rel=1.0371  gain_vs_zero=0.0014  gain_vs_shuffled=0.0018  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0293  task_specific_frac=0.9035
+step  37550  L=0.0834  src=0.0261  tgt=0.0286  trans=0.0287  gain=-0.0000  |dz|=0.053  6.1 it/s
+step  37600  L=0.1257  src=0.0671  tgt=0.0293  trans=0.0293  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  37650  L=0.3925  src=0.0644  tgt=0.1641  trans=0.1641  gain=+0.0000  |dz|=0.109  6.1 it/s
+step  37700  L=0.0920  src=0.0583  tgt=0.0169  trans=0.0169  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  37750  L=0.0932  src=0.0471  tgt=0.0231  trans=0.0231  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  37800  L=0.0903  src=0.0437  tgt=0.0233  trans=0.0233  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  37850  L=0.5018  src=0.0449  tgt=0.2285  trans=0.2285  gain=+0.0000  |dz|=0.105  6.1 it/s
+step  37900  L=0.3678  src=0.0670  tgt=0.1504  trans=0.1504  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  37950  L=0.1277  src=0.0499  tgt=0.0389  trans=0.0389  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  38000  L=0.1371  src=0.0823  tgt=0.0274  trans=0.0274  gain=+0.0000  |dz|=0.090  6.1 it/s
+  [diagnostics @ 38000] loss_correct=0.0624  loss_zero=0.0635  loss_shuffled=0.0643  loss_random=0.0638  loss_target_only=0.0624  loss_mean_z=0.0635  r_basis=0.0319  |dz_transport|=0.0740  z_s_vs_enc_rel=1.1782  z_spread_rel=1.1002  gain_vs_zero=0.0011  gain_vs_shuffled=0.0019  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0290  task_specific_frac=0.9372
+  saved /opt/ml/code/checkpoints/ctr128_off_step38000.pt
+step  38050  L=0.1385  src=0.0815  tgt=0.0285  trans=0.0285  gain=+0.0000  |dz|=0.088  6.1 it/s
+step  38100  L=0.0799  src=0.0385  tgt=0.0207  trans=0.0207  gain=+0.0001  |dz|=0.090  6.1 it/s
+step  38150  L=0.1018  src=0.0530  tgt=0.0244  trans=0.0244  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  38200  L=0.0794  src=0.0426  tgt=0.0185  trans=0.0184  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  38250  L=0.1310  src=0.0622  tgt=0.0344  trans=0.0344  gain=+0.0001  |dz|=0.057  6.1 it/s
+step  38300  L=0.0831  src=0.0289  tgt=0.0271  trans=0.0271  gain=+0.0001  |dz|=0.091  6.1 it/s
+step  38350  L=0.1103  src=0.0706  tgt=0.0198  trans=0.0198  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  38400  L=0.1066  src=0.0575  tgt=0.0246  trans=0.0246  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  38450  L=0.4322  src=0.0435  tgt=0.1944  trans=0.1944  gain=-0.0000  |dz|=0.099  6.1 it/s
+step  38500  L=0.1312  src=0.0778  tgt=0.0267  trans=0.0267  gain=-0.0000  |dz|=0.092  6.1 it/s
+  [diagnostics @ 38500] loss_correct=0.0584  loss_zero=0.0598  loss_shuffled=0.0611  loss_random=0.0601  loss_target_only=0.0585  loss_mean_z=0.0597  r_basis=0.0342  |dz_transport|=0.0821  z_s_vs_enc_rel=1.3443  z_spread_rel=1.0760  gain_vs_zero=0.0013  gain_vs_shuffled=0.0027  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0280  task_specific_frac=0.9020
+step  38550  L=0.1045  src=0.0477  tgt=0.0284  trans=0.0284  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  38600  L=0.0839  src=0.0369  tgt=0.0235  trans=0.0235  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  38650  L=0.0958  src=0.0359  tgt=0.0300  trans=0.0300  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  38700  L=0.1249  src=0.0686  tgt=0.0282  trans=0.0282  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  38750  L=0.1148  src=0.0638  tgt=0.0255  trans=0.0255  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  38800  L=0.0881  src=0.0526  tgt=0.0177  trans=0.0177  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  38850  L=0.1312  src=0.0584  tgt=0.0364  trans=0.0364  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  38900  L=0.0722  src=0.0288  tgt=0.0217  trans=0.0217  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  38950  L=0.0817  src=0.0417  tgt=0.0200  trans=0.0200  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  39000  L=0.5333  src=0.0318  tgt=0.2507  trans=0.2508  gain=-0.0000  |dz|=0.103  6.1 it/s
+  [diagnostics @ 39000] loss_correct=0.0639  loss_zero=0.0653  loss_shuffled=0.0663  loss_random=0.0656  loss_target_only=0.0639  loss_mean_z=0.0652  r_basis=0.0345  |dz_transport|=0.0835  z_s_vs_enc_rel=1.4345  z_spread_rel=1.0974  gain_vs_zero=0.0014  gain_vs_shuffled=0.0024  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0263  task_specific_frac=0.9810
+step  39050  L=0.1062  src=0.0482  tgt=0.0290  trans=0.0290  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  39100  L=0.1704  src=0.0792  tgt=0.0456  trans=0.0456  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  39150  L=0.4062  src=0.0708  tgt=0.1677  trans=0.1677  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  39200  L=0.1130  src=0.0469  tgt=0.0330  trans=0.0330  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  39250  L=0.1381  src=0.0716  tgt=0.0333  trans=0.0333  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  39300  L=0.1175  src=0.0694  tgt=0.0241  trans=0.0241  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  39350  L=0.0915  src=0.0507  tgt=0.0204  trans=0.0204  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  39400  L=0.0841  src=0.0321  tgt=0.0260  trans=0.0260  gain=+0.0000  |dz|=0.090  6.1 it/s
+step  39450  L=0.0833  src=0.0506  tgt=0.0164  trans=0.0164  gain=+0.0000  |dz|=0.089  6.1 it/s
+step  39500  L=0.0814  src=0.0451  tgt=0.0182  trans=0.0182  gain=+0.0001  |dz|=0.055  6.1 it/s
+  [diagnostics @ 39500] loss_correct=0.0568  loss_zero=0.0579  loss_shuffled=0.0590  loss_random=0.0582  loss_target_only=0.0568  loss_mean_z=0.0578  r_basis=0.0327  |dz_transport|=0.0771  z_s_vs_enc_rel=1.2541  z_spread_rel=1.1145  gain_vs_zero=0.0012  gain_vs_shuffled=0.0022  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0277  task_specific_frac=0.9100
+step  39550  L=0.0832  src=0.0472  tgt=0.0180  trans=0.0180  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  39600  L=0.0980  src=0.0227  tgt=0.0377  trans=0.0377  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  39650  L=0.0878  src=0.0320  tgt=0.0279  trans=0.0279  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  39700  L=0.1242  src=0.0640  tgt=0.0301  trans=0.0301  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  39750  L=0.0737  src=0.0302  tgt=0.0218  trans=0.0217  gain=+0.0001  |dz|=0.053  6.1 it/s
+step  39800  L=0.1222  src=0.0680  tgt=0.0271  trans=0.0271  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  39850  L=0.0942  src=0.0460  tgt=0.0241  trans=0.0241  gain=-0.0000  |dz|=0.088  6.1 it/s
+step  39900  L=0.1290  src=0.0654  tgt=0.0318  trans=0.0318  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  39950  L=0.1214  src=0.0512  tgt=0.0351  trans=0.0351  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  40000  L=0.3155  src=0.0608  tgt=0.1273  trans=0.1274  gain=-0.0000  |dz|=0.116  6.1 it/s
+  [diagnostics @ 40000] loss_correct=0.0796  loss_zero=0.0810  loss_shuffled=0.0825  loss_random=0.0813  loss_target_only=0.0796  loss_mean_z=0.0812  r_basis=0.0354  |dz_transport|=0.0888  z_s_vs_enc_rel=1.5412  z_spread_rel=1.1775  gain_vs_zero=0.0014  gain_vs_shuffled=0.0029  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0016  delta_task=0.0016  z_center_norm=0.0249  task_specific_frac=1.1081
+  saved /opt/ml/code/checkpoints/ctr128_off_step40000.pt
+step  40050  L=0.1134  src=0.0703  tgt=0.0215  trans=0.0215  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  40100  L=0.1275  src=0.0503  tgt=0.0386  trans=0.0386  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  40150  L=0.0846  src=0.0449  tgt=0.0199  trans=0.0199  gain=-0.0000  |dz|=0.087  6.1 it/s
+step  40200  L=0.2582  src=0.0579  tgt=0.1001  trans=0.1002  gain=-0.0000  |dz|=0.111  6.1 it/s
+step  40250  L=0.0846  src=0.0459  tgt=0.0194  trans=0.0194  gain=-0.0000  |dz|=0.054  6.1 it/s
+step  40300  L=0.1491  src=0.0557  tgt=0.0467  trans=0.0467  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  40350  L=0.0647  src=0.0265  tgt=0.0191  trans=0.0191  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  40400  L=0.4072  src=0.0471  tgt=0.1801  trans=0.1801  gain=-0.0000  |dz|=0.106  6.1 it/s
+step  40450  L=0.0498  src=0.0286  tgt=0.0106  trans=0.0105  gain=+0.0001  |dz|=0.057  6.1 it/s
+step  40500  L=0.1124  src=0.0467  tgt=0.0328  trans=0.0329  gain=-0.0000  |dz|=0.056  6.1 it/s
+  [diagnostics @ 40500] loss_correct=0.0930  loss_zero=0.0943  loss_shuffled=0.0955  loss_random=0.0946  loss_target_only=0.0930  loss_mean_z=0.0948  r_basis=0.0361  |dz_transport|=0.0833  z_s_vs_enc_rel=1.3974  z_spread_rel=1.2038  gain_vs_zero=0.0013  gain_vs_shuffled=0.0026  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0018  delta_task=0.0018  z_center_norm=0.0298  task_specific_frac=1.3284
+step  40550  L=0.1315  src=0.0766  tgt=0.0275  trans=0.0274  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  40600  L=0.3949  src=0.0426  tgt=0.1761  trans=0.1761  gain=+0.0000  |dz|=0.109  6.1 it/s
+step  40650  L=0.1206  src=0.0510  tgt=0.0348  trans=0.0348  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  40700  L=0.0877  src=0.0604  tgt=0.0136  trans=0.0136  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  40750  L=0.2808  src=0.0480  tgt=0.1164  trans=0.1164  gain=+0.0000  |dz|=0.102  6.1 it/s
+step  40800  L=0.1431  src=0.0647  tgt=0.0392  trans=0.0392  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  40850  L=0.3288  src=0.0336  tgt=0.1476  trans=0.1476  gain=-0.0000  |dz|=0.104  6.1 it/s
+step  40900  L=0.1155  src=0.0680  tgt=0.0238  trans=0.0237  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  40950  L=0.3464  src=0.0600  tgt=0.1432  trans=0.1432  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  41000  L=0.3502  src=0.0660  tgt=0.1421  trans=0.1421  gain=+0.0000  |dz|=0.103  6.1 it/s
+  [diagnostics @ 41000] loss_correct=0.0886  loss_zero=0.0898  loss_shuffled=0.0910  loss_random=0.0901  loss_target_only=0.0886  loss_mean_z=0.0901  r_basis=0.0330  |dz_transport|=0.0766  z_s_vs_enc_rel=1.3049  z_spread_rel=1.1065  gain_vs_zero=0.0012  gain_vs_shuffled=0.0023  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0015  delta_task=0.0015  z_center_norm=0.0256  task_specific_frac=1.2377
+step  41050  L=0.1107  src=0.0447  tgt=0.0330  trans=0.0330  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  41100  L=0.1305  src=0.0694  tgt=0.0306  trans=0.0305  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  41150  L=0.0680  src=0.0375  tgt=0.0152  trans=0.0152  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  41200  L=0.2353  src=0.0485  tgt=0.0934  trans=0.0934  gain=+0.0000  |dz|=0.105  6.1 it/s
+step  41250  L=0.1086  src=0.0420  tgt=0.0333  trans=0.0333  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  41300  L=0.0980  src=0.0592  tgt=0.0194  trans=0.0194  gain=-0.0000  |dz|=0.055  6.1 it/s
+step  41350  L=0.3214  src=0.0518  tgt=0.1348  trans=0.1348  gain=+0.0000  |dz|=0.107  6.1 it/s
+step  41400  L=0.1034  src=0.0517  tgt=0.0259  trans=0.0258  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  41450  L=0.2487  src=0.0626  tgt=0.0931  trans=0.0930  gain=+0.0001  |dz|=0.104  6.1 it/s
+step  41500  L=0.1068  src=0.0469  tgt=0.0299  trans=0.0299  gain=+0.0000  |dz|=0.055  6.1 it/s
+  [diagnostics @ 41500] loss_correct=0.0928  loss_zero=0.0942  loss_shuffled=0.0958  loss_random=0.0945  loss_target_only=0.0928  loss_mean_z=0.0946  r_basis=0.0359  |dz_transport|=0.0845  z_s_vs_enc_rel=1.3851  z_spread_rel=1.2100  gain_vs_zero=0.0014  gain_vs_shuffled=0.0030  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0018  delta_task=0.0018  z_center_norm=0.0284  task_specific_frac=1.3103
+step  41550  L=0.2746  src=0.0305  tgt=0.1221  trans=0.1221  gain=-0.0000  |dz|=0.105  6.1 it/s
+step  41600  L=0.3391  src=0.0547  tgt=0.1422  trans=0.1422  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  41650  L=0.0901  src=0.0452  tgt=0.0225  trans=0.0224  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  41700  L=0.1059  src=0.0637  tgt=0.0211  trans=0.0211  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  41750  L=0.3318  src=0.0511  tgt=0.1404  trans=0.1404  gain=+0.0000  |dz|=0.103  6.1 it/s
+step  41800  L=0.1638  src=0.0840  tgt=0.0399  trans=0.0399  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  41850  L=0.3535  src=0.0542  tgt=0.1497  trans=0.1496  gain=+0.0000  |dz|=0.102  6.1 it/s
+step  41900  L=0.3357  src=0.0541  tgt=0.1408  trans=0.1408  gain=-0.0000  |dz|=0.106  6.1 it/s
+step  41950  L=0.0864  src=0.0507  tgt=0.0179  trans=0.0178  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  42000  L=0.0825  src=0.0316  tgt=0.0255  trans=0.0254  gain=+0.0001  |dz|=0.056  6.1 it/s
+  [diagnostics @ 42000] loss_correct=0.0696  loss_zero=0.0710  loss_shuffled=0.0721  loss_random=0.0713  loss_target_only=0.0696  loss_mean_z=0.0711  r_basis=0.0351  |dz_transport|=0.0834  z_s_vs_enc_rel=1.3782  z_spread_rel=1.1559  gain_vs_zero=0.0014  gain_vs_shuffled=0.0024  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0254  task_specific_frac=1.0687
+  saved /opt/ml/code/checkpoints/ctr128_off_step42000.pt
+step  42050  L=0.1333  src=0.0633  tgt=0.0350  trans=0.0350  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  42100  L=0.5555  src=0.0553  tgt=0.2501  trans=0.2501  gain=-0.0000  |dz|=0.102  6.1 it/s
+step  42150  L=0.1340  src=0.0607  tgt=0.0367  trans=0.0366  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  42200  L=0.0748  src=0.0195  tgt=0.0276  trans=0.0276  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  42250  L=0.2111  src=0.0531  tgt=0.0790  trans=0.0790  gain=-0.0000  |dz|=0.110  6.1 it/s
+step  42300  L=0.4045  src=0.0631  tgt=0.1707  trans=0.1707  gain=+0.0000  |dz|=0.109  6.1 it/s
+step  42350  L=0.1408  src=0.0585  tgt=0.0412  trans=0.0412  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  42400  L=0.0847  src=0.0450  tgt=0.0198  trans=0.0198  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  42450  L=0.4745  src=0.0606  tgt=0.2069  trans=0.2070  gain=-0.0000  |dz|=0.109  6.1 it/s
+step  42500  L=0.0801  src=0.0524  tgt=0.0138  trans=0.0139  gain=-0.0000  |dz|=0.094  6.1 it/s
+  [diagnostics @ 42500] loss_correct=0.0534  loss_zero=0.0547  loss_shuffled=0.0558  loss_random=0.0550  loss_target_only=0.0535  loss_mean_z=0.0546  r_basis=0.0337  |dz_transport|=0.0807  z_s_vs_enc_rel=1.3546  z_spread_rel=1.0549  gain_vs_zero=0.0013  gain_vs_shuffled=0.0023  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0249  task_specific_frac=0.9042
+step  42550  L=0.1153  src=0.0860  tgt=0.0146  trans=0.0147  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  42600  L=0.3507  src=0.0446  tgt=0.1531  trans=0.1530  gain=+0.0000  |dz|=0.105  6.1 it/s
+step  42650  L=0.1263  src=0.0688  tgt=0.0287  trans=0.0287  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  42700  L=0.1429  src=0.0668  tgt=0.0381  trans=0.0381  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  42750  L=0.1086  src=0.0503  tgt=0.0292  trans=0.0292  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  42800  L=0.3413  src=0.0672  tgt=0.1371  trans=0.1371  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  42850  L=0.0783  src=0.0378  tgt=0.0203  trans=0.0203  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  42900  L=0.1535  src=0.0649  tgt=0.0443  trans=0.0443  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  42950  L=0.0881  src=0.0496  tgt=0.0192  trans=0.0192  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  43000  L=0.0683  src=0.0350  tgt=0.0166  trans=0.0166  gain=-0.0001  |dz|=0.094  6.1 it/s
+  [diagnostics @ 43000] loss_correct=0.0539  loss_zero=0.0552  loss_shuffled=0.0566  loss_random=0.0555  loss_target_only=0.0539  loss_mean_z=0.0551  r_basis=0.0328  |dz_transport|=0.0816  z_s_vs_enc_rel=1.4042  z_spread_rel=1.1062  gain_vs_zero=0.0013  gain_vs_shuffled=0.0026  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0012  delta_task=0.0012  z_center_norm=0.0266  task_specific_frac=0.9318
+step  43050  L=0.2081  src=0.0711  tgt=0.0685  trans=0.0684  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  43100  L=0.1382  src=0.0364  tgt=0.0509  trans=0.0509  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  43150  L=0.0918  src=0.0340  tgt=0.0289  trans=0.0289  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  43200  L=0.1303  src=0.0591  tgt=0.0356  trans=0.0356  gain=+0.0000  |dz|=0.055  6.1 it/s
+step  43250  L=0.1002  src=0.0490  tgt=0.0256  trans=0.0256  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  43300  L=0.1468  src=0.0539  tgt=0.0465  trans=0.0464  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  43350  L=0.0754  src=0.0370  tgt=0.0192  trans=0.0192  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  43400  L=0.2330  src=0.0505  tgt=0.0913  trans=0.0912  gain=+0.0001  |dz|=0.054  6.1 it/s
+step  43450  L=0.0827  src=0.0262  tgt=0.0283  trans=0.0283  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  43500  L=0.3114  src=0.0255  tgt=0.1429  trans=0.1429  gain=+0.0000  |dz|=0.102  6.1 it/s
+  [diagnostics @ 43500] loss_correct=0.0825  loss_zero=0.0838  loss_shuffled=0.0857  loss_random=0.0841  loss_target_only=0.0825  loss_mean_z=0.0841  r_basis=0.0347  |dz_transport|=0.0854  z_s_vs_enc_rel=1.4524  z_spread_rel=1.2476  gain_vs_zero=0.0013  gain_vs_shuffled=0.0033  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0016  delta_task=0.0016  z_center_norm=0.0255  task_specific_frac=1.1880
+step  43550  L=0.0944  src=0.0467  tgt=0.0239  trans=0.0239  gain=+0.0001  |dz|=0.055  6.1 it/s
+step  43600  L=0.0720  src=0.0218  tgt=0.0251  trans=0.0251  gain=-0.0000  |dz|=0.092  6.1 it/s
+step  43650  L=0.1125  src=0.0399  tgt=0.0363  trans=0.0363  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  43700  L=0.4061  src=0.0668  tgt=0.1697  trans=0.1697  gain=+0.0000  |dz|=0.102  6.1 it/s
+step  43750  L=0.4109  src=0.0595  tgt=0.1757  trans=0.1757  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  43800  L=0.3415  src=0.0377  tgt=0.1518  trans=0.1519  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  43850  L=0.1059  src=0.0495  tgt=0.0281  trans=0.0282  gain=-0.0001  |dz|=0.054  6.1 it/s
+step  43900  L=0.1620  src=0.0540  tgt=0.0540  trans=0.0540  gain=+0.0000  |dz|=0.054  6.1 it/s
+step  43950  L=0.3627  src=0.0564  tgt=0.1532  trans=0.1531  gain=+0.0000  |dz|=0.101  6.1 it/s
+step  44000  L=0.2729  src=0.0345  tgt=0.1192  trans=0.1192  gain=+0.0000  |dz|=0.100  6.1 it/s
+  [diagnostics @ 44000] loss_correct=0.1007  loss_zero=0.1022  loss_shuffled=0.1033  loss_random=0.1025  loss_target_only=0.1007  loss_mean_z=0.1026  r_basis=0.0361  |dz_transport|=0.0892  z_s_vs_enc_rel=1.4985  z_spread_rel=1.1849  gain_vs_zero=0.0015  gain_vs_shuffled=0.0026  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0019  delta_task=0.0019  z_center_norm=0.0245  task_specific_frac=1.2881
+  saved /opt/ml/code/checkpoints/ctr128_off_step44000.pt
+step  44050  L=0.3920  src=0.0512  tgt=0.1704  trans=0.1704  gain=-0.0000  |dz|=0.098  6.1 it/s
+step  44100  L=0.1110  src=0.0706  tgt=0.0202  trans=0.0202  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  44150  L=0.3137  src=0.0598  tgt=0.1270  trans=0.1269  gain=+0.0000  |dz|=0.101  6.1 it/s
+step  44200  L=0.1179  src=0.0610  tgt=0.0284  trans=0.0285  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  44250  L=0.0941  src=0.0506  tgt=0.0218  trans=0.0218  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  44300  L=0.0927  src=0.0631  tgt=0.0148  trans=0.0148  gain=+0.0000  |dz|=0.053  6.1 it/s
+step  44350  L=0.2782  src=0.0343  tgt=0.1219  trans=0.1219  gain=-0.0001  |dz|=0.099  6.1 it/s
+step  44400  L=0.0614  src=0.0316  tgt=0.0149  trans=0.0148  gain=+0.0001  |dz|=0.092  6.1 it/s
+step  44450  L=0.1241  src=0.0551  tgt=0.0345  trans=0.0345  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  44500  L=0.3307  src=0.0405  tgt=0.1451  trans=0.1451  gain=+0.0000  |dz|=0.102  6.1 it/s
+  [diagnostics @ 44500] loss_correct=0.0616  loss_zero=0.0628  loss_shuffled=0.0633  loss_random=0.0631  loss_target_only=0.0616  loss_mean_z=0.0628  r_basis=0.0324  |dz_transport|=0.0763  z_s_vs_enc_rel=1.3166  z_spread_rel=1.1328  gain_vs_zero=0.0012  gain_vs_shuffled=0.0017  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0011  delta_task=0.0011  z_center_norm=0.0254  task_specific_frac=0.9681
+step  44550  L=0.3932  src=0.0292  tgt=0.1820  trans=0.1820  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  44600  L=0.0991  src=0.0522  tgt=0.0235  trans=0.0235  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  44650  L=0.3035  src=0.0505  tgt=0.1265  trans=0.1265  gain=+0.0000  |dz|=0.101  6.1 it/s
+step  44700  L=0.3453  src=0.0671  tgt=0.1391  trans=0.1391  gain=+0.0000  |dz|=0.101  6.1 it/s
+step  44750  L=0.3735  src=0.0625  tgt=0.1555  trans=0.1555  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  44800  L=0.4042  src=0.0432  tgt=0.1806  trans=0.1805  gain=+0.0001  |dz|=0.111  6.1 it/s
+step  44850  L=0.3312  src=0.0405  tgt=0.1454  trans=0.1454  gain=-0.0000  |dz|=0.128  6.1 it/s
+step  44900  L=0.1029  src=0.0675  tgt=0.0177  trans=0.0177  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  44950  L=0.2864  src=0.0397  tgt=0.1234  trans=0.1233  gain=+0.0000  |dz|=0.116  6.1 it/s
+step  45000  L=0.1016  src=0.0542  tgt=0.0237  trans=0.0237  gain=-0.0000  |dz|=0.057  6.1 it/s
+  [diagnostics @ 45000] loss_correct=0.0611  loss_zero=0.0624  loss_shuffled=0.0642  loss_random=0.0627  loss_target_only=0.0611  loss_mean_z=0.0624  r_basis=0.0338  |dz_transport|=0.0815  z_s_vs_enc_rel=1.3609  z_spread_rel=1.1530  gain_vs_zero=0.0013  gain_vs_shuffled=0.0031  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0256  task_specific_frac=1.0045
+step  45050  L=0.4049  src=0.0491  tgt=0.1779  trans=0.1779  gain=-0.0000  |dz|=0.113  6.1 it/s
+step  45100  L=0.0974  src=0.0649  tgt=0.0163  trans=0.0162  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  45150  L=0.4245  src=0.0503  tgt=0.1871  trans=0.1871  gain=-0.0000  |dz|=0.110  6.1 it/s
+step  45200  L=0.0981  src=0.0473  tgt=0.0254  trans=0.0253  gain=+0.0001  |dz|=0.056  6.1 it/s
+step  45250  L=0.1663  src=0.1118  tgt=0.0272  trans=0.0272  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  45300  L=0.1392  src=0.0742  tgt=0.0325  trans=0.0325  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  45350  L=0.0910  src=0.0561  tgt=0.0175  trans=0.0175  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  45400  L=0.1164  src=0.0608  tgt=0.0278  trans=0.0278  gain=-0.0000  |dz|=0.090  6.1 it/s
+step  45450  L=0.1030  src=0.0616  tgt=0.0207  trans=0.0207  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  45500  L=0.3920  src=0.0705  tgt=0.1607  trans=0.1607  gain=+0.0000  |dz|=0.105  6.1 it/s
+  [diagnostics @ 45500] loss_correct=0.1086  loss_zero=0.1101  loss_shuffled=0.1107  loss_random=0.1105  loss_target_only=0.1086  loss_mean_z=0.1107  r_basis=0.0386  |dz_transport|=0.0946  z_s_vs_enc_rel=1.5680  z_spread_rel=1.1399  gain_vs_zero=0.0016  gain_vs_shuffled=0.0021  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0022  delta_task=0.0022  z_center_norm=0.0269  task_specific_frac=1.3750
+step  45550  L=0.0852  src=0.0396  tgt=0.0228  trans=0.0228  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  45600  L=0.1088  src=0.0492  tgt=0.0298  trans=0.0298  gain=+0.0001  |dz|=0.058  6.1 it/s
+step  45650  L=0.1134  src=0.0632  tgt=0.0251  trans=0.0251  gain=+0.0000  |dz|=0.091  6.1 it/s
+step  45700  L=0.0972  src=0.0511  tgt=0.0231  trans=0.0231  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  45750  L=0.0936  src=0.0314  tgt=0.0311  trans=0.0311  gain=-0.0000  |dz|=0.091  6.1 it/s
+step  45800  L=0.3919  src=0.0573  tgt=0.1673  trans=0.1673  gain=-0.0000  |dz|=0.106  6.1 it/s
+step  45850  L=0.1071  src=0.0537  tgt=0.0267  trans=0.0267  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  45900  L=0.1020  src=0.0515  tgt=0.0253  trans=0.0252  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  45950  L=0.1051  src=0.0414  tgt=0.0319  trans=0.0319  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  46000  L=0.3724  src=0.0388  tgt=0.1668  trans=0.1668  gain=-0.0000  |dz|=0.101  6.1 it/s
+  [diagnostics @ 46000] loss_correct=0.0620  loss_zero=0.0633  loss_shuffled=0.0643  loss_random=0.0637  loss_target_only=0.0621  loss_mean_z=0.0633  r_basis=0.0335  |dz_transport|=0.0806  z_s_vs_enc_rel=1.3613  z_spread_rel=1.1605  gain_vs_zero=0.0013  gain_vs_shuffled=0.0023  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0013  delta_task=0.0013  z_center_norm=0.0260  task_specific_frac=0.9920
+  saved /opt/ml/code/checkpoints/ctr128_off_step46000.pt
+step  46050  L=0.0761  src=0.0314  tgt=0.0224  trans=0.0223  gain=+0.0002  |dz|=0.058  6.1 it/s
+step  46100  L=0.1354  src=0.0548  tgt=0.0403  trans=0.0403  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  46150  L=0.0747  src=0.0292  tgt=0.0228  trans=0.0228  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  46200  L=0.0958  src=0.0494  tgt=0.0232  trans=0.0232  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  46250  L=0.1103  src=0.0555  tgt=0.0274  trans=0.0274  gain=+0.0000  |dz|=0.093  6.1 it/s
+step  46300  L=0.0765  src=0.0486  tgt=0.0140  trans=0.0140  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  46350  L=0.1012  src=0.0264  tgt=0.0374  trans=0.0374  gain=+0.0000  |dz|=0.059  6.1 it/s
+step  46400  L=0.1335  src=0.0782  tgt=0.0276  trans=0.0276  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  46450  L=0.3303  src=0.0381  tgt=0.1461  trans=0.1461  gain=+0.0000  |dz|=0.102  6.1 it/s
+step  46500  L=0.3037  src=0.0488  tgt=0.1275  trans=0.1274  gain=+0.0001  |dz|=0.101  6.1 it/s
+  [diagnostics @ 46500] loss_correct=0.0769  loss_zero=0.0783  loss_shuffled=0.0799  loss_random=0.0786  loss_target_only=0.0769  loss_mean_z=0.0784  r_basis=0.0351  |dz_transport|=0.0848  z_s_vs_enc_rel=1.4214  z_spread_rel=1.2103  gain_vs_zero=0.0014  gain_vs_shuffled=0.0031  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0015  delta_task=0.0015  z_center_norm=0.0242  task_specific_frac=1.1088
+step  46550  L=0.0739  src=0.0269  tgt=0.0235  trans=0.0235  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  46600  L=0.3996  src=0.0834  tgt=0.1581  trans=0.1581  gain=-0.0000  |dz|=0.101  6.1 it/s
+step  46650  L=0.4072  src=0.0444  tgt=0.1814  trans=0.1814  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  46700  L=0.1015  src=0.0424  tgt=0.0295  trans=0.0295  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  46750  L=0.0940  src=0.0393  tgt=0.0273  trans=0.0273  gain=-0.0000  |dz|=0.095  6.1 it/s
+step  46800  L=0.3532  src=0.0343  tgt=0.1594  trans=0.1595  gain=-0.0000  |dz|=0.103  6.1 it/s
+step  46850  L=0.1555  src=0.0965  tgt=0.0295  trans=0.0295  gain=-0.0000  |dz|=0.097  6.1 it/s
+step  46900  L=0.1300  src=0.0625  tgt=0.0338  trans=0.0337  gain=+0.0001  |dz|=0.095  6.1 it/s
+step  46950  L=0.0803  src=0.0411  tgt=0.0196  trans=0.0196  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  47000  L=0.0933  src=0.0473  tgt=0.0230  trans=0.0230  gain=-0.0000  |dz|=0.058  6.1 it/s
+  [diagnostics @ 47000] loss_correct=0.0750  loss_zero=0.0765  loss_shuffled=0.0781  loss_random=0.0768  loss_target_only=0.0750  loss_mean_z=0.0767  r_basis=0.0368  |dz_transport|=0.0895  z_s_vs_enc_rel=1.5155  z_spread_rel=1.1695  gain_vs_zero=0.0015  gain_vs_shuffled=0.0031  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0017  delta_task=0.0017  z_center_norm=0.0263  task_specific_frac=1.0957
+step  47050  L=0.0759  src=0.0371  tgt=0.0195  trans=0.0194  gain=+0.0000  |dz|=0.094  6.1 it/s
+step  47100  L=0.1076  src=0.0395  tgt=0.0341  trans=0.0340  gain=+0.0001  |dz|=0.058  6.1 it/s
+step  47150  L=0.0877  src=0.0439  tgt=0.0219  trans=0.0219  gain=-0.0000  |dz|=0.093  6.1 it/s
+step  47200  L=0.1605  src=0.0745  tgt=0.0430  trans=0.0430  gain=+0.0001  |dz|=0.058  6.1 it/s
+step  47250  L=0.1048  src=0.0732  tgt=0.0159  trans=0.0158  gain=+0.0001  |dz|=0.057  6.1 it/s
+step  47300  L=0.3243  src=0.0559  tgt=0.1342  trans=0.1342  gain=+0.0000  |dz|=0.103  6.1 it/s
+step  47350  L=0.1041  src=0.0362  tgt=0.0340  trans=0.0339  gain=+0.0001  |dz|=0.058  6.1 it/s
+step  47400  L=0.1347  src=0.0649  tgt=0.0349  trans=0.0348  gain=+0.0001  |dz|=0.056  6.1 it/s
+step  47450  L=0.2270  src=0.0354  tgt=0.0958  trans=0.0958  gain=+0.0000  |dz|=0.138  6.1 it/s
+step  47500  L=0.2864  src=0.0430  tgt=0.1217  trans=0.1217  gain=+0.0000  |dz|=0.134  6.1 it/s
+  [diagnostics @ 47500] loss_correct=0.0904  loss_zero=0.0919  loss_shuffled=0.0939  loss_random=0.0922  loss_target_only=0.0904  loss_mean_z=0.0923  r_basis=0.0362  |dz_transport|=0.0883  z_s_vs_enc_rel=1.4245  z_spread_rel=1.2260  gain_vs_zero=0.0015  gain_vs_shuffled=0.0035  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0019  delta_task=0.0019  z_center_norm=0.0267  task_specific_frac=1.2789
+step  47550  L=0.0934  src=0.0251  tgt=0.0342  trans=0.0342  gain=-0.0000  |dz|=0.056  6.1 it/s
+step  47600  L=0.1127  src=0.0575  tgt=0.0276  trans=0.0276  gain=+0.0000  |dz|=0.096  6.1 it/s
+step  47650  L=0.0952  src=0.0551  tgt=0.0201  trans=0.0200  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  47700  L=0.3875  src=0.0710  tgt=0.1582  trans=0.1582  gain=-0.0000  |dz|=0.121  6.1 it/s
+step  47750  L=0.1238  src=0.0697  tgt=0.0270  trans=0.0271  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  47800  L=0.0783  src=0.0420  tgt=0.0182  trans=0.0181  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  47850  L=0.1213  src=0.0440  tgt=0.0387  trans=0.0386  gain=+0.0000  |dz|=0.058  6.1 it/s
+step  47900  L=0.4797  src=0.0490  tgt=0.2154  trans=0.2153  gain=+0.0000  |dz|=0.115  6.1 it/s
+step  47950  L=0.1013  src=0.0510  tgt=0.0252  trans=0.0252  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  48000  L=0.1035  src=0.0462  tgt=0.0287  trans=0.0287  gain=+0.0000  |dz|=0.095  6.1 it/s
+  [diagnostics @ 48000] loss_correct=0.0912  loss_zero=0.0931  loss_shuffled=0.0955  loss_random=0.0935  loss_target_only=0.0913  loss_mean_z=0.0935  r_basis=0.0398  |dz_transport|=0.0951  z_s_vs_enc_rel=1.5159  z_spread_rel=1.2094  gain_vs_zero=0.0018  gain_vs_shuffled=0.0042  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.0259  task_specific_frac=1.2232
+  saved /opt/ml/code/checkpoints/ctr128_off_step48000.pt
+step  48050  L=0.0753  src=0.0369  tgt=0.0192  trans=0.0192  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  48100  L=0.1279  src=0.0490  tgt=0.0395  trans=0.0394  gain=+0.0001  |dz|=0.057  6.1 it/s
+step  48150  L=0.0558  src=0.0219  tgt=0.0170  trans=0.0169  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  48200  L=0.4157  src=0.0617  tgt=0.1770  trans=0.1770  gain=+0.0000  |dz|=0.115  6.1 it/s
+step  48250  L=0.4862  src=0.0629  tgt=0.2117  trans=0.2117  gain=+0.0000  |dz|=0.114  6.1 it/s
+step  48300  L=0.1127  src=0.0657  tgt=0.0235  trans=0.0235  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  48350  L=0.0845  src=0.0380  tgt=0.0232  trans=0.0232  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  48400  L=0.3018  src=0.0382  tgt=0.1318  trans=0.1318  gain=-0.0000  |dz|=0.113  6.1 it/s
+step  48450  L=0.3832  src=0.0483  tgt=0.1675  trans=0.1674  gain=+0.0000  |dz|=0.113  6.1 it/s
+step  48500  L=0.1150  src=0.0260  tgt=0.0445  trans=0.0445  gain=+0.0000  |dz|=0.057  6.1 it/s
+  [diagnostics @ 48500] loss_correct=0.0813  loss_zero=0.0829  loss_shuffled=0.0844  loss_random=0.0832  loss_target_only=0.0814  loss_mean_z=0.0832  r_basis=0.0368  |dz_transport|=0.0873  z_s_vs_enc_rel=1.4204  z_spread_rel=1.2217  gain_vs_zero=0.0016  gain_vs_shuffled=0.0030  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0018  delta_task=0.0018  z_center_norm=0.0267  task_specific_frac=1.1789
+step  48550  L=0.4650  src=0.0452  tgt=0.2099  trans=0.2098  gain=+0.0001  |dz|=0.109  6.1 it/s
+step  48600  L=0.1413  src=0.0464  tgt=0.0474  trans=0.0474  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  48650  L=0.0559  src=0.0199  tgt=0.0180  trans=0.0180  gain=-0.0000  |dz|=0.057  6.1 it/s
+step  48700  L=0.3144  src=0.0465  tgt=0.1340  trans=0.1339  gain=+0.0000  |dz|=0.109  6.1 it/s
+step  48750  L=0.5315  src=0.0547  tgt=0.2384  trans=0.2383  gain=+0.0000  |dz|=0.110  6.1 it/s
+step  48800  L=0.0675  src=0.0348  tgt=0.0163  trans=0.0163  gain=+0.0000  |dz|=0.098  6.1 it/s
+step  48850  L=0.0854  src=0.0211  tgt=0.0321  trans=0.0321  gain=+0.0000  |dz|=0.056  6.1 it/s
+step  48900  L=0.0472  src=0.0168  tgt=0.0153  trans=0.0152  gain=+0.0001  |dz|=0.056  6.1 it/s
+step  48950  L=0.0903  src=0.0510  tgt=0.0196  trans=0.0197  gain=-0.0000  |dz|=0.097  6.1 it/s
+step  49000  L=0.1652  src=0.0660  tgt=0.0496  trans=0.0496  gain=+0.0000  |dz|=0.057  6.1 it/s
+  [diagnostics @ 49000] loss_correct=0.0636  loss_zero=0.0650  loss_shuffled=0.0662  loss_random=0.0653  loss_target_only=0.0636  loss_mean_z=0.0650  r_basis=0.0340  |dz_transport|=0.0817  z_s_vs_enc_rel=1.3641  z_spread_rel=1.1495  gain_vs_zero=0.0014  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0014  delta_task=0.0014  z_center_norm=0.0286  task_specific_frac=1.0257
+step  49050  L=0.1240  src=0.0602  tgt=0.0320  trans=0.0318  gain=+0.0001  |dz|=0.056  6.1 it/s
+step  49100  L=0.3241  src=0.0402  tgt=0.1419  trans=0.1419  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  49150  L=0.1398  src=0.0750  tgt=0.0324  trans=0.0324  gain=-0.0000  |dz|=0.096  6.1 it/s
+step  49200  L=0.4058  src=0.0891  tgt=0.1583  trans=0.1583  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  49250  L=0.3786  src=0.0467  tgt=0.1660  trans=0.1660  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  49300  L=0.1017  src=0.0445  tgt=0.0286  trans=0.0286  gain=-0.0000  |dz|=0.094  6.1 it/s
+step  49350  L=0.0775  src=0.0403  tgt=0.0186  trans=0.0185  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  49400  L=0.1464  src=0.0496  tgt=0.0484  trans=0.0484  gain=+0.0001  |dz|=0.058  6.1 it/s
+step  49450  L=0.1167  src=0.0606  tgt=0.0281  trans=0.0280  gain=+0.0000  |dz|=0.092  6.1 it/s
+step  49500  L=0.0917  src=0.0477  tgt=0.0220  trans=0.0220  gain=+0.0000  |dz|=0.057  6.1 it/s
+  [diagnostics @ 49500] loss_correct=0.0780  loss_zero=0.0796  loss_shuffled=0.0812  loss_random=0.0799  loss_target_only=0.0780  loss_mean_z=0.0798  r_basis=0.0365  |dz_transport|=0.0894  z_s_vs_enc_rel=1.4559  z_spread_rel=1.2088  gain_vs_zero=0.0016  gain_vs_shuffled=0.0032  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0018  delta_task=0.0018  z_center_norm=0.0277  task_specific_frac=1.1293
+step  49550  L=0.5421  src=0.0460  tgt=0.2480  trans=0.2481  gain=-0.0000  |dz|=0.107  6.1 it/s
+step  49600  L=0.4388  src=0.0879  tgt=0.1755  trans=0.1754  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  49650  L=0.0912  src=0.0386  tgt=0.0263  trans=0.0263  gain=+0.0000  |dz|=0.096  6.1 it/s
+step  49700  L=0.1156  src=0.0679  tgt=0.0238  trans=0.0238  gain=-0.0000  |dz|=0.058  6.1 it/s
+step  49750  L=0.0998  src=0.0463  tgt=0.0268  trans=0.0267  gain=+0.0000  |dz|=0.095  6.1 it/s
+step  49800  L=0.4550  src=0.0752  tgt=0.1899  trans=0.1899  gain=+0.0000  |dz|=0.108  6.1 it/s
+step  49850  L=0.1466  src=0.0792  tgt=0.0337  trans=0.0337  gain=+0.0000  |dz|=0.057  6.1 it/s
+step  49900  L=0.2590  src=0.0273  tgt=0.1158  trans=0.1158  gain=+0.0000  |dz|=0.106  6.1 it/s
+step  49950  L=0.1168  src=0.0739  tgt=0.0215  trans=0.0214  gain=+0.0001  |dz|=0.058  6.1 it/s
+step  50000  L=0.0936  src=0.0441  tgt=0.0248  trans=0.0248  gain=-0.0000  |dz|=0.093  6.1 it/s
+  [diagnostics @ 50000] loss_correct=0.0667  loss_zero=0.0681  loss_shuffled=0.0698  loss_random=0.0684  loss_target_only=0.0667  loss_mean_z=0.0682  r_basis=0.0352  |dz_transport|=0.0845  z_s_vs_enc_rel=1.3439  z_spread_rel=1.2009  gain_vs_zero=0.0014  gain_vs_shuffled=0.0031  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0015  delta_task=0.0015  z_center_norm=0.0274  task_specific_frac=1.0796
+  saved /opt/ml/code/checkpoints/ctr128_off_step50000.pt
+
+done in 136.4 min. log: /opt/ml/code/checkpoints/ctr128_off_log.jsonl

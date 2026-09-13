@@ -38,7 +38,7 @@ class EMA:
         self.modules = modules
         self.shadow = [
             {k: v.detach().clone().float() for k, v in m.state_dict().items()
-             if v.is_floating_point()}
+             if v.is_floating_point() and not k.endswith("z_center")}  # E13: z_center drifts -- do not double-smooth it
             for m in modules
         ]
 
@@ -93,7 +93,8 @@ def build(
     sched = NoiseSchedule(cfg.diffusion.n_steps, cfg.diffusion.schedule)
     backbone = build_backbone(cfg.model.backbone, **cfg.model.backbone_kwargs)
     model = model_cls(backbone, sched, k=cfg.model.k,
-                      basis_init_scale=cfg.model.basis_init_scale).to(device)
+                      basis_init_scale=cfg.model.basis_init_scale,
+                      center_coords=cfg.model.center_coords).to(device)
     encoder = SetEncoder(
         image_channels=backbone.spec.image_channels, image_size=backbone.spec.image_size,
         width=cfg.model.encoder_width, feature_dim=cfg.model.encoder_feature_dim,
@@ -223,11 +224,13 @@ def train(cfg: BaseConfig, model_cls: type[ScoreModel] = ScoreModel) -> str:
                     mm.eval()
                 with ema.applied():                       # diagnostics read EMA weights
                     rep = run_diagnostics(model, encoder, transport,
-                                          diag_loader.sample_many(8), cfg)
+                                          diag_loader.sample_many(cfg.train.diag_episodes),
+                                          cfg, n_draws=cfg.train.diag_noise_draws)
                 for mm in modules:
                     mm.train()
                 print(f"  [diagnostics @ {step}] {rep.format()}")
                 logf.write(json.dumps({"step": step, "diagnostics": rep.values,
+                                       "diagnostics_per_episode": rep.series,
                                        "warnings": rep.warnings}) + "\n")
                 logf.flush()
 

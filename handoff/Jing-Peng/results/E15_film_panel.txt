@@ -1,0 +1,20 @@
+E15 — Generic latent conditioning (FiLM) vs the structured additive basis
+==============================================================================
+Same SetEncoder / Transport / k=16 / 128-channel backbone / 50k steps / centring off.
+Only the conditioning differs:
+  basis (ctr128_off): eps_hat = eps_hat_0 + sum_l z_l R_l(x,t)      [equation 21]
+  FiLM  (film128)   : z folded into the timestep embedding of the U-Net
+
+Values shown as  final (last-20%-mean)   [EMA weights].
+
+   metric                   basis(ctr128_off)   FiLM(film128)
+   loss_correct                       +0.0667         +0.0703
+   gain_vs_zero                       +0.0014         +0.0084
+   delta_task                         +0.0015         +0.0098
+   gain_vs_mean_z                     +0.0015         +0.0098
+   gain_vs_shuffled                   +0.0031         +0.0302
+   r_basis                            +0.0352         +0.0688
+
+   reading (lower loss_correct is better): basis beats FiLM (basis 0.0667 vs FiLM 0.0703).
+   coordinate usefulness (gain_vs_zero): basis +0.0014 vs FiLM +0.0084.
+

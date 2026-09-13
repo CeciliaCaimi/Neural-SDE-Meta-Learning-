@@ -111,6 +111,23 @@ def main() -> int:
     record(f"a one-hot z selects basis direction {ell}",
            torch.allclose(r_hot, R[:, ell], atol=1e-6))
 
+    # ---- 4b. Centred parameterisation (E13): the identity becomes eps_hat(z_center) == eps_hat_0 ----
+    print("\n[4b] centred coordinates (E13)  eps_hat(z_center) == eps_hat_0")
+    model_c = ScoreModel(SmallUNet(image_channels=C, image_size=S), sched, k=K,
+                         center_coords=True).eval()
+    with torch.no_grad():
+        zc = torch.randn(K)
+        model_c.z_center.copy_(zc)
+        feats_c = model_c.features(nb.x_t, t)
+        base_c = model_c.eps_base(nb.x_t, t, feats_c)
+        e_at_center = model_c.eps_hat(nb.x_t, t, zc.unsqueeze(0).expand(B, -1))
+        e_at_zero_c = model_c.eps_hat(nb.x_t, t, None)
+    record("under centring, eps_hat(z_center) == eps_hat_0 (the null moves to z_center)",
+           torch.allclose(e_at_center, base_c, atol=1e-6),
+           f"max deviation {(e_at_center - base_c).abs().max().item():.2e}")
+    record("under centring, z=0 is an off-centre perturbation (differs from eps_hat_0)",
+           not torch.allclose(e_at_zero_c, base_c, atol=1e-6))
+
     # ---- 5. Diagnostic quantities ----
     print("\n[5] the r_basis diagnostic (section 15)")
     with torch.no_grad():

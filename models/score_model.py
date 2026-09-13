@@ -32,6 +32,7 @@ class ScoreModel(nn.Module):
         basis_init_scale: float = 1e-3,
         coord_decoder: str = "linear",
         decoder_hidden: int = 64,
+        center_coords: bool = False,
     ) -> None:
         super().__init__()
         if k <= 0:
@@ -39,6 +40,12 @@ class ScoreModel(nn.Module):
         self.backbone = backbone
         self.schedule = schedule
         self.k = int(k)
+        # E13: centred coordinates z = z_center + delta_z. z_center is a running mean
+        # (EMA, see update_center) held as a buffer -- no gradient path. When
+        # center_coords is on, _prepare_z subtracts it so the shared offset lives in the
+        # frozen predictor and the basis carries only the task-specific part.
+        self.center_coords = bool(center_coords)
+        self.register_buffer("z_center", torch.zeros(self.k))
 
         # Coordinate decoder h_eta. The matched comparison required by section 3.1:
         #     linear    : Delta_s = B(x,t) z         -- default; the claim of the paper
@@ -116,9 +123,28 @@ class ScoreModel(nn.Module):
             if z.shape != (batch, self.k):
                 raise ValueError(f"z should have shape ({batch}, {self.k}), got {tuple(z.shape)}")
             zz = z.to(device=device, dtype=dtype)
+        if self.center_coords:
+            # E13: absorb the shared offset. z_center is a buffer (no gradient path); under
+            # centring the null coordinate is z = z_center, which makes the basis term vanish.
+            zz = zz - self.z_center.to(device=device, dtype=dtype)
         if self.coord_decoder is None:
             return zz
         return zz + zz * self.coord_decoder(zz)      # h_η(0) = 0
+
+    @torch.no_grad()
+    def update_center(self, *coords: Tensor, decay: float = 0.99) -> None:
+        """E13: EMA of the mean training coordinate into the ``z_center`` buffer.
+
+        Tracked on every run (centred or not) so the mean-coordinate control -- the
+        substitution that strips task-specific content while keeping the common offset --
+        reads a running mean over training episodes rather than the current diagnostic
+        batch. No gradient path.
+        """
+        if not coords:
+            return
+        stacked = torch.stack([c.detach().reshape(self.k).float() for c in coords])
+        batch_mean = stacked.mean(dim=0)
+        self.z_center.mul_(decay).add_(batch_mean.to(self.z_center), alpha=1.0 - decay)
 
     def eps_hat(self, x_t: Tensor, t: Tensor, z: Tensor | None = None) -> Tensor:
         """Equation (21). One backbone pass, shared by both heads."""

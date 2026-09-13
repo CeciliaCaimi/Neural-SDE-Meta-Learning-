@@ -192,6 +192,11 @@ class SmallUNet(DiffusionBackbone):
 
     def forward_features(self, x_t: Tensor, t: Tensor) -> Tensor:
         temb = self.time_mlp(timestep_embedding(t, self.base_channels))
+        return self._trunk(x_t, temb)
+
+    def _trunk(self, x_t: Tensor, temb: Tensor) -> Tensor:
+        """The U-Net body given an already-built time embedding. Factored out so a
+        conditioning variant (see models/film_unet.py) can fold z into temb and reuse it."""
         h = self.conv_in(x_t)
         skips = [h]
         for stage in self.downs:

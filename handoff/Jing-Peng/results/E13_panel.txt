@@ -1,0 +1,37 @@
+E13 — Centred coordinates:  z = z_center + delta_z
+==============================================================================
+Question: does moving the shared offset into z_center (a running EMA mean,
+subtracted before the basis) raise the *task-specific* benefit of the coordinate?
+
+Primary metric  delta_task = L(z=running-mean) - L(z=correct)   [EMA weights]
+  > 0 means the correct coordinate beats its own mean, i.e. real task-specific signal.
+Values shown as  final (last-20%-mean).  gain_vs_zero/r_basis are sanity controls.
+
+------------------------------------------------------------------------------
+32-channel backbone   (k=32, base_channels=32, 60k steps)
+   metric                         off          on     Δ(on-off)
+   delta_task                 +0.0025     +0.0022       -0.0002
+   gain_vs_mean_z             +0.0025     +0.0022       -0.0002
+   task_specific_frac         +0.0402     +0.2350       +0.1948
+   gain_vs_zero               +0.0616     +0.0095       -0.0521
+   r_basis                    +0.3390     +0.0388       -0.3002
+   z_center_norm              +0.2228     +0.4170       +0.1942
+   loss_correct               +0.0728     +0.0729       +0.0001
+   per-episode delta_task off: mean +0.0025 ± 0.0017  [+0.0003, +0.0061] n=24
+   per-episode delta_task on : mean +0.0022 ± 0.0015  [+0.0004, +0.0052] n=24
+   reading: centring does NOT raise delta_task: +0.0025 -> +0.0022 (Δ -0.0002).
+
+------------------------------------------------------------------------------
+128-channel backbone   (k=16, base_channels=128, 50k steps)
+   metric                         off          on     Δ(on-off)
+   delta_task                 +0.0015     +0.0013       -0.0002
+   gain_vs_mean_z             +0.0015     +0.0013       -0.0002
+   task_specific_frac         +1.0796     +0.0392       -1.0404
+   gain_vs_zero               +0.0014     +0.0322       +0.0308
+   r_basis                    +0.0352     +0.0306       -0.0046
+   z_center_norm              +0.0274     +0.6984       +0.6710
+   loss_correct               +0.0667     +0.0667       +0.0000
+   per-episode delta_task off: mean +0.0015 ± 0.0013  [+0.0002, +0.0041] n=24
+   per-episode delta_task on : mean +0.0013 ± 0.0013  [+0.0002, +0.0039] n=24
+   reading: centring does NOT raise delta_task: +0.0015 -> +0.0013 (Δ -0.0002).
+

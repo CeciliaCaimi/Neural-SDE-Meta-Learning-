@@ -28,6 +28,8 @@ def parse() -> argparse.Namespace:
     p.add_argument("--run-name", type=str, default=None)
     p.add_argument("--device", type=str, default=None)
     p.add_argument("--no-amp", action="store_true")
+    p.add_argument("--center-coords", action="store_true",
+                   help="E13: centred coordinates z = z_center + delta_z (absorb the shared offset)")
     p.add_argument("--ckpt-every", type=int, default=None)
     p.add_argument("--diagnose-every", type=int, default=None)
     p.add_argument("--pooling", choices=("mean", "mean_std"), default=None,
@@ -48,8 +50,7 @@ def parse() -> argparse.Namespace:
     return p.parse_args()
 
 
-def main() -> None:
-    a = parse()
+def configure(a: argparse.Namespace) -> BaseConfig:
     cfg = BaseConfig()
 
     if a.smoke:
@@ -82,6 +83,8 @@ def main() -> None:
         cfg.device = a.device
     if a.no_amp:
         cfg.train.amp = False
+    if a.center_coords:
+        cfg.model.center_coords = True
     if a.ckpt_every is not None:
         cfg.train.ckpt_every = a.ckpt_every
     if a.diagnose_every is not None:
@@ -112,7 +115,11 @@ def main() -> None:
     if not os.path.isabs(cfg.train.ckpt_dir):
         cfg.train.ckpt_dir = os.path.join(_ROOT, cfg.train.ckpt_dir)
 
-    train(cfg)
+    return cfg
+
+
+def main() -> None:
+    train(configure(parse()))
 
 
 if __name__ == "__main__":

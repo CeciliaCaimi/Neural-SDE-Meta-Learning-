@@ -1,0 +1,1483 @@
+device cuda | backbone small_unet | k=32
+φ 0.73M + encoder 0.33M + transport 8.9K
+training episode combinations 900 | 60000 steps
+
+step      1  L=3.5378  src=1.1711  tgt=1.1834  trans=1.1833  gain=+0.0000  |dz|=0.019  0.7 it/s
+step     50  L=2.9150  src=0.9731  tgt=0.9693  trans=0.9725  gain=-0.0033  |dz|=0.025  11.8 it/s
+step    100  L=0.9223  src=0.2837  tgt=0.3176  trans=0.3182  gain=-0.0005  |dz|=0.085  14.3 it/s
+step    150  L=0.5570  src=0.2396  tgt=0.1573  trans=0.1575  gain=-0.0001  |dz|=0.059  15.4 it/s
+step    200  L=0.5134  src=0.1384  tgt=0.1866  trans=0.1859  gain=+0.0006  |dz|=0.053  15.9 it/s
+step    250  L=0.3076  src=0.1199  tgt=0.0926  trans=0.0927  gain=-0.0000  |dz|=0.044  16.3 it/s
+step    300  L=0.3319  src=0.1627  tgt=0.0836  trans=0.0835  gain=+0.0000  |dz|=0.043  16.6 it/s
+step    350  L=0.4746  src=0.0751  tgt=0.1993  trans=0.1984  gain=+0.0009  |dz|=0.145  16.8 it/s
+step    400  L=0.5984  src=0.1168  tgt=0.2400  trans=0.2398  gain=+0.0002  |dz|=0.179  16.9 it/s
+step    450  L=0.6387  src=0.2594  tgt=0.1897  trans=0.1880  gain=+0.0017  |dz|=0.155  17.0 it/s
+step    500  L=0.2810  src=0.1139  tgt=0.0826  trans=0.0830  gain=-0.0004  |dz|=0.062  17.1 it/s
+  [diagnostics @ 500] loss_correct=0.8146  loss_zero=0.9570  loss_shuffled=0.8147  loss_random=0.9569  loss_target_only=0.8105  loss_mean_z=0.6143  r_basis=0.2844  |dz_transport|=0.0331  z_s_vs_enc_rel=0.0778  z_spread_rel=0.0400  gain_vs_zero=0.1424  gain_vs_shuffled=0.0000  gain_vs_target_only=-0.0041  gain_vs_mean_z=-0.2003  delta_task=-0.2003  z_center_norm=2.8776  task_specific_frac=-1.4073
+    ⚠ gain_vs_zero=0.1424 looks healthy but only -140.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+    ⚠ coordinate collapse: relative spacing of z across episodes is only 0.040 (threshold 0.05) -- the encoder emits a near-constant, so gain_vs_zero reflects the basis acting as shared capacity, not task specificity
+step    550  L=0.2073  src=0.1200  tgt=0.0430  trans=0.0430  gain=+0.0001  |dz|=0.073  16.4 it/s
+step    600  L=0.5309  src=0.0676  tgt=0.2335  trans=0.2285  gain=+0.0050  |dz|=0.152  16.6 it/s
+step    650  L=0.5491  src=0.0860  tgt=0.2321  trans=0.2300  gain=+0.0020  |dz|=0.193  16.7 it/s
+step    700  L=0.4219  src=0.0571  tgt=0.1813  trans=0.1824  gain=-0.0011  |dz|=0.153  16.8 it/s
+step    750  L=0.5451  src=0.0532  tgt=0.2470  trans=0.2439  gain=+0.0030  |dz|=0.175  16.9 it/s
+step    800  L=0.1943  src=0.1264  tgt=0.0335  trans=0.0334  gain=+0.0002  |dz|=0.061  17.0 it/s
+step    850  L=0.1382  src=0.0671  tgt=0.0350  trans=0.0351  gain=-0.0001  |dz|=0.056  17.0 it/s
+step    900  L=0.1809  src=0.0731  tgt=0.0533  trans=0.0535  gain=-0.0002  |dz|=0.058  17.1 it/s
+step    950  L=0.2317  src=0.0819  tgt=0.0745  trans=0.0743  gain=+0.0002  |dz|=0.063  17.1 it/s
+step   1000  L=0.1202  src=0.0573  tgt=0.0310  trans=0.0310  gain=+0.0000  |dz|=0.052  17.2 it/s
+  [diagnostics @ 1000] loss_correct=0.4250  loss_zero=0.8464  loss_shuffled=0.4253  loss_random=0.8523  loss_target_only=0.4219  loss_mean_z=0.3440  r_basis=0.9566  |dz_transport|=0.0488  z_s_vs_enc_rel=0.0460  z_spread_rel=0.0275  gain_vs_zero=0.4214  gain_vs_shuffled=0.0003  gain_vs_target_only=-0.0031  gain_vs_mean_z=-0.0810  delta_task=-0.0810  z_center_norm=2.1390  task_specific_frac=-0.1922
+    ⚠ gain_vs_zero=0.4214 looks healthy but only -19.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+    ⚠ coordinate collapse: relative spacing of z across episodes is only 0.028 (threshold 0.05) -- the encoder emits a near-constant, so gain_vs_zero reflects the basis acting as shared capacity, not task specificity
+    ⚠ z_S and z^enc_T are only 0.046 apart relatively -- the encoder is not separating the source set from the target set
+step   1050  L=0.1179  src=0.0628  tgt=0.0274  trans=0.0269  gain=+0.0005  |dz|=0.056  16.9 it/s
+step   1100  L=0.3831  src=0.0885  tgt=0.1465  trans=0.1473  gain=-0.0009  |dz|=0.186  17.0 it/s
+step   1150  L=0.1248  src=0.0588  tgt=0.0326  trans=0.0326  gain=-0.0000  |dz|=0.063  17.0 it/s
+step   1200  L=0.4942  src=0.0524  tgt=0.2216  trans=0.2194  gain=+0.0022  |dz|=0.187  17.1 it/s
+step   1250  L=0.1293  src=0.0553  tgt=0.0366  trans=0.0366  gain=+0.0000  |dz|=0.061  17.1 it/s
+step   1300  L=0.1359  src=0.0672  tgt=0.0339  trans=0.0341  gain=-0.0002  |dz|=0.070  17.2 it/s
+step   1350  L=0.1414  src=0.0576  tgt=0.0417  trans=0.0413  gain=+0.0004  |dz|=0.066  17.2 it/s
+step   1400  L=0.1530  src=0.0867  tgt=0.0328  trans=0.0329  gain=-0.0001  |dz|=0.067  17.2 it/s
+step   1450  L=0.2039  src=0.1227  tgt=0.0399  trans=0.0407  gain=-0.0008  |dz|=0.074  17.3 it/s
+step   1500  L=0.1589  src=0.0909  tgt=0.0337  trans=0.0336  gain=+0.0001  |dz|=0.073  17.3 it/s
+  [diagnostics @ 1500] loss_correct=0.2385  loss_zero=0.8185  loss_shuffled=0.2394  loss_random=0.8279  loss_target_only=0.2368  loss_mean_z=0.2353  r_basis=1.5331  |dz_transport|=0.0716  z_s_vs_enc_rel=0.0353  z_spread_rel=0.0401  gain_vs_zero=0.5800  gain_vs_shuffled=0.0009  gain_vs_target_only=-0.0017  gain_vs_mean_z=-0.0032  delta_task=-0.0032  z_center_norm=1.8279  task_specific_frac=-0.0055
+    ⚠ gain_vs_zero=0.5800 looks healthy but only -0.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+    ⚠ coordinate collapse: relative spacing of z across episodes is only 0.040 (threshold 0.05) -- the encoder emits a near-constant, so gain_vs_zero reflects the basis acting as shared capacity, not task specificity
+    ⚠ z_S and z^enc_T are only 0.035 apart relatively -- the encoder is not separating the source set from the target set
+step   1550  L=0.1681  src=0.0886  tgt=0.0394  trans=0.0394  gain=+0.0000  |dz|=0.073  17.1 it/s
+step   1600  L=0.1049  src=0.0621  tgt=0.0208  trans=0.0213  gain=-0.0005  |dz|=0.071  17.1 it/s
+step   1650  L=0.2011  src=0.1141  tgt=0.0432  trans=0.0432  gain=+0.0000  |dz|=0.077  17.2 it/s
+step   1700  L=0.3369  src=0.0570  tgt=0.1402  trans=0.1392  gain=+0.0010  |dz|=0.270  17.2 it/s
+step   1750  L=0.1826  src=0.0776  tgt=0.0523  trans=0.0522  gain=+0.0001  |dz|=0.069  17.2 it/s
+step   1800  L=0.1427  src=0.0580  tgt=0.0421  trans=0.0420  gain=+0.0001  |dz|=0.073  17.3 it/s
+step   1850  L=0.1577  src=0.0669  tgt=0.0451  trans=0.0450  gain=+0.0001  |dz|=0.075  17.3 it/s
+step   1900  L=0.1848  src=0.0878  tgt=0.0482  trans=0.0482  gain=+0.0000  |dz|=0.078  17.3 it/s
+step   1950  L=0.3664  src=0.0911  tgt=0.1374  trans=0.1374  gain=-0.0001  |dz|=0.345  17.3 it/s
+step   2000  L=0.4973  src=0.0947  tgt=0.2013  trans=0.2008  gain=+0.0004  |dz|=0.360  17.4 it/s
+  [diagnostics @ 2000] loss_correct=0.1666  loss_zero=0.7939  loss_shuffled=0.1680  loss_random=0.7983  loss_target_only=0.1659  loss_mean_z=0.1827  r_basis=1.8825  |dz_transport|=0.1106  z_s_vs_enc_rel=0.0420  z_spread_rel=0.0601  gain_vs_zero=0.6274  gain_vs_shuffled=0.0014  gain_vs_target_only=-0.0007  gain_vs_mean_z=0.0162  delta_task=0.0162  z_center_norm=1.6515  task_specific_frac=0.0258
+    ⚠ gain_vs_zero=0.6274 looks healthy but only 2.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+    ⚠ z_S and z^enc_T are only 0.042 apart relatively -- the encoder is not separating the source set from the target set
+  saved /opt/ml/code/checkpoints/ctr32_off_step2000.pt
+step   2050  L=0.2108  src=0.0995  tgt=0.0550  trans=0.0558  gain=-0.0007  |dz|=0.086  17.2 it/s
+step   2100  L=0.1582  src=0.0781  tgt=0.0397  trans=0.0398  gain=-0.0001  |dz|=0.088  17.2 it/s
+step   2150  L=0.1776  src=0.0818  tgt=0.0477  trans=0.0475  gain=+0.0002  |dz|=0.091  17.2 it/s
+step   2200  L=0.1432  src=0.0677  tgt=0.0376  trans=0.0375  gain=+0.0001  |dz|=0.106  17.2 it/s
+step   2250  L=0.1456  src=0.0994  tgt=0.0229  trans=0.0229  gain=-0.0000  |dz|=0.099  17.3 it/s
+step   2300  L=0.1851  src=0.0667  tgt=0.0590  trans=0.0590  gain=-0.0000  |dz|=0.103  17.3 it/s
+step   2350  L=0.1041  src=0.0513  tgt=0.0261  trans=0.0263  gain=-0.0002  |dz|=0.104  17.3 it/s
+step   2400  L=0.4256  src=0.0693  tgt=0.1785  trans=0.1773  gain=+0.0012  |dz|=0.512  17.3 it/s
+step   2450  L=0.1362  src=0.0754  tgt=0.0302  trans=0.0301  gain=+0.0001  |dz|=0.129  17.4 it/s
+step   2500  L=0.1558  src=0.0711  tgt=0.0421  trans=0.0421  gain=+0.0000  |dz|=0.133  17.4 it/s
+  [diagnostics @ 2500] loss_correct=0.1199  loss_zero=0.7644  loss_shuffled=0.1208  loss_random=0.7875  loss_target_only=0.1192  loss_mean_z=0.1379  r_basis=2.0700  |dz_transport|=0.1521  z_s_vs_enc_rel=0.0610  z_spread_rel=0.0859  gain_vs_zero=0.6446  gain_vs_shuffled=0.0010  gain_vs_target_only=-0.0006  gain_vs_mean_z=0.0180  delta_task=0.0180  z_center_norm=1.5256  task_specific_frac=0.0280
+    ⚠ gain_vs_zero=0.6446 looks healthy but only 2.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   2550  L=0.1555  src=0.0894  tgt=0.0329  trans=0.0327  gain=+0.0002  |dz|=0.138  17.3 it/s
+step   2600  L=0.1464  src=0.0542  tgt=0.0459  trans=0.0459  gain=+0.0000  |dz|=0.120  17.3 it/s
+step   2650  L=0.1797  src=0.1007  tgt=0.0393  trans=0.0393  gain=-0.0000  |dz|=0.148  17.3 it/s
+step   2700  L=0.0950  src=0.0462  tgt=0.0242  trans=0.0242  gain=-0.0000  |dz|=0.132  17.3 it/s
+step   2750  L=0.1361  src=0.0714  tgt=0.0322  trans=0.0320  gain=+0.0002  |dz|=0.138  17.3 it/s
+step   2800  L=0.1328  src=0.0830  tgt=0.0247  trans=0.0247  gain=+0.0001  |dz|=0.172  17.4 it/s
+step   2850  L=0.4072  src=0.0713  tgt=0.1677  trans=0.1677  gain=-0.0000  |dz|=0.701  17.4 it/s
+step   2900  L=0.1271  src=0.0520  tgt=0.0374  trans=0.0374  gain=+0.0000  |dz|=0.189  17.4 it/s
+step   2950  L=0.3888  src=0.0929  tgt=0.1478  trans=0.1478  gain=-0.0000  |dz|=0.715  17.4 it/s
+step   3000  L=0.1125  src=0.0440  tgt=0.0342  trans=0.0339  gain=+0.0003  |dz|=0.203  17.4 it/s
+  [diagnostics @ 3000] loss_correct=0.0621  loss_zero=0.7287  loss_shuffled=0.0630  loss_random=0.7430  loss_target_only=0.0622  loss_mean_z=0.0808  r_basis=2.1710  |dz_transport|=0.1334  z_s_vs_enc_rel=0.0763  z_spread_rel=0.0754  gain_vs_zero=0.6666  gain_vs_shuffled=0.0009  gain_vs_target_only=0.0002  gain_vs_mean_z=0.0187  delta_task=0.0187  z_center_norm=1.4095  task_specific_frac=0.0281
+    ⚠ gain_vs_zero=0.6666 looks healthy but only 2.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   3050  L=0.5845  src=0.0703  tgt=0.2570  trans=0.2568  gain=+0.0002  |dz|=0.715  17.3 it/s
+step   3100  L=0.1303  src=0.0660  tgt=0.0320  trans=0.0319  gain=+0.0000  |dz|=0.147  17.3 it/s
+step   3150  L=0.1308  src=0.0563  tgt=0.0371  trans=0.0370  gain=+0.0001  |dz|=0.147  17.3 it/s
+step   3200  L=0.1868  src=0.0675  tgt=0.0595  trans=0.0595  gain=-0.0000  |dz|=0.142  17.4 it/s
+step   3250  L=0.1573  src=0.0771  tgt=0.0397  trans=0.0401  gain=-0.0004  |dz|=0.142  17.4 it/s
+step   3300  L=0.4309  src=0.0473  tgt=0.1918  trans=0.1915  gain=+0.0004  |dz|=0.787  17.4 it/s
+step   3350  L=0.3072  src=0.0379  tgt=0.1345  trans=0.1344  gain=+0.0001  |dz|=0.840  17.4 it/s
+step   3400  L=0.1479  src=0.0441  tgt=0.0517  trans=0.0517  gain=+0.0000  |dz|=0.269  17.4 it/s
+step   3450  L=0.1927  src=0.0780  tgt=0.0572  trans=0.0572  gain=-0.0000  |dz|=0.153  17.4 it/s
+step   3500  L=0.1259  src=0.0706  tgt=0.0276  trans=0.0275  gain=+0.0001  |dz|=0.149  17.5 it/s
+  [diagnostics @ 3500] loss_correct=0.0870  loss_zero=0.7115  loss_shuffled=0.0888  loss_random=0.7244  loss_target_only=0.0869  loss_mean_z=0.1000  r_basis=2.1315  |dz_transport|=0.2732  z_s_vs_enc_rel=0.1310  z_spread_rel=0.2032  gain_vs_zero=0.6245  gain_vs_shuffled=0.0018  gain_vs_target_only=-0.0001  gain_vs_mean_z=0.0130  delta_task=0.0130  z_center_norm=1.3034  task_specific_frac=0.0208
+    ⚠ gain_vs_zero=0.6245 looks healthy but only 2.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   3550  L=0.3814  src=0.0575  tgt=0.1620  trans=0.1616  gain=+0.0004  |dz|=0.907  17.4 it/s
+step   3600  L=0.1804  src=0.1029  tgt=0.0388  trans=0.0384  gain=+0.0004  |dz|=0.270  17.4 it/s
+step   3650  L=0.2309  src=0.0781  tgt=0.0765  trans=0.0760  gain=+0.0005  |dz|=0.253  17.4 it/s
+step   3700  L=0.3023  src=0.0437  tgt=0.1294  trans=0.1289  gain=+0.0005  |dz|=0.849  17.4 it/s
+step   3750  L=0.1018  src=0.0437  tgt=0.0289  trans=0.0288  gain=+0.0001  |dz|=0.247  17.4 it/s
+step   3800  L=0.5649  src=0.0759  tgt=0.2444  trans=0.2443  gain=+0.0001  |dz|=0.874  17.4 it/s
+step   3850  L=0.1249  src=0.0651  tgt=0.0296  trans=0.0298  gain=-0.0002  |dz|=0.145  17.4 it/s
+step   3900  L=0.1736  src=0.0610  tgt=0.0561  trans=0.0562  gain=-0.0000  |dz|=0.143  17.4 it/s
+step   3950  L=0.4498  src=0.0343  tgt=0.2079  trans=0.2074  gain=+0.0005  |dz|=0.891  17.5 it/s
+step   4000  L=0.1024  src=0.0404  tgt=0.0309  trans=0.0309  gain=+0.0000  |dz|=0.146  17.5 it/s
+  [diagnostics @ 4000] loss_correct=0.0820  loss_zero=0.6861  loss_shuffled=0.0841  loss_random=0.7088  loss_target_only=0.0820  loss_mean_z=0.0933  r_basis=2.0971  |dz_transport|=0.3206  z_s_vs_enc_rel=0.1683  z_spread_rel=0.2652  gain_vs_zero=0.6041  gain_vs_shuffled=0.0021  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0113  delta_task=0.0113  z_center_norm=1.2095  task_specific_frac=0.0187
+    ⚠ gain_vs_zero=0.6041 looks healthy but only 1.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step4000.pt
+step   4050  L=0.1503  src=0.0897  tgt=0.0301  trans=0.0302  gain=-0.0001  |dz|=0.275  17.4 it/s
+step   4100  L=0.1680  src=0.0797  tgt=0.0441  trans=0.0438  gain=+0.0003  |dz|=0.289  17.4 it/s
+step   4150  L=0.0724  src=0.0249  tgt=0.0238  trans=0.0234  gain=+0.0003  |dz|=0.328  17.4 it/s
+step   4200  L=0.4328  src=0.0613  tgt=0.1856  trans=0.1857  gain=-0.0001  |dz|=1.071  17.4 it/s
+step   4250  L=0.1237  src=0.0624  tgt=0.0306  trans=0.0304  gain=+0.0002  |dz|=0.281  17.4 it/s
+step   4300  L=0.4706  src=0.0535  tgt=0.2084  trans=0.2084  gain=+0.0000  |dz|=0.937  17.4 it/s
+step   4350  L=0.2207  src=0.0914  tgt=0.0646  trans=0.0645  gain=+0.0002  |dz|=0.271  17.4 it/s
+step   4400  L=0.1472  src=0.0770  tgt=0.0350  trans=0.0350  gain=+0.0001  |dz|=0.265  17.4 it/s
+step   4450  L=0.1241  src=0.0618  tgt=0.0311  trans=0.0309  gain=+0.0001  |dz|=0.152  17.4 it/s
+step   4500  L=0.1982  src=0.0625  tgt=0.0678  trans=0.0677  gain=+0.0000  |dz|=0.264  17.4 it/s
+  [diagnostics @ 4500] loss_correct=0.1002  loss_zero=0.6683  loss_shuffled=0.1021  loss_random=0.6904  loss_target_only=0.1004  loss_mean_z=0.1083  r_basis=2.0297  |dz_transport|=0.4168  z_s_vs_enc_rel=0.2225  z_spread_rel=0.3471  gain_vs_zero=0.5681  gain_vs_shuffled=0.0019  gain_vs_target_only=0.0002  gain_vs_mean_z=0.0080  delta_task=0.0080  z_center_norm=1.1417  task_specific_frac=0.0141
+    ⚠ gain_vs_zero=0.5681 looks healthy but only 1.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   4550  L=0.1232  src=0.0431  tgt=0.0400  trans=0.0398  gain=+0.0002  |dz|=0.266  17.4 it/s
+step   4600  L=0.1176  src=0.0431  tgt=0.0371  trans=0.0372  gain=-0.0001  |dz|=0.156  17.4 it/s
+step   4650  L=0.3758  src=0.0731  tgt=0.1514  trans=0.1510  gain=+0.0003  |dz|=0.911  17.4 it/s
+step   4700  L=0.1544  src=0.0647  tgt=0.0447  trans=0.0447  gain=+0.0000  |dz|=0.166  17.4 it/s
+step   4750  L=0.1343  src=0.0868  tgt=0.0237  trans=0.0235  gain=+0.0003  |dz|=0.165  17.4 it/s
+step   4800  L=0.4434  src=0.0884  tgt=0.1773  trans=0.1774  gain=-0.0001  |dz|=0.951  17.4 it/s
+step   4850  L=0.1456  src=0.0575  tgt=0.0439  trans=0.0439  gain=+0.0000  |dz|=0.161  17.4 it/s
+step   4900  L=0.3128  src=0.0969  tgt=0.1080  trans=0.1076  gain=+0.0004  |dz|=0.933  17.4 it/s
+step   4950  L=0.1247  src=0.0735  tgt=0.0255  trans=0.0255  gain=-0.0001  |dz|=0.276  17.4 it/s
+step   5000  L=0.2933  src=0.0688  tgt=0.1122  trans=0.1121  gain=+0.0001  |dz|=0.925  17.5 it/s
+  [diagnostics @ 5000] loss_correct=0.0973  loss_zero=0.6451  loss_shuffled=0.1001  loss_random=0.6665  loss_target_only=0.0975  loss_mean_z=0.1035  r_basis=1.9698  |dz_transport|=0.5103  z_s_vs_enc_rel=0.2881  z_spread_rel=0.4009  gain_vs_zero=0.5478  gain_vs_shuffled=0.0028  gain_vs_target_only=0.0003  gain_vs_mean_z=0.0062  delta_task=0.0062  z_center_norm=1.0780  task_specific_frac=0.0113
+    ⚠ gain_vs_zero=0.5478 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   5050  L=0.1204  src=0.0736  tgt=0.0234  trans=0.0232  gain=+0.0002  |dz|=0.277  17.4 it/s
+step   5100  L=0.1013  src=0.0358  tgt=0.0327  trans=0.0326  gain=+0.0001  |dz|=0.277  17.4 it/s
+step   5150  L=0.3817  src=0.0772  tgt=0.1520  trans=0.1522  gain=-0.0001  |dz|=0.879  17.4 it/s
+step   5200  L=0.2361  src=0.1074  tgt=0.0642  trans=0.0642  gain=-0.0000  |dz|=0.309  17.4 it/s
+step   5250  L=0.6590  src=0.0841  tgt=0.2873  trans=0.2874  gain=-0.0001  |dz|=0.849  17.4 it/s
+step   5300  L=0.5187  src=0.1002  tgt=0.2091  trans=0.2092  gain=-0.0000  |dz|=0.865  17.4 it/s
+step   5350  L=0.1496  src=0.0718  tgt=0.0388  trans=0.0387  gain=+0.0001  |dz|=0.330  17.4 it/s
+step   5400  L=0.1040  src=0.0726  tgt=0.0156  trans=0.0156  gain=-0.0000  |dz|=0.194  17.4 it/s
+step   5450  L=0.3299  src=0.0693  tgt=0.1302  trans=0.1302  gain=+0.0000  |dz|=0.913  17.5 it/s
+step   5500  L=0.1297  src=0.0733  tgt=0.0282  trans=0.0280  gain=+0.0002  |dz|=0.373  17.5 it/s
+  [diagnostics @ 5500] loss_correct=0.0900  loss_zero=0.6252  loss_shuffled=0.0927  loss_random=0.6483  loss_target_only=0.0900  loss_mean_z=0.0957  r_basis=1.9363  |dz_transport|=0.4488  z_s_vs_enc_rel=0.3245  z_spread_rel=0.4133  gain_vs_zero=0.5353  gain_vs_shuffled=0.0028  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0058  delta_task=0.0058  z_center_norm=1.0185  task_specific_frac=0.0108
+    ⚠ gain_vs_zero=0.5353 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   5550  L=0.2557  src=0.0950  tgt=0.0803  trans=0.0802  gain=+0.0001  |dz|=0.207  17.4 it/s
+step   5600  L=0.1161  src=0.0592  tgt=0.0284  trans=0.0283  gain=+0.0000  |dz|=0.201  17.4 it/s
+step   5650  L=0.1703  src=0.0875  tgt=0.0414  trans=0.0412  gain=+0.0002  |dz|=0.202  17.4 it/s
+step   5700  L=0.1629  src=0.1034  tgt=0.0297  trans=0.0296  gain=+0.0001  |dz|=0.387  17.4 it/s
+step   5750  L=0.1580  src=0.0827  tgt=0.0376  trans=0.0375  gain=+0.0001  |dz|=0.379  17.4 it/s
+step   5800  L=0.3045  src=0.0294  tgt=0.1375  trans=0.1373  gain=+0.0001  |dz|=0.830  17.4 it/s
+step   5850  L=0.1260  src=0.0798  tgt=0.0229  trans=0.0229  gain=-0.0000  |dz|=0.420  17.4 it/s
+step   5900  L=0.0801  src=0.0369  tgt=0.0215  trans=0.0214  gain=+0.0001  |dz|=0.426  17.4 it/s
+step   5950  L=0.3006  src=0.0912  tgt=0.1046  trans=0.1047  gain=-0.0001  |dz|=0.844  17.5 it/s
+step   6000  L=0.1955  src=0.0752  tgt=0.0600  trans=0.0600  gain=-0.0000  |dz|=0.437  17.5 it/s
+  [diagnostics @ 6000] loss_correct=0.0877  loss_zero=0.6068  loss_shuffled=0.0908  loss_random=0.6286  loss_target_only=0.0878  loss_mean_z=0.0928  r_basis=1.8831  |dz_transport|=0.4841  z_s_vs_enc_rel=0.3765  z_spread_rel=0.4453  gain_vs_zero=0.5191  gain_vs_shuffled=0.0031  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0051  delta_task=0.0051  z_center_norm=0.9708  task_specific_frac=0.0098
+    ⚠ gain_vs_zero=0.5191 looks healthy but only 1.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step6000.pt
+step   6050  L=0.4568  src=0.0664  tgt=0.1951  trans=0.1950  gain=+0.0001  |dz|=0.844  17.4 it/s
+step   6100  L=0.3284  src=0.0826  tgt=0.1228  trans=0.1228  gain=+0.0000  |dz|=0.950  17.4 it/s
+step   6150  L=0.1430  src=0.0811  tgt=0.0309  trans=0.0307  gain=+0.0002  |dz|=0.468  17.4 it/s
+step   6200  L=0.1486  src=0.0853  tgt=0.0316  trans=0.0315  gain=+0.0001  |dz|=0.483  17.4 it/s
+step   6250  L=0.6696  src=0.0816  tgt=0.2960  trans=0.2919  gain=+0.0041  |dz|=0.914  17.4 it/s
+step   6300  L=0.1202  src=0.0458  tgt=0.0372  trans=0.0370  gain=+0.0002  |dz|=0.476  17.4 it/s
+step   6350  L=0.3321  src=0.0733  tgt=0.1294  trans=0.1292  gain=+0.0002  |dz|=0.842  17.4 it/s
+step   6400  L=0.1326  src=0.0719  tgt=0.0303  trans=0.0302  gain=+0.0001  |dz|=0.205  17.4 it/s
+step   6450  L=0.1185  src=0.0684  tgt=0.0249  trans=0.0250  gain=-0.0000  |dz|=0.205  17.5 it/s
+step   6500  L=0.4823  src=0.0711  tgt=0.2054  trans=0.2055  gain=-0.0001  |dz|=0.830  17.5 it/s
+  [diagnostics @ 6500] loss_correct=0.0766  loss_zero=0.5839  loss_shuffled=0.0789  loss_random=0.6040  loss_target_only=0.0766  loss_mean_z=0.0806  r_basis=1.8279  |dz_transport|=0.4850  z_s_vs_enc_rel=0.3836  z_spread_rel=0.4782  gain_vs_zero=0.5073  gain_vs_shuffled=0.0024  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0041  delta_task=0.0041  z_center_norm=0.9372  task_specific_frac=0.0080
+    ⚠ gain_vs_zero=0.5073 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   6550  L=0.1894  src=0.1104  tgt=0.0394  trans=0.0394  gain=+0.0000  |dz|=0.205  17.4 it/s
+step   6600  L=0.3207  src=0.0697  tgt=0.1255  trans=0.1254  gain=+0.0001  |dz|=0.852  17.4 it/s
+step   6650  L=0.1499  src=0.0855  tgt=0.0322  trans=0.0320  gain=+0.0003  |dz|=0.546  17.4 it/s
+step   6700  L=0.1262  src=0.0822  tgt=0.0219  trans=0.0220  gain=-0.0000  |dz|=0.203  17.4 it/s
+step   6750  L=0.1483  src=0.0816  tgt=0.0332  trans=0.0333  gain=-0.0001  |dz|=0.615  17.4 it/s
+step   6800  L=0.1089  src=0.0539  tgt=0.0275  trans=0.0274  gain=+0.0001  |dz|=0.607  17.4 it/s
+step   6850  L=0.1085  src=0.0291  tgt=0.0396  trans=0.0396  gain=-0.0000  |dz|=0.203  17.4 it/s
+step   6900  L=0.1722  src=0.0494  tgt=0.0614  trans=0.0613  gain=+0.0001  |dz|=0.203  17.4 it/s
+step   6950  L=0.1263  src=0.0470  tgt=0.0395  trans=0.0396  gain=-0.0001  |dz|=0.631  17.4 it/s
+step   7000  L=0.1156  src=0.0636  tgt=0.0261  trans=0.0258  gain=+0.0003  |dz|=0.650  17.4 it/s
+  [diagnostics @ 7000] loss_correct=0.0669  loss_zero=0.5690  loss_shuffled=0.0686  loss_random=0.5883  loss_target_only=0.0669  loss_mean_z=0.0716  r_basis=1.8110  |dz_transport|=0.4414  z_s_vs_enc_rel=0.3820  z_spread_rel=0.4028  gain_vs_zero=0.5022  gain_vs_shuffled=0.0017  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0047  delta_task=0.0047  z_center_norm=0.8905  task_specific_frac=0.0094
+    ⚠ gain_vs_zero=0.5022 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   7050  L=0.1204  src=0.0536  tgt=0.0333  trans=0.0333  gain=-0.0000  |dz|=0.196  17.4 it/s
+step   7100  L=0.1197  src=0.0591  tgt=0.0302  trans=0.0302  gain=+0.0000  |dz|=0.221  17.4 it/s
+step   7150  L=0.1081  src=0.0498  tgt=0.0292  trans=0.0289  gain=+0.0003  |dz|=0.648  17.4 it/s
+step   7200  L=0.0918  src=0.0404  tgt=0.0256  trans=0.0256  gain=-0.0000  |dz|=0.620  17.4 it/s
+step   7250  L=0.0979  src=0.0573  tgt=0.0202  trans=0.0203  gain=-0.0001  |dz|=0.157  17.4 it/s
+step   7300  L=0.1894  src=0.0792  tgt=0.0550  trans=0.0550  gain=-0.0000  |dz|=0.170  17.4 it/s
+step   7350  L=0.3173  src=0.0781  tgt=0.1195  trans=0.1195  gain=-0.0000  |dz|=0.752  17.4 it/s
+step   7400  L=0.1151  src=0.0565  tgt=0.0293  trans=0.0292  gain=+0.0001  |dz|=0.691  17.4 it/s
+step   7450  L=0.0879  src=0.0446  tgt=0.0216  trans=0.0216  gain=-0.0000  |dz|=0.674  17.4 it/s
+step   7500  L=0.1148  src=0.0423  tgt=0.0363  trans=0.0360  gain=+0.0003  |dz|=0.728  17.4 it/s
+  [diagnostics @ 7500] loss_correct=0.0831  loss_zero=0.5602  loss_shuffled=0.0867  loss_random=0.5805  loss_target_only=0.0831  loss_mean_z=0.0872  r_basis=1.7390  |dz_transport|=0.5929  z_s_vs_enc_rel=0.5750  z_spread_rel=0.5130  gain_vs_zero=0.4771  gain_vs_shuffled=0.0036  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0041  delta_task=0.0041  z_center_norm=0.8562  task_specific_frac=0.0087
+    ⚠ gain_vs_zero=0.4771 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   7550  L=0.1294  src=0.0742  tgt=0.0275  trans=0.0276  gain=-0.0001  |dz|=0.166  17.4 it/s
+step   7600  L=0.2393  src=0.0509  tgt=0.0941  trans=0.0941  gain=+0.0000  |dz|=0.816  17.3 it/s
+step   7650  L=0.1169  src=0.0794  tgt=0.0187  trans=0.0186  gain=+0.0001  |dz|=0.709  17.3 it/s
+step   7700  L=0.3688  src=0.0675  tgt=0.1505  trans=0.1506  gain=-0.0001  |dz|=0.797  17.3 it/s
+step   7750  L=0.1434  src=0.0885  tgt=0.0274  trans=0.0274  gain=+0.0000  |dz|=0.712  17.3 it/s
+step   7800  L=0.1830  src=0.0918  tgt=0.0456  trans=0.0455  gain=+0.0002  |dz|=0.159  17.3 it/s
+step   7850  L=0.0924  src=0.0341  tgt=0.0291  trans=0.0290  gain=+0.0002  |dz|=0.674  17.3 it/s
+step   7900  L=0.3147  src=0.0827  tgt=0.1159  trans=0.1160  gain=-0.0001  |dz|=0.876  17.3 it/s
+step   7950  L=0.1721  src=0.0863  tgt=0.0428  trans=0.0428  gain=-0.0000  |dz|=0.161  17.3 it/s
+step   8000  L=0.5011  src=0.1068  tgt=0.1970  trans=0.1970  gain=+0.0000  |dz|=0.800  17.3 it/s
+  [diagnostics @ 8000] loss_correct=0.0853  loss_zero=0.5494  loss_shuffled=0.0894  loss_random=0.5689  loss_target_only=0.0853  loss_mean_z=0.0888  r_basis=1.7021  |dz_transport|=0.5874  z_s_vs_enc_rel=0.5729  z_spread_rel=0.5616  gain_vs_zero=0.4641  gain_vs_shuffled=0.0041  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0035  delta_task=0.0035  z_center_norm=0.8275  task_specific_frac=0.0076
+    ⚠ gain_vs_zero=0.4641 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step8000.pt
+step   8050  L=0.3794  src=0.0374  tgt=0.1709  trans=0.1710  gain=-0.0001  |dz|=0.786  17.2 it/s
+step   8100  L=0.5975  src=0.0683  tgt=0.2645  trans=0.2646  gain=-0.0000  |dz|=0.775  17.2 it/s
+step   8150  L=0.1836  src=0.1034  tgt=0.0403  trans=0.0398  gain=+0.0005  |dz|=0.146  17.2 it/s
+step   8200  L=0.1527  src=0.0872  tgt=0.0328  trans=0.0326  gain=+0.0003  |dz|=0.150  17.2 it/s
+step   8250  L=0.1584  src=0.0847  tgt=0.0368  trans=0.0368  gain=-0.0000  |dz|=0.137  17.2 it/s
+step   8300  L=0.4909  src=0.0406  tgt=0.2253  trans=0.2249  gain=+0.0004  |dz|=0.828  17.2 it/s
+step   8350  L=0.4607  src=0.0724  tgt=0.1941  trans=0.1941  gain=-0.0000  |dz|=0.827  17.2 it/s
+step   8400  L=0.1552  src=0.0705  tgt=0.0424  trans=0.0422  gain=+0.0001  |dz|=0.736  17.2 it/s
+step   8450  L=0.2012  src=0.0864  tgt=0.0574  trans=0.0573  gain=+0.0001  |dz|=0.139  17.2 it/s
+step   8500  L=0.1022  src=0.0437  tgt=0.0292  trans=0.0291  gain=+0.0001  |dz|=0.125  17.2 it/s
+  [diagnostics @ 8500] loss_correct=0.0840  loss_zero=0.5369  loss_shuffled=0.0881  loss_random=0.5605  loss_target_only=0.0840  loss_mean_z=0.0870  r_basis=1.6652  |dz_transport|=0.5229  z_s_vs_enc_rel=0.5801  z_spread_rel=0.5630  gain_vs_zero=0.4529  gain_vs_shuffled=0.0041  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0030  delta_task=0.0030  z_center_norm=0.8023  task_specific_frac=0.0065
+    ⚠ gain_vs_zero=0.4529 looks healthy but only 0.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   8550  L=0.1273  src=0.0559  tgt=0.0356  trans=0.0356  gain=+0.0000  |dz|=0.124  17.1 it/s
+step   8600  L=0.1164  src=0.0454  tgt=0.0354  trans=0.0354  gain=-0.0000  |dz|=0.689  17.1 it/s
+step   8650  L=0.4697  src=0.0797  tgt=0.1948  trans=0.1950  gain=-0.0002  |dz|=0.772  17.1 it/s
+step   8700  L=0.1196  src=0.0694  tgt=0.0250  trans=0.0250  gain=+0.0000  |dz|=0.696  17.1 it/s
+step   8750  L=0.1118  src=0.0448  tgt=0.0332  trans=0.0336  gain=-0.0004  |dz|=0.729  17.1 it/s
+step   8800  L=0.2883  src=0.0361  tgt=0.1261  trans=0.1259  gain=+0.0002  |dz|=0.790  17.1 it/s
+step   8850  L=0.3377  src=0.0803  tgt=0.1286  trans=0.1287  gain=-0.0001  |dz|=0.726  17.1 it/s
+step   8900  L=0.1092  src=0.0658  tgt=0.0217  trans=0.0217  gain=-0.0000  |dz|=0.131  17.1 it/s
+step   8950  L=0.4384  src=0.0858  tgt=0.1764  trans=0.1761  gain=+0.0004  |dz|=0.766  17.1 it/s
+step   9000  L=0.1024  src=0.0597  tgt=0.0213  trans=0.0213  gain=+0.0000  |dz|=0.140  17.1 it/s
+  [diagnostics @ 9000] loss_correct=0.0920  loss_zero=0.5284  loss_shuffled=0.0945  loss_random=0.5439  loss_target_only=0.0920  loss_mean_z=0.0948  r_basis=1.6185  |dz_transport|=0.5203  z_s_vs_enc_rel=0.5770  z_spread_rel=0.5763  gain_vs_zero=0.4364  gain_vs_shuffled=0.0025  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.7745  task_specific_frac=0.0063
+    ⚠ gain_vs_zero=0.4364 looks healthy but only 0.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   9050  L=0.0936  src=0.0595  tgt=0.0170  trans=0.0170  gain=-0.0000  |dz|=0.145  17.1 it/s
+step   9100  L=0.3632  src=0.0484  tgt=0.1574  trans=0.1573  gain=+0.0001  |dz|=0.872  17.1 it/s
+step   9150  L=0.0869  src=0.0530  tgt=0.0168  trans=0.0169  gain=-0.0000  |dz|=0.130  17.1 it/s
+step   9200  L=0.4671  src=0.0811  tgt=0.1929  trans=0.1929  gain=+0.0000  |dz|=0.784  17.1 it/s
+step   9250  L=0.1324  src=0.0361  tgt=0.0482  trans=0.0480  gain=+0.0002  |dz|=0.129  17.1 it/s
+step   9300  L=0.4146  src=0.0854  tgt=0.1645  trans=0.1645  gain=+0.0000  |dz|=0.819  17.1 it/s
+step   9350  L=0.1368  src=0.0664  tgt=0.0351  trans=0.0351  gain=+0.0000  |dz|=0.131  17.1 it/s
+step   9400  L=0.4891  src=0.0771  tgt=0.2061  trans=0.2058  gain=+0.0003  |dz|=0.765  17.1 it/s
+step   9450  L=0.2427  src=0.0616  tgt=0.0905  trans=0.0905  gain=-0.0000  |dz|=0.736  17.0 it/s
+step   9500  L=0.1239  src=0.0728  tgt=0.0255  trans=0.0255  gain=-0.0000  |dz|=0.142  17.1 it/s
+  [diagnostics @ 9500] loss_correct=0.0894  loss_zero=0.5179  loss_shuffled=0.0953  loss_random=0.5368  loss_target_only=0.0894  loss_mean_z=0.0921  r_basis=1.5890  |dz_transport|=0.5456  z_s_vs_enc_rel=0.6528  z_spread_rel=0.6015  gain_vs_zero=0.4285  gain_vs_shuffled=0.0059  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.7526  task_specific_frac=0.0063
+    ⚠ gain_vs_zero=0.4285 looks healthy but only 0.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step   9550  L=0.1266  src=0.0603  tgt=0.0331  trans=0.0331  gain=+0.0000  |dz|=0.145  17.0 it/s
+step   9600  L=0.1192  src=0.0490  tgt=0.0351  trans=0.0351  gain=-0.0000  |dz|=0.153  17.0 it/s
+step   9650  L=0.1137  src=0.0465  tgt=0.0336  trans=0.0335  gain=+0.0001  |dz|=0.665  17.0 it/s
+step   9700  L=0.3130  src=0.0751  tgt=0.1189  trans=0.1189  gain=-0.0000  |dz|=0.728  17.0 it/s
+step   9750  L=0.4509  src=0.0835  tgt=0.1837  trans=0.1835  gain=+0.0001  |dz|=0.711  17.0 it/s
+step   9800  L=0.2625  src=0.0356  tgt=0.1133  trans=0.1134  gain=-0.0001  |dz|=0.779  17.0 it/s
+step   9850  L=0.1336  src=0.0681  tgt=0.0327  trans=0.0326  gain=+0.0000  |dz|=0.646  17.0 it/s
+step   9900  L=0.0594  src=0.0209  tgt=0.0192  trans=0.0192  gain=-0.0000  |dz|=0.140  17.0 it/s
+step   9950  L=0.1450  src=0.0711  tgt=0.0369  trans=0.0369  gain=-0.0000  |dz|=0.154  17.0 it/s
+step  10000  L=0.3736  src=0.0467  tgt=0.1634  trans=0.1634  gain=-0.0001  |dz|=0.715  17.0 it/s
+  [diagnostics @ 10000] loss_correct=0.0762  loss_zero=0.5025  loss_shuffled=0.0798  loss_random=0.5186  loss_target_only=0.0762  loss_mean_z=0.0788  r_basis=1.5735  |dz_transport|=0.4320  z_s_vs_enc_rel=0.5352  z_spread_rel=0.5643  gain_vs_zero=0.4263  gain_vs_shuffled=0.0035  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.7341  task_specific_frac=0.0060
+    ⚠ gain_vs_zero=0.4263 looks healthy but only 0.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step10000.pt
+step  10050  L=0.1641  src=0.0776  tgt=0.0432  trans=0.0432  gain=+0.0001  |dz|=0.167  17.0 it/s
+step  10100  L=0.1324  src=0.0431  tgt=0.0446  trans=0.0446  gain=-0.0000  |dz|=0.154  17.0 it/s
+step  10150  L=0.4750  src=0.0569  tgt=0.2089  trans=0.2091  gain=-0.0001  |dz|=0.718  17.0 it/s
+step  10200  L=0.0794  src=0.0267  tgt=0.0264  trans=0.0262  gain=+0.0003  |dz|=0.637  17.0 it/s
+step  10250  L=0.4321  src=0.0544  tgt=0.1888  trans=0.1888  gain=-0.0000  |dz|=0.749  17.0 it/s
+step  10300  L=0.1139  src=0.0552  tgt=0.0293  trans=0.0293  gain=-0.0000  |dz|=0.629  17.0 it/s
+step  10350  L=0.2643  src=0.0869  tgt=0.0887  trans=0.0886  gain=+0.0001  |dz|=0.672  17.0 it/s
+step  10400  L=0.1786  src=0.0739  tgt=0.0524  trans=0.0522  gain=+0.0002  |dz|=0.623  17.0 it/s
+step  10450  L=0.3782  src=0.0603  tgt=0.1589  trans=0.1589  gain=+0.0001  |dz|=0.733  17.0 it/s
+step  10500  L=0.1138  src=0.0543  tgt=0.0297  trans=0.0297  gain=-0.0000  |dz|=0.156  17.1 it/s
+  [diagnostics @ 10500] loss_correct=0.0853  loss_zero=0.4968  loss_shuffled=0.0892  loss_random=0.5124  loss_target_only=0.0853  loss_mean_z=0.0881  r_basis=1.5334  |dz_transport|=0.5232  z_s_vs_enc_rel=0.6452  z_spread_rel=0.6222  gain_vs_zero=0.4116  gain_vs_shuffled=0.0039  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.7098  task_specific_frac=0.0069
+    ⚠ gain_vs_zero=0.4116 looks healthy but only 0.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  10550  L=0.1407  src=0.0622  tgt=0.0392  trans=0.0392  gain=-0.0000  |dz|=0.153  17.0 it/s
+step  10600  L=0.1276  src=0.0450  tgt=0.0412  trans=0.0413  gain=-0.0001  |dz|=0.150  17.0 it/s
+step  10650  L=0.1092  src=0.0597  tgt=0.0247  trans=0.0247  gain=-0.0000  |dz|=0.614  17.0 it/s
+step  10700  L=0.0763  src=0.0299  tgt=0.0232  trans=0.0231  gain=+0.0000  |dz|=0.148  17.0 it/s
+step  10750  L=0.0914  src=0.0392  tgt=0.0259  trans=0.0262  gain=-0.0003  |dz|=0.582  17.0 it/s
+step  10800  L=0.4454  src=0.0433  tgt=0.2009  trans=0.2011  gain=-0.0002  |dz|=0.666  17.0 it/s
+step  10850  L=0.1784  src=0.0745  tgt=0.0519  trans=0.0519  gain=-0.0000  |dz|=0.162  17.1 it/s
+step  10900  L=0.1631  src=0.1051  tgt=0.0289  trans=0.0290  gain=-0.0002  |dz|=0.159  17.1 it/s
+step  10950  L=0.3467  src=0.0581  tgt=0.1443  trans=0.1441  gain=+0.0003  |dz|=0.645  17.1 it/s
+step  11000  L=0.1823  src=0.0954  tgt=0.0434  trans=0.0433  gain=+0.0001  |dz|=0.160  17.1 it/s
+  [diagnostics @ 11000] loss_correct=0.1065  loss_zero=0.4972  loss_shuffled=0.1102  loss_random=0.5129  loss_target_only=0.1065  loss_mean_z=0.1089  r_basis=1.4880  |dz_transport|=0.5171  z_s_vs_enc_rel=0.6903  z_spread_rel=0.5908  gain_vs_zero=0.3907  gain_vs_shuffled=0.0037  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.6982  task_specific_frac=0.0063
+    ⚠ gain_vs_zero=0.3907 looks healthy but only 0.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  11050  L=0.1275  src=0.0587  tgt=0.0344  trans=0.0343  gain=+0.0001  |dz|=0.157  17.0 it/s
+step  11100  L=0.3331  src=0.0314  tgt=0.1508  trans=0.1508  gain=-0.0000  |dz|=0.673  17.0 it/s
+step  11150  L=0.1234  src=0.0708  tgt=0.0263  trans=0.0262  gain=+0.0001  |dz|=0.617  17.1 it/s
+step  11200  L=0.1164  src=0.0719  tgt=0.0222  trans=0.0222  gain=-0.0000  |dz|=0.151  17.1 it/s
+step  11250  L=0.4628  src=0.0744  tgt=0.1942  trans=0.1940  gain=+0.0002  |dz|=0.666  17.1 it/s
+step  11300  L=0.4565  src=0.0564  tgt=0.2000  trans=0.1999  gain=+0.0001  |dz|=0.683  17.1 it/s
+step  11350  L=0.1338  src=0.0690  tgt=0.0324  trans=0.0324  gain=+0.0000  |dz|=0.630  17.1 it/s
+step  11400  L=0.4870  src=0.0871  tgt=0.1999  trans=0.1999  gain=-0.0000  |dz|=0.654  17.1 it/s
+step  11450  L=0.3361  src=0.0724  tgt=0.1318  trans=0.1318  gain=+0.0000  |dz|=0.657  17.1 it/s
+step  11500  L=0.1085  src=0.0443  tgt=0.0320  trans=0.0320  gain=+0.0000  |dz|=0.160  17.1 it/s
+  [diagnostics @ 11500] loss_correct=0.0649  loss_zero=0.4693  loss_shuffled=0.0693  loss_random=0.4895  loss_target_only=0.0649  loss_mean_z=0.0676  r_basis=1.4918  |dz_transport|=0.4287  z_s_vs_enc_rel=0.5897  z_spread_rel=0.5819  gain_vs_zero=0.4044  gain_vs_shuffled=0.0044  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.6733  task_specific_frac=0.0067
+    ⚠ gain_vs_zero=0.4044 looks healthy but only 0.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  11550  L=0.1317  src=0.0687  tgt=0.0315  trans=0.0314  gain=+0.0000  |dz|=0.163  17.1 it/s
+step  11600  L=0.3369  src=0.0824  tgt=0.1271  trans=0.1273  gain=-0.0001  |dz|=0.645  17.1 it/s
+step  11650  L=0.5242  src=0.0790  tgt=0.2226  trans=0.2226  gain=-0.0000  |dz|=0.676  17.1 it/s
+step  11700  L=0.2741  src=0.0682  tgt=0.1029  trans=0.1029  gain=-0.0000  |dz|=0.772  17.1 it/s
+step  11750  L=0.1064  src=0.0657  tgt=0.0203  trans=0.0203  gain=+0.0000  |dz|=0.159  17.1 it/s
+step  11800  L=0.0907  src=0.0627  tgt=0.0140  trans=0.0140  gain=-0.0000  |dz|=0.608  17.1 it/s
+step  11850  L=0.1062  src=0.0642  tgt=0.0210  trans=0.0210  gain=+0.0000  |dz|=0.165  17.1 it/s
+step  11900  L=0.3096  src=0.0820  tgt=0.1138  trans=0.1137  gain=+0.0001  |dz|=0.681  17.1 it/s
+step  11950  L=0.4733  src=0.0724  tgt=0.2004  trans=0.2004  gain=-0.0000  |dz|=0.679  17.1 it/s
+step  12000  L=0.1022  src=0.0535  tgt=0.0243  trans=0.0243  gain=-0.0000  |dz|=0.628  17.1 it/s
+  [diagnostics @ 12000] loss_correct=0.0994  loss_zero=0.4772  loss_shuffled=0.1043  loss_random=0.4968  loss_target_only=0.0994  loss_mean_z=0.1023  r_basis=1.4328  |dz_transport|=0.5834  z_s_vs_enc_rel=0.7830  z_spread_rel=0.6334  gain_vs_zero=0.3778  gain_vs_shuffled=0.0049  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.6576  task_specific_frac=0.0077
+    ⚠ gain_vs_zero=0.3778 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step12000.pt
+step  12050  L=0.1578  src=0.0858  tgt=0.0359  trans=0.0359  gain=-0.0000  |dz|=0.626  17.1 it/s
+step  12100  L=0.1511  src=0.0977  tgt=0.0266  trans=0.0266  gain=+0.0000  |dz|=0.160  17.1 it/s
+step  12150  L=0.1425  src=0.0551  tgt=0.0437  trans=0.0437  gain=-0.0000  |dz|=0.175  17.1 it/s
+step  12200  L=0.3497  src=0.0604  tgt=0.1446  trans=0.1446  gain=+0.0001  |dz|=0.620  17.1 it/s
+step  12250  L=0.1642  src=0.0766  tgt=0.0437  trans=0.0438  gain=-0.0001  |dz|=0.615  17.1 it/s
+step  12300  L=0.4401  src=0.0815  tgt=0.1793  trans=0.1792  gain=+0.0000  |dz|=0.642  17.1 it/s
+step  12350  L=0.1473  src=0.0893  tgt=0.0289  trans=0.0289  gain=+0.0000  |dz|=0.612  17.1 it/s
+step  12400  L=0.1195  src=0.0578  tgt=0.0308  trans=0.0308  gain=+0.0000  |dz|=0.622  17.1 it/s
+step  12450  L=0.1951  src=0.1181  tgt=0.0385  trans=0.0385  gain=+0.0000  |dz|=0.596  17.1 it/s
+step  12500  L=0.1378  src=0.0411  tgt=0.0483  trans=0.0483  gain=+0.0000  |dz|=0.167  17.1 it/s
+  [diagnostics @ 12500] loss_correct=0.0763  loss_zero=0.4573  loss_shuffled=0.0802  loss_random=0.4772  loss_target_only=0.0763  loss_mean_z=0.0790  r_basis=1.4255  |dz_transport|=0.4491  z_s_vs_enc_rel=0.6291  z_spread_rel=0.6152  gain_vs_zero=0.3809  gain_vs_shuffled=0.0039  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.6378  task_specific_frac=0.0069
+    ⚠ gain_vs_zero=0.3809 looks healthy but only 0.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  12550  L=0.4108  src=0.0360  tgt=0.1873  trans=0.1874  gain=-0.0001  |dz|=0.737  17.1 it/s
+step  12600  L=0.1261  src=0.0803  tgt=0.0230  trans=0.0227  gain=+0.0002  |dz|=0.166  17.1 it/s
+step  12650  L=0.1558  src=0.0774  tgt=0.0393  trans=0.0390  gain=+0.0002  |dz|=0.167  17.1 it/s
+step  12700  L=0.1240  src=0.0545  tgt=0.0347  trans=0.0346  gain=+0.0001  |dz|=0.170  17.1 it/s
+step  12750  L=0.1252  src=0.0788  tgt=0.0232  trans=0.0231  gain=+0.0000  |dz|=0.164  17.1 it/s
+step  12800  L=0.0806  src=0.0283  tgt=0.0262  trans=0.0260  gain=+0.0002  |dz|=0.596  17.1 it/s
+step  12850  L=0.2915  src=0.0431  tgt=0.1242  trans=0.1241  gain=+0.0001  |dz|=0.677  17.1 it/s
+step  12900  L=0.1386  src=0.0963  tgt=0.0211  trans=0.0211  gain=+0.0000  |dz|=0.577  17.1 it/s
+step  12950  L=0.1392  src=0.0706  tgt=0.0343  trans=0.0342  gain=+0.0000  |dz|=0.606  17.1 it/s
+step  13000  L=0.1061  src=0.0612  tgt=0.0224  trans=0.0224  gain=+0.0000  |dz|=0.164  17.1 it/s
+  [diagnostics @ 13000] loss_correct=0.0579  loss_zero=0.4401  loss_shuffled=0.0615  loss_random=0.4619  loss_target_only=0.0579  loss_mean_z=0.0603  r_basis=1.4149  |dz_transport|=0.4007  z_s_vs_enc_rel=0.5661  z_spread_rel=0.5613  gain_vs_zero=0.3822  gain_vs_shuffled=0.0035  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.6278  task_specific_frac=0.0063
+    ⚠ gain_vs_zero=0.3822 looks healthy but only 0.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  13050  L=0.2086  src=0.0678  tgt=0.0704  trans=0.0704  gain=+0.0000  |dz|=0.171  17.1 it/s
+step  13100  L=0.1159  src=0.0574  tgt=0.0292  trans=0.0293  gain=-0.0000  |dz|=0.624  17.1 it/s
+step  13150  L=0.2684  src=0.0471  tgt=0.1106  trans=0.1105  gain=+0.0001  |dz|=0.938  17.1 it/s
+step  13200  L=0.4003  src=0.0817  tgt=0.1593  trans=0.1592  gain=+0.0001  |dz|=0.807  17.1 it/s
+step  13250  L=0.5371  src=0.1061  tgt=0.2154  trans=0.2156  gain=-0.0002  |dz|=0.769  17.1 it/s
+step  13300  L=0.4157  src=0.0881  tgt=0.1638  trans=0.1638  gain=+0.0000  |dz|=0.754  17.1 it/s
+step  13350  L=0.1092  src=0.0676  tgt=0.0207  trans=0.0208  gain=-0.0001  |dz|=0.590  17.1 it/s
+step  13400  L=0.1037  src=0.0483  tgt=0.0277  trans=0.0277  gain=-0.0000  |dz|=0.595  17.1 it/s
+step  13450  L=0.1232  src=0.0558  tgt=0.0336  trans=0.0337  gain=-0.0001  |dz|=0.609  17.1 it/s
+step  13500  L=0.1787  src=0.0893  tgt=0.0447  trans=0.0447  gain=+0.0000  |dz|=0.170  17.1 it/s
+  [diagnostics @ 13500] loss_correct=0.0898  loss_zero=0.4476  loss_shuffled=0.0964  loss_random=0.4615  loss_target_only=0.0898  loss_mean_z=0.0926  r_basis=1.3573  |dz_transport|=0.5037  z_s_vs_enc_rel=0.7160  z_spread_rel=0.6720  gain_vs_zero=0.3578  gain_vs_shuffled=0.0066  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.6189  task_specific_frac=0.0079
+    ⚠ gain_vs_zero=0.3578 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  13550  L=0.1465  src=0.0897  tgt=0.0284  trans=0.0284  gain=-0.0000  |dz|=0.168  17.1 it/s
+step  13600  L=0.0884  src=0.0492  tgt=0.0195  trans=0.0195  gain=-0.0000  |dz|=0.165  17.1 it/s
+step  13650  L=0.4334  src=0.0498  tgt=0.1918  trans=0.1918  gain=+0.0000  |dz|=0.660  17.1 it/s
+step  13700  L=0.1256  src=0.0699  tgt=0.0278  trans=0.0278  gain=+0.0000  |dz|=0.594  17.1 it/s
+step  13750  L=0.3556  src=0.0749  tgt=0.1403  trans=0.1403  gain=-0.0000  |dz|=0.661  17.1 it/s
+step  13800  L=0.3633  src=0.0451  tgt=0.1592  trans=0.1590  gain=+0.0002  |dz|=0.666  17.1 it/s
+step  13850  L=0.1678  src=0.0652  tgt=0.0512  trans=0.0513  gain=-0.0001  |dz|=0.173  17.1 it/s
+step  13900  L=0.1768  src=0.0743  tgt=0.0513  trans=0.0511  gain=+0.0002  |dz|=0.609  17.1 it/s
+step  13950  L=0.1310  src=0.0795  tgt=0.0257  trans=0.0257  gain=+0.0001  |dz|=0.171  17.1 it/s
+step  14000  L=0.1258  src=0.0723  tgt=0.0267  trans=0.0267  gain=-0.0000  |dz|=0.584  17.1 it/s
+  [diagnostics @ 14000] loss_correct=0.0739  loss_zero=0.4311  loss_shuffled=0.0785  loss_random=0.4417  loss_target_only=0.0739  loss_mean_z=0.0764  r_basis=1.3392  |dz_transport|=0.4517  z_s_vs_enc_rel=0.6523  z_spread_rel=0.6569  gain_vs_zero=0.3572  gain_vs_shuffled=0.0046  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.6046  task_specific_frac=0.0069
+    ⚠ gain_vs_zero=0.3572 looks healthy but only 0.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step14000.pt
+step  14050  L=0.1252  src=0.0698  tgt=0.0277  trans=0.0276  gain=+0.0001  |dz|=0.166  17.1 it/s
+step  14100  L=0.0736  src=0.0284  tgt=0.0225  trans=0.0226  gain=-0.0001  |dz|=0.582  17.1 it/s
+step  14150  L=0.1509  src=0.0829  tgt=0.0338  trans=0.0341  gain=-0.0002  |dz|=0.164  17.1 it/s
+step  14200  L=0.4289  src=0.0727  tgt=0.1788  trans=0.1773  gain=+0.0014  |dz|=0.829  17.1 it/s
+step  14250  L=0.0766  src=0.0310  tgt=0.0228  trans=0.0227  gain=+0.0000  |dz|=0.166  17.1 it/s
+step  14300  L=0.4381  src=0.0480  tgt=0.1951  trans=0.1950  gain=+0.0001  |dz|=0.691  17.1 it/s
+step  14350  L=0.0559  src=0.0314  tgt=0.0122  trans=0.0122  gain=-0.0000  |dz|=0.534  17.1 it/s
+step  14400  L=0.2853  src=0.0539  tgt=0.1157  trans=0.1156  gain=+0.0001  |dz|=0.697  17.1 it/s
+step  14450  L=0.1335  src=0.0522  tgt=0.0407  trans=0.0406  gain=+0.0000  |dz|=0.163  17.1 it/s
+step  14500  L=0.3153  src=0.0668  tgt=0.1243  trans=0.1242  gain=+0.0001  |dz|=0.654  17.2 it/s
+  [diagnostics @ 14500] loss_correct=0.0527  loss_zero=0.4116  loss_shuffled=0.0566  loss_random=0.4270  loss_target_only=0.0527  loss_mean_z=0.0554  r_basis=1.3300  |dz_transport|=0.4330  z_s_vs_enc_rel=0.6324  z_spread_rel=0.5919  gain_vs_zero=0.3589  gain_vs_shuffled=0.0039  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.5884  task_specific_frac=0.0074
+    ⚠ gain_vs_zero=0.3589 looks healthy but only 0.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  14550  L=0.1740  src=0.0683  tgt=0.0528  trans=0.0528  gain=+0.0001  |dz|=0.162  17.1 it/s
+step  14600  L=0.3713  src=0.0779  tgt=0.1467  trans=0.1466  gain=+0.0001  |dz|=0.654  17.1 it/s
+step  14650  L=0.1695  src=0.0560  tgt=0.0567  trans=0.0567  gain=-0.0000  |dz|=0.647  17.1 it/s
+step  14700  L=0.1368  src=0.0700  tgt=0.0334  trans=0.0333  gain=+0.0000  |dz|=0.582  17.1 it/s
+step  14750  L=0.1512  src=0.0939  tgt=0.0286  trans=0.0286  gain=-0.0000  |dz|=0.564  17.1 it/s
+step  14800  L=0.1763  src=0.0722  tgt=0.0520  trans=0.0520  gain=+0.0000  |dz|=0.166  17.1 it/s
+step  14850  L=0.0771  src=0.0362  tgt=0.0204  trans=0.0204  gain=+0.0000  |dz|=0.585  17.2 it/s
+step  14900  L=0.4006  src=0.0904  tgt=0.1550  trans=0.1551  gain=-0.0000  |dz|=0.622  17.2 it/s
+step  14950  L=0.1335  src=0.0730  tgt=0.0302  trans=0.0302  gain=-0.0000  |dz|=0.166  17.2 it/s
+step  15000  L=0.0923  src=0.0362  tgt=0.0280  trans=0.0280  gain=-0.0000  |dz|=0.569  17.2 it/s
+  [diagnostics @ 15000] loss_correct=0.0597  loss_zero=0.4085  loss_shuffled=0.0644  loss_random=0.4226  loss_target_only=0.0597  loss_mean_z=0.0625  r_basis=1.3008  |dz_transport|=0.4634  z_s_vs_enc_rel=0.7284  z_spread_rel=0.6159  gain_vs_zero=0.3488  gain_vs_shuffled=0.0046  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.5803  task_specific_frac=0.0079
+    ⚠ gain_vs_zero=0.3488 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  15050  L=0.1478  src=0.0940  tgt=0.0269  trans=0.0268  gain=+0.0001  |dz|=0.582  17.1 it/s
+step  15100  L=0.1227  src=0.0787  tgt=0.0219  trans=0.0220  gain=-0.0000  |dz|=0.568  17.1 it/s
+step  15150  L=0.0723  src=0.0406  tgt=0.0159  trans=0.0158  gain=+0.0002  |dz|=0.544  17.2 it/s
+step  15200  L=0.0841  src=0.0501  tgt=0.0170  trans=0.0170  gain=-0.0000  |dz|=0.159  17.2 it/s
+step  15250  L=0.1016  src=0.0358  tgt=0.0329  trans=0.0329  gain=+0.0001  |dz|=0.159  17.2 it/s
+step  15300  L=0.0954  src=0.0394  tgt=0.0280  trans=0.0280  gain=+0.0001  |dz|=0.577  17.2 it/s
+step  15350  L=0.0978  src=0.0485  tgt=0.0246  trans=0.0246  gain=-0.0000  |dz|=0.546  17.2 it/s
+step  15400  L=0.1468  src=0.0771  tgt=0.0348  trans=0.0348  gain=+0.0000  |dz|=0.164  17.2 it/s
+step  15450  L=0.5142  src=0.0817  tgt=0.2162  trans=0.2162  gain=-0.0000  |dz|=0.670  17.2 it/s
+step  15500  L=0.1348  src=0.0508  tgt=0.0420  trans=0.0420  gain=-0.0000  |dz|=0.155  17.2 it/s
+  [diagnostics @ 15500] loss_correct=0.0679  loss_zero=0.4043  loss_shuffled=0.0757  loss_random=0.4206  loss_target_only=0.0679  loss_mean_z=0.0707  r_basis=1.2605  |dz_transport|=0.4727  z_s_vs_enc_rel=0.7404  z_spread_rel=0.6774  gain_vs_zero=0.3364  gain_vs_shuffled=0.0077  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.5670  task_specific_frac=0.0081
+    ⚠ gain_vs_zero=0.3364 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  15550  L=0.1362  src=0.0728  tgt=0.0316  trans=0.0316  gain=-0.0000  |dz|=0.590  17.2 it/s
+step  15600  L=0.0831  src=0.0457  tgt=0.0187  trans=0.0187  gain=-0.0000  |dz|=0.152  17.2 it/s
+step  15650  L=0.3769  src=0.0661  tgt=0.1555  trans=0.1552  gain=+0.0004  |dz|=0.618  17.2 it/s
+step  15700  L=0.0744  src=0.0376  tgt=0.0183  trans=0.0183  gain=+0.0000  |dz|=0.541  17.2 it/s
+step  15750  L=0.0956  src=0.0567  tgt=0.0194  trans=0.0194  gain=-0.0000  |dz|=0.553  17.2 it/s
+step  15800  L=0.3687  src=0.0382  tgt=0.1652  trans=0.1652  gain=+0.0000  |dz|=0.621  17.2 it/s
+step  15850  L=0.6734  src=0.0866  tgt=0.2934  trans=0.2933  gain=+0.0001  |dz|=0.596  17.2 it/s
+step  15900  L=0.1291  src=0.0690  tgt=0.0301  trans=0.0300  gain=+0.0001  |dz|=0.554  17.2 it/s
+step  15950  L=0.1201  src=0.0465  tgt=0.0368  trans=0.0367  gain=+0.0001  |dz|=0.164  17.2 it/s
+step  16000  L=0.1076  src=0.0625  tgt=0.0225  trans=0.0225  gain=-0.0000  |dz|=0.167  17.2 it/s
+  [diagnostics @ 16000] loss_correct=0.0659  loss_zero=0.3965  loss_shuffled=0.0702  loss_random=0.4172  loss_target_only=0.0659  loss_mean_z=0.0683  r_basis=1.2421  |dz_transport|=0.3914  z_s_vs_enc_rel=0.6132  z_spread_rel=0.6371  gain_vs_zero=0.3306  gain_vs_shuffled=0.0043  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.5516  task_specific_frac=0.0071
+    ⚠ gain_vs_zero=0.3306 looks healthy but only 0.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step16000.pt
+step  16050  L=0.1106  src=0.0622  tgt=0.0241  trans=0.0241  gain=-0.0000  |dz|=0.556  17.2 it/s
+step  16100  L=0.1111  src=0.0658  tgt=0.0226  trans=0.0226  gain=+0.0001  |dz|=0.162  17.2 it/s
+step  16150  L=0.4065  src=0.0822  tgt=0.1621  trans=0.1621  gain=-0.0000  |dz|=0.597  17.2 it/s
+step  16200  L=0.1341  src=0.0491  tgt=0.0425  trans=0.0425  gain=+0.0000  |dz|=0.169  17.2 it/s
+step  16250  L=0.3506  src=0.0738  tgt=0.1384  trans=0.1383  gain=+0.0001  |dz|=0.619  17.1 it/s
+step  16300  L=0.0790  src=0.0389  tgt=0.0200  trans=0.0200  gain=+0.0000  |dz|=0.160  17.1 it/s
+step  16350  L=0.1446  src=0.0927  tgt=0.0260  trans=0.0259  gain=+0.0000  |dz|=0.160  17.1 it/s
+step  16400  L=0.1370  src=0.0602  tgt=0.0383  trans=0.0384  gain=-0.0001  |dz|=0.559  17.1 it/s
+step  16450  L=0.1207  src=0.0713  tgt=0.0247  trans=0.0246  gain=+0.0001  |dz|=0.164  17.1 it/s
+step  16500  L=0.1512  src=0.0825  tgt=0.0343  trans=0.0343  gain=+0.0000  |dz|=0.591  17.1 it/s
+  [diagnostics @ 16500] loss_correct=0.0656  loss_zero=0.3907  loss_shuffled=0.0706  loss_random=0.4092  loss_target_only=0.0656  loss_mean_z=0.0684  r_basis=1.2206  |dz_transport|=0.4525  z_s_vs_enc_rel=0.7407  z_spread_rel=0.6565  gain_vs_zero=0.3251  gain_vs_shuffled=0.0051  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.5378  task_specific_frac=0.0088
+    ⚠ gain_vs_zero=0.3251 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  16550  L=0.1175  src=0.0519  tgt=0.0327  trans=0.0328  gain=-0.0000  |dz|=0.166  17.1 it/s
+step  16600  L=0.4276  src=0.0267  tgt=0.2005  trans=0.2003  gain=+0.0002  |dz|=0.675  17.1 it/s
+step  16650  L=0.1370  src=0.0883  tgt=0.0243  trans=0.0244  gain=-0.0000  |dz|=0.559  17.1 it/s
+step  16700  L=0.1206  src=0.0429  tgt=0.0388  trans=0.0388  gain=-0.0000  |dz|=0.166  17.1 it/s
+step  16750  L=0.3992  src=0.0567  tgt=0.1712  trans=0.1713  gain=-0.0000  |dz|=0.646  17.1 it/s
+step  16800  L=0.0994  src=0.0490  tgt=0.0252  trans=0.0252  gain=+0.0000  |dz|=0.536  17.1 it/s
+step  16850  L=0.1219  src=0.0598  tgt=0.0311  trans=0.0310  gain=+0.0000  |dz|=0.167  17.1 it/s
+step  16900  L=0.3827  src=0.0622  tgt=0.1602  trans=0.1602  gain=+0.0000  |dz|=0.583  17.1 it/s
+step  16950  L=0.1054  src=0.0543  tgt=0.0255  trans=0.0256  gain=-0.0000  |dz|=0.555  17.1 it/s
+step  17000  L=0.4628  src=0.0228  tgt=0.2200  trans=0.2200  gain=-0.0000  |dz|=0.588  17.1 it/s
+  [diagnostics @ 17000] loss_correct=0.0783  loss_zero=0.3911  loss_shuffled=0.0841  loss_random=0.4063  loss_target_only=0.0783  loss_mean_z=0.0810  r_basis=1.1920  |dz_transport|=0.4699  z_s_vs_enc_rel=0.7786  z_spread_rel=0.6922  gain_vs_zero=0.3128  gain_vs_shuffled=0.0058  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.5356  task_specific_frac=0.0087
+    ⚠ gain_vs_zero=0.3128 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  17050  L=0.4537  src=0.0739  tgt=0.1899  trans=0.1899  gain=-0.0000  |dz|=0.619  17.1 it/s
+step  17100  L=0.1472  src=0.0801  tgt=0.0335  trans=0.0335  gain=+0.0000  |dz|=0.155  17.1 it/s
+step  17150  L=0.1533  src=0.0733  tgt=0.0400  trans=0.0400  gain=+0.0000  |dz|=0.158  17.1 it/s
+step  17200  L=0.6018  src=0.0676  tgt=0.2672  trans=0.2669  gain=+0.0004  |dz|=0.687  17.1 it/s
+step  17250  L=0.1306  src=0.0749  tgt=0.0278  trans=0.0278  gain=+0.0000  |dz|=0.164  17.1 it/s
+step  17300  L=0.1058  src=0.0649  tgt=0.0204  trans=0.0204  gain=-0.0001  |dz|=0.524  17.1 it/s
+step  17350  L=0.1445  src=0.0255  tgt=0.0594  trans=0.0595  gain=-0.0002  |dz|=0.514  17.1 it/s
+step  17400  L=0.1166  src=0.0603  tgt=0.0282  trans=0.0281  gain=+0.0000  |dz|=0.159  17.1 it/s
+step  17450  L=0.1596  src=0.0682  tgt=0.0457  trans=0.0457  gain=-0.0000  |dz|=0.161  17.1 it/s
+step  17500  L=0.1051  src=0.0501  tgt=0.0275  trans=0.0274  gain=+0.0000  |dz|=0.535  17.1 it/s
+  [diagnostics @ 17500] loss_correct=0.0706  loss_zero=0.3800  loss_shuffled=0.0745  loss_random=0.3951  loss_target_only=0.0706  loss_mean_z=0.0732  r_basis=1.1728  |dz_transport|=0.4440  z_s_vs_enc_rel=0.7315  z_spread_rel=0.6807  gain_vs_zero=0.3093  gain_vs_shuffled=0.0039  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.5255  task_specific_frac=0.0083
+    ⚠ gain_vs_zero=0.3093 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  17550  L=0.1322  src=0.0393  tgt=0.0465  trans=0.0464  gain=+0.0001  |dz|=0.158  17.0 it/s
+step  17600  L=0.1273  src=0.0617  tgt=0.0328  trans=0.0328  gain=+0.0000  |dz|=0.524  17.0 it/s
+step  17650  L=0.4941  src=0.0719  tgt=0.2109  trans=0.2112  gain=-0.0003  |dz|=0.578  17.0 it/s
+step  17700  L=0.1075  src=0.0592  tgt=0.0241  trans=0.0241  gain=-0.0000  |dz|=0.154  17.0 it/s
+step  17750  L=0.0994  src=0.0581  tgt=0.0206  trans=0.0207  gain=-0.0000  |dz|=0.156  17.0 it/s
+step  17800  L=0.1496  src=0.0622  tgt=0.0437  trans=0.0437  gain=-0.0000  |dz|=0.151  17.0 it/s
+step  17850  L=0.1202  src=0.0625  tgt=0.0289  trans=0.0287  gain=+0.0002  |dz|=0.535  17.0 it/s
+step  17900  L=0.0885  src=0.0476  tgt=0.0204  trans=0.0204  gain=+0.0001  |dz|=0.149  17.0 it/s
+step  17950  L=0.2643  src=0.0396  tgt=0.1123  trans=0.1123  gain=-0.0001  |dz|=0.600  17.0 it/s
+step  18000  L=0.4712  src=0.0528  tgt=0.2093  trans=0.2091  gain=+0.0002  |dz|=0.567  17.0 it/s
+  [diagnostics @ 18000] loss_correct=0.1010  loss_zero=0.3909  loss_shuffled=0.1070  loss_random=0.4021  loss_target_only=0.1010  loss_mean_z=0.1037  r_basis=1.1298  |dz_transport|=0.4495  z_s_vs_enc_rel=0.7655  z_spread_rel=0.6821  gain_vs_zero=0.2900  gain_vs_shuffled=0.0061  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.5119  task_specific_frac=0.0093
+    ⚠ gain_vs_zero=0.2900 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step18000.pt
+step  18050  L=0.2882  src=0.0442  tgt=0.1220  trans=0.1219  gain=+0.0000  |dz|=0.518  17.0 it/s
+step  18100  L=0.1158  src=0.0558  tgt=0.0300  trans=0.0300  gain=+0.0001  |dz|=0.151  17.0 it/s
+step  18150  L=0.1039  src=0.0489  tgt=0.0275  trans=0.0274  gain=+0.0001  |dz|=0.157  17.0 it/s
+step  18200  L=0.3921  src=0.0467  tgt=0.1727  trans=0.1727  gain=-0.0001  |dz|=0.580  17.0 it/s
+step  18250  L=0.1525  src=0.0623  tgt=0.0451  trans=0.0450  gain=+0.0001  |dz|=0.530  17.0 it/s
+step  18300  L=0.1317  src=0.0522  tgt=0.0397  trans=0.0397  gain=-0.0000  |dz|=0.157  17.0 it/s
+step  18350  L=0.4130  src=0.0932  tgt=0.1599  trans=0.1598  gain=+0.0000  |dz|=0.584  17.0 it/s
+step  18400  L=0.6174  src=0.0569  tgt=0.2802  trans=0.2802  gain=-0.0000  |dz|=0.603  17.0 it/s
+step  18450  L=0.1400  src=0.0800  tgt=0.0300  trans=0.0300  gain=-0.0000  |dz|=0.527  17.0 it/s
+step  18500  L=0.1073  src=0.0733  tgt=0.0170  trans=0.0169  gain=+0.0000  |dz|=0.150  17.0 it/s
+  [diagnostics @ 18500] loss_correct=0.0646  loss_zero=0.3633  loss_shuffled=0.0703  loss_random=0.3781  loss_target_only=0.0647  loss_mean_z=0.0670  r_basis=1.1301  |dz_transport|=0.3938  z_s_vs_enc_rel=0.6754  z_spread_rel=0.6654  gain_vs_zero=0.2987  gain_vs_shuffled=0.0057  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.5067  task_specific_frac=0.0078
+    ⚠ gain_vs_zero=0.2987 looks healthy but only 0.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  18550  L=0.1312  src=0.0558  tgt=0.0377  trans=0.0377  gain=-0.0000  |dz|=0.532  17.0 it/s
+step  18600  L=0.1219  src=0.0380  tgt=0.0419  trans=0.0419  gain=-0.0000  |dz|=0.150  17.0 it/s
+step  18650  L=0.5543  src=0.0625  tgt=0.2458  trans=0.2459  gain=-0.0001  |dz|=0.594  17.0 it/s
+step  18700  L=0.0912  src=0.0518  tgt=0.0196  trans=0.0197  gain=-0.0001  |dz|=0.512  17.0 it/s
+step  18750  L=0.0777  src=0.0422  tgt=0.0177  trans=0.0177  gain=+0.0000  |dz|=0.508  17.0 it/s
+step  18800  L=0.1268  src=0.0651  tgt=0.0308  trans=0.0308  gain=+0.0000  |dz|=0.149  17.0 it/s
+step  18850  L=0.4904  src=0.0348  tgt=0.2278  trans=0.2278  gain=+0.0000  |dz|=0.554  17.0 it/s
+step  18900  L=0.1688  src=0.0874  tgt=0.0406  trans=0.0407  gain=-0.0001  |dz|=0.153  17.0 it/s
+step  18950  L=0.5274  src=0.0511  tgt=0.2384  trans=0.2378  gain=+0.0007  |dz|=0.992  17.0 it/s
+step  19000  L=0.3926  src=0.0666  tgt=0.1630  trans=0.1628  gain=+0.0002  |dz|=1.017  17.1 it/s
+  [diagnostics @ 19000] loss_correct=0.1038  loss_zero=0.3787  loss_shuffled=0.1092  loss_random=0.3919  loss_target_only=0.1038  loss_mean_z=0.1077  r_basis=1.0780  |dz_transport|=0.5345  z_s_vs_enc_rel=0.9601  z_spread_rel=0.6943  gain_vs_zero=0.2748  gain_vs_shuffled=0.0054  gain_vs_target_only=-0.0000  gain_vs_mean_z=0.0039  delta_task=0.0039  z_center_norm=0.4908  task_specific_frac=0.0141
+    ⚠ gain_vs_zero=0.2748 looks healthy but only 1.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  19050  L=0.2985  src=0.0401  tgt=0.1290  trans=0.1293  gain=-0.0003  |dz|=0.863  17.0 it/s
+step  19100  L=0.1271  src=0.0488  tgt=0.0392  trans=0.0390  gain=+0.0001  |dz|=0.538  17.0 it/s
+step  19150  L=0.1798  src=0.0594  tgt=0.0602  trans=0.0602  gain=+0.0001  |dz|=0.153  17.0 it/s
+step  19200  L=0.1201  src=0.0805  tgt=0.0197  trans=0.0198  gain=-0.0000  |dz|=0.158  17.0 it/s
+step  19250  L=0.4322  src=0.0628  tgt=0.1846  trans=0.1847  gain=-0.0001  |dz|=0.738  17.0 it/s
+step  19300  L=0.1073  src=0.0412  tgt=0.0330  trans=0.0330  gain=+0.0000  |dz|=0.515  17.1 it/s
+step  19350  L=0.5054  src=0.0761  tgt=0.2146  trans=0.2147  gain=-0.0001  |dz|=0.694  17.1 it/s
+step  19400  L=0.1070  src=0.0559  tgt=0.0255  trans=0.0255  gain=-0.0000  |dz|=0.512  17.1 it/s
+step  19450  L=0.4164  src=0.0875  tgt=0.1644  trans=0.1644  gain=-0.0000  |dz|=0.641  17.1 it/s
+step  19500  L=0.1095  src=0.0532  tgt=0.0281  trans=0.0281  gain=+0.0000  |dz|=0.150  17.1 it/s
+  [diagnostics @ 19500] loss_correct=0.0839  loss_zero=0.3607  loss_shuffled=0.0911  loss_random=0.3747  loss_target_only=0.0839  loss_mean_z=0.0871  r_basis=1.0684  |dz_transport|=0.4396  z_s_vs_enc_rel=0.7794  z_spread_rel=0.7332  gain_vs_zero=0.2768  gain_vs_shuffled=0.0072  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0032  delta_task=0.0032  z_center_norm=0.4904  task_specific_frac=0.0115
+    ⚠ gain_vs_zero=0.2768 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  19550  L=0.5488  src=0.0487  tgt=0.2502  trans=0.2498  gain=+0.0003  |dz|=0.621  17.0 it/s
+step  19600  L=0.1387  src=0.0349  tgt=0.0519  trans=0.0518  gain=+0.0000  |dz|=0.153  17.1 it/s
+step  19650  L=0.3648  src=0.0745  tgt=0.1451  trans=0.1451  gain=+0.0000  |dz|=0.601  17.1 it/s
+step  19700  L=0.3134  src=0.0668  tgt=0.1232  trans=0.1233  gain=-0.0000  |dz|=0.614  17.1 it/s
+step  19750  L=0.4877  src=0.0766  tgt=0.2055  trans=0.2055  gain=+0.0000  |dz|=0.627  17.1 it/s
+step  19800  L=0.3031  src=0.0383  tgt=0.1323  trans=0.1324  gain=-0.0001  |dz|=0.626  17.1 it/s
+step  19850  L=0.1069  src=0.0559  tgt=0.0254  trans=0.0254  gain=+0.0000  |dz|=0.142  17.1 it/s
+step  19900  L=0.1602  src=0.0410  tgt=0.0596  trans=0.0596  gain=-0.0000  |dz|=0.150  17.1 it/s
+step  19950  L=0.4798  src=0.1098  tgt=0.1869  trans=0.1829  gain=+0.0040  |dz|=0.781  17.1 it/s
+step  20000  L=0.0978  src=0.0416  tgt=0.0281  trans=0.0280  gain=+0.0002  |dz|=0.520  17.1 it/s
+  [diagnostics @ 20000] loss_correct=0.0661  loss_zero=0.3446  loss_shuffled=0.0706  loss_random=0.3621  loss_target_only=0.0661  loss_mean_z=0.0685  r_basis=1.0626  |dz_transport|=0.3501  z_s_vs_enc_rel=0.6279  z_spread_rel=0.6490  gain_vs_zero=0.2785  gain_vs_shuffled=0.0045  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.4852  task_specific_frac=0.0088
+    ⚠ gain_vs_zero=0.2785 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step20000.pt
+step  20050  L=0.1383  src=0.0763  tgt=0.0310  trans=0.0310  gain=-0.0000  |dz|=0.529  17.1 it/s
+step  20100  L=0.0982  src=0.0352  tgt=0.0314  trans=0.0314  gain=+0.0000  |dz|=0.525  17.1 it/s
+step  20150  L=0.1316  src=0.0639  tgt=0.0338  trans=0.0338  gain=+0.0000  |dz|=0.144  17.1 it/s
+step  20200  L=0.1310  src=0.0754  tgt=0.0278  trans=0.0277  gain=+0.0000  |dz|=0.528  17.1 it/s
+step  20250  L=0.4032  src=0.0826  tgt=0.1604  trans=0.1602  gain=+0.0002  |dz|=0.733  17.1 it/s
+step  20300  L=0.1309  src=0.0616  tgt=0.0346  trans=0.0346  gain=+0.0001  |dz|=0.157  17.1 it/s
+step  20350  L=0.3648  src=0.0387  tgt=0.1630  trans=0.1630  gain=+0.0000  |dz|=0.645  17.1 it/s
+step  20400  L=0.1109  src=0.0595  tgt=0.0257  trans=0.0256  gain=+0.0000  |dz|=0.515  17.1 it/s
+step  20450  L=0.3161  src=0.0701  tgt=0.1229  trans=0.1229  gain=-0.0000  |dz|=0.630  17.1 it/s
+step  20500  L=0.5781  src=0.0801  tgt=0.2490  trans=0.2490  gain=-0.0000  |dz|=0.609  17.1 it/s
+  [diagnostics @ 20500] loss_correct=0.0877  loss_zero=0.3507  loss_shuffled=0.0964  loss_random=0.3687  loss_target_only=0.0877  loss_mean_z=0.0910  r_basis=1.0215  |dz_transport|=0.5000  z_s_vs_enc_rel=0.8815  z_spread_rel=0.7448  gain_vs_zero=0.2630  gain_vs_shuffled=0.0087  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0034  delta_task=0.0034  z_center_norm=0.4756  task_specific_frac=0.0128
+    ⚠ gain_vs_zero=0.2630 looks healthy but only 1.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  20550  L=0.3296  src=0.0490  tgt=0.1403  trans=0.1402  gain=+0.0000  |dz|=0.614  17.1 it/s
+step  20600  L=0.3428  src=0.0503  tgt=0.1462  trans=0.1462  gain=-0.0000  |dz|=0.619  17.1 it/s
+step  20650  L=0.1003  src=0.0424  tgt=0.0289  trans=0.0289  gain=+0.0000  |dz|=0.152  17.1 it/s
+step  20700  L=0.1502  src=0.0723  tgt=0.0389  trans=0.0389  gain=-0.0000  |dz|=0.151  17.1 it/s
+step  20750  L=0.1974  src=0.0308  tgt=0.0833  trans=0.0832  gain=+0.0000  |dz|=0.631  17.1 it/s
+step  20800  L=0.4974  src=0.0928  tgt=0.2022  trans=0.2023  gain=-0.0001  |dz|=0.609  17.1 it/s
+step  20850  L=0.1109  src=0.0403  tgt=0.0352  trans=0.0353  gain=-0.0000  |dz|=0.505  17.1 it/s
+step  20900  L=0.1233  src=0.0662  tgt=0.0285  trans=0.0285  gain=+0.0000  |dz|=0.159  17.1 it/s
+step  20950  L=0.4523  src=0.0800  tgt=0.1861  trans=0.1861  gain=-0.0000  |dz|=0.579  17.1 it/s
+step  21000  L=0.4718  src=0.0773  tgt=0.1973  trans=0.1972  gain=+0.0000  |dz|=0.585  17.1 it/s
+  [diagnostics @ 21000] loss_correct=0.0763  loss_zero=0.3385  loss_shuffled=0.0837  loss_random=0.3525  loss_target_only=0.0763  loss_mean_z=0.0792  r_basis=1.0135  |dz_transport|=0.4353  z_s_vs_enc_rel=0.8120  z_spread_rel=0.7385  gain_vs_zero=0.2622  gain_vs_shuffled=0.0074  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.4698  task_specific_frac=0.0110
+    ⚠ gain_vs_zero=0.2622 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  21050  L=0.0924  src=0.0527  tgt=0.0198  trans=0.0198  gain=+0.0000  |dz|=0.500  17.1 it/s
+step  21100  L=0.1290  src=0.0777  tgt=0.0256  trans=0.0256  gain=-0.0000  |dz|=0.528  17.1 it/s
+step  21150  L=0.4696  src=0.0737  tgt=0.1980  trans=0.1979  gain=+0.0001  |dz|=0.568  17.1 it/s
+step  21200  L=0.1370  src=0.0449  tgt=0.0460  trans=0.0460  gain=+0.0001  |dz|=0.502  17.1 it/s
+step  21250  L=0.4610  src=0.0451  tgt=0.2080  trans=0.2079  gain=+0.0001  |dz|=0.577  17.1 it/s
+step  21300  L=0.3608  src=0.0495  tgt=0.1556  trans=0.1556  gain=-0.0000  |dz|=0.562  17.1 it/s
+step  21350  L=0.1221  src=0.0610  tgt=0.0306  trans=0.0305  gain=+0.0000  |dz|=0.487  17.1 it/s
+step  21400  L=0.0977  src=0.0521  tgt=0.0228  trans=0.0228  gain=-0.0000  |dz|=0.498  17.1 it/s
+step  21450  L=0.1137  src=0.0677  tgt=0.0230  trans=0.0230  gain=-0.0000  |dz|=0.496  17.1 it/s
+step  21500  L=0.1009  src=0.0515  tgt=0.0247  trans=0.0247  gain=+0.0000  |dz|=0.133  17.1 it/s
+  [diagnostics @ 21500] loss_correct=0.0870  loss_zero=0.3386  loss_shuffled=0.0941  loss_random=0.3532  loss_target_only=0.0870  loss_mean_z=0.0897  r_basis=0.9824  |dz_transport|=0.4319  z_s_vs_enc_rel=0.8156  z_spread_rel=0.7401  gain_vs_zero=0.2516  gain_vs_shuffled=0.0070  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.4619  task_specific_frac=0.0107
+    ⚠ gain_vs_zero=0.2516 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  21550  L=0.1214  src=0.0636  tgt=0.0289  trans=0.0289  gain=-0.0001  |dz|=0.509  17.1 it/s
+step  21600  L=0.4388  src=0.0966  tgt=0.1711  trans=0.1711  gain=+0.0001  |dz|=0.624  17.1 it/s
+step  21650  L=0.1801  src=0.0965  tgt=0.0418  trans=0.0418  gain=+0.0000  |dz|=0.143  17.1 it/s
+step  21700  L=0.4001  src=0.0581  tgt=0.1710  trans=0.1710  gain=+0.0000  |dz|=0.611  17.1 it/s
+step  21750  L=0.1134  src=0.0456  tgt=0.0339  trans=0.0339  gain=-0.0000  |dz|=0.142  17.1 it/s
+step  21800  L=0.1456  src=0.0712  tgt=0.0371  trans=0.0372  gain=-0.0000  |dz|=0.488  17.1 it/s
+step  21850  L=0.1511  src=0.0837  tgt=0.0337  trans=0.0337  gain=+0.0000  |dz|=0.142  17.1 it/s
+step  21900  L=0.1401  src=0.0591  tgt=0.0405  trans=0.0405  gain=+0.0000  |dz|=0.495  17.1 it/s
+step  21950  L=0.1835  src=0.0968  tgt=0.0433  trans=0.0434  gain=-0.0001  |dz|=0.515  17.1 it/s
+step  22000  L=0.3715  src=0.0892  tgt=0.1411  trans=0.1411  gain=-0.0000  |dz|=0.575  17.1 it/s
+  [diagnostics @ 22000] loss_correct=0.0889  loss_zero=0.3350  loss_shuffled=0.0957  loss_random=0.3485  loss_target_only=0.0889  loss_mean_z=0.0916  r_basis=0.9647  |dz_transport|=0.4392  z_s_vs_enc_rel=0.8288  z_spread_rel=0.7387  gain_vs_zero=0.2462  gain_vs_shuffled=0.0068  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.4537  task_specific_frac=0.0112
+    ⚠ gain_vs_zero=0.2462 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step22000.pt
+step  22050  L=0.1365  src=0.0796  tgt=0.0284  trans=0.0284  gain=+0.0000  |dz|=0.482  17.1 it/s
+step  22100  L=0.4698  src=0.0929  tgt=0.1884  trans=0.1884  gain=-0.0000  |dz|=0.557  17.1 it/s
+step  22150  L=0.4692  src=0.0671  tgt=0.2010  trans=0.2010  gain=-0.0000  |dz|=0.549  17.1 it/s
+step  22200  L=0.0508  src=0.0263  tgt=0.0122  trans=0.0122  gain=+0.0001  |dz|=0.467  17.1 it/s
+step  22250  L=0.1274  src=0.0437  tgt=0.0418  trans=0.0419  gain=-0.0001  |dz|=0.139  17.1 it/s
+step  22300  L=0.0935  src=0.0492  tgt=0.0221  trans=0.0221  gain=+0.0000  |dz|=0.488  17.1 it/s
+step  22350  L=0.0928  src=0.0421  tgt=0.0253  trans=0.0253  gain=+0.0000  |dz|=0.504  17.1 it/s
+step  22400  L=0.1119  src=0.0594  tgt=0.0262  trans=0.0262  gain=+0.0000  |dz|=0.496  17.1 it/s
+step  22450  L=0.1171  src=0.0625  tgt=0.0273  trans=0.0273  gain=-0.0000  |dz|=0.504  17.1 it/s
+step  22500  L=0.2869  src=0.0518  tgt=0.1175  trans=0.1175  gain=+0.0000  |dz|=0.546  17.1 it/s
+  [diagnostics @ 22500] loss_correct=0.0623  loss_zero=0.3153  loss_shuffled=0.0677  loss_random=0.3277  loss_target_only=0.0624  loss_mean_z=0.0648  r_basis=0.9727  |dz_transport|=0.3706  z_s_vs_enc_rel=0.6825  z_spread_rel=0.6773  gain_vs_zero=0.2531  gain_vs_shuffled=0.0054  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.4484  task_specific_frac=0.0100
+    ⚠ gain_vs_zero=0.2531 looks healthy but only 1.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  22550  L=0.1901  src=0.1236  tgt=0.0332  trans=0.0332  gain=-0.0000  |dz|=0.498  17.1 it/s
+step  22600  L=0.1509  src=0.0762  tgt=0.0373  trans=0.0373  gain=+0.0000  |dz|=0.490  17.1 it/s
+step  22650  L=0.3608  src=0.0611  tgt=0.1498  trans=0.1499  gain=-0.0001  |dz|=0.627  17.1 it/s
+step  22700  L=0.0908  src=0.0410  tgt=0.0249  trans=0.0248  gain=+0.0000  |dz|=0.494  17.1 it/s
+step  22750  L=0.1586  src=0.0598  tgt=0.0495  trans=0.0494  gain=+0.0001  |dz|=0.498  17.1 it/s
+step  22800  L=0.1019  src=0.0562  tgt=0.0228  trans=0.0228  gain=+0.0000  |dz|=0.481  17.1 it/s
+step  22850  L=0.3043  src=0.0406  tgt=0.1318  trans=0.1318  gain=+0.0000  |dz|=0.558  17.1 it/s
+step  22900  L=0.6427  src=0.0772  tgt=0.2827  trans=0.2827  gain=+0.0000  |dz|=0.560  17.1 it/s
+step  22950  L=0.4116  src=0.0545  tgt=0.1785  trans=0.1785  gain=-0.0000  |dz|=0.537  17.1 it/s
+step  23000  L=0.0776  src=0.0471  tgt=0.0152  trans=0.0152  gain=+0.0000  |dz|=0.133  17.1 it/s
+  [diagnostics @ 23000] loss_correct=0.0869  loss_zero=0.3245  loss_shuffled=0.0927  loss_random=0.3364  loss_target_only=0.0870  loss_mean_z=0.0896  r_basis=0.9343  |dz_transport|=0.4109  z_s_vs_enc_rel=0.7823  z_spread_rel=0.7400  gain_vs_zero=0.2376  gain_vs_shuffled=0.0058  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.4431  task_specific_frac=0.0114
+    ⚠ gain_vs_zero=0.2376 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  23050  L=0.1388  src=0.0918  tgt=0.0235  trans=0.0235  gain=-0.0000  |dz|=0.484  17.1 it/s
+step  23100  L=0.1321  src=0.0766  tgt=0.0277  trans=0.0277  gain=+0.0000  |dz|=0.494  17.1 it/s
+step  23150  L=0.2647  src=0.0405  tgt=0.1126  trans=0.1116  gain=+0.0010  |dz|=0.658  17.1 it/s
+step  23200  L=0.1346  src=0.0742  tgt=0.0301  trans=0.0302  gain=-0.0001  |dz|=0.485  17.1 it/s
+step  23250  L=0.1052  src=0.0475  tgt=0.0288  trans=0.0288  gain=-0.0000  |dz|=0.485  17.1 it/s
+step  23300  L=0.1156  src=0.0513  tgt=0.0321  trans=0.0321  gain=+0.0000  |dz|=0.133  17.1 it/s
+step  23350  L=0.1467  src=0.0762  tgt=0.0352  trans=0.0352  gain=+0.0001  |dz|=0.138  17.1 it/s
+step  23400  L=0.4038  src=0.0525  tgt=0.1756  trans=0.1756  gain=+0.0000  |dz|=0.537  17.1 it/s
+step  23450  L=0.1291  src=0.0689  tgt=0.0301  trans=0.0300  gain=+0.0001  |dz|=0.491  17.1 it/s
+step  23500  L=0.3296  src=0.0651  tgt=0.1323  trans=0.1322  gain=+0.0000  |dz|=0.539  17.1 it/s
+  [diagnostics @ 23500] loss_correct=0.0895  loss_zero=0.3206  loss_shuffled=0.0968  loss_random=0.3370  loss_target_only=0.0896  loss_mean_z=0.0925  r_basis=0.9143  |dz_transport|=0.4422  z_s_vs_enc_rel=0.8208  z_spread_rel=0.7512  gain_vs_zero=0.2311  gain_vs_shuffled=0.0073  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0030  delta_task=0.0030  z_center_norm=0.4340  task_specific_frac=0.0131
+    ⚠ gain_vs_zero=0.2311 looks healthy but only 1.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  23550  L=0.4787  src=0.0752  tgt=0.2017  trans=0.2018  gain=-0.0001  |dz|=0.539  17.1 it/s
+step  23600  L=0.1485  src=0.0807  tgt=0.0339  trans=0.0338  gain=+0.0000  |dz|=0.137  17.1 it/s
+step  23650  L=0.3227  src=0.0627  tgt=0.1300  trans=0.1299  gain=+0.0000  |dz|=0.538  17.1 it/s
+step  23700  L=0.3240  src=0.0388  tgt=0.1426  trans=0.1426  gain=+0.0000  |dz|=0.538  17.1 it/s
+step  23750  L=0.3729  src=0.0491  tgt=0.1618  trans=0.1619  gain=-0.0001  |dz|=0.527  17.1 it/s
+step  23800  L=0.1482  src=0.0679  tgt=0.0402  trans=0.0401  gain=+0.0000  |dz|=0.481  17.1 it/s
+step  23850  L=0.0968  src=0.0617  tgt=0.0176  trans=0.0175  gain=+0.0000  |dz|=0.479  17.1 it/s
+step  23900  L=0.1602  src=0.0832  tgt=0.0385  trans=0.0384  gain=+0.0000  |dz|=0.139  17.1 it/s
+step  23950  L=0.3051  src=0.0477  tgt=0.1287  trans=0.1287  gain=+0.0000  |dz|=0.540  17.1 it/s
+step  24000  L=0.4485  src=0.0850  tgt=0.1817  trans=0.1817  gain=-0.0000  |dz|=0.543  17.1 it/s
+  [diagnostics @ 24000] loss_correct=0.0710  loss_zero=0.3047  loss_shuffled=0.0758  loss_random=0.3138  loss_target_only=0.0710  loss_mean_z=0.0735  r_basis=0.9125  |dz_transport|=0.3654  z_s_vs_enc_rel=0.7428  z_spread_rel=0.7197  gain_vs_zero=0.2337  gain_vs_shuffled=0.0048  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.4286  task_specific_frac=0.0111
+    ⚠ gain_vs_zero=0.2337 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step24000.pt
+step  24050  L=0.5217  src=0.0695  tgt=0.2261  trans=0.2261  gain=-0.0000  |dz|=0.553  17.1 it/s
+step  24100  L=0.4694  src=0.0664  tgt=0.2019  trans=0.2010  gain=+0.0009  |dz|=0.836  17.1 it/s
+step  24150  L=0.4875  src=0.0398  tgt=0.2239  trans=0.2238  gain=+0.0001  |dz|=0.751  17.1 it/s
+step  24200  L=0.4246  src=0.0488  tgt=0.1880  trans=0.1878  gain=+0.0003  |dz|=0.572  17.1 it/s
+step  24250  L=0.1200  src=0.0743  tgt=0.0228  trans=0.0228  gain=-0.0000  |dz|=0.126  17.1 it/s
+step  24300  L=0.5070  src=0.0667  tgt=0.2201  trans=0.2201  gain=-0.0000  |dz|=0.582  17.1 it/s
+step  24350  L=0.4225  src=0.0610  tgt=0.1807  trans=0.1807  gain=-0.0000  |dz|=0.582  17.1 it/s
+step  24400  L=0.1259  src=0.0767  tgt=0.0246  trans=0.0246  gain=-0.0000  |dz|=0.470  17.1 it/s
+step  24450  L=0.1272  src=0.0784  tgt=0.0244  trans=0.0244  gain=-0.0000  |dz|=0.132  17.1 it/s
+step  24500  L=0.0975  src=0.0340  tgt=0.0317  trans=0.0317  gain=-0.0000  |dz|=0.133  17.1 it/s
+  [diagnostics @ 24500] loss_correct=0.0686  loss_zero=0.2996  loss_shuffled=0.0736  loss_random=0.3113  loss_target_only=0.0686  loss_mean_z=0.0716  r_basis=0.9013  |dz_transport|=0.4061  z_s_vs_enc_rel=0.7951  z_spread_rel=0.7053  gain_vs_zero=0.2310  gain_vs_shuffled=0.0050  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0030  delta_task=0.0030  z_center_norm=0.4289  task_specific_frac=0.0130
+    ⚠ gain_vs_zero=0.2310 looks healthy but only 1.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  24550  L=0.1628  src=0.0780  tgt=0.0424  trans=0.0424  gain=+0.0000  |dz|=0.449  17.1 it/s
+step  24600  L=0.1068  src=0.0588  tgt=0.0240  trans=0.0240  gain=+0.0000  |dz|=0.129  17.1 it/s
+step  24650  L=0.5349  src=0.0366  tgt=0.2491  trans=0.2491  gain=+0.0000  |dz|=0.552  17.1 it/s
+step  24700  L=0.3342  src=0.0572  tgt=0.1385  trans=0.1384  gain=+0.0000  |dz|=0.564  17.1 it/s
+step  24750  L=0.1407  src=0.0618  tgt=0.0394  trans=0.0395  gain=-0.0000  |dz|=0.476  17.1 it/s
+step  24800  L=0.3158  src=0.0603  tgt=0.1278  trans=0.1277  gain=+0.0001  |dz|=0.614  17.1 it/s
+step  24850  L=0.1108  src=0.0608  tgt=0.0249  trans=0.0250  gain=-0.0001  |dz|=0.135  17.1 it/s
+step  24900  L=0.1141  src=0.0664  tgt=0.0238  trans=0.0238  gain=-0.0000  |dz|=0.469  17.1 it/s
+step  24950  L=0.1404  src=0.0568  tgt=0.0418  trans=0.0418  gain=+0.0000  |dz|=0.453  17.1 it/s
+step  25000  L=0.4986  src=0.0688  tgt=0.2149  trans=0.2149  gain=-0.0000  |dz|=0.572  17.1 it/s
+  [diagnostics @ 25000] loss_correct=0.0829  loss_zero=0.3008  loss_shuffled=0.0906  loss_random=0.3136  loss_target_only=0.0829  loss_mean_z=0.0856  r_basis=0.8658  |dz_transport|=0.4000  z_s_vs_enc_rel=0.8231  z_spread_rel=0.7621  gain_vs_zero=0.2179  gain_vs_shuffled=0.0077  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.4173  task_specific_frac=0.0125
+    ⚠ gain_vs_zero=0.2179 looks healthy but only 1.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  25050  L=0.4000  src=0.0597  tgt=0.1701  trans=0.1701  gain=+0.0000  |dz|=0.569  17.1 it/s
+step  25100  L=0.1391  src=0.0440  tgt=0.0475  trans=0.0475  gain=+0.0000  |dz|=0.128  17.1 it/s
+step  25150  L=0.0977  src=0.0531  tgt=0.0223  trans=0.0223  gain=-0.0000  |dz|=0.125  17.1 it/s
+step  25200  L=0.1910  src=0.1138  tgt=0.0385  trans=0.0386  gain=-0.0001  |dz|=0.463  17.1 it/s
+step  25250  L=0.1062  src=0.0553  tgt=0.0254  trans=0.0255  gain=-0.0000  |dz|=0.120  17.1 it/s
+step  25300  L=0.0996  src=0.0575  tgt=0.0210  trans=0.0210  gain=+0.0000  |dz|=0.454  17.1 it/s
+step  25350  L=0.1136  src=0.0540  tgt=0.0298  trans=0.0297  gain=+0.0001  |dz|=0.464  17.1 it/s
+step  25400  L=0.3103  src=0.0398  tgt=0.1353  trans=0.1352  gain=+0.0000  |dz|=0.553  17.1 it/s
+step  25450  L=0.1039  src=0.0553  tgt=0.0242  trans=0.0242  gain=+0.0000  |dz|=0.123  17.1 it/s
+step  25500  L=0.0838  src=0.0455  tgt=0.0191  trans=0.0191  gain=+0.0000  |dz|=0.426  17.1 it/s
+  [diagnostics @ 25500] loss_correct=0.0728  loss_zero=0.2901  loss_shuffled=0.0787  loss_random=0.3022  loss_target_only=0.0728  loss_mean_z=0.0753  r_basis=0.8579  |dz_transport|=0.3724  z_s_vs_enc_rel=0.7824  z_spread_rel=0.7447  gain_vs_zero=0.2173  gain_vs_shuffled=0.0059  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.4158  task_specific_frac=0.0115
+    ⚠ gain_vs_zero=0.2173 looks healthy but only 1.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  25550  L=0.5109  src=0.1072  tgt=0.2018  trans=0.2018  gain=-0.0000  |dz|=0.535  17.1 it/s
+step  25600  L=0.1041  src=0.0621  tgt=0.0210  trans=0.0210  gain=-0.0000  |dz|=0.470  17.1 it/s
+step  25650  L=0.1632  src=0.0663  tgt=0.0484  trans=0.0484  gain=+0.0000  |dz|=0.124  17.1 it/s
+step  25700  L=0.5628  src=0.0879  tgt=0.2374  trans=0.2374  gain=-0.0000  |dz|=0.550  17.1 it/s
+step  25750  L=0.3865  src=0.0631  tgt=0.1617  trans=0.1617  gain=-0.0000  |dz|=0.522  17.1 it/s
+step  25800  L=0.1525  src=0.1030  tgt=0.0248  trans=0.0247  gain=+0.0001  |dz|=0.127  17.1 it/s
+step  25850  L=0.1157  src=0.0602  tgt=0.0277  trans=0.0277  gain=+0.0000  |dz|=0.125  17.1 it/s
+step  25900  L=0.4890  src=0.0624  tgt=0.2133  trans=0.2133  gain=-0.0000  |dz|=0.506  17.1 it/s
+step  25950  L=0.0917  src=0.0455  tgt=0.0231  trans=0.0231  gain=-0.0000  |dz|=0.449  17.1 it/s
+step  26000  L=0.1337  src=0.0592  tgt=0.0373  trans=0.0372  gain=+0.0001  |dz|=0.121  17.1 it/s
+  [diagnostics @ 26000] loss_correct=0.0632  loss_zero=0.2798  loss_shuffled=0.0690  loss_random=0.2943  loss_target_only=0.0632  loss_mean_z=0.0651  r_basis=0.8522  |dz_transport|=0.3047  z_s_vs_enc_rel=0.6352  z_spread_rel=0.6804  gain_vs_zero=0.2166  gain_vs_shuffled=0.0058  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0019  delta_task=0.0019  z_center_norm=0.4107  task_specific_frac=0.0089
+    ⚠ gain_vs_zero=0.2166 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step26000.pt
+step  26050  L=0.0816  src=0.0428  tgt=0.0194  trans=0.0194  gain=+0.0000  |dz|=0.456  17.1 it/s
+step  26100  L=0.3318  src=0.0619  tgt=0.1349  trans=0.1349  gain=+0.0000  |dz|=0.516  17.1 it/s
+step  26150  L=0.1394  src=0.0642  tgt=0.0376  trans=0.0376  gain=+0.0000  |dz|=0.464  17.1 it/s
+step  26200  L=0.1150  src=0.0590  tgt=0.0280  trans=0.0280  gain=+0.0000  |dz|=0.457  17.1 it/s
+step  26250  L=0.3072  src=0.0495  tgt=0.1287  trans=0.1289  gain=-0.0001  |dz|=0.520  17.1 it/s
+step  26300  L=0.4712  src=0.0720  tgt=0.1997  trans=0.1994  gain=+0.0003  |dz|=0.515  17.1 it/s
+step  26350  L=0.1600  src=0.0624  tgt=0.0487  trans=0.0488  gain=-0.0000  |dz|=0.458  17.1 it/s
+step  26400  L=0.1062  src=0.0525  tgt=0.0268  trans=0.0268  gain=+0.0000  |dz|=0.454  17.1 it/s
+step  26450  L=0.0946  src=0.0487  tgt=0.0229  trans=0.0230  gain=-0.0000  |dz|=0.457  17.1 it/s
+step  26500  L=0.1194  src=0.0523  tgt=0.0335  trans=0.0335  gain=-0.0000  |dz|=0.123  17.1 it/s
+  [diagnostics @ 26500] loss_correct=0.0675  loss_zero=0.2787  loss_shuffled=0.0714  loss_random=0.2900  loss_target_only=0.0675  loss_mean_z=0.0703  r_basis=0.8332  |dz_transport|=0.4017  z_s_vs_enc_rel=0.8574  z_spread_rel=0.7252  gain_vs_zero=0.2112  gain_vs_shuffled=0.0039  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.4062  task_specific_frac=0.0132
+    ⚠ gain_vs_zero=0.2112 looks healthy but only 1.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  26550  L=0.1286  src=0.0860  tgt=0.0213  trans=0.0213  gain=+0.0000  |dz|=0.121  17.1 it/s
+step  26600  L=0.3650  src=0.0531  tgt=0.1558  trans=0.1560  gain=-0.0002  |dz|=0.520  17.1 it/s
+step  26650  L=0.1118  src=0.0557  tgt=0.0280  trans=0.0280  gain=+0.0001  |dz|=0.124  17.1 it/s
+step  26700  L=0.1002  src=0.0528  tgt=0.0237  trans=0.0237  gain=+0.0000  |dz|=0.121  17.1 it/s
+step  26750  L=0.1342  src=0.0743  tgt=0.0299  trans=0.0299  gain=+0.0000  |dz|=0.117  17.1 it/s
+step  26800  L=0.4713  src=0.0743  tgt=0.1985  trans=0.1985  gain=+0.0000  |dz|=0.501  17.1 it/s
+step  26850  L=0.4315  src=0.0681  tgt=0.1817  trans=0.1817  gain=-0.0000  |dz|=0.512  17.1 it/s
+step  26900  L=0.1042  src=0.0697  tgt=0.0173  trans=0.0171  gain=+0.0001  |dz|=0.421  17.1 it/s
+step  26950  L=0.4129  src=0.0588  tgt=0.1771  trans=0.1770  gain=+0.0000  |dz|=0.502  17.1 it/s
+step  27000  L=0.1166  src=0.0775  tgt=0.0195  trans=0.0195  gain=-0.0000  |dz|=0.124  17.1 it/s
+  [diagnostics @ 27000] loss_correct=0.0880  loss_zero=0.2880  loss_shuffled=0.0938  loss_random=0.3027  loss_target_only=0.0880  loss_mean_z=0.0907  r_basis=0.8078  |dz_transport|=0.3605  z_s_vs_enc_rel=0.7623  z_spread_rel=0.7476  gain_vs_zero=0.2001  gain_vs_shuffled=0.0059  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.3978  task_specific_frac=0.0136
+    ⚠ gain_vs_zero=0.2001 looks healthy but only 1.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  27050  L=0.3326  src=0.0787  tgt=0.1271  trans=0.1267  gain=+0.0004  |dz|=0.510  17.0 it/s
+step  27100  L=0.4870  src=0.0841  tgt=0.2015  trans=0.2014  gain=+0.0001  |dz|=0.516  17.0 it/s
+step  27150  L=0.1073  src=0.0523  tgt=0.0274  trans=0.0274  gain=+0.0000  |dz|=0.440  17.0 it/s
+step  27200  L=0.1531  src=0.0624  tgt=0.0453  trans=0.0453  gain=-0.0000  |dz|=0.430  17.0 it/s
+step  27250  L=0.1531  src=0.1057  tgt=0.0237  trans=0.0237  gain=-0.0000  |dz|=0.438  17.0 it/s
+step  27300  L=0.0977  src=0.0519  tgt=0.0229  trans=0.0229  gain=+0.0001  |dz|=0.115  17.0 it/s
+step  27350  L=0.1303  src=0.0662  tgt=0.0320  trans=0.0320  gain=-0.0000  |dz|=0.115  17.0 it/s
+step  27400  L=0.1253  src=0.0491  tgt=0.0381  trans=0.0381  gain=+0.0000  |dz|=0.445  17.0 it/s
+step  27450  L=0.1655  src=0.0878  tgt=0.0388  trans=0.0388  gain=+0.0000  |dz|=0.436  17.0 it/s
+step  27500  L=0.3885  src=0.0597  tgt=0.1644  trans=0.1644  gain=-0.0000  |dz|=0.488  17.0 it/s
+  [diagnostics @ 27500] loss_correct=0.0597  loss_zero=0.2666  loss_shuffled=0.0662  loss_random=0.2764  loss_target_only=0.0597  loss_mean_z=0.0625  r_basis=0.8167  |dz_transport|=0.3682  z_s_vs_enc_rel=0.8052  z_spread_rel=0.6758  gain_vs_zero=0.2069  gain_vs_shuffled=0.0064  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.3932  task_specific_frac=0.0132
+    ⚠ gain_vs_zero=0.2069 looks healthy but only 1.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  27550  L=0.1670  src=0.0805  tgt=0.0432  trans=0.0432  gain=-0.0000  |dz|=0.446  17.0 it/s
+step  27600  L=0.1525  src=0.0923  tgt=0.0301  trans=0.0301  gain=+0.0000  |dz|=0.422  17.0 it/s
+step  27650  L=0.1439  src=0.0643  tgt=0.0398  trans=0.0398  gain=-0.0000  |dz|=0.121  17.0 it/s
+step  27700  L=0.1630  src=0.0946  tgt=0.0342  trans=0.0342  gain=+0.0000  |dz|=0.119  17.0 it/s
+step  27750  L=0.0746  src=0.0258  tgt=0.0244  trans=0.0244  gain=+0.0000  |dz|=0.119  17.0 it/s
+step  27800  L=0.0739  src=0.0373  tgt=0.0183  trans=0.0183  gain=+0.0000  |dz|=0.118  17.0 it/s
+step  27850  L=0.1689  src=0.0839  tgt=0.0425  trans=0.0425  gain=+0.0000  |dz|=0.123  17.0 it/s
+step  27900  L=0.1217  src=0.0664  tgt=0.0276  trans=0.0276  gain=+0.0000  |dz|=0.447  17.0 it/s
+step  27950  L=0.1565  src=0.0816  tgt=0.0374  trans=0.0375  gain=-0.0001  |dz|=0.116  17.0 it/s
+step  28000  L=0.1102  src=0.0503  tgt=0.0299  trans=0.0299  gain=+0.0000  |dz|=0.440  17.0 it/s
+  [diagnostics @ 28000] loss_correct=0.0556  loss_zero=0.2594  loss_shuffled=0.0585  loss_random=0.2703  loss_target_only=0.0556  loss_mean_z=0.0575  r_basis=0.8059  |dz_transport|=0.2679  z_s_vs_enc_rel=0.5889  z_spread_rel=0.6239  gain_vs_zero=0.2037  gain_vs_shuffled=0.0028  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0019  delta_task=0.0019  z_center_norm=0.3910  task_specific_frac=0.0092
+    ⚠ gain_vs_zero=0.2037 looks healthy but only 0.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step28000.pt
+step  28050  L=0.1007  src=0.0415  tgt=0.0296  trans=0.0296  gain=-0.0000  |dz|=0.120  17.0 it/s
+step  28100  L=0.1720  src=0.0918  tgt=0.0401  trans=0.0400  gain=+0.0000  |dz|=0.121  17.0 it/s
+step  28150  L=0.1019  src=0.0405  tgt=0.0307  trans=0.0307  gain=+0.0000  |dz|=0.466  17.0 it/s
+step  28200  L=0.1207  src=0.0643  tgt=0.0282  trans=0.0281  gain=+0.0001  |dz|=0.453  17.0 it/s
+step  28250  L=0.5145  src=0.0503  tgt=0.2321  trans=0.2320  gain=+0.0001  |dz|=0.511  17.0 it/s
+step  28300  L=0.2392  src=0.0696  tgt=0.0848  trans=0.0848  gain=-0.0000  |dz|=0.561  17.0 it/s
+step  28350  L=0.3643  src=0.0509  tgt=0.1567  trans=0.1566  gain=+0.0001  |dz|=0.515  17.0 it/s
+step  28400  L=0.3730  src=0.0546  tgt=0.1591  trans=0.1592  gain=-0.0001  |dz|=0.510  17.0 it/s
+step  28450  L=0.4019  src=0.1070  tgt=0.1474  trans=0.1474  gain=-0.0000  |dz|=0.508  17.0 it/s
+step  28500  L=0.1203  src=0.0394  tgt=0.0404  trans=0.0405  gain=-0.0000  |dz|=0.125  17.0 it/s
+  [diagnostics @ 28500] loss_correct=0.0818  loss_zero=0.2718  loss_shuffled=0.0913  loss_random=0.2843  loss_target_only=0.0818  loss_mean_z=0.0844  r_basis=0.7696  |dz_transport|=0.3766  z_s_vs_enc_rel=0.8444  z_spread_rel=0.7698  gain_vs_zero=0.1900  gain_vs_shuffled=0.0095  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.3838  task_specific_frac=0.0140
+    ⚠ gain_vs_zero=0.1900 looks healthy but only 1.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  28550  L=0.1765  src=0.1010  tgt=0.0377  trans=0.0377  gain=-0.0000  |dz|=0.120  17.0 it/s
+step  28600  L=0.3525  src=0.0429  tgt=0.1548  trans=0.1548  gain=+0.0000  |dz|=0.494  17.0 it/s
+step  28650  L=0.4220  src=0.0485  tgt=0.1867  trans=0.1868  gain=-0.0000  |dz|=0.499  17.0 it/s
+step  28700  L=0.0728  src=0.0392  tgt=0.0168  trans=0.0168  gain=-0.0000  |dz|=0.120  17.0 it/s
+step  28750  L=0.1353  src=0.0566  tgt=0.0393  trans=0.0393  gain=-0.0000  |dz|=0.424  17.0 it/s
+step  28800  L=0.2932  src=0.0324  tgt=0.1304  trans=0.1304  gain=+0.0000  |dz|=0.491  17.0 it/s
+step  28850  L=0.1484  src=0.0810  tgt=0.0337  trans=0.0337  gain=-0.0000  |dz|=0.438  17.0 it/s
+step  28900  L=0.0985  src=0.0536  tgt=0.0224  trans=0.0225  gain=-0.0000  |dz|=0.433  17.0 it/s
+step  28950  L=0.4071  src=0.0450  tgt=0.1811  trans=0.1810  gain=+0.0001  |dz|=0.494  17.0 it/s
+step  29000  L=0.4277  src=0.0373  tgt=0.1952  trans=0.1952  gain=+0.0000  |dz|=0.482  17.0 it/s
+  [diagnostics @ 29000] loss_correct=0.0717  loss_zero=0.2628  loss_shuffled=0.0782  loss_random=0.2740  loss_target_only=0.0717  loss_mean_z=0.0744  r_basis=0.7712  |dz_transport|=0.3671  z_s_vs_enc_rel=0.8300  z_spread_rel=0.7446  gain_vs_zero=0.1912  gain_vs_shuffled=0.0065  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.3790  task_specific_frac=0.0142
+    ⚠ gain_vs_zero=0.1912 looks healthy but only 1.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  29050  L=0.1173  src=0.0604  tgt=0.0284  trans=0.0285  gain=-0.0001  |dz|=0.115  17.0 it/s
+step  29100  L=0.0930  src=0.0445  tgt=0.0242  trans=0.0242  gain=-0.0000  |dz|=0.121  17.0 it/s
+step  29150  L=0.1532  src=0.0672  tgt=0.0430  trans=0.0430  gain=-0.0000  |dz|=0.425  17.0 it/s
+step  29200  L=0.1675  src=0.0694  tgt=0.0490  trans=0.0491  gain=-0.0000  |dz|=0.118  17.0 it/s
+step  29250  L=0.0893  src=0.0405  tgt=0.0244  trans=0.0244  gain=-0.0001  |dz|=0.115  17.0 it/s
+step  29300  L=0.1179  src=0.0618  tgt=0.0281  trans=0.0281  gain=+0.0000  |dz|=0.416  17.0 it/s
+step  29350  L=0.4520  src=0.0951  tgt=0.1784  trans=0.1785  gain=-0.0001  |dz|=0.567  17.0 it/s
+step  29400  L=0.2933  src=0.0800  tgt=0.1066  trans=0.1066  gain=-0.0000  |dz|=0.562  17.0 it/s
+step  29450  L=0.0995  src=0.0589  tgt=0.0203  trans=0.0203  gain=-0.0000  |dz|=0.423  17.0 it/s
+step  29500  L=0.1202  src=0.0448  tgt=0.0377  trans=0.0376  gain=+0.0000  |dz|=0.427  17.0 it/s
+  [diagnostics @ 29500] loss_correct=0.0776  loss_zero=0.2616  loss_shuffled=0.0843  loss_random=0.2719  loss_target_only=0.0776  loss_mean_z=0.0803  r_basis=0.7482  |dz_transport|=0.3444  z_s_vs_enc_rel=0.7837  z_spread_rel=0.7606  gain_vs_zero=0.1840  gain_vs_shuffled=0.0067  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.3771  task_specific_frac=0.0147
+    ⚠ gain_vs_zero=0.1840 looks healthy but only 1.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  29550  L=0.4012  src=0.0711  tgt=0.1650  trans=0.1650  gain=+0.0000  |dz|=0.526  17.0 it/s
+step  29600  L=0.1323  src=0.0487  tgt=0.0418  trans=0.0418  gain=-0.0000  |dz|=0.116  17.0 it/s
+step  29650  L=0.1118  src=0.0426  tgt=0.0346  trans=0.0345  gain=+0.0000  |dz|=0.451  17.0 it/s
+step  29700  L=0.2908  src=0.0731  tgt=0.1089  trans=0.1088  gain=+0.0000  |dz|=0.510  17.0 it/s
+step  29750  L=0.1141  src=0.0538  tgt=0.0302  trans=0.0301  gain=+0.0000  |dz|=0.428  17.0 it/s
+step  29800  L=0.3213  src=0.0536  tgt=0.1338  trans=0.1338  gain=+0.0000  |dz|=0.514  17.0 it/s
+step  29850  L=0.1868  src=0.1177  tgt=0.0346  trans=0.0346  gain=+0.0000  |dz|=0.118  17.0 it/s
+step  29900  L=0.3122  src=0.0377  tgt=0.1372  trans=0.1372  gain=-0.0001  |dz|=0.501  17.0 it/s
+step  29950  L=0.1178  src=0.0549  tgt=0.0314  trans=0.0314  gain=-0.0000  |dz|=0.113  17.0 it/s
+step  30000  L=0.1074  src=0.0453  tgt=0.0311  trans=0.0310  gain=+0.0001  |dz|=0.116  17.1 it/s
+  [diagnostics @ 30000] loss_correct=0.0611  loss_zero=0.2469  loss_shuffled=0.0674  loss_random=0.2562  loss_target_only=0.0611  loss_mean_z=0.0635  r_basis=0.7489  |dz_transport|=0.3178  z_s_vs_enc_rel=0.7156  z_spread_rel=0.7161  gain_vs_zero=0.1859  gain_vs_shuffled=0.0063  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.3694  task_specific_frac=0.0132
+    ⚠ gain_vs_zero=0.1859 looks healthy but only 1.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step30000.pt
+step  30050  L=0.0967  src=0.0578  tgt=0.0194  trans=0.0195  gain=-0.0000  |dz|=0.112  17.0 it/s
+step  30100  L=0.0993  src=0.0602  tgt=0.0195  trans=0.0195  gain=+0.0000  |dz|=0.408  17.0 it/s
+step  30150  L=0.3677  src=0.0217  tgt=0.1730  trans=0.1730  gain=+0.0000  |dz|=0.499  17.0 it/s
+step  30200  L=0.1188  src=0.0740  tgt=0.0224  trans=0.0224  gain=-0.0001  |dz|=0.114  17.0 it/s
+step  30250  L=0.1412  src=0.0951  tgt=0.0230  trans=0.0230  gain=+0.0000  |dz|=0.113  17.0 it/s
+step  30300  L=0.1468  src=0.0935  tgt=0.0266  trans=0.0266  gain=-0.0000  |dz|=0.115  17.0 it/s
+step  30350  L=0.1126  src=0.0581  tgt=0.0272  trans=0.0272  gain=-0.0000  |dz|=0.398  17.1 it/s
+step  30400  L=0.1310  src=0.0547  tgt=0.0381  trans=0.0381  gain=-0.0001  |dz|=0.110  17.1 it/s
+step  30450  L=0.0767  src=0.0461  tgt=0.0153  trans=0.0152  gain=+0.0001  |dz|=0.399  17.1 it/s
+step  30500  L=0.3060  src=0.0507  tgt=0.1277  trans=0.1276  gain=+0.0000  |dz|=0.533  17.1 it/s
+  [diagnostics @ 30500] loss_correct=0.1033  loss_zero=0.2717  loss_shuffled=0.1117  loss_random=0.2817  loss_target_only=0.1033  loss_mean_z=0.1066  r_basis=0.7076  |dz_transport|=0.4171  z_s_vs_enc_rel=0.9637  z_spread_rel=0.7539  gain_vs_zero=0.1684  gain_vs_shuffled=0.0083  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0033  delta_task=0.0033  z_center_norm=0.3646  task_specific_frac=0.0196
+    ⚠ gain_vs_zero=0.1684 looks healthy but only 2.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  30550  L=0.4412  src=0.0691  tgt=0.1861  trans=0.1860  gain=+0.0001  |dz|=0.513  17.0 it/s
+step  30600  L=0.1039  src=0.0663  tgt=0.0188  trans=0.0188  gain=-0.0000  |dz|=0.414  17.0 it/s
+step  30650  L=0.1722  src=0.0534  tgt=0.0595  trans=0.0593  gain=+0.0002  |dz|=0.414  17.0 it/s
+step  30700  L=0.1262  src=0.0749  tgt=0.0256  trans=0.0256  gain=-0.0000  |dz|=0.116  17.1 it/s
+step  30750  L=0.0918  src=0.0415  tgt=0.0252  trans=0.0251  gain=+0.0001  |dz|=0.399  17.1 it/s
+step  30800  L=0.2954  src=0.0377  tgt=0.1288  trans=0.1288  gain=+0.0000  |dz|=0.499  17.1 it/s
+step  30850  L=0.1161  src=0.0712  tgt=0.0224  trans=0.0224  gain=+0.0000  |dz|=0.112  17.1 it/s
+step  30900  L=0.1608  src=0.0780  tgt=0.0414  trans=0.0413  gain=+0.0000  |dz|=0.423  17.1 it/s
+step  30950  L=0.1121  src=0.0581  tgt=0.0270  trans=0.0270  gain=+0.0000  |dz|=0.419  17.1 it/s
+step  31000  L=0.0960  src=0.0546  tgt=0.0207  trans=0.0206  gain=+0.0000  |dz|=0.111  17.1 it/s
+  [diagnostics @ 31000] loss_correct=0.0595  loss_zero=0.2370  loss_shuffled=0.0642  loss_random=0.2482  loss_target_only=0.0595  loss_mean_z=0.0615  r_basis=0.7207  |dz_transport|=0.2754  z_s_vs_enc_rel=0.6529  z_spread_rel=0.7008  gain_vs_zero=0.1775  gain_vs_shuffled=0.0047  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0020  delta_task=0.0020  z_center_norm=0.3620  task_specific_frac=0.0113
+    ⚠ gain_vs_zero=0.1775 looks healthy but only 1.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  31050  L=0.0748  src=0.0311  tgt=0.0218  trans=0.0218  gain=+0.0000  |dz|=0.386  17.1 it/s
+step  31100  L=0.1095  src=0.0630  tgt=0.0232  trans=0.0232  gain=+0.0000  |dz|=0.400  17.1 it/s
+step  31150  L=0.1243  src=0.0782  tgt=0.0230  trans=0.0230  gain=+0.0000  |dz|=0.406  17.1 it/s
+step  31200  L=0.4345  src=0.0638  tgt=0.1854  trans=0.1852  gain=+0.0002  |dz|=0.509  17.1 it/s
+step  31250  L=0.1562  src=0.0895  tgt=0.0334  trans=0.0333  gain=+0.0000  |dz|=0.113  17.1 it/s
+step  31300  L=0.1419  src=0.0909  tgt=0.0255  trans=0.0255  gain=+0.0000  |dz|=0.114  17.1 it/s
+step  31350  L=0.3405  src=0.0440  tgt=0.1482  trans=0.1482  gain=+0.0000  |dz|=0.484  17.1 it/s
+step  31400  L=0.1065  src=0.0424  tgt=0.0320  trans=0.0320  gain=-0.0000  |dz|=0.112  17.1 it/s
+step  31450  L=0.0951  src=0.0360  tgt=0.0296  trans=0.0294  gain=+0.0002  |dz|=0.403  17.1 it/s
+step  31500  L=0.1194  src=0.0437  tgt=0.0378  trans=0.0378  gain=+0.0000  |dz|=0.411  17.1 it/s
+  [diagnostics @ 31500] loss_correct=0.0829  loss_zero=0.2507  loss_shuffled=0.0882  loss_random=0.2626  loss_target_only=0.0829  loss_mean_z=0.0856  r_basis=0.6989  |dz_transport|=0.3355  z_s_vs_enc_rel=0.7935  z_spread_rel=0.7801  gain_vs_zero=0.1677  gain_vs_shuffled=0.0053  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.3632  task_specific_frac=0.0161
+    ⚠ gain_vs_zero=0.1677 looks healthy but only 1.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  31550  L=0.1313  src=0.0584  tgt=0.0364  trans=0.0364  gain=-0.0000  |dz|=0.112  17.1 it/s
+step  31600  L=0.0801  src=0.0274  tgt=0.0263  trans=0.0263  gain=+0.0000  |dz|=0.413  17.1 it/s
+step  31650  L=0.1095  src=0.0517  tgt=0.0289  trans=0.0289  gain=-0.0000  |dz|=0.401  17.1 it/s
+step  31700  L=0.0731  src=0.0249  tgt=0.0240  trans=0.0241  gain=-0.0001  |dz|=0.107  17.1 it/s
+step  31750  L=0.2014  src=0.0680  tgt=0.0667  trans=0.0667  gain=-0.0000  |dz|=0.113  17.1 it/s
+step  31800  L=0.1444  src=0.0848  tgt=0.0298  trans=0.0298  gain=+0.0000  |dz|=0.405  17.1 it/s
+step  31850  L=0.1388  src=0.0747  tgt=0.0320  trans=0.0321  gain=-0.0000  |dz|=0.111  17.1 it/s
+step  31900  L=0.1429  src=0.0655  tgt=0.0387  trans=0.0386  gain=+0.0001  |dz|=0.412  17.1 it/s
+step  31950  L=0.0981  src=0.0418  tgt=0.0281  trans=0.0282  gain=-0.0001  |dz|=0.421  17.1 it/s
+step  32000  L=0.0973  src=0.0382  tgt=0.0295  trans=0.0295  gain=+0.0001  |dz|=0.416  17.1 it/s
+  [diagnostics @ 32000] loss_correct=0.0854  loss_zero=0.2473  loss_shuffled=0.0903  loss_random=0.2596  loss_target_only=0.0855  loss_mean_z=0.0884  r_basis=0.6755  |dz_transport|=0.3880  z_s_vs_enc_rel=0.8986  z_spread_rel=0.7872  gain_vs_zero=0.1619  gain_vs_shuffled=0.0049  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.3500  task_specific_frac=0.0181
+    ⚠ gain_vs_zero=0.1619 looks healthy but only 1.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step32000.pt
+step  32050  L=0.1238  src=0.0451  tgt=0.0393  trans=0.0394  gain=-0.0000  |dz|=0.407  17.1 it/s
+step  32100  L=0.2838  src=0.0236  tgt=0.1301  trans=0.1300  gain=+0.0002  |dz|=0.485  17.1 it/s
+step  32150  L=0.1146  src=0.0691  tgt=0.0227  trans=0.0227  gain=+0.0000  |dz|=0.109  17.1 it/s
+step  32200  L=0.4763  src=0.0715  tgt=0.2024  trans=0.2024  gain=-0.0000  |dz|=0.536  17.1 it/s
+step  32250  L=0.1574  src=0.0898  tgt=0.0338  trans=0.0338  gain=-0.0000  |dz|=0.110  17.1 it/s
+step  32300  L=0.2526  src=0.0541  tgt=0.0993  trans=0.0992  gain=+0.0001  |dz|=0.513  17.1 it/s
+step  32350  L=0.0921  src=0.0510  tgt=0.0206  trans=0.0205  gain=+0.0001  |dz|=0.107  17.1 it/s
+step  32400  L=0.3577  src=0.0529  tgt=0.1524  trans=0.1524  gain=+0.0000  |dz|=0.485  17.1 it/s
+step  32450  L=0.1472  src=0.0668  tgt=0.0402  trans=0.0402  gain=+0.0000  |dz|=0.109  17.1 it/s
+step  32500  L=0.0722  src=0.0426  tgt=0.0148  trans=0.0148  gain=-0.0000  |dz|=0.403  17.1 it/s
+  [diagnostics @ 32500] loss_correct=0.0761  loss_zero=0.2385  loss_shuffled=0.0809  loss_random=0.2472  loss_target_only=0.0761  loss_mean_z=0.0786  r_basis=0.6760  |dz_transport|=0.3295  z_s_vs_enc_rel=0.8039  z_spread_rel=0.7834  gain_vs_zero=0.1624  gain_vs_shuffled=0.0048  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.3487  task_specific_frac=0.0154
+    ⚠ gain_vs_zero=0.1624 looks healthy but only 1.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  32550  L=0.5146  src=0.0680  tgt=0.2232  trans=0.2234  gain=-0.0001  |dz|=0.479  17.1 it/s
+step  32600  L=0.1218  src=0.0737  tgt=0.0240  trans=0.0241  gain=-0.0000  |dz|=0.111  17.1 it/s
+step  32650  L=0.1063  src=0.0483  tgt=0.0290  trans=0.0290  gain=+0.0001  |dz|=0.402  17.1 it/s
+step  32700  L=0.1556  src=0.0387  tgt=0.0584  trans=0.0584  gain=+0.0000  |dz|=0.107  17.1 it/s
+step  32750  L=0.3817  src=0.0678  tgt=0.1569  trans=0.1569  gain=-0.0000  |dz|=0.471  17.1 it/s
+step  32800  L=0.1686  src=0.0911  tgt=0.0387  trans=0.0387  gain=-0.0000  |dz|=0.111  17.1 it/s
+step  32850  L=0.5438  src=0.0453  tgt=0.2492  trans=0.2492  gain=+0.0000  |dz|=0.476  17.1 it/s
+step  32900  L=0.4521  src=0.0946  tgt=0.1787  trans=0.1788  gain=-0.0000  |dz|=0.626  17.1 it/s
+step  32950  L=0.1718  src=0.0708  tgt=0.0505  trans=0.0505  gain=+0.0000  |dz|=0.118  17.1 it/s
+step  33000  L=0.0943  src=0.0442  tgt=0.0250  trans=0.0250  gain=+0.0000  |dz|=0.111  17.1 it/s
+  [diagnostics @ 33000] loss_correct=0.0781  loss_zero=0.2383  loss_shuffled=0.0846  loss_random=0.2472  loss_target_only=0.0781  loss_mean_z=0.0813  r_basis=0.6692  |dz_transport|=0.3891  z_s_vs_enc_rel=0.9485  z_spread_rel=0.7592  gain_vs_zero=0.1602  gain_vs_shuffled=0.0064  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0032  delta_task=0.0032  z_center_norm=0.3485  task_specific_frac=0.0198
+    ⚠ gain_vs_zero=0.1602 looks healthy but only 2.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  33050  L=0.1165  src=0.0724  tgt=0.0220  trans=0.0220  gain=-0.0000  |dz|=0.406  17.1 it/s
+step  33100  L=0.3780  src=0.0376  tgt=0.1702  trans=0.1702  gain=+0.0000  |dz|=0.509  17.1 it/s
+step  33150  L=0.1768  src=0.1098  tgt=0.0334  trans=0.0334  gain=+0.0000  |dz|=0.399  17.1 it/s
+step  33200  L=0.1321  src=0.0665  tgt=0.0328  trans=0.0328  gain=-0.0000  |dz|=0.390  17.1 it/s
+step  33250  L=0.1426  src=0.0992  tgt=0.0217  trans=0.0217  gain=+0.0000  |dz|=0.407  17.1 it/s
+step  33300  L=0.3775  src=0.0552  tgt=0.1612  trans=0.1611  gain=+0.0001  |dz|=0.516  17.1 it/s
+step  33350  L=0.3572  src=0.0635  tgt=0.1469  trans=0.1468  gain=+0.0001  |dz|=0.512  17.1 it/s
+step  33400  L=0.1289  src=0.0737  tgt=0.0276  trans=0.0276  gain=+0.0000  |dz|=0.396  17.1 it/s
+step  33450  L=0.4451  src=0.0571  tgt=0.1940  trans=0.1939  gain=+0.0000  |dz|=0.487  17.1 it/s
+step  33500  L=0.3173  src=0.0728  tgt=0.1223  trans=0.1222  gain=+0.0000  |dz|=0.487  17.1 it/s
+  [diagnostics @ 33500] loss_correct=0.0657  loss_zero=0.2255  loss_shuffled=0.0729  loss_random=0.2359  loss_target_only=0.0658  loss_mean_z=0.0682  r_basis=0.6637  |dz_transport|=0.3193  z_s_vs_enc_rel=0.7796  z_spread_rel=0.7719  gain_vs_zero=0.1598  gain_vs_shuffled=0.0071  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.3434  task_specific_frac=0.0155
+    ⚠ gain_vs_zero=0.1598 looks healthy but only 1.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  33550  L=0.1021  src=0.0493  tgt=0.0264  trans=0.0264  gain=+0.0001  |dz|=0.377  17.1 it/s
+step  33600  L=0.2495  src=0.0812  tgt=0.0841  trans=0.0841  gain=+0.0000  |dz|=0.510  17.1 it/s
+step  33650  L=0.3609  src=0.0568  tgt=0.1520  trans=0.1520  gain=-0.0000  |dz|=0.498  17.1 it/s
+step  33700  L=0.0907  src=0.0479  tgt=0.0214  trans=0.0214  gain=+0.0001  |dz|=0.385  17.1 it/s
+step  33750  L=0.1543  src=0.0930  tgt=0.0307  trans=0.0306  gain=+0.0000  |dz|=0.115  17.1 it/s
+step  33800  L=0.1105  src=0.0498  tgt=0.0303  trans=0.0304  gain=-0.0001  |dz|=0.121  17.1 it/s
+step  33850  L=0.2906  src=0.0668  tgt=0.1120  trans=0.1119  gain=+0.0001  |dz|=0.466  17.1 it/s
+step  33900  L=0.5385  src=0.0766  tgt=0.2309  trans=0.2309  gain=-0.0000  |dz|=0.478  17.1 it/s
+step  33950  L=0.0768  src=0.0382  tgt=0.0193  trans=0.0193  gain=+0.0000  |dz|=0.393  17.1 it/s
+step  34000  L=0.3416  src=0.1132  tgt=0.1142  trans=0.1142  gain=+0.0000  |dz|=0.488  17.1 it/s
+  [diagnostics @ 34000] loss_correct=0.0875  loss_zero=0.2369  loss_shuffled=0.0932  loss_random=0.2453  loss_target_only=0.0876  loss_mean_z=0.0901  r_basis=0.6387  |dz_transport|=0.3323  z_s_vs_enc_rel=0.8369  z_spread_rel=0.7887  gain_vs_zero=0.1494  gain_vs_shuffled=0.0056  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.3407  task_specific_frac=0.0175
+    ⚠ gain_vs_zero=0.1494 looks healthy but only 1.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step34000.pt
+step  34050  L=0.4261  src=0.0476  tgt=0.1892  trans=0.1892  gain=-0.0000  |dz|=0.475  17.1 it/s
+step  34100  L=0.1055  src=0.0519  tgt=0.0268  trans=0.0268  gain=+0.0000  |dz|=0.107  17.1 it/s
+step  34150  L=0.1717  src=0.0916  tgt=0.0400  trans=0.0400  gain=+0.0000  |dz|=0.109  17.1 it/s
+step  34200  L=0.4286  src=0.0569  tgt=0.1859  trans=0.1859  gain=-0.0000  |dz|=0.483  17.1 it/s
+step  34250  L=0.1429  src=0.0830  tgt=0.0299  trans=0.0299  gain=+0.0000  |dz|=0.381  17.1 it/s
+step  34300  L=0.0648  src=0.0396  tgt=0.0126  trans=0.0126  gain=+0.0000  |dz|=0.108  17.1 it/s
+step  34350  L=0.1438  src=0.0942  tgt=0.0248  trans=0.0248  gain=+0.0001  |dz|=0.110  17.1 it/s
+step  34400  L=0.0979  src=0.0562  tgt=0.0208  trans=0.0208  gain=-0.0000  |dz|=0.387  17.1 it/s
+step  34450  L=0.1384  src=0.0652  tgt=0.0366  trans=0.0365  gain=+0.0001  |dz|=0.104  17.1 it/s
+step  34500  L=0.1196  src=0.0592  tgt=0.0301  trans=0.0302  gain=-0.0001  |dz|=0.381  17.1 it/s
+  [diagnostics @ 34500] loss_correct=0.0901  loss_zero=0.2353  loss_shuffled=0.0960  loss_random=0.2448  loss_target_only=0.0901  loss_mean_z=0.0929  r_basis=0.6236  |dz_transport|=0.3662  z_s_vs_enc_rel=0.9163  z_spread_rel=0.7971  gain_vs_zero=0.1453  gain_vs_shuffled=0.0060  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.3360  task_specific_frac=0.0195
+    ⚠ gain_vs_zero=0.1453 looks healthy but only 2.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  34550  L=0.0819  src=0.0280  tgt=0.0269  trans=0.0269  gain=-0.0000  |dz|=0.107  17.1 it/s
+step  34600  L=0.1150  src=0.0552  tgt=0.0299  trans=0.0298  gain=+0.0001  |dz|=0.109  17.1 it/s
+step  34650  L=0.4570  src=0.0763  tgt=0.1904  trans=0.1903  gain=+0.0000  |dz|=0.460  17.1 it/s
+step  34700  L=0.1781  src=0.0760  tgt=0.0510  trans=0.0510  gain=-0.0000  |dz|=0.112  17.1 it/s
+step  34750  L=0.1846  src=0.0364  tgt=0.0741  trans=0.0741  gain=-0.0001  |dz|=0.474  17.1 it/s
+step  34800  L=0.1072  src=0.0538  tgt=0.0267  trans=0.0266  gain=+0.0000  |dz|=0.113  17.1 it/s
+step  34850  L=0.0694  src=0.0398  tgt=0.0148  trans=0.0148  gain=-0.0000  |dz|=0.109  17.1 it/s
+step  34900  L=0.4345  src=0.0444  tgt=0.1950  trans=0.1951  gain=-0.0000  |dz|=0.481  17.1 it/s
+step  34950  L=0.0795  src=0.0438  tgt=0.0179  trans=0.0179  gain=+0.0000  |dz|=0.378  17.1 it/s
+step  35000  L=0.1262  src=0.0628  tgt=0.0317  trans=0.0317  gain=-0.0000  |dz|=0.373  17.1 it/s
+  [diagnostics @ 35000] loss_correct=0.0830  loss_zero=0.2283  loss_shuffled=0.0896  loss_random=0.2391  loss_target_only=0.0830  loss_mean_z=0.0852  r_basis=0.6221  |dz_transport|=0.2868  z_s_vs_enc_rel=0.7427  z_spread_rel=0.7500  gain_vs_zero=0.1453  gain_vs_shuffled=0.0067  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0022  delta_task=0.0022  z_center_norm=0.3341  task_specific_frac=0.0152
+    ⚠ gain_vs_zero=0.1453 looks healthy but only 1.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  35050  L=0.3864  src=0.0444  tgt=0.1710  trans=0.1710  gain=-0.0001  |dz|=0.530  17.1 it/s
+step  35100  L=0.0959  src=0.0592  tgt=0.0184  trans=0.0183  gain=+0.0000  |dz|=0.106  17.1 it/s
+step  35150  L=0.0950  src=0.0428  tgt=0.0260  trans=0.0261  gain=-0.0000  |dz|=0.124  17.1 it/s
+step  35200  L=0.3469  src=0.0603  tgt=0.1434  trans=0.1431  gain=+0.0002  |dz|=0.474  17.1 it/s
+step  35250  L=0.0862  src=0.0467  tgt=0.0198  trans=0.0198  gain=-0.0000  |dz|=0.383  17.1 it/s
+step  35300  L=0.1141  src=0.0439  tgt=0.0351  trans=0.0351  gain=-0.0000  |dz|=0.112  17.1 it/s
+step  35350  L=0.1133  src=0.0460  tgt=0.0336  trans=0.0336  gain=-0.0000  |dz|=0.110  17.1 it/s
+step  35400  L=0.3707  src=0.0835  tgt=0.1436  trans=0.1436  gain=-0.0000  |dz|=0.479  17.1 it/s
+step  35450  L=0.0908  src=0.0427  tgt=0.0240  trans=0.0240  gain=+0.0000  |dz|=0.388  17.1 it/s
+step  35500  L=0.2533  src=0.0572  tgt=0.0981  trans=0.0981  gain=-0.0000  |dz|=0.479  17.1 it/s
+  [diagnostics @ 35500] loss_correct=0.0727  loss_zero=0.2193  loss_shuffled=0.0793  loss_random=0.2286  loss_target_only=0.0727  loss_mean_z=0.0755  r_basis=0.6235  |dz_transport|=0.3483  z_s_vs_enc_rel=0.8657  z_spread_rel=0.7703  gain_vs_zero=0.1466  gain_vs_shuffled=0.0066  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.3262  task_specific_frac=0.0193
+    ⚠ gain_vs_zero=0.1466 looks healthy but only 1.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  35550  L=0.1371  src=0.0733  tgt=0.0319  trans=0.0319  gain=+0.0000  |dz|=0.107  17.1 it/s
+step  35600  L=0.1286  src=0.0848  tgt=0.0219  trans=0.0218  gain=+0.0000  |dz|=0.108  17.1 it/s
+step  35650  L=0.3417  src=0.0718  tgt=0.1349  trans=0.1349  gain=-0.0001  |dz|=0.474  17.1 it/s
+step  35700  L=0.2103  src=0.0439  tgt=0.0832  trans=0.0832  gain=+0.0000  |dz|=0.456  17.1 it/s
+step  35750  L=0.3995  src=0.0391  tgt=0.1802  trans=0.1802  gain=+0.0000  |dz|=0.473  17.1 it/s
+step  35800  L=0.1352  src=0.0504  tgt=0.0424  trans=0.0424  gain=-0.0000  |dz|=0.112  17.1 it/s
+step  35850  L=0.0863  src=0.0381  tgt=0.0242  trans=0.0240  gain=+0.0001  |dz|=0.380  17.1 it/s
+step  35900  L=0.1287  src=0.0729  tgt=0.0278  trans=0.0278  gain=-0.0000  |dz|=0.117  17.1 it/s
+step  35950  L=0.1052  src=0.0560  tgt=0.0246  trans=0.0245  gain=+0.0000  |dz|=0.375  17.1 it/s
+step  36000  L=0.3956  src=0.0529  tgt=0.1714  trans=0.1713  gain=+0.0001  |dz|=0.484  17.1 it/s
+  [diagnostics @ 36000] loss_correct=0.0719  loss_zero=0.2153  loss_shuffled=0.0777  loss_random=0.2219  loss_target_only=0.0719  loss_mean_z=0.0746  r_basis=0.6117  |dz_transport|=0.3219  z_s_vs_enc_rel=0.8458  z_spread_rel=0.7904  gain_vs_zero=0.1434  gain_vs_shuffled=0.0057  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.3261  task_specific_frac=0.0183
+    ⚠ gain_vs_zero=0.1434 looks healthy but only 1.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step36000.pt
+step  36050  L=0.1289  src=0.0528  tgt=0.0380  trans=0.0380  gain=-0.0000  |dz|=0.114  17.1 it/s
+step  36100  L=0.1155  src=0.0584  tgt=0.0286  trans=0.0286  gain=+0.0000  |dz|=0.109  17.1 it/s
+step  36150  L=0.3897  src=0.0917  tgt=0.1490  trans=0.1490  gain=+0.0000  |dz|=0.444  17.1 it/s
+step  36200  L=0.1230  src=0.0633  tgt=0.0298  trans=0.0298  gain=-0.0000  |dz|=0.105  17.1 it/s
+step  36250  L=0.1332  src=0.0356  tgt=0.0488  trans=0.0488  gain=-0.0000  |dz|=0.107  17.1 it/s
+step  36300  L=0.1129  src=0.0335  tgt=0.0397  trans=0.0397  gain=-0.0000  |dz|=0.359  17.1 it/s
+step  36350  L=0.1213  src=0.0769  tgt=0.0222  trans=0.0222  gain=+0.0000  |dz|=0.373  17.1 it/s
+step  36400  L=0.0885  src=0.0432  tgt=0.0227  trans=0.0226  gain=+0.0000  |dz|=0.100  17.1 it/s
+step  36450  L=0.2978  src=0.0538  tgt=0.1220  trans=0.1220  gain=+0.0000  |dz|=0.468  17.1 it/s
+step  36500  L=0.0626  src=0.0336  tgt=0.0145  trans=0.0145  gain=+0.0000  |dz|=0.100  17.1 it/s
+  [diagnostics @ 36500] loss_correct=0.0778  loss_zero=0.2178  loss_shuffled=0.0858  loss_random=0.2268  loss_target_only=0.0779  loss_mean_z=0.0808  r_basis=0.6016  |dz_transport|=0.3463  z_s_vs_enc_rel=0.9040  z_spread_rel=0.7936  gain_vs_zero=0.1399  gain_vs_shuffled=0.0079  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0030  delta_task=0.0030  z_center_norm=0.3197  task_specific_frac=0.0214
+    ⚠ gain_vs_zero=0.1399 looks healthy but only 2.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  36550  L=0.1299  src=0.0531  tgt=0.0384  trans=0.0384  gain=-0.0000  |dz|=0.374  17.1 it/s
+step  36600  L=0.0863  src=0.0319  tgt=0.0272  trans=0.0272  gain=-0.0000  |dz|=0.105  17.1 it/s
+step  36650  L=0.2011  src=0.1195  tgt=0.0407  trans=0.0407  gain=-0.0000  |dz|=0.381  17.1 it/s
+step  36700  L=0.4526  src=0.0639  tgt=0.1946  trans=0.1942  gain=+0.0004  |dz|=0.547  17.1 it/s
+step  36750  L=0.1161  src=0.0370  tgt=0.0396  trans=0.0395  gain=+0.0001  |dz|=0.114  17.1 it/s
+step  36800  L=0.1251  src=0.0613  tgt=0.0319  trans=0.0319  gain=+0.0000  |dz|=0.375  17.1 it/s
+step  36850  L=0.1139  src=0.0386  tgt=0.0376  trans=0.0377  gain=-0.0001  |dz|=0.367  17.1 it/s
+step  36900  L=0.1862  src=0.0953  tgt=0.0455  trans=0.0454  gain=+0.0001  |dz|=0.107  17.1 it/s
+step  36950  L=0.4246  src=0.0529  tgt=0.1858  trans=0.1858  gain=-0.0000  |dz|=0.488  17.1 it/s
+step  37000  L=0.1136  src=0.0435  tgt=0.0351  trans=0.0350  gain=+0.0001  |dz|=0.106  17.1 it/s
+  [diagnostics @ 37000] loss_correct=0.0696  loss_zero=0.2084  loss_shuffled=0.0750  loss_random=0.2180  loss_target_only=0.0697  loss_mean_z=0.0725  r_basis=0.5958  |dz_transport|=0.3231  z_s_vs_enc_rel=0.8540  z_spread_rel=0.8005  gain_vs_zero=0.1387  gain_vs_shuffled=0.0053  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.3155  task_specific_frac=0.0203
+    ⚠ gain_vs_zero=0.1387 looks healthy but only 2.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  37050  L=0.1111  src=0.0533  tgt=0.0289  trans=0.0288  gain=+0.0000  |dz|=0.371  17.1 it/s
+step  37100  L=0.1051  src=0.0372  tgt=0.0339  trans=0.0339  gain=-0.0000  |dz|=0.107  17.1 it/s
+step  37150  L=0.1062  src=0.0619  tgt=0.0222  trans=0.0222  gain=+0.0000  |dz|=0.365  17.1 it/s
+step  37200  L=0.1578  src=0.0792  tgt=0.0393  trans=0.0393  gain=+0.0000  |dz|=0.367  17.1 it/s
+step  37250  L=0.2761  src=0.0557  tgt=0.1102  trans=0.1103  gain=-0.0001  |dz|=0.460  17.1 it/s
+step  37300  L=0.1243  src=0.0692  tgt=0.0275  trans=0.0275  gain=+0.0000  |dz|=0.377  17.1 it/s
+step  37350  L=0.0837  src=0.0394  tgt=0.0221  trans=0.0221  gain=+0.0000  |dz|=0.368  17.1 it/s
+step  37400  L=0.1428  src=0.0596  tgt=0.0416  trans=0.0416  gain=-0.0000  |dz|=0.368  17.1 it/s
+step  37450  L=0.1294  src=0.0660  tgt=0.0317  trans=0.0316  gain=+0.0000  |dz|=0.359  17.1 it/s
+step  37500  L=0.0948  src=0.0399  tgt=0.0274  trans=0.0274  gain=-0.0000  |dz|=0.104  17.1 it/s
+  [diagnostics @ 37500] loss_correct=0.0620  loss_zero=0.2009  loss_shuffled=0.0669  loss_random=0.2103  loss_target_only=0.0621  loss_mean_z=0.0648  r_basis=0.5936  |dz_transport|=0.3195  z_s_vs_enc_rel=0.8357  z_spread_rel=0.7287  gain_vs_zero=0.1389  gain_vs_shuffled=0.0049  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.3198  task_specific_frac=0.0199
+    ⚠ gain_vs_zero=0.1389 looks healthy but only 2.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  37550  L=0.1044  src=0.0529  tgt=0.0258  trans=0.0257  gain=+0.0001  |dz|=0.099  17.1 it/s
+step  37600  L=0.0990  src=0.0603  tgt=0.0193  trans=0.0194  gain=-0.0000  |dz|=0.106  17.1 it/s
+step  37650  L=0.3819  src=0.0475  tgt=0.1672  trans=0.1671  gain=+0.0001  |dz|=0.466  17.1 it/s
+step  37700  L=0.0817  src=0.0417  tgt=0.0199  trans=0.0200  gain=-0.0000  |dz|=0.102  17.1 it/s
+step  37750  L=0.0876  src=0.0455  tgt=0.0210  trans=0.0210  gain=-0.0000  |dz|=0.366  17.1 it/s
+step  37800  L=0.0953  src=0.0459  tgt=0.0247  trans=0.0247  gain=-0.0000  |dz|=0.355  17.1 it/s
+step  37850  L=0.3164  src=0.0477  tgt=0.1343  trans=0.1344  gain=-0.0000  |dz|=0.441  17.1 it/s
+step  37900  L=0.4152  src=0.0693  tgt=0.1729  trans=0.1729  gain=+0.0001  |dz|=0.431  17.1 it/s
+step  37950  L=0.0986  src=0.0363  tgt=0.0311  trans=0.0311  gain=+0.0000  |dz|=0.103  17.1 it/s
+step  38000  L=0.1233  src=0.0563  tgt=0.0335  trans=0.0335  gain=-0.0000  |dz|=0.381  17.1 it/s
+  [diagnostics @ 38000] loss_correct=0.0689  loss_zero=0.2026  loss_shuffled=0.0732  loss_random=0.2111  loss_target_only=0.0690  loss_mean_z=0.0709  r_basis=0.5808  |dz_transport|=0.2416  z_s_vs_enc_rel=0.6357  z_spread_rel=0.7187  gain_vs_zero=0.1337  gain_vs_shuffled=0.0043  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0020  delta_task=0.0020  z_center_norm=0.3175  task_specific_frac=0.0150
+    ⚠ gain_vs_zero=0.1337 looks healthy but only 1.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step38000.pt
+step  38050  L=0.1300  src=0.0799  tgt=0.0251  trans=0.0250  gain=+0.0000  |dz|=0.372  17.1 it/s
+step  38100  L=0.1037  src=0.0583  tgt=0.0227  trans=0.0227  gain=+0.0000  |dz|=0.350  17.1 it/s
+step  38150  L=0.1001  src=0.0474  tgt=0.0264  trans=0.0264  gain=+0.0000  |dz|=0.365  17.1 it/s
+step  38200  L=0.1141  src=0.0442  tgt=0.0350  trans=0.0349  gain=+0.0000  |dz|=0.358  17.1 it/s
+step  38250  L=0.1358  src=0.0595  tgt=0.0381  trans=0.0381  gain=-0.0000  |dz|=0.108  17.1 it/s
+step  38300  L=0.1251  src=0.0472  tgt=0.0389  trans=0.0389  gain=+0.0000  |dz|=0.370  17.1 it/s
+step  38350  L=0.1029  src=0.0577  tgt=0.0226  trans=0.0226  gain=-0.0000  |dz|=0.369  17.1 it/s
+step  38400  L=0.1555  src=0.1052  tgt=0.0251  trans=0.0251  gain=+0.0000  |dz|=0.106  17.1 it/s
+step  38450  L=0.2251  src=0.0357  tgt=0.0947  trans=0.0947  gain=-0.0000  |dz|=0.457  17.1 it/s
+step  38500  L=0.1227  src=0.0580  tgt=0.0323  trans=0.0323  gain=+0.0000  |dz|=0.370  17.1 it/s
+  [diagnostics @ 38500] loss_correct=0.0594  loss_zero=0.1934  loss_shuffled=0.0661  loss_random=0.2019  loss_target_only=0.0595  loss_mean_z=0.0619  r_basis=0.5772  |dz_transport|=0.3057  z_s_vs_enc_rel=0.8204  z_spread_rel=0.7514  gain_vs_zero=0.1340  gain_vs_shuffled=0.0067  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.3162  task_specific_frac=0.0184
+    ⚠ gain_vs_zero=0.1340 looks healthy but only 1.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  38550  L=0.1333  src=0.0641  tgt=0.0346  trans=0.0346  gain=+0.0000  |dz|=0.103  17.1 it/s
+step  38600  L=0.1006  src=0.0544  tgt=0.0231  trans=0.0231  gain=+0.0000  |dz|=0.355  17.1 it/s
+step  38650  L=0.1209  src=0.0580  tgt=0.0315  trans=0.0314  gain=+0.0000  |dz|=0.356  17.1 it/s
+step  38700  L=0.1728  src=0.0836  tgt=0.0446  trans=0.0446  gain=-0.0000  |dz|=0.365  17.1 it/s
+step  38750  L=0.1933  src=0.0928  tgt=0.0503  trans=0.0503  gain=-0.0000  |dz|=0.107  17.1 it/s
+step  38800  L=0.1342  src=0.0785  tgt=0.0278  trans=0.0278  gain=-0.0000  |dz|=0.106  17.1 it/s
+step  38850  L=0.1480  src=0.0710  tgt=0.0384  trans=0.0385  gain=-0.0000  |dz|=0.107  17.1 it/s
+step  38900  L=0.0814  src=0.0385  tgt=0.0214  trans=0.0215  gain=-0.0000  |dz|=0.101  17.1 it/s
+step  38950  L=0.1111  src=0.0556  tgt=0.0277  trans=0.0277  gain=+0.0000  |dz|=0.356  17.1 it/s
+step  39000  L=0.3213  src=0.0412  tgt=0.1400  trans=0.1400  gain=-0.0000  |dz|=0.477  17.1 it/s
+  [diagnostics @ 39000] loss_correct=0.0677  loss_zero=0.1975  loss_shuffled=0.0741  loss_random=0.2073  loss_target_only=0.0677  loss_mean_z=0.0706  r_basis=0.5658  |dz_transport|=0.3198  z_s_vs_enc_rel=0.8755  z_spread_rel=0.7768  gain_vs_zero=0.1298  gain_vs_shuffled=0.0065  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.3086  task_specific_frac=0.0225
+    ⚠ gain_vs_zero=0.1298 looks healthy but only 2.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  39050  L=0.0925  src=0.0499  tgt=0.0213  trans=0.0213  gain=+0.0000  |dz|=0.364  17.1 it/s
+step  39100  L=0.1536  src=0.0624  tgt=0.0456  trans=0.0456  gain=+0.0001  |dz|=0.105  17.1 it/s
+step  39150  L=0.3394  src=0.0487  tgt=0.1453  trans=0.1454  gain=-0.0000  |dz|=0.467  17.1 it/s
+step  39200  L=0.1093  src=0.0427  tgt=0.0333  trans=0.0332  gain=+0.0001  |dz|=0.106  17.1 it/s
+step  39250  L=0.1196  src=0.0485  tgt=0.0355  trans=0.0356  gain=-0.0000  |dz|=0.379  17.1 it/s
+step  39300  L=0.1236  src=0.0587  tgt=0.0325  trans=0.0324  gain=+0.0001  |dz|=0.369  17.1 it/s
+step  39350  L=0.1062  src=0.0438  tgt=0.0312  trans=0.0312  gain=-0.0000  |dz|=0.107  17.1 it/s
+step  39400  L=0.1198  src=0.0713  tgt=0.0242  trans=0.0242  gain=+0.0000  |dz|=0.354  17.1 it/s
+step  39450  L=0.0968  src=0.0631  tgt=0.0169  trans=0.0168  gain=+0.0001  |dz|=0.349  17.1 it/s
+step  39500  L=0.1196  src=0.0474  tgt=0.0361  trans=0.0361  gain=+0.0000  |dz|=0.107  17.1 it/s
+  [diagnostics @ 39500] loss_correct=0.0596  loss_zero=0.1889  loss_shuffled=0.0654  loss_random=0.1965  loss_target_only=0.0596  loss_mean_z=0.0618  r_basis=0.5629  |dz_transport|=0.2693  z_s_vs_enc_rel=0.7455  z_spread_rel=0.7629  gain_vs_zero=0.1293  gain_vs_shuffled=0.0058  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0022  delta_task=0.0022  z_center_norm=0.3085  task_specific_frac=0.0172
+    ⚠ gain_vs_zero=0.1293 looks healthy but only 1.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  39550  L=0.0726  src=0.0374  tgt=0.0175  trans=0.0176  gain=-0.0000  |dz|=0.350  17.1 it/s
+step  39600  L=0.1140  src=0.0689  tgt=0.0225  trans=0.0225  gain=+0.0000  |dz|=0.103  17.1 it/s
+step  39650  L=0.0796  src=0.0557  tgt=0.0119  trans=0.0120  gain=-0.0001  |dz|=0.102  17.1 it/s
+step  39700  L=0.0970  src=0.0508  tgt=0.0231  trans=0.0231  gain=-0.0000  |dz|=0.354  17.1 it/s
+step  39750  L=0.0822  src=0.0350  tgt=0.0236  trans=0.0236  gain=+0.0001  |dz|=0.100  17.1 it/s
+step  39800  L=0.1049  src=0.0515  tgt=0.0267  trans=0.0267  gain=-0.0000  |dz|=0.355  17.1 it/s
+step  39850  L=0.0730  src=0.0460  tgt=0.0135  trans=0.0135  gain=+0.0000  |dz|=0.344  17.1 it/s
+step  39900  L=0.1479  src=0.0565  tgt=0.0457  trans=0.0457  gain=+0.0000  |dz|=0.103  17.1 it/s
+step  39950  L=0.1236  src=0.0622  tgt=0.0307  trans=0.0307  gain=-0.0000  |dz|=0.358  17.1 it/s
+step  40000  L=0.2994  src=0.0736  tgt=0.1128  trans=0.1129  gain=-0.0000  |dz|=0.420  17.1 it/s
+  [diagnostics @ 40000] loss_correct=0.0861  loss_zero=0.2069  loss_shuffled=0.0929  loss_random=0.2128  loss_target_only=0.0861  loss_mean_z=0.0891  r_basis=0.5412  |dz_transport|=0.3437  z_s_vs_enc_rel=0.9589  z_spread_rel=0.8074  gain_vs_zero=0.1208  gain_vs_shuffled=0.0068  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0030  delta_task=0.0030  z_center_norm=0.3036  task_specific_frac=0.0248
+    ⚠ gain_vs_zero=0.1208 looks healthy but only 2.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step40000.pt
+step  40050  L=0.1402  src=0.0760  tgt=0.0321  trans=0.0320  gain=+0.0001  |dz|=0.348  17.1 it/s
+step  40100  L=0.0926  src=0.0316  tgt=0.0304  trans=0.0305  gain=-0.0000  |dz|=0.103  17.1 it/s
+step  40150  L=0.1173  src=0.0597  tgt=0.0288  trans=0.0287  gain=+0.0000  |dz|=0.361  17.1 it/s
+step  40200  L=0.4873  src=0.0481  tgt=0.2196  trans=0.2196  gain=+0.0000  |dz|=0.447  17.1 it/s
+step  40250  L=0.0858  src=0.0588  tgt=0.0135  trans=0.0135  gain=-0.0000  |dz|=0.097  17.1 it/s
+step  40300  L=0.1066  src=0.0461  tgt=0.0302  trans=0.0303  gain=-0.0000  |dz|=0.099  17.1 it/s
+step  40350  L=0.0945  src=0.0277  tgt=0.0334  trans=0.0334  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  40400  L=0.4174  src=0.0358  tgt=0.1908  trans=0.1908  gain=-0.0000  |dz|=0.417  17.1 it/s
+step  40450  L=0.0752  src=0.0403  tgt=0.0174  trans=0.0174  gain=+0.0001  |dz|=0.100  17.1 it/s
+step  40500  L=0.1141  src=0.0574  tgt=0.0284  trans=0.0283  gain=+0.0000  |dz|=0.105  17.1 it/s
+  [diagnostics @ 40500] loss_correct=0.0997  loss_zero=0.2138  loss_shuffled=0.1053  loss_random=0.2214  loss_target_only=0.0998  loss_mean_z=0.1025  r_basis=0.5225  |dz_transport|=0.2933  z_s_vs_enc_rel=0.8135  z_spread_rel=0.7671  gain_vs_zero=0.1141  gain_vs_shuffled=0.0055  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.3062  task_specific_frac=0.0239
+    ⚠ gain_vs_zero=0.1141 looks healthy but only 2.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  40550  L=0.1696  src=0.0990  tgt=0.0353  trans=0.0353  gain=+0.0000  |dz|=0.366  17.1 it/s
+step  40600  L=0.4143  src=0.0776  tgt=0.1683  trans=0.1684  gain=-0.0000  |dz|=0.433  17.1 it/s
+step  40650  L=0.1325  src=0.0405  tgt=0.0460  trans=0.0460  gain=+0.0000  |dz|=0.102  17.1 it/s
+step  40700  L=0.1051  src=0.0634  tgt=0.0208  trans=0.0208  gain=+0.0000  |dz|=0.342  17.1 it/s
+step  40750  L=0.4206  src=0.0694  tgt=0.1756  trans=0.1756  gain=+0.0000  |dz|=0.436  17.1 it/s
+step  40800  L=0.1066  src=0.0570  tgt=0.0248  trans=0.0248  gain=+0.0000  |dz|=0.355  17.1 it/s
+step  40850  L=0.4556  src=0.0452  tgt=0.2052  trans=0.2052  gain=+0.0000  |dz|=0.428  17.1 it/s
+step  40900  L=0.1424  src=0.0944  tgt=0.0240  trans=0.0240  gain=+0.0000  |dz|=0.347  17.1 it/s
+step  40950  L=0.3585  src=0.0804  tgt=0.1391  trans=0.1391  gain=-0.0000  |dz|=0.426  17.1 it/s
+step  41000  L=0.2255  src=0.0515  tgt=0.0870  trans=0.0870  gain=+0.0001  |dz|=0.423  17.1 it/s
+  [diagnostics @ 41000] loss_correct=0.0917  loss_zero=0.2051  loss_shuffled=0.0957  loss_random=0.2112  loss_target_only=0.0918  loss_mean_z=0.0937  r_basis=0.5200  |dz_transport|=0.2442  z_s_vs_enc_rel=0.6974  z_spread_rel=0.6625  gain_vs_zero=0.1133  gain_vs_shuffled=0.0040  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0020  delta_task=0.0020  z_center_norm=0.2987  task_specific_frac=0.0173
+    ⚠ gain_vs_zero=0.1133 looks healthy but only 1.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  41050  L=0.1085  src=0.0632  tgt=0.0226  trans=0.0226  gain=+0.0000  |dz|=0.343  17.1 it/s
+step  41100  L=0.1642  src=0.0611  tgt=0.0516  trans=0.0515  gain=+0.0001  |dz|=0.110  17.1 it/s
+step  41150  L=0.0999  src=0.0373  tgt=0.0313  trans=0.0313  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  41200  L=0.4176  src=0.0711  tgt=0.1732  trans=0.1732  gain=+0.0000  |dz|=0.482  17.1 it/s
+step  41250  L=0.1080  src=0.0433  tgt=0.0324  trans=0.0323  gain=+0.0001  |dz|=0.343  17.1 it/s
+step  41300  L=0.1240  src=0.0541  tgt=0.0350  trans=0.0349  gain=+0.0001  |dz|=0.102  17.1 it/s
+step  41350  L=0.3549  src=0.0630  tgt=0.1460  trans=0.1460  gain=-0.0000  |dz|=0.442  17.1 it/s
+step  41400  L=0.0763  src=0.0410  tgt=0.0177  trans=0.0177  gain=+0.0000  |dz|=0.103  17.1 it/s
+step  41450  L=0.4647  src=0.0308  tgt=0.2169  trans=0.2170  gain=-0.0001  |dz|=0.435  17.1 it/s
+step  41500  L=0.1387  src=0.0711  tgt=0.0338  trans=0.0338  gain=-0.0000  |dz|=0.103  17.1 it/s
+  [diagnostics @ 41500] loss_correct=0.1001  loss_zero=0.2107  loss_shuffled=0.1065  loss_random=0.2188  loss_target_only=0.1002  loss_mean_z=0.1030  r_basis=0.5121  |dz_transport|=0.3008  z_s_vs_enc_rel=0.8499  z_spread_rel=0.7863  gain_vs_zero=0.1105  gain_vs_shuffled=0.0063  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.2990  task_specific_frac=0.0263
+    ⚠ gain_vs_zero=0.1105 looks healthy but only 2.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  41550  L=0.3479  src=0.0880  tgt=0.1299  trans=0.1299  gain=+0.0000  |dz|=0.429  17.1 it/s
+step  41600  L=0.4180  src=0.0466  tgt=0.1857  trans=0.1857  gain=+0.0000  |dz|=0.434  17.1 it/s
+step  41650  L=0.1242  src=0.0690  tgt=0.0276  trans=0.0276  gain=-0.0000  |dz|=0.107  17.1 it/s
+step  41700  L=0.1398  src=0.0520  tgt=0.0439  trans=0.0439  gain=-0.0000  |dz|=0.103  17.1 it/s
+step  41750  L=0.5217  src=0.0705  tgt=0.2256  trans=0.2256  gain=+0.0000  |dz|=0.418  17.1 it/s
+step  41800  L=0.1076  src=0.0511  tgt=0.0282  trans=0.0283  gain=-0.0000  |dz|=0.099  17.1 it/s
+step  41850  L=0.2896  src=0.0408  tgt=0.1244  trans=0.1244  gain=-0.0000  |dz|=0.415  17.1 it/s
+step  41900  L=0.3270  src=0.0385  tgt=0.1442  trans=0.1443  gain=-0.0000  |dz|=0.437  17.1 it/s
+step  41950  L=0.1366  src=0.0766  tgt=0.0300  trans=0.0300  gain=-0.0001  |dz|=0.104  17.1 it/s
+step  42000  L=0.1136  src=0.0478  tgt=0.0329  trans=0.0329  gain=+0.0000  |dz|=0.098  17.1 it/s
+  [diagnostics @ 42000] loss_correct=0.0674  loss_zero=0.1831  loss_shuffled=0.0722  loss_random=0.1915  loss_target_only=0.0674  loss_mean_z=0.0697  r_basis=0.5205  |dz_transport|=0.2936  z_s_vs_enc_rel=0.8336  z_spread_rel=0.7894  gain_vs_zero=0.1157  gain_vs_shuffled=0.0048  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.2931  task_specific_frac=0.0204
+    ⚠ gain_vs_zero=0.1157 looks healthy but only 2.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step42000.pt
+step  42050  L=0.1407  src=0.0406  tgt=0.0500  trans=0.0501  gain=-0.0000  |dz|=0.104  17.1 it/s
+step  42100  L=0.5415  src=0.0509  tgt=0.2453  trans=0.2452  gain=+0.0001  |dz|=0.416  17.1 it/s
+step  42150  L=0.1339  src=0.0513  tgt=0.0413  trans=0.0412  gain=+0.0000  |dz|=0.105  17.1 it/s
+step  42200  L=0.1345  src=0.0459  tgt=0.0443  trans=0.0443  gain=-0.0000  |dz|=0.101  17.1 it/s
+step  42250  L=0.3679  src=0.0528  tgt=0.1575  trans=0.1575  gain=+0.0000  |dz|=0.426  17.1 it/s
+step  42300  L=0.4238  src=0.0842  tgt=0.1698  trans=0.1697  gain=+0.0001  |dz|=0.416  17.1 it/s
+step  42350  L=0.0991  src=0.0341  tgt=0.0325  trans=0.0324  gain=+0.0001  |dz|=0.106  17.1 it/s
+step  42400  L=0.1024  src=0.0557  tgt=0.0233  trans=0.0233  gain=-0.0000  |dz|=0.335  17.1 it/s
+step  42450  L=0.3377  src=0.0522  tgt=0.1427  trans=0.1428  gain=-0.0000  |dz|=0.426  17.1 it/s
+step  42500  L=0.0847  src=0.0477  tgt=0.0185  trans=0.0185  gain=-0.0000  |dz|=0.330  17.1 it/s
+  [diagnostics @ 42500] loss_correct=0.0538  loss_zero=0.1720  loss_shuffled=0.0591  loss_random=0.1779  loss_target_only=0.0538  loss_mean_z=0.0561  r_basis=0.5253  |dz_transport|=0.2699  z_s_vs_enc_rel=0.7592  z_spread_rel=0.7165  gain_vs_zero=0.1182  gain_vs_shuffled=0.0054  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.2895  task_specific_frac=0.0194
+    ⚠ gain_vs_zero=0.1182 looks healthy but only 1.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  42550  L=0.0734  src=0.0403  tgt=0.0166  trans=0.0166  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  42600  L=0.3860  src=0.0514  tgt=0.1672  trans=0.1673  gain=-0.0000  |dz|=0.394  17.1 it/s
+step  42650  L=0.1205  src=0.0812  tgt=0.0197  trans=0.0196  gain=+0.0000  |dz|=0.343  17.1 it/s
+step  42700  L=0.1282  src=0.0662  tgt=0.0310  trans=0.0310  gain=-0.0000  |dz|=0.340  17.1 it/s
+step  42750  L=0.1267  src=0.0518  tgt=0.0374  trans=0.0374  gain=+0.0000  |dz|=0.335  17.1 it/s
+step  42800  L=0.3631  src=0.0630  tgt=0.1500  trans=0.1500  gain=+0.0000  |dz|=0.402  17.1 it/s
+step  42850  L=0.1637  src=0.0777  tgt=0.0429  trans=0.0430  gain=-0.0001  |dz|=0.346  17.1 it/s
+step  42900  L=0.1285  src=0.0704  tgt=0.0290  trans=0.0290  gain=-0.0000  |dz|=0.103  17.1 it/s
+step  42950  L=0.1158  src=0.0650  tgt=0.0255  trans=0.0254  gain=+0.0001  |dz|=0.099  17.1 it/s
+step  43000  L=0.1276  src=0.0483  tgt=0.0397  trans=0.0396  gain=+0.0000  |dz|=0.344  17.1 it/s
+  [diagnostics @ 43000] loss_correct=0.0613  loss_zero=0.1768  loss_shuffled=0.0676  loss_random=0.1853  loss_target_only=0.0613  loss_mean_z=0.0636  r_basis=0.5183  |dz_transport|=0.2709  z_s_vs_enc_rel=0.7998  z_spread_rel=0.7550  gain_vs_zero=0.1155  gain_vs_shuffled=0.0064  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.2897  task_specific_frac=0.0204
+    ⚠ gain_vs_zero=0.1155 looks healthy but only 2.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  43050  L=0.1364  src=0.0473  tgt=0.0445  trans=0.0445  gain=+0.0000  |dz|=0.102  17.1 it/s
+step  43100  L=0.1195  src=0.0563  tgt=0.0316  trans=0.0316  gain=+0.0000  |dz|=0.102  17.1 it/s
+step  43150  L=0.1309  src=0.0646  tgt=0.0332  trans=0.0331  gain=+0.0001  |dz|=0.348  17.1 it/s
+step  43200  L=0.1434  src=0.0924  tgt=0.0255  trans=0.0255  gain=-0.0000  |dz|=0.100  17.1 it/s
+step  43250  L=0.1228  src=0.0632  tgt=0.0298  trans=0.0298  gain=+0.0000  |dz|=0.337  17.1 it/s
+step  43300  L=0.1261  src=0.0622  tgt=0.0320  trans=0.0319  gain=+0.0001  |dz|=0.104  17.1 it/s
+step  43350  L=0.1131  src=0.0488  tgt=0.0319  trans=0.0324  gain=-0.0004  |dz|=0.351  17.1 it/s
+step  43400  L=0.1576  src=0.1120  tgt=0.0228  trans=0.0228  gain=+0.0000  |dz|=0.107  17.1 it/s
+step  43450  L=0.0990  src=0.0456  tgt=0.0267  trans=0.0267  gain=+0.0000  |dz|=0.352  17.1 it/s
+step  43500  L=0.4322  src=0.0416  tgt=0.1952  trans=0.1953  gain=-0.0001  |dz|=0.523  17.1 it/s
+  [diagnostics @ 43500] loss_correct=0.0875  loss_zero=0.1923  loss_shuffled=0.0953  loss_random=0.2006  loss_target_only=0.0875  loss_mean_z=0.0902  r_basis=0.4897  |dz_transport|=0.3106  z_s_vs_enc_rel=0.9206  z_spread_rel=0.8335  gain_vs_zero=0.1048  gain_vs_shuffled=0.0077  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.2830  task_specific_frac=0.0260
+    ⚠ gain_vs_zero=0.1048 looks healthy but only 2.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  43550  L=0.0890  src=0.0545  tgt=0.0173  trans=0.0173  gain=+0.0000  |dz|=0.100  17.1 it/s
+step  43600  L=0.1125  src=0.0468  tgt=0.0328  trans=0.0328  gain=+0.0000  |dz|=0.339  17.1 it/s
+step  43650  L=0.1036  src=0.0540  tgt=0.0248  trans=0.0248  gain=-0.0000  |dz|=0.334  17.1 it/s
+step  43700  L=0.4875  src=0.0576  tgt=0.2149  trans=0.2149  gain=+0.0000  |dz|=0.448  17.1 it/s
+step  43750  L=0.3993  src=0.0597  tgt=0.1697  trans=0.1698  gain=-0.0000  |dz|=0.467  17.1 it/s
+step  43800  L=0.3347  src=0.0413  tgt=0.1467  trans=0.1467  gain=+0.0000  |dz|=0.449  17.1 it/s
+step  43850  L=0.1329  src=0.0639  tgt=0.0345  trans=0.0345  gain=-0.0000  |dz|=0.102  17.1 it/s
+step  43900  L=0.1454  src=0.0648  tgt=0.0403  trans=0.0402  gain=+0.0000  |dz|=0.104  17.1 it/s
+step  43950  L=0.3519  src=0.0854  tgt=0.1332  trans=0.1333  gain=-0.0001  |dz|=0.429  17.1 it/s
+step  44000  L=0.4229  src=0.0822  tgt=0.1703  trans=0.1703  gain=-0.0000  |dz|=0.425  17.1 it/s
+  [diagnostics @ 44000] loss_correct=0.1115  loss_zero=0.2095  loss_shuffled=0.1174  loss_random=0.2171  loss_target_only=0.1115  loss_mean_z=0.1148  r_basis=0.4720  |dz_transport|=0.3440  z_s_vs_enc_rel=1.0023  z_spread_rel=0.7892  gain_vs_zero=0.0980  gain_vs_shuffled=0.0059  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0033  delta_task=0.0033  z_center_norm=0.2852  task_specific_frac=0.0340
+    ⚠ gain_vs_zero=0.0980 looks healthy but only 3.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step44000.pt
+step  44050  L=0.2652  src=0.0455  tgt=0.1098  trans=0.1098  gain=-0.0000  |dz|=0.431  17.1 it/s
+step  44100  L=0.1516  src=0.0716  tgt=0.0400  trans=0.0400  gain=-0.0000  |dz|=0.099  17.1 it/s
+step  44150  L=0.6179  src=0.0734  tgt=0.2722  trans=0.2722  gain=+0.0000  |dz|=0.448  17.1 it/s
+step  44200  L=0.1308  src=0.0532  tgt=0.0388  trans=0.0388  gain=+0.0000  |dz|=0.330  17.1 it/s
+step  44250  L=0.1445  src=0.0642  tgt=0.0401  trans=0.0401  gain=-0.0000  |dz|=0.334  17.1 it/s
+step  44300  L=0.1419  src=0.0682  tgt=0.0369  trans=0.0369  gain=-0.0000  |dz|=0.104  17.1 it/s
+step  44350  L=0.4052  src=0.0980  tgt=0.1536  trans=0.1536  gain=-0.0000  |dz|=0.426  17.1 it/s
+step  44400  L=0.1110  src=0.0624  tgt=0.0243  trans=0.0243  gain=-0.0000  |dz|=0.342  17.1 it/s
+step  44450  L=0.1299  src=0.0620  tgt=0.0340  trans=0.0339  gain=+0.0001  |dz|=0.342  17.1 it/s
+step  44500  L=0.4816  src=0.0353  tgt=0.2231  trans=0.2232  gain=-0.0000  |dz|=0.416  17.1 it/s
+  [diagnostics @ 44500] loss_correct=0.0648  loss_zero=0.1714  loss_shuffled=0.0691  loss_random=0.1780  loss_target_only=0.0649  loss_mean_z=0.0669  r_basis=0.4899  |dz_transport|=0.2483  z_s_vs_enc_rel=0.7357  z_spread_rel=0.7747  gain_vs_zero=0.1065  gain_vs_shuffled=0.0042  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0020  delta_task=0.0020  z_center_norm=0.2837  task_specific_frac=0.0191
+    ⚠ gain_vs_zero=0.1065 looks healthy but only 1.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  44550  L=0.4384  src=0.0659  tgt=0.1863  trans=0.1862  gain=+0.0001  |dz|=0.513  17.1 it/s
+step  44600  L=0.1224  src=0.0639  tgt=0.0292  trans=0.0292  gain=+0.0000  |dz|=0.331  17.1 it/s
+step  44650  L=0.3519  src=0.0516  tgt=0.1502  trans=0.1502  gain=+0.0000  |dz|=0.444  17.1 it/s
+step  44700  L=0.3647  src=0.0325  tgt=0.1661  trans=0.1661  gain=+0.0000  |dz|=0.441  17.1 it/s
+step  44750  L=0.4533  src=0.0708  tgt=0.1912  trans=0.1912  gain=-0.0000  |dz|=0.449  17.1 it/s
+step  44800  L=0.4032  src=0.0386  tgt=0.1823  trans=0.1823  gain=+0.0000  |dz|=0.441  17.1 it/s
+step  44850  L=0.2904  src=0.0586  tgt=0.1159  trans=0.1159  gain=-0.0000  |dz|=0.425  17.1 it/s
+step  44900  L=0.1381  src=0.0866  tgt=0.0257  trans=0.0257  gain=-0.0000  |dz|=0.099  17.1 it/s
+step  44950  L=0.3800  src=0.0450  tgt=0.1675  trans=0.1675  gain=-0.0000  |dz|=0.423  17.1 it/s
+step  45000  L=0.1210  src=0.0608  tgt=0.0301  trans=0.0301  gain=+0.0000  |dz|=0.101  17.1 it/s
+  [diagnostics @ 45000] loss_correct=0.0630  loss_zero=0.1691  loss_shuffled=0.0707  loss_random=0.1748  loss_target_only=0.0630  loss_mean_z=0.0654  r_basis=0.4887  |dz_transport|=0.2779  z_s_vs_enc_rel=0.8109  z_spread_rel=0.8052  gain_vs_zero=0.1061  gain_vs_shuffled=0.0077  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.2804  task_specific_frac=0.0231
+    ⚠ gain_vs_zero=0.1061 looks healthy but only 2.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  45050  L=0.2316  src=0.0533  tgt=0.0892  trans=0.0892  gain=-0.0000  |dz|=0.405  17.1 it/s
+step  45100  L=0.1457  src=0.0744  tgt=0.0357  trans=0.0357  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  45150  L=0.3046  src=0.0406  tgt=0.1320  trans=0.1319  gain=+0.0001  |dz|=0.406  17.1 it/s
+step  45200  L=0.0850  src=0.0299  tgt=0.0275  trans=0.0275  gain=-0.0000  |dz|=0.097  17.1 it/s
+step  45250  L=0.1292  src=0.0854  tgt=0.0219  trans=0.0219  gain=+0.0000  |dz|=0.103  17.1 it/s
+step  45300  L=0.1535  src=0.0653  tgt=0.0441  trans=0.0441  gain=-0.0000  |dz|=0.101  17.1 it/s
+step  45350  L=0.1091  src=0.0604  tgt=0.0244  trans=0.0243  gain=+0.0000  |dz|=0.097  17.1 it/s
+step  45400  L=0.1378  src=0.0594  tgt=0.0391  trans=0.0392  gain=-0.0001  |dz|=0.328  17.1 it/s
+step  45450  L=0.1084  src=0.0562  tgt=0.0261  trans=0.0261  gain=-0.0000  |dz|=0.343  17.1 it/s
+step  45500  L=0.4296  src=0.0862  tgt=0.1717  trans=0.1717  gain=+0.0000  |dz|=0.414  17.1 it/s
+  [diagnostics @ 45500] loss_correct=0.1168  loss_zero=0.2091  loss_shuffled=0.1213  loss_random=0.2167  loss_target_only=0.1169  loss_mean_z=0.1203  r_basis=0.4521  |dz_transport|=0.3544  z_s_vs_enc_rel=1.0290  z_spread_rel=0.7750  gain_vs_zero=0.0923  gain_vs_shuffled=0.0045  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0035  delta_task=0.0035  z_center_norm=0.2801  task_specific_frac=0.0380
+    ⚠ gain_vs_zero=0.0923 looks healthy but only 3.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  45550  L=0.1123  src=0.0642  tgt=0.0240  trans=0.0240  gain=+0.0000  |dz|=0.100  17.1 it/s
+step  45600  L=0.0961  src=0.0456  tgt=0.0253  trans=0.0252  gain=+0.0002  |dz|=0.103  17.1 it/s
+step  45650  L=0.1485  src=0.0576  tgt=0.0454  trans=0.0454  gain=+0.0000  |dz|=0.328  17.1 it/s
+step  45700  L=0.1008  src=0.0606  tgt=0.0201  trans=0.0201  gain=+0.0000  |dz|=0.323  17.1 it/s
+step  45750  L=0.1155  src=0.0440  tgt=0.0358  trans=0.0357  gain=+0.0001  |dz|=0.337  17.1 it/s
+step  45800  L=0.3328  src=0.0716  tgt=0.1306  trans=0.1306  gain=-0.0001  |dz|=0.530  17.1 it/s
+step  45850  L=0.1106  src=0.0438  tgt=0.0334  trans=0.0334  gain=+0.0000  |dz|=0.329  17.1 it/s
+step  45900  L=0.1390  src=0.0661  tgt=0.0365  trans=0.0365  gain=-0.0000  |dz|=0.100  17.1 it/s
+step  45950  L=0.1046  src=0.0476  tgt=0.0285  trans=0.0285  gain=+0.0000  |dz|=0.103  17.1 it/s
+step  46000  L=0.3825  src=0.0601  tgt=0.1612  trans=0.1611  gain=+0.0001  |dz|=0.438  17.1 it/s
+  [diagnostics @ 46000] loss_correct=0.0658  loss_zero=0.1682  loss_shuffled=0.0710  loss_random=0.1734  loss_target_only=0.0658  loss_mean_z=0.0681  r_basis=0.4762  |dz_transport|=0.2631  z_s_vs_enc_rel=0.7954  z_spread_rel=0.8020  gain_vs_zero=0.1024  gain_vs_shuffled=0.0052  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.2757  task_specific_frac=0.0225
+    ⚠ gain_vs_zero=0.1024 looks healthy but only 2.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step46000.pt
+step  46050  L=0.1181  src=0.0485  tgt=0.0348  trans=0.0348  gain=+0.0000  |dz|=0.102  17.1 it/s
+step  46100  L=0.1421  src=0.0685  tgt=0.0368  trans=0.0368  gain=-0.0000  |dz|=0.340  17.1 it/s
+step  46150  L=0.1322  src=0.0690  tgt=0.0315  trans=0.0316  gain=-0.0001  |dz|=0.334  17.1 it/s
+step  46200  L=0.1426  src=0.0578  tgt=0.0425  trans=0.0424  gain=+0.0001  |dz|=0.099  17.1 it/s
+step  46250  L=0.1217  src=0.0621  tgt=0.0298  trans=0.0297  gain=+0.0001  |dz|=0.339  17.1 it/s
+step  46300  L=0.0928  src=0.0370  tgt=0.0280  trans=0.0279  gain=+0.0000  |dz|=0.101  17.1 it/s
+step  46350  L=0.1089  src=0.0432  tgt=0.0328  trans=0.0328  gain=-0.0000  |dz|=0.102  17.1 it/s
+step  46400  L=0.1235  src=0.0658  tgt=0.0289  trans=0.0288  gain=+0.0000  |dz|=0.334  17.1 it/s
+step  46450  L=0.3212  src=0.0517  tgt=0.1347  trans=0.1347  gain=+0.0001  |dz|=0.391  17.1 it/s
+step  46500  L=0.4769  src=0.0660  tgt=0.2054  trans=0.2054  gain=-0.0000  |dz|=0.387  17.1 it/s
+  [diagnostics @ 46500] loss_correct=0.0791  loss_zero=0.1765  loss_shuffled=0.0857  loss_random=0.1833  loss_target_only=0.0792  loss_mean_z=0.0818  r_basis=0.4629  |dz_transport|=0.2887  z_s_vs_enc_rel=0.8507  z_spread_rel=0.8329  gain_vs_zero=0.0974  gain_vs_shuffled=0.0066  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.2727  task_specific_frac=0.0279
+    ⚠ gain_vs_zero=0.0974 looks healthy but only 2.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  46550  L=0.1115  src=0.0618  tgt=0.0248  trans=0.0248  gain=+0.0000  |dz|=0.327  17.1 it/s
+step  46600  L=0.2686  src=0.0656  tgt=0.1015  trans=0.1015  gain=-0.0000  |dz|=0.395  17.1 it/s
+step  46650  L=0.4752  src=0.0727  tgt=0.2013  trans=0.2012  gain=+0.0000  |dz|=0.398  17.1 it/s
+step  46700  L=0.1173  src=0.0656  tgt=0.0258  trans=0.0258  gain=-0.0000  |dz|=0.324  17.1 it/s
+step  46750  L=0.1041  src=0.0583  tgt=0.0228  trans=0.0229  gain=-0.0000  |dz|=0.337  17.1 it/s
+step  46800  L=0.3664  src=0.0709  tgt=0.1477  trans=0.1477  gain=-0.0000  |dz|=0.402  17.1 it/s
+step  46850  L=0.1438  src=0.0608  tgt=0.0415  trans=0.0415  gain=+0.0000  |dz|=0.328  17.1 it/s
+step  46900  L=0.1240  src=0.0569  tgt=0.0335  trans=0.0336  gain=-0.0000  |dz|=0.327  17.1 it/s
+step  46950  L=0.0711  src=0.0350  tgt=0.0181  trans=0.0180  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  47000  L=0.1126  src=0.0509  tgt=0.0308  trans=0.0308  gain=-0.0000  |dz|=0.105  17.1 it/s
+  [diagnostics @ 47000] loss_correct=0.0812  loss_zero=0.1771  loss_shuffled=0.0881  loss_random=0.1842  loss_target_only=0.0812  loss_mean_z=0.0841  r_basis=0.4584  |dz_transport|=0.3128  z_s_vs_enc_rel=0.9571  z_spread_rel=0.8097  gain_vs_zero=0.0959  gain_vs_shuffled=0.0069  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.2721  task_specific_frac=0.0300
+    ⚠ gain_vs_zero=0.0959 looks healthy but only 3.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  47050  L=0.1061  src=0.0662  tgt=0.0200  trans=0.0199  gain=+0.0000  |dz|=0.325  17.1 it/s
+step  47100  L=0.1546  src=0.0628  tgt=0.0459  trans=0.0459  gain=+0.0000  |dz|=0.102  17.1 it/s
+step  47150  L=0.1175  src=0.0552  tgt=0.0311  trans=0.0312  gain=-0.0000  |dz|=0.330  17.1 it/s
+step  47200  L=0.1726  src=0.0572  tgt=0.0577  trans=0.0577  gain=+0.0001  |dz|=0.105  17.1 it/s
+step  47250  L=0.0939  src=0.0461  tgt=0.0239  trans=0.0239  gain=+0.0000  |dz|=0.102  17.1 it/s
+step  47300  L=0.5383  src=0.0571  tgt=0.2406  trans=0.2406  gain=-0.0000  |dz|=0.387  17.1 it/s
+step  47350  L=0.1477  src=0.0852  tgt=0.0313  trans=0.0313  gain=+0.0000  |dz|=0.101  17.1 it/s
+step  47400  L=0.1332  src=0.0759  tgt=0.0286  trans=0.0287  gain=-0.0000  |dz|=0.098  17.1 it/s
+step  47450  L=0.4024  src=0.0513  tgt=0.1755  trans=0.1755  gain=+0.0000  |dz|=0.400  17.1 it/s
+step  47500  L=0.5405  src=0.0417  tgt=0.2495  trans=0.2494  gain=+0.0000  |dz|=0.400  17.1 it/s
+  [diagnostics @ 47500] loss_correct=0.0920  loss_zero=0.1823  loss_shuffled=0.0990  loss_random=0.1883  loss_target_only=0.0921  loss_mean_z=0.0947  r_basis=0.4410  |dz_transport|=0.2919  z_s_vs_enc_rel=0.8646  z_spread_rel=0.8204  gain_vs_zero=0.0903  gain_vs_shuffled=0.0069  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.2707  task_specific_frac=0.0293
+    ⚠ gain_vs_zero=0.0903 looks healthy but only 2.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  47550  L=0.1553  src=0.0736  tgt=0.0408  trans=0.0408  gain=-0.0000  |dz|=0.099  17.1 it/s
+step  47600  L=0.1370  src=0.0784  tgt=0.0292  trans=0.0293  gain=-0.0000  |dz|=0.317  17.1 it/s
+step  47650  L=0.1146  src=0.0550  tgt=0.0298  trans=0.0298  gain=+0.0000  |dz|=0.324  17.1 it/s
+step  47700  L=0.3747  src=0.0707  tgt=0.1520  trans=0.1520  gain=+0.0000  |dz|=0.403  17.1 it/s
+step  47750  L=0.1597  src=0.1033  tgt=0.0282  trans=0.0282  gain=+0.0000  |dz|=0.334  17.1 it/s
+step  47800  L=0.1008  src=0.0509  tgt=0.0250  trans=0.0249  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  47850  L=0.1000  src=0.0647  tgt=0.0177  trans=0.0177  gain=+0.0000  |dz|=0.097  17.1 it/s
+step  47900  L=0.4744  src=0.0667  tgt=0.2039  trans=0.2039  gain=+0.0000  |dz|=0.389  17.1 it/s
+step  47950  L=0.1064  src=0.0474  tgt=0.0295  trans=0.0295  gain=-0.0000  |dz|=0.341  17.1 it/s
+step  48000  L=0.1224  src=0.0524  tgt=0.0349  trans=0.0350  gain=-0.0000  |dz|=0.340  17.1 it/s
+  [diagnostics @ 48000] loss_correct=0.0976  loss_zero=0.1866  loss_shuffled=0.1052  loss_random=0.1932  loss_target_only=0.0976  loss_mean_z=0.1007  r_basis=0.4375  |dz_transport|=0.3170  z_s_vs_enc_rel=0.9793  z_spread_rel=0.8403  gain_vs_zero=0.0889  gain_vs_shuffled=0.0076  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0031  delta_task=0.0031  z_center_norm=0.2672  task_specific_frac=0.0347
+    ⚠ gain_vs_zero=0.0889 looks healthy but only 3.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step48000.pt
+step  48050  L=0.1015  src=0.0455  tgt=0.0280  trans=0.0280  gain=-0.0000  |dz|=0.094  17.1 it/s
+step  48100  L=0.1589  src=0.1058  tgt=0.0265  trans=0.0265  gain=+0.0000  |dz|=0.101  17.1 it/s
+step  48150  L=0.0793  src=0.0461  tgt=0.0166  trans=0.0166  gain=-0.0000  |dz|=0.092  17.1 it/s
+step  48200  L=0.4141  src=0.0859  tgt=0.1641  trans=0.1641  gain=+0.0000  |dz|=0.375  17.1 it/s
+step  48250  L=0.3796  src=0.0475  tgt=0.1661  trans=0.1660  gain=+0.0000  |dz|=0.396  17.1 it/s
+step  48300  L=0.1297  src=0.0543  tgt=0.0377  trans=0.0376  gain=+0.0001  |dz|=0.096  17.1 it/s
+step  48350  L=0.1073  src=0.0558  tgt=0.0258  trans=0.0257  gain=+0.0001  |dz|=0.326  17.1 it/s
+step  48400  L=0.4104  src=0.0558  tgt=0.1773  trans=0.1773  gain=+0.0001  |dz|=0.408  17.1 it/s
+step  48450  L=0.3505  src=0.0402  tgt=0.1551  trans=0.1551  gain=+0.0001  |dz|=0.413  17.1 it/s
+step  48500  L=0.1135  src=0.0698  tgt=0.0218  trans=0.0218  gain=+0.0000  |dz|=0.100  17.1 it/s
+  [diagnostics @ 48500] loss_correct=0.0837  loss_zero=0.1731  loss_shuffled=0.0891  loss_random=0.1792  loss_target_only=0.0837  loss_mean_z=0.0859  r_basis=0.4370  |dz_transport|=0.2699  z_s_vs_enc_rel=0.8475  z_spread_rel=0.8322  gain_vs_zero=0.0894  gain_vs_shuffled=0.0055  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.2639  task_specific_frac=0.0257
+    ⚠ gain_vs_zero=0.0894 looks healthy but only 2.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  48550  L=0.2772  src=0.0290  tgt=0.1241  trans=0.1241  gain=+0.0000  |dz|=0.395  17.1 it/s
+step  48600  L=0.1142  src=0.0514  tgt=0.0314  trans=0.0313  gain=+0.0001  |dz|=0.099  17.1 it/s
+step  48650  L=0.0543  src=0.0328  tgt=0.0107  trans=0.0107  gain=+0.0000  |dz|=0.092  17.1 it/s
+step  48700  L=0.4156  src=0.0593  tgt=0.1782  trans=0.1781  gain=+0.0001  |dz|=0.401  17.1 it/s
+step  48750  L=0.4324  src=0.0540  tgt=0.1892  trans=0.1892  gain=+0.0000  |dz|=0.378  17.1 it/s
+step  48800  L=0.0894  src=0.0441  tgt=0.0227  trans=0.0227  gain=-0.0000  |dz|=0.332  17.1 it/s
+step  48850  L=0.1150  src=0.0443  tgt=0.0353  trans=0.0353  gain=-0.0000  |dz|=0.095  17.1 it/s
+step  48900  L=0.0599  src=0.0367  tgt=0.0117  trans=0.0115  gain=+0.0002  |dz|=0.098  17.1 it/s
+step  48950  L=0.1144  src=0.0509  tgt=0.0317  trans=0.0317  gain=+0.0000  |dz|=0.322  17.1 it/s
+step  49000  L=0.1470  src=0.0830  tgt=0.0320  trans=0.0320  gain=-0.0000  |dz|=0.099  17.1 it/s
+  [diagnostics @ 49000] loss_correct=0.0621  loss_zero=0.1543  loss_shuffled=0.0672  loss_random=0.1603  loss_target_only=0.0621  loss_mean_z=0.0641  r_basis=0.4427  |dz_transport|=0.2449  z_s_vs_enc_rel=0.7781  z_spread_rel=0.7901  gain_vs_zero=0.0922  gain_vs_shuffled=0.0051  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0019  delta_task=0.0019  z_center_norm=0.2623  task_specific_frac=0.0211
+    ⚠ gain_vs_zero=0.0922 looks healthy but only 2.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  49050  L=0.1570  src=0.0713  tgt=0.0428  trans=0.0428  gain=-0.0000  |dz|=0.101  17.1 it/s
+step  49100  L=0.4489  src=0.0504  tgt=0.1992  trans=0.1992  gain=-0.0000  |dz|=0.456  17.1 it/s
+step  49150  L=0.1189  src=0.0569  tgt=0.0310  trans=0.0310  gain=+0.0000  |dz|=0.320  17.1 it/s
+step  49200  L=0.2329  src=0.0585  tgt=0.0872  trans=0.0872  gain=-0.0000  |dz|=0.416  17.1 it/s
+step  49250  L=0.4259  src=0.0511  tgt=0.1874  trans=0.1874  gain=-0.0000  |dz|=0.412  17.1 it/s
+step  49300  L=0.1144  src=0.0629  tgt=0.0257  trans=0.0257  gain=-0.0000  |dz|=0.323  17.1 it/s
+step  49350  L=0.1042  src=0.0419  tgt=0.0311  trans=0.0311  gain=+0.0000  |dz|=0.316  17.1 it/s
+step  49400  L=0.0878  src=0.0472  tgt=0.0203  trans=0.0203  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  49450  L=0.0813  src=0.0342  tgt=0.0235  trans=0.0235  gain=+0.0000  |dz|=0.318  17.1 it/s
+step  49500  L=0.1279  src=0.0616  tgt=0.0332  trans=0.0331  gain=+0.0000  |dz|=0.100  17.1 it/s
+  [diagnostics @ 49500] loss_correct=0.0820  loss_zero=0.1688  loss_shuffled=0.0884  loss_random=0.1742  loss_target_only=0.0820  loss_mean_z=0.0848  r_basis=0.4267  |dz_transport|=0.2943  z_s_vs_enc_rel=0.9181  z_spread_rel=0.8451  gain_vs_zero=0.0868  gain_vs_shuffled=0.0064  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.2614  task_specific_frac=0.0325
+    ⚠ gain_vs_zero=0.0868 looks healthy but only 3.3% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  49550  L=0.4758  src=0.0777  tgt=0.1990  trans=0.1990  gain=+0.0000  |dz|=0.412  17.1 it/s
+step  49600  L=0.2550  src=0.0368  tgt=0.1091  trans=0.1090  gain=+0.0001  |dz|=0.416  17.1 it/s
+step  49650  L=0.0902  src=0.0362  tgt=0.0270  trans=0.0270  gain=+0.0000  |dz|=0.329  17.1 it/s
+step  49700  L=0.1461  src=0.0460  tgt=0.0500  trans=0.0500  gain=+0.0000  |dz|=0.097  17.1 it/s
+step  49750  L=0.0969  src=0.0378  tgt=0.0295  trans=0.0296  gain=-0.0000  |dz|=0.326  17.1 it/s
+step  49800  L=0.5094  src=0.0530  tgt=0.2282  trans=0.2282  gain=-0.0000  |dz|=0.399  17.1 it/s
+step  49850  L=0.0971  src=0.0626  tgt=0.0172  trans=0.0172  gain=+0.0000  |dz|=0.096  17.1 it/s
+step  49900  L=0.2921  src=0.0460  tgt=0.1230  trans=0.1230  gain=+0.0000  |dz|=0.383  17.1 it/s
+step  49950  L=0.1079  src=0.0495  tgt=0.0292  trans=0.0292  gain=-0.0000  |dz|=0.100  17.1 it/s
+step  50000  L=0.1086  src=0.0451  tgt=0.0318  trans=0.0317  gain=+0.0000  |dz|=0.319  17.1 it/s
+  [diagnostics @ 50000] loss_correct=0.0699  loss_zero=0.1573  loss_shuffled=0.0759  loss_random=0.1643  loss_target_only=0.0699  loss_mean_z=0.0724  r_basis=0.4279  |dz_transport|=0.2644  z_s_vs_enc_rel=0.8380  z_spread_rel=0.8370  gain_vs_zero=0.0874  gain_vs_shuffled=0.0060  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.2606  task_specific_frac=0.0280
+    ⚠ gain_vs_zero=0.0874 looks healthy but only 2.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step50000.pt
+step  50050  L=0.1142  src=0.0790  tgt=0.0176  trans=0.0176  gain=-0.0000  |dz|=0.310  17.1 it/s
+step  50100  L=0.1438  src=0.0609  tgt=0.0414  trans=0.0414  gain=+0.0000  |dz|=0.096  17.1 it/s
+step  50150  L=0.1209  src=0.0468  tgt=0.0370  trans=0.0370  gain=-0.0000  |dz|=0.104  17.1 it/s
+step  50200  L=0.1041  src=0.0364  tgt=0.0339  trans=0.0338  gain=+0.0001  |dz|=0.319  17.1 it/s
+step  50250  L=0.3412  src=0.0963  tgt=0.1224  trans=0.1225  gain=-0.0000  |dz|=0.410  17.1 it/s
+step  50300  L=0.4532  src=0.0560  tgt=0.1986  trans=0.1986  gain=+0.0001  |dz|=0.424  17.1 it/s
+step  50350  L=0.3988  src=0.0855  tgt=0.1567  trans=0.1566  gain=+0.0000  |dz|=0.403  17.1 it/s
+step  50400  L=0.4255  src=0.0826  tgt=0.1714  trans=0.1715  gain=-0.0000  |dz|=0.397  17.1 it/s
+step  50450  L=0.3967  src=0.0547  tgt=0.1710  trans=0.1709  gain=+0.0001  |dz|=0.451  17.1 it/s
+step  50500  L=0.2858  src=0.0460  tgt=0.1199  trans=0.1199  gain=-0.0000  |dz|=0.398  17.1 it/s
+  [diagnostics @ 50500] loss_correct=0.0671  loss_zero=0.1541  loss_shuffled=0.0729  loss_random=0.1587  loss_target_only=0.0672  loss_mean_z=0.0692  r_basis=0.4269  |dz_transport|=0.2434  z_s_vs_enc_rel=0.7898  z_spread_rel=0.8076  gain_vs_zero=0.0870  gain_vs_shuffled=0.0058  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0021  delta_task=0.0021  z_center_norm=0.2548  task_specific_frac=0.0240
+    ⚠ gain_vs_zero=0.0870 looks healthy but only 2.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  50550  L=0.0995  src=0.0302  tgt=0.0346  trans=0.0346  gain=+0.0000  |dz|=0.317  17.1 it/s
+step  50600  L=0.1060  src=0.0468  tgt=0.0296  trans=0.0296  gain=+0.0000  |dz|=0.315  17.1 it/s
+step  50650  L=0.1423  src=0.0545  tgt=0.0438  trans=0.0439  gain=-0.0000  |dz|=0.324  17.1 it/s
+step  50700  L=0.1111  src=0.0532  tgt=0.0289  trans=0.0290  gain=-0.0000  |dz|=0.100  17.1 it/s
+step  50750  L=0.0877  src=0.0367  tgt=0.0255  trans=0.0254  gain=+0.0000  |dz|=0.312  17.1 it/s
+step  50800  L=0.1084  src=0.0445  tgt=0.0319  trans=0.0319  gain=-0.0000  |dz|=0.322  17.1 it/s
+step  50850  L=0.5453  src=0.0615  tgt=0.2419  trans=0.2419  gain=-0.0000  |dz|=0.392  17.1 it/s
+step  50900  L=0.1063  src=0.0534  tgt=0.0264  trans=0.0264  gain=+0.0000  |dz|=0.315  17.1 it/s
+step  50950  L=0.4273  src=0.0606  tgt=0.1833  trans=0.1834  gain=-0.0000  |dz|=0.381  17.1 it/s
+step  51000  L=0.1255  src=0.0715  tgt=0.0270  trans=0.0270  gain=-0.0000  |dz|=0.104  17.1 it/s
+  [diagnostics @ 51000] loss_correct=0.0869  loss_zero=0.1687  loss_shuffled=0.0925  loss_random=0.1743  loss_target_only=0.0869  loss_mean_z=0.0894  r_basis=0.4116  |dz_transport|=0.2697  z_s_vs_enc_rel=0.8729  z_spread_rel=0.8535  gain_vs_zero=0.0818  gain_vs_shuffled=0.0055  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.2552  task_specific_frac=0.0302
+    ⚠ gain_vs_zero=0.0818 looks healthy but only 3.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  51050  L=0.0881  src=0.0561  tgt=0.0160  trans=0.0160  gain=-0.0000  |dz|=0.314  17.1 it/s
+step  51100  L=0.4660  src=0.0722  tgt=0.1969  trans=0.1969  gain=-0.0000  |dz|=0.422  17.1 it/s
+step  51150  L=0.1648  src=0.0912  tgt=0.0368  trans=0.0368  gain=+0.0001  |dz|=0.097  17.1 it/s
+step  51200  L=0.0965  src=0.0492  tgt=0.0236  trans=0.0237  gain=-0.0001  |dz|=0.315  17.1 it/s
+step  51250  L=0.0638  src=0.0307  tgt=0.0166  trans=0.0166  gain=-0.0000  |dz|=0.315  17.1 it/s
+step  51300  L=0.3528  src=0.0462  tgt=0.1533  trans=0.1533  gain=+0.0001  |dz|=0.399  17.1 it/s
+step  51350  L=0.0929  src=0.0464  tgt=0.0232  trans=0.0232  gain=-0.0000  |dz|=0.318  17.1 it/s
+step  51400  L=0.0731  src=0.0329  tgt=0.0201  trans=0.0201  gain=+0.0000  |dz|=0.096  17.1 it/s
+step  51450  L=0.1404  src=0.0871  tgt=0.0266  trans=0.0266  gain=-0.0000  |dz|=0.318  17.1 it/s
+step  51500  L=0.0885  src=0.0282  tgt=0.0301  trans=0.0301  gain=+0.0000  |dz|=0.314  17.1 it/s
+  [diagnostics @ 51500] loss_correct=0.0551  loss_zero=0.1419  loss_shuffled=0.0608  loss_random=0.1475  loss_target_only=0.0552  loss_mean_z=0.0573  r_basis=0.4227  |dz_transport|=0.2396  z_s_vs_enc_rel=0.7999  z_spread_rel=0.7592  gain_vs_zero=0.0868  gain_vs_shuffled=0.0057  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0022  delta_task=0.0022  z_center_norm=0.2516  task_specific_frac=0.0255
+    ⚠ gain_vs_zero=0.0868 looks healthy but only 2.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  51550  L=0.1038  src=0.0344  tgt=0.0347  trans=0.0347  gain=+0.0001  |dz|=0.314  17.1 it/s
+step  51600  L=0.2852  src=0.0477  tgt=0.1188  trans=0.1187  gain=+0.0001  |dz|=0.384  17.1 it/s
+step  51650  L=0.1177  src=0.0850  tgt=0.0163  trans=0.0163  gain=-0.0000  |dz|=0.309  17.1 it/s
+step  51700  L=0.1064  src=0.0516  tgt=0.0275  trans=0.0274  gain=+0.0001  |dz|=0.312  17.1 it/s
+step  51750  L=0.1522  src=0.0722  tgt=0.0400  trans=0.0399  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  51800  L=0.2219  src=0.0436  tgt=0.0891  trans=0.0891  gain=+0.0001  |dz|=0.378  17.1 it/s
+step  51850  L=0.1177  src=0.0588  tgt=0.0294  trans=0.0294  gain=-0.0000  |dz|=0.314  17.1 it/s
+step  51900  L=0.1044  src=0.0405  tgt=0.0319  trans=0.0319  gain=+0.0000  |dz|=0.097  17.1 it/s
+step  51950  L=0.4705  src=0.0964  tgt=0.1870  trans=0.1870  gain=+0.0000  |dz|=0.393  17.1 it/s
+step  52000  L=0.4812  src=0.0770  tgt=0.2021  trans=0.2021  gain=+0.0001  |dz|=0.376  17.1 it/s
+  [diagnostics @ 52000] loss_correct=0.0645  loss_zero=0.1477  loss_shuffled=0.0687  loss_random=0.1537  loss_target_only=0.0645  loss_mean_z=0.0668  r_basis=0.4116  |dz_transport|=0.2650  z_s_vs_enc_rel=0.8709  z_spread_rel=0.8137  gain_vs_zero=0.0832  gain_vs_shuffled=0.0042  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.2491  task_specific_frac=0.0279
+    ⚠ gain_vs_zero=0.0832 looks healthy but only 2.8% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step52000.pt
+step  52050  L=0.1294  src=0.0498  tgt=0.0398  trans=0.0398  gain=+0.0000  |dz|=0.316  17.1 it/s
+step  52100  L=0.1634  src=0.0811  tgt=0.0411  trans=0.0411  gain=-0.0000  |dz|=0.309  17.1 it/s
+step  52150  L=0.3084  src=0.0485  tgt=0.1300  trans=0.1300  gain=+0.0000  |dz|=0.378  17.1 it/s
+step  52200  L=0.1024  src=0.0569  tgt=0.0228  trans=0.0227  gain=+0.0000  |dz|=0.100  17.1 it/s
+step  52250  L=0.2833  src=0.0611  tgt=0.1111  trans=0.1110  gain=+0.0000  |dz|=0.478  17.1 it/s
+step  52300  L=0.1227  src=0.0553  tgt=0.0337  trans=0.0337  gain=-0.0000  |dz|=0.323  17.1 it/s
+step  52350  L=0.4405  src=0.0675  tgt=0.1865  trans=0.1865  gain=+0.0000  |dz|=0.424  17.1 it/s
+step  52400  L=0.3698  src=0.0561  tgt=0.1568  trans=0.1568  gain=+0.0000  |dz|=0.406  17.1 it/s
+step  52450  L=0.1031  src=0.0466  tgt=0.0283  trans=0.0283  gain=+0.0000  |dz|=0.306  17.1 it/s
+step  52500  L=0.0859  src=0.0479  tgt=0.0190  trans=0.0190  gain=+0.0000  |dz|=0.308  17.1 it/s
+  [diagnostics @ 52500] loss_correct=0.0833  loss_zero=0.1611  loss_shuffled=0.0905  loss_random=0.1681  loss_target_only=0.0833  loss_mean_z=0.0861  r_basis=0.3962  |dz_transport|=0.2957  z_s_vs_enc_rel=0.9786  z_spread_rel=0.8607  gain_vs_zero=0.0778  gain_vs_shuffled=0.0072  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.2450  task_specific_frac=0.0360
+    ⚠ gain_vs_zero=0.0778 looks healthy but only 3.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  52550  L=0.1655  src=0.0860  tgt=0.0397  trans=0.0397  gain=-0.0000  |dz|=0.099  17.1 it/s
+step  52600  L=0.1617  src=0.0841  tgt=0.0388  trans=0.0388  gain=+0.0000  |dz|=0.107  17.1 it/s
+step  52650  L=0.0642  src=0.0266  tgt=0.0188  trans=0.0188  gain=-0.0000  |dz|=0.316  17.1 it/s
+step  52700  L=0.3600  src=0.0355  tgt=0.1622  trans=0.1622  gain=+0.0000  |dz|=0.432  17.1 it/s
+step  52750  L=0.5736  src=0.1019  tgt=0.2359  trans=0.2358  gain=+0.0000  |dz|=0.419  17.1 it/s
+step  52800  L=0.3266  src=0.0484  tgt=0.1391  trans=0.1391  gain=-0.0000  |dz|=0.401  17.1 it/s
+step  52850  L=0.0816  src=0.0368  tgt=0.0224  trans=0.0224  gain=+0.0000  |dz|=0.310  17.1 it/s
+step  52900  L=0.3877  src=0.0632  tgt=0.1623  trans=0.1623  gain=-0.0000  |dz|=0.394  17.1 it/s
+step  52950  L=0.1454  src=0.0624  tgt=0.0415  trans=0.0415  gain=+0.0000  |dz|=0.323  17.1 it/s
+step  53000  L=0.0729  src=0.0216  tgt=0.0256  trans=0.0257  gain=-0.0000  |dz|=0.295  17.1 it/s
+  [diagnostics @ 53000] loss_correct=0.0746  loss_zero=0.1536  loss_shuffled=0.0804  loss_random=0.1581  loss_target_only=0.0747  loss_mean_z=0.0772  r_basis=0.4003  |dz_transport|=0.2613  z_s_vs_enc_rel=0.8792  z_spread_rel=0.8483  gain_vs_zero=0.0790  gain_vs_shuffled=0.0058  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.2456  task_specific_frac=0.0323
+    ⚠ gain_vs_zero=0.0790 looks healthy but only 3.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  53050  L=0.3732  src=0.0603  tgt=0.1564  trans=0.1565  gain=-0.0001  |dz|=0.378  17.1 it/s
+step  53100  L=0.2451  src=0.0479  tgt=0.0986  trans=0.0986  gain=+0.0000  |dz|=0.380  17.1 it/s
+step  53150  L=0.1173  src=0.0738  tgt=0.0217  trans=0.0217  gain=-0.0000  |dz|=0.097  17.1 it/s
+step  53200  L=0.0987  src=0.0476  tgt=0.0256  trans=0.0255  gain=+0.0001  |dz|=0.096  17.1 it/s
+step  53250  L=0.3996  src=0.0649  tgt=0.1674  trans=0.1673  gain=+0.0000  |dz|=0.395  17.1 it/s
+step  53300  L=0.2683  src=0.0540  tgt=0.1071  trans=0.1071  gain=+0.0000  |dz|=0.403  17.1 it/s
+step  53350  L=0.1206  src=0.0417  tgt=0.0395  trans=0.0394  gain=+0.0000  |dz|=0.097  17.1 it/s
+step  53400  L=0.3595  src=0.0522  tgt=0.1536  trans=0.1536  gain=-0.0000  |dz|=0.370  17.1 it/s
+step  53450  L=0.0986  src=0.0660  tgt=0.0163  trans=0.0163  gain=-0.0000  |dz|=0.319  17.1 it/s
+step  53500  L=0.3177  src=0.0500  tgt=0.1338  trans=0.1339  gain=-0.0001  |dz|=0.382  17.1 it/s
+  [diagnostics @ 53500] loss_correct=0.0676  loss_zero=0.1465  loss_shuffled=0.0743  loss_random=0.1537  loss_target_only=0.0676  loss_mean_z=0.0705  r_basis=0.3978  |dz_transport|=0.3038  z_s_vs_enc_rel=1.0141  z_spread_rel=0.7954  gain_vs_zero=0.0789  gain_vs_shuffled=0.0067  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.2432  task_specific_frac=0.0362
+    ⚠ gain_vs_zero=0.0789 looks healthy but only 3.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  53550  L=0.0575  src=0.0244  tgt=0.0165  trans=0.0165  gain=-0.0000  |dz|=0.098  17.1 it/s
+step  53600  L=0.1066  src=0.0494  tgt=0.0286  trans=0.0286  gain=+0.0000  |dz|=0.319  17.1 it/s
+step  53650  L=0.1720  src=0.0801  tgt=0.0460  trans=0.0459  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  53700  L=0.3366  src=0.0473  tgt=0.1446  trans=0.1446  gain=+0.0001  |dz|=0.426  17.1 it/s
+step  53750  L=0.1176  src=0.0577  tgt=0.0299  trans=0.0300  gain=-0.0000  |dz|=0.313  17.1 it/s
+step  53800  L=0.4030  src=0.1085  tgt=0.1473  trans=0.1473  gain=+0.0000  |dz|=0.414  17.1 it/s
+step  53850  L=0.3569  src=0.0464  tgt=0.1552  trans=0.1553  gain=-0.0001  |dz|=0.420  17.1 it/s
+step  53900  L=0.1660  src=0.0607  tgt=0.0527  trans=0.0526  gain=+0.0001  |dz|=0.324  17.1 it/s
+step  53950  L=0.1374  src=0.0358  tgt=0.0508  trans=0.0508  gain=-0.0000  |dz|=0.314  17.1 it/s
+step  54000  L=0.1040  src=0.0710  tgt=0.0165  trans=0.0165  gain=-0.0000  |dz|=0.096  17.1 it/s
+  [diagnostics @ 54000] loss_correct=0.0628  loss_zero=0.1410  loss_shuffled=0.0693  loss_random=0.1477  loss_target_only=0.0628  loss_mean_z=0.0652  r_basis=0.3961  |dz_transport|=0.2551  z_s_vs_enc_rel=0.8575  z_spread_rel=0.8033  gain_vs_zero=0.0782  gain_vs_shuffled=0.0066  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.2449  task_specific_frac=0.0313
+    ⚠ gain_vs_zero=0.0782 looks healthy but only 3.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step54000.pt
+step  54050  L=0.1054  src=0.0509  tgt=0.0273  trans=0.0273  gain=-0.0000  |dz|=0.305  17.1 it/s
+step  54100  L=0.4281  src=0.0556  tgt=0.1863  trans=0.1862  gain=+0.0000  |dz|=0.404  17.1 it/s
+step  54150  L=0.1031  src=0.0586  tgt=0.0223  trans=0.0223  gain=-0.0000  |dz|=0.103  17.1 it/s
+step  54200  L=0.1467  src=0.0621  tgt=0.0423  trans=0.0423  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  54250  L=0.0779  src=0.0377  tgt=0.0201  trans=0.0201  gain=-0.0000  |dz|=0.098  17.1 it/s
+step  54300  L=0.5126  src=0.0852  tgt=0.2137  trans=0.2137  gain=+0.0001  |dz|=0.398  17.1 it/s
+step  54350  L=0.4388  src=0.0735  tgt=0.1826  trans=0.1826  gain=+0.0000  |dz|=0.418  17.1 it/s
+step  54400  L=0.1181  src=0.0710  tgt=0.0235  trans=0.0236  gain=-0.0000  |dz|=0.314  17.1 it/s
+step  54450  L=0.1062  src=0.0524  tgt=0.0269  trans=0.0269  gain=-0.0000  |dz|=0.303  17.1 it/s
+step  54500  L=0.4196  src=0.0305  tgt=0.1945  trans=0.1945  gain=+0.0000  |dz|=0.372  17.1 it/s
+  [diagnostics @ 54500] loss_correct=0.0538  loss_zero=0.1317  loss_shuffled=0.0584  loss_random=0.1371  loss_target_only=0.0538  loss_mean_z=0.0559  r_basis=0.3935  |dz_transport|=0.2205  z_s_vs_enc_rel=0.7433  z_spread_rel=0.7579  gain_vs_zero=0.0779  gain_vs_shuffled=0.0046  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0021  delta_task=0.0021  z_center_norm=0.2405  task_specific_frac=0.0268
+    ⚠ gain_vs_zero=0.0779 looks healthy but only 2.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  54550  L=0.1415  src=0.0826  tgt=0.0294  trans=0.0294  gain=+0.0000  |dz|=0.305  17.1 it/s
+step  54600  L=0.3452  src=0.0424  tgt=0.1514  trans=0.1514  gain=-0.0000  |dz|=0.374  17.1 it/s
+step  54650  L=0.1220  src=0.0659  tgt=0.0280  trans=0.0281  gain=-0.0000  |dz|=0.093  17.1 it/s
+step  54700  L=0.4104  src=0.0584  tgt=0.1760  trans=0.1759  gain=+0.0001  |dz|=0.362  17.1 it/s
+step  54750  L=0.0961  src=0.0606  tgt=0.0177  trans=0.0177  gain=+0.0000  |dz|=0.297  17.1 it/s
+step  54800  L=0.1458  src=0.0841  tgt=0.0309  trans=0.0309  gain=+0.0000  |dz|=0.097  17.1 it/s
+step  54850  L=0.4151  src=0.0986  tgt=0.1583  trans=0.1582  gain=+0.0001  |dz|=0.382  17.1 it/s
+step  54900  L=0.1885  src=0.0743  tgt=0.0571  trans=0.0571  gain=+0.0001  |dz|=0.101  17.1 it/s
+step  54950  L=0.1832  src=0.0472  tgt=0.0680  trans=0.0680  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  55000  L=0.4139  src=0.0355  tgt=0.1892  trans=0.1892  gain=+0.0000  |dz|=0.391  17.1 it/s
+  [diagnostics @ 55000] loss_correct=0.0594  loss_zero=0.1360  loss_shuffled=0.0657  loss_random=0.1409  loss_target_only=0.0594  loss_mean_z=0.0621  r_basis=0.3889  |dz_transport|=0.2661  z_s_vs_enc_rel=0.9156  z_spread_rel=0.7843  gain_vs_zero=0.0766  gain_vs_shuffled=0.0063  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0027  delta_task=0.0027  z_center_norm=0.2343  task_specific_frac=0.0356
+    ⚠ gain_vs_zero=0.0766 looks healthy but only 3.6% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  55050  L=0.1364  src=0.0631  tgt=0.0366  trans=0.0366  gain=+0.0000  |dz|=0.094  17.1 it/s
+step  55100  L=0.0868  src=0.0443  tgt=0.0213  trans=0.0212  gain=+0.0000  |dz|=0.312  17.1 it/s
+step  55150  L=0.1277  src=0.0735  tgt=0.0271  trans=0.0271  gain=-0.0000  |dz|=0.296  17.1 it/s
+step  55200  L=0.1001  src=0.0475  tgt=0.0263  trans=0.0263  gain=+0.0000  |dz|=0.301  17.1 it/s
+step  55250  L=0.3033  src=0.0516  tgt=0.1258  trans=0.1258  gain=+0.0000  |dz|=0.400  17.1 it/s
+step  55300  L=0.4340  src=0.0770  tgt=0.1785  trans=0.1785  gain=+0.0000  |dz|=0.393  17.1 it/s
+step  55350  L=0.3242  src=0.0504  tgt=0.1369  trans=0.1369  gain=-0.0000  |dz|=0.382  17.1 it/s
+step  55400  L=0.1300  src=0.0593  tgt=0.0354  trans=0.0353  gain=+0.0001  |dz|=0.101  17.1 it/s
+step  55450  L=0.2869  src=0.0614  tgt=0.1127  trans=0.1127  gain=-0.0000  |dz|=0.374  17.1 it/s
+step  55500  L=0.4979  src=0.0539  tgt=0.2221  trans=0.2219  gain=+0.0002  |dz|=0.420  17.1 it/s
+  [diagnostics @ 55500] loss_correct=0.0846  loss_zero=0.1547  loss_shuffled=0.0916  loss_random=0.1601  loss_target_only=0.0846  loss_mean_z=0.0875  r_basis=0.3703  |dz_transport|=0.2885  z_s_vs_enc_rel=0.9992  z_spread_rel=0.8760  gain_vs_zero=0.0701  gain_vs_shuffled=0.0070  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0029  delta_task=0.0029  z_center_norm=0.2331  task_specific_frac=0.0419
+    ⚠ gain_vs_zero=0.0701 looks healthy but only 4.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  55550  L=0.0882  src=0.0380  tgt=0.0251  trans=0.0251  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  55600  L=0.0877  src=0.0450  tgt=0.0213  trans=0.0214  gain=-0.0000  |dz|=0.292  17.1 it/s
+step  55650  L=0.0935  src=0.0466  tgt=0.0235  trans=0.0234  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  55700  L=0.1120  src=0.0356  tgt=0.0382  trans=0.0382  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  55750  L=0.0940  src=0.0376  tgt=0.0282  trans=0.0282  gain=-0.0000  |dz|=0.296  17.1 it/s
+step  55800  L=0.5440  src=0.0943  tgt=0.2248  trans=0.2249  gain=-0.0000  |dz|=0.387  17.1 it/s
+step  55850  L=0.1620  src=0.0934  tgt=0.0343  trans=0.0343  gain=+0.0000  |dz|=0.104  17.1 it/s
+step  55900  L=0.1453  src=0.0737  tgt=0.0358  trans=0.0358  gain=-0.0000  |dz|=0.301  17.1 it/s
+step  55950  L=0.1317  src=0.0792  tgt=0.0262  trans=0.0262  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  56000  L=0.1145  src=0.0546  tgt=0.0299  trans=0.0299  gain=+0.0000  |dz|=0.307  17.1 it/s
+  [diagnostics @ 56000] loss_correct=0.0665  loss_zero=0.1382  loss_shuffled=0.0732  loss_random=0.1446  loss_target_only=0.0665  loss_mean_z=0.0691  r_basis=0.3735  |dz_transport|=0.2679  z_s_vs_enc_rel=0.9358  z_spread_rel=0.8269  gain_vs_zero=0.0718  gain_vs_shuffled=0.0068  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.2372  task_specific_frac=0.0367
+    ⚠ gain_vs_zero=0.0718 looks healthy but only 3.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step56000.pt
+step  56050  L=0.4376  src=0.0738  tgt=0.1819  trans=0.1819  gain=+0.0000  |dz|=0.389  17.1 it/s
+step  56100  L=0.1479  src=0.0799  tgt=0.0340  trans=0.0340  gain=-0.0000  |dz|=0.299  17.1 it/s
+step  56150  L=0.1161  src=0.0733  tgt=0.0214  trans=0.0214  gain=+0.0000  |dz|=0.306  17.1 it/s
+step  56200  L=0.1100  src=0.0598  tgt=0.0251  trans=0.0251  gain=+0.0000  |dz|=0.306  17.1 it/s
+step  56250  L=0.2567  src=0.0505  tgt=0.1032  trans=0.1031  gain=+0.0001  |dz|=0.373  17.1 it/s
+step  56300  L=0.2883  src=0.0728  tgt=0.1077  trans=0.1077  gain=-0.0000  |dz|=0.371  17.1 it/s
+step  56350  L=0.4303  src=0.0701  tgt=0.1801  trans=0.1801  gain=-0.0000  |dz|=0.372  17.1 it/s
+step  56400  L=0.1133  src=0.0580  tgt=0.0277  trans=0.0277  gain=+0.0000  |dz|=0.095  17.1 it/s
+step  56450  L=0.0951  src=0.0550  tgt=0.0201  trans=0.0201  gain=-0.0000  |dz|=0.096  17.1 it/s
+step  56500  L=0.1389  src=0.0634  tgt=0.0378  trans=0.0378  gain=+0.0000  |dz|=0.096  17.1 it/s
+  [diagnostics @ 56500] loss_correct=0.0874  loss_zero=0.1540  loss_shuffled=0.0945  loss_random=0.1596  loss_target_only=0.0875  loss_mean_z=0.0902  r_basis=0.3582  |dz_transport|=0.2876  z_s_vs_enc_rel=0.9875  z_spread_rel=0.8696  gain_vs_zero=0.0666  gain_vs_shuffled=0.0071  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.2321  task_specific_frac=0.0421
+    ⚠ gain_vs_zero=0.0666 looks healthy but only 4.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  56550  L=0.1232  src=0.0675  tgt=0.0278  trans=0.0279  gain=-0.0001  |dz|=0.306  17.1 it/s
+step  56600  L=0.1014  src=0.0405  tgt=0.0305  trans=0.0305  gain=+0.0000  |dz|=0.091  17.1 it/s
+step  56650  L=0.4269  src=0.0539  tgt=0.1865  trans=0.1865  gain=+0.0000  |dz|=0.361  17.1 it/s
+step  56700  L=0.4291  src=0.0819  tgt=0.1736  trans=0.1736  gain=+0.0000  |dz|=0.359  17.1 it/s
+step  56750  L=0.1147  src=0.0641  tgt=0.0252  trans=0.0253  gain=-0.0001  |dz|=0.099  17.1 it/s
+step  56800  L=0.1270  src=0.0519  tgt=0.0375  trans=0.0375  gain=-0.0000  |dz|=0.095  17.1 it/s
+step  56850  L=0.1248  src=0.0753  tgt=0.0248  trans=0.0247  gain=+0.0001  |dz|=0.098  17.1 it/s
+step  56900  L=0.0918  src=0.0384  tgt=0.0267  trans=0.0266  gain=+0.0001  |dz|=0.308  17.1 it/s
+step  56950  L=0.1561  src=0.0678  tgt=0.0441  trans=0.0442  gain=-0.0000  |dz|=0.099  17.1 it/s
+step  57000  L=0.1600  src=0.0599  tgt=0.0500  trans=0.0501  gain=-0.0000  |dz|=0.095  17.1 it/s
+  [diagnostics @ 57000] loss_correct=0.0822  loss_zero=0.1491  loss_shuffled=0.0862  loss_random=0.1531  loss_target_only=0.0823  loss_mean_z=0.0844  r_basis=0.3597  |dz_transport|=0.2337  z_s_vs_enc_rel=0.8107  z_spread_rel=0.8420  gain_vs_zero=0.0669  gain_vs_shuffled=0.0041  gain_vs_target_only=0.0001  gain_vs_mean_z=0.0023  delta_task=0.0023  z_center_norm=0.2335  task_specific_frac=0.0338
+    ⚠ gain_vs_zero=0.0669 looks healthy but only 3.4% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  57050  L=0.0800  src=0.0414  tgt=0.0193  trans=0.0193  gain=+0.0000  |dz|=0.095  17.1 it/s
+step  57100  L=0.3900  src=0.0485  tgt=0.1707  trans=0.1707  gain=+0.0000  |dz|=0.363  17.1 it/s
+step  57150  L=0.2422  src=0.1494  tgt=0.0464  trans=0.0463  gain=+0.0001  |dz|=0.101  17.1 it/s
+step  57200  L=0.3479  src=0.0538  tgt=0.1471  trans=0.1470  gain=+0.0001  |dz|=0.345  17.1 it/s
+step  57250  L=0.2148  src=0.1101  tgt=0.0524  trans=0.0523  gain=+0.0000  |dz|=0.095  17.1 it/s
+step  57300  L=0.0649  src=0.0457  tgt=0.0096  trans=0.0096  gain=+0.0000  |dz|=0.098  17.1 it/s
+step  57350  L=0.1153  src=0.0519  tgt=0.0317  trans=0.0316  gain=+0.0000  |dz|=0.096  17.1 it/s
+step  57400  L=0.1335  src=0.0735  tgt=0.0300  trans=0.0300  gain=+0.0000  |dz|=0.108  17.1 it/s
+step  57450  L=0.1268  src=0.0764  tgt=0.0252  trans=0.0252  gain=-0.0000  |dz|=0.294  17.1 it/s
+step  57500  L=0.0735  src=0.0429  tgt=0.0153  trans=0.0153  gain=+0.0000  |dz|=0.095  17.1 it/s
+  [diagnostics @ 57500] loss_correct=0.0801  loss_zero=0.1457  loss_shuffled=0.0855  loss_random=0.1514  loss_target_only=0.0801  loss_mean_z=0.0825  r_basis=0.3538  |dz_transport|=0.2609  z_s_vs_enc_rel=0.9230  z_spread_rel=0.8848  gain_vs_zero=0.0656  gain_vs_shuffled=0.0055  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.2279  task_specific_frac=0.0375
+    ⚠ gain_vs_zero=0.0656 looks healthy but only 3.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  57550  L=0.1168  src=0.0461  tgt=0.0353  trans=0.0353  gain=+0.0000  |dz|=0.301  17.1 it/s
+step  57600  L=0.4316  src=0.0407  tgt=0.1954  trans=0.1954  gain=+0.0001  |dz|=0.373  17.1 it/s
+step  57650  L=0.1606  src=0.0802  tgt=0.0402  trans=0.0402  gain=+0.0000  |dz|=0.097  17.1 it/s
+step  57700  L=0.0629  src=0.0285  tgt=0.0172  trans=0.0172  gain=+0.0000  |dz|=0.093  17.1 it/s
+step  57750  L=0.0903  src=0.0434  tgt=0.0235  trans=0.0234  gain=+0.0001  |dz|=0.299  17.1 it/s
+step  57800  L=0.3665  src=0.0607  tgt=0.1529  trans=0.1528  gain=+0.0000  |dz|=0.478  17.1 it/s
+step  57850  L=0.3172  src=0.0851  tgt=0.1161  trans=0.1161  gain=-0.0000  |dz|=0.458  17.1 it/s
+step  57900  L=0.0973  src=0.0582  tgt=0.0196  trans=0.0196  gain=+0.0000  |dz|=0.099  17.1 it/s
+step  57950  L=0.6265  src=0.0595  tgt=0.2835  trans=0.2835  gain=-0.0000  |dz|=0.428  17.1 it/s
+step  58000  L=0.1350  src=0.0832  tgt=0.0259  trans=0.0259  gain=+0.0000  |dz|=0.294  17.1 it/s
+  [diagnostics @ 58000] loss_correct=0.0579  loss_zero=0.1266  loss_shuffled=0.0627  loss_random=0.1309  loss_target_only=0.0579  loss_mean_z=0.0600  r_basis=0.3619  |dz_transport|=0.2279  z_s_vs_enc_rel=0.8267  z_spread_rel=0.8201  gain_vs_zero=0.0687  gain_vs_shuffled=0.0048  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0021  delta_task=0.0021  z_center_norm=0.2248  task_specific_frac=0.0311
+    ⚠ gain_vs_zero=0.0687 looks healthy but only 3.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step58000.pt
+step  58050  L=0.1397  src=0.0510  tgt=0.0444  trans=0.0443  gain=+0.0001  |dz|=0.102  17.0 it/s
+step  58100  L=0.1196  src=0.0578  tgt=0.0309  trans=0.0309  gain=-0.0000  |dz|=0.303  17.0 it/s
+step  58150  L=0.1074  src=0.0583  tgt=0.0246  trans=0.0246  gain=-0.0000  |dz|=0.305  17.0 it/s
+step  58200  L=0.1303  src=0.0771  tgt=0.0266  trans=0.0266  gain=+0.0000  |dz|=0.298  17.0 it/s
+step  58250  L=0.1203  src=0.0606  tgt=0.0298  trans=0.0299  gain=-0.0000  |dz|=0.293  17.0 it/s
+step  58300  L=0.4425  src=0.0464  tgt=0.1981  trans=0.1981  gain=+0.0000  |dz|=0.414  17.0 it/s
+step  58350  L=0.0792  src=0.0482  tgt=0.0155  trans=0.0155  gain=-0.0000  |dz|=0.099  17.0 it/s
+step  58400  L=0.1282  src=0.0370  tgt=0.0457  trans=0.0455  gain=+0.0002  |dz|=0.303  17.0 it/s
+step  58450  L=0.1006  src=0.0413  tgt=0.0296  trans=0.0296  gain=+0.0000  |dz|=0.306  17.0 it/s
+step  58500  L=0.4171  src=0.0880  tgt=0.1645  trans=0.1645  gain=-0.0000  |dz|=0.384  17.0 it/s
+  [diagnostics @ 58500] loss_correct=0.0729  loss_zero=0.1365  loss_shuffled=0.0802  loss_random=0.1418  loss_target_only=0.0729  loss_mean_z=0.0755  r_basis=0.3460  |dz_transport|=0.2764  z_s_vs_enc_rel=0.9779  z_spread_rel=0.8965  gain_vs_zero=0.0637  gain_vs_shuffled=0.0074  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0026  delta_task=0.0026  z_center_norm=0.2255  task_specific_frac=0.0414
+    ⚠ gain_vs_zero=0.0637 looks healthy but only 4.1% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  58550  L=0.3812  src=0.0435  tgt=0.1689  trans=0.1689  gain=+0.0000  |dz|=0.391  17.0 it/s
+step  58600  L=0.2691  src=0.0704  tgt=0.0994  trans=0.0993  gain=+0.0001  |dz|=0.387  17.0 it/s
+step  58650  L=0.1237  src=0.0416  tgt=0.0410  trans=0.0410  gain=-0.0000  |dz|=0.100  17.0 it/s
+step  58700  L=0.3569  src=0.0717  tgt=0.1426  trans=0.1426  gain=-0.0000  |dz|=0.383  17.0 it/s
+step  58750  L=0.1182  src=0.0683  tgt=0.0250  trans=0.0250  gain=+0.0000  |dz|=0.099  17.0 it/s
+step  58800  L=0.1251  src=0.0638  tgt=0.0306  trans=0.0306  gain=+0.0000  |dz|=0.297  17.0 it/s
+step  58850  L=0.0914  src=0.0607  tgt=0.0154  trans=0.0154  gain=-0.0000  |dz|=0.099  17.0 it/s
+step  58900  L=0.5666  src=0.0927  tgt=0.2370  trans=0.2370  gain=-0.0000  |dz|=0.374  17.0 it/s
+step  58950  L=0.0900  src=0.0464  tgt=0.0218  trans=0.0218  gain=+0.0000  |dz|=0.298  17.0 it/s
+step  59000  L=0.0942  src=0.0248  tgt=0.0347  trans=0.0347  gain=+0.0000  |dz|=0.295  17.0 it/s
+  [diagnostics @ 59000] loss_correct=0.0737  loss_zero=0.1365  loss_shuffled=0.0802  loss_random=0.1409  loss_target_only=0.0737  loss_mean_z=0.0761  r_basis=0.3441  |dz_transport|=0.2551  z_s_vs_enc_rel=0.9215  z_spread_rel=0.8983  gain_vs_zero=0.0628  gain_vs_shuffled=0.0065  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0024  delta_task=0.0024  z_center_norm=0.2272  task_specific_frac=0.0386
+    ⚠ gain_vs_zero=0.0628 looks healthy but only 3.9% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  59050  L=0.1169  src=0.0660  tgt=0.0255  trans=0.0255  gain=+0.0000  |dz|=0.098  17.0 it/s
+step  59100  L=0.1363  src=0.0569  tgt=0.0397  trans=0.0397  gain=-0.0000  |dz|=0.095  17.0 it/s
+step  59150  L=0.0898  src=0.0609  tgt=0.0145  trans=0.0145  gain=-0.0000  |dz|=0.294  17.0 it/s
+step  59200  L=0.0604  src=0.0258  tgt=0.0173  trans=0.0173  gain=-0.0000  |dz|=0.283  17.0 it/s
+step  59250  L=0.1259  src=0.0675  tgt=0.0292  trans=0.0292  gain=+0.0000  |dz|=0.300  17.0 it/s
+step  59300  L=0.1839  src=0.0986  tgt=0.0427  trans=0.0427  gain=+0.0000  |dz|=0.101  17.0 it/s
+step  59350  L=0.1308  src=0.0506  tgt=0.0401  trans=0.0401  gain=+0.0000  |dz|=0.310  17.0 it/s
+step  59400  L=0.4070  src=0.0481  tgt=0.1795  trans=0.1795  gain=+0.0000  |dz|=0.382  17.0 it/s
+step  59450  L=0.0874  src=0.0335  tgt=0.0270  trans=0.0269  gain=+0.0000  |dz|=0.096  17.0 it/s
+step  59500  L=0.1304  src=0.0647  tgt=0.0329  trans=0.0329  gain=+0.0000  |dz|=0.289  17.0 it/s
+  [diagnostics @ 59500] loss_correct=0.0745  loss_zero=0.1371  loss_shuffled=0.0806  loss_random=0.1413  loss_target_only=0.0745  loss_mean_z=0.0773  r_basis=0.3419  |dz_transport|=0.2813  z_s_vs_enc_rel=1.0268  z_spread_rel=0.8827  gain_vs_zero=0.0626  gain_vs_shuffled=0.0061  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0028  delta_task=0.0028  z_center_norm=0.2194  task_specific_frac=0.0453
+    ⚠ gain_vs_zero=0.0626 looks healthy but only 4.5% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+step  59550  L=0.1022  src=0.0510  tgt=0.0256  trans=0.0256  gain=-0.0000  |dz|=0.283  17.0 it/s
+step  59600  L=0.1823  src=0.0982  tgt=0.0421  trans=0.0420  gain=+0.0001  |dz|=0.097  17.0 it/s
+step  59650  L=0.3695  src=0.0745  tgt=0.1474  trans=0.1475  gain=-0.0000  |dz|=0.375  17.0 it/s
+step  59700  L=0.5296  src=0.0570  tgt=0.2363  trans=0.2363  gain=-0.0000  |dz|=0.362  17.0 it/s
+step  59750  L=0.3973  src=0.0524  tgt=0.1725  trans=0.1724  gain=+0.0000  |dz|=0.364  17.0 it/s
+step  59800  L=0.0919  src=0.0602  tgt=0.0159  trans=0.0159  gain=+0.0000  |dz|=0.099  17.0 it/s
+step  59850  L=0.1056  src=0.0408  tgt=0.0324  trans=0.0324  gain=-0.0000  |dz|=0.097  17.0 it/s
+step  59900  L=0.1122  src=0.0548  tgt=0.0288  trans=0.0287  gain=+0.0001  |dz|=0.292  17.0 it/s
+step  59950  L=0.1560  src=0.0667  tgt=0.0446  trans=0.0446  gain=+0.0000  |dz|=0.093  17.0 it/s
+step  60000  L=0.1027  src=0.0627  tgt=0.0200  trans=0.0200  gain=+0.0000  |dz|=0.097  17.0 it/s
+  [diagnostics @ 60000] loss_correct=0.0728  loss_zero=0.1344  loss_shuffled=0.0797  loss_random=0.1384  loss_target_only=0.0728  loss_mean_z=0.0753  r_basis=0.3390  |dz_transport|=0.2503  z_s_vs_enc_rel=0.9311  z_spread_rel=0.8979  gain_vs_zero=0.0616  gain_vs_shuffled=0.0069  gain_vs_target_only=0.0000  gain_vs_mean_z=0.0025  delta_task=0.0025  z_center_norm=0.2228  task_specific_frac=0.0402
+    ⚠ gain_vs_zero=0.0616 looks healthy but only 4.0% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation
+  saved /opt/ml/code/checkpoints/ctr32_off_step60000.pt
+
+done in 58.7 min. log: /opt/ml/code/checkpoints/ctr32_off_log.jsonl
