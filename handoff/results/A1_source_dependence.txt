@@ -7,3 +7,50 @@ source     M_S=64, sets drawn independently
 
 source controls on: mean over 3 transformations, shuffle within transformation, relation-only
 
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            1.614 +-0.089     1.609 +-0.086     1.603 +-0.087
+  reuse z_S                1.440 +-0.103     0.860 +-0.085     0.512 +-0.052
+  transport                0.292 +-0.042     0.307 +-0.036     0.296 +-0.046
+  transport + refine       0.307 +-0.044     0.313 +-0.043     0.305 +-0.046
+  target only              0.365 +-0.049     0.322 +-0.043     0.315 +-0.047
+  oracle                   0.275 +-0.041     0.291 +-0.040     0.284 +-0.042
+  mean z_S                 0.309 +-0.043     0.299 +-0.043     0.307 +-0.045
+  shuffled z_S             0.338 +-0.045     0.341 +-0.050     0.342 +-0.050
+  relation only            0.438 +-0.038     0.431 +-0.041     0.436 +-0.038
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.262 +-0.020     0.268 +-0.018     0.269 +-0.020
+  reuse z_S                0.248 +-0.018     0.238 +-0.016     0.222 +-0.019
+  transport                0.210 +-0.019     0.211 +-0.016     0.214 +-0.019
+  transport + refine       0.212 +-0.019     0.209 +-0.018     0.207 +-0.021
+  target only              0.228 +-0.018     0.222 +-0.018     0.211 +-0.021
+  oracle                   0.186 +-0.019     0.182 +-0.017     0.189 +-0.021
+  mean z_S                 0.240 +-0.021     0.245 +-0.019     0.248 +-0.021
+  shuffled z_S             0.252 +-0.021     0.256 +-0.020     0.257 +-0.022
+  relation only            0.236 +-0.022     0.239 +-0.020     0.243 +-0.023
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison                                 K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------
+  transport vs reuse z_S             +1.147 +-0.105*     +0.554 +-0.102*     +0.216 +-0.058*
+  transport vs target only           +0.073 +-0.052*     +0.016 +-0.030      +0.019 +-0.042 
+  refinement: off vs on              -0.015 +-0.014*     -0.006 +-0.027      -0.009 +-0.042 
+  transport + refine vs oracle       +0.033 +-0.032*     +0.022 +-0.038      +0.021 +-0.043 
+  transport vs mean z_S              +0.017 +-0.033      -0.008 +-0.030      +0.011 +-0.028 
+  transport vs shuffled z_S          +0.046 +-0.039*     +0.035 +-0.040      +0.045 +-0.042*
+  transport vs relation only         +0.146 +-0.057*     +0.125 +-0.056*     +0.140 +-0.054*
+
+  * = the 95% interval excludes zero
+
+grid written to handoff/results/A1_grid.png
