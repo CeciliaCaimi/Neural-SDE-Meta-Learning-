@@ -1,0 +1,139 @@
+C0 -- FEASIBILITY CHECK, Fitzpatrick17k
+==============================================================================
+run            2026-09-16 17:00
+annotations    https://raw.githubusercontent.com/mattgroh/fitzpatrick17k/main/fitzpatrick17k.csv
+               4104341 bytes, sha256 851dfaabf1791c2a8b1c2957619f3e0673cf0002f4ce924a5c02d185c7d4a1cd
+rows           16577   distinct conditions 114
+licence        CC BY-NC-SA 3.0; images belong to Atlas Dermatologico and DermaAmin
+
+VERDICT
+------------------------------------------------------------------------------
+  Annotations: fully available.
+  Images:      PARTIAL. One of the two source atlases is globally unreachable,
+               and it holds roughly three quarters of the dataset.
+  Consequence: the experiment is feasible today only in its reduced, Atlas-only
+               form, and only under the I-III vs IV-VI phenotype grouping.
+               Restoring the full dataset requires the authors' image link,
+               which is requested through a form the user must submit.
+
+1. RETRIEVABILITY BY HOST
+------------------------------------------------------------------------------
+  method: 30 urls per host, sampled with seed 20260916, first 4 KiB fetched.
+  A row counts as live only if the status is 200/206 AND the bytes carry an image
+  magic number -- a 200 returning an HTML error page is a dead link in disguise.
+
+  www.dermaamin.com
+    rows in dataset   12631 (76.2% of the table)
+    sampled           30
+    real image bytes  0 (0.0%)
+      status URLError           body -        30
+
+  atlasdermatologico.com.br
+    rows in dataset   3905 (23.6% of the table)
+    sampled           30
+    real image bytes  30 (100.0%)
+      status 200                body jpeg     30
+
+  DNS diagnosis for www.dermaamin.com, run separately:
+    local resolver (137.205.205.80)  -> SERVFAIL
+    Cloudflare DNS-over-HTTPS        -> Status 2, EDE(22) 'No Reachable Authority
+                                        at delegation dermaamin.com', EDE(23) REFUSED
+  The domain fails to resolve for a public resolver as well as for this network,
+  so this is the domain's own delegation failing, not a campus block. No scheme,
+  port or user-agent change can work around it.
+
+2. COUNT TABLES
+------------------------------------------------------------------------------
+  source population = Fitzpatrick 'light' side, target population = 'dark' side.
+
+  grouping 2v2: I-II vs V-VI  (types III-IV discarded)
+  FULL DATASET (requires the authors' image link)
+    threshold (source / target)         conditions   target images
+    N_S >= 30  and N_T >= 15                       35            1333
+    N_S >= 40  and N_T >= 20                       25            1123
+    N_S >= 60  and N_T >= 30                       12             719
+    N_S >= 100 and N_T >= 50                        6             476
+
+  ATLAS ONLY (retrievable today)
+    threshold (source / target)         conditions   target images
+    N_S >= 30  and N_T >= 15                        3              84
+    N_S >= 40  and N_T >= 20                        2              53
+    N_S >= 60  and N_T >= 30                        0               0
+    N_S >= 100 and N_T >= 50                        0               0
+
+  grouping 3v3: I-III vs IV-VI  (every labelled image kept)
+  FULL DATASET (requires the authors' image link)
+    threshold (source / target)         conditions   target images
+    N_S >= 30  and N_T >= 15                       83            4582
+    N_S >= 40  and N_T >= 20                       65            4210
+    N_S >= 60  and N_T >= 30                       40            3200
+    N_S >= 100 and N_T >= 50                       18            1921
+
+  ATLAS ONLY (retrievable today)
+    threshold (source / target)         conditions   target images
+    N_S >= 30  and N_T >= 15                       16             843
+    N_S >= 40  and N_T >= 20                       12             685
+    N_S >= 60  and N_T >= 30                        8             538
+    N_S >= 100 and N_T >= 50                        2             147
+
+
+3. CHOSEN GROUPING
+------------------------------------------------------------------------------
+  I-III vs IV-VI, chosen from the counts above, not in advance.
+  Under I-II vs V-VI the Atlas-only table retains too few conditions to split into
+  train/validation/test task sets at all, which C1 requires. The I-III vs IV-VI
+  grouping keeps every labelled image and is the only one that survives the loss
+  of DermaAmin. It is a weaker contrast in phenotype, and that must be stated in
+  the write-up as a consequence of data availability rather than a design choice.
+
+4. CONDITIONS PASSING N_S >= 30, N_T >= 15 UNDER THE CHOSEN GROUPING
+------------------------------------------------------------------------------
+  Atlas only: 16 conditions
+    condition                                       source    target
+    lichen planus                                       73       152
+    basal cell carcinoma                               169        84
+    lupus erythematosus                                 30        77
+    squamous cell carcinoma                            133        63
+    porokeratosis actinic                               65        59
+    nematode infection                                  67        58
+    scabies                                             70        56
+    pityriasis rosea                                    42        53
+    melanoma                                            39        40
+    neutrophilic dermatoses                             48        39
+    folliculitis                                        60        36
+    hailey hailey disease                               65        30
+    tungiasis                                           65        28
+    mycosis fungoides                                   53        27
+    photodermatoses                                     31        22
+    seborrheic dermatitis                               31        19
+
+  Full dataset: 83 conditions (4582 target images)
+
+5. ROUTES TO THE IMAGES, RANKED
+------------------------------------------------------------------------------
+  (a) Authors' request form, linked from the dataset README. Restores the full
+      16,577 images. Must be submitted by the user; it is the only route that
+      makes the 83-condition table above real. Blocking, and slow -- start it now.
+  (b) Atlas Dermatologico direct. Works today, 3,905 images, no permission needed
+      beyond the CC BY-NC-SA licence. This is the fallback the rest of C1-C4 can
+      be built on while (a) is pending.
+  (c) Internet Archive. The DermaAmin images are in the Wayback index -- a CDX
+      query returns image/jpeg with status 200, snapshots from 2017. Coverage was
+      not quantified: the CDX endpoint returned 503 and 504 under any bulk query.
+      Retrieval would be a slow rate-limited crawl of ~12,600 files and should be
+      treated as a repair for (a) failing, not as a plan.
+  (d) Public mirrors: none usable. Hugging Face ZYXue/Fitzpatrick_17k is a 5,148
+      row visual-question-answering derivative with no fitzpatrick_scale column;
+      spycoder/fitzpatrick carries the annotations and a dangling 'path' column
+      but no pixels; joshuachou/SkinCAP is gated. Checked 2026-09-16.
+
+6. WHAT THIS MEANS FOR C1-C4
+------------------------------------------------------------------------------
+  Atlas-only gives 16 conditions above threshold. C1 splits the semantic tasks
+  themselves into train/validation/test, so that is roughly a 10/3/3 split of
+  conditions -- thin, but larger than the three transformations CIFAR ran on.
+  With the authors' link it becomes 83 conditions, which is the version worth
+  building the claim on.
+  Neither dataset may be committed. Reference the image root through an
+  environment variable read at import, as domains/cifar100.py does for
+  CIFAR100_ROOT, and do not widen the repository root.

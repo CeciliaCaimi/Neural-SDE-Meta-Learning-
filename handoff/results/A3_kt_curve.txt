@@ -1,0 +1,44 @@
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+
+300 episodes: 20 classes x 3 transformations x 5 values of K_T
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  ----------------------------------------------------------------------------------------------------
+  no adaptation            1.616 +-0.094     1.620 +-0.091     1.609 +-0.095     1.621 +-0.094     1.586 +-0.090
+  reuse z_S                1.439 +-0.106     1.212 +-0.098     0.825 +-0.086     0.630 +-0.058     0.521 +-0.050
+  transport                0.299 +-0.045     0.297 +-0.045     0.299 +-0.042     0.313 +-0.041     0.293 +-0.040
+  transport + refine       0.291 +-0.045     0.294 +-0.047     0.295 +-0.036     0.312 +-0.043     0.322 +-0.048
+  target only              0.360 +-0.052     0.336 +-0.051     0.304 +-0.040     0.331 +-0.053     0.301 +-0.041
+  oracle                   0.274 +-0.043     0.283 +-0.039     0.260 +-0.039     0.308 +-0.041     0.290 +-0.037
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  ----------------------------------------------------------------------------------------------------
+  no adaptation            0.270 +-0.020     0.262 +-0.020     0.265 +-0.018     0.269 +-0.020     0.263 +-0.018
+  reuse z_S                0.251 +-0.019     0.240 +-0.019     0.238 +-0.016     0.235 +-0.019     0.225 +-0.017
+  transport                0.212 +-0.021     0.207 +-0.019     0.210 +-0.017     0.217 +-0.019     0.212 +-0.018
+  transport + refine       0.212 +-0.021     0.204 +-0.019     0.206 +-0.018     0.213 +-0.022     0.209 +-0.020
+  target only              0.230 +-0.020     0.220 +-0.020     0.224 +-0.020     0.220 +-0.022     0.208 +-0.019
+  oracle                   0.186 +-0.019     0.183 +-0.019     0.184 +-0.019     0.194 +-0.021     0.187 +-0.019
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison                                 K_T=1             K_T=2             K_T=5            K_T=10            K_T=20
+  ------------------------------------------------------------------------------------------------------------------------
+  transport vs reuse z_S             +1.140 +-0.108*     +0.915 +-0.105*     +0.526 +-0.099*     +0.317 +-0.067*     +0.229 +-0.059*
+  transport vs target only           +0.061 +-0.051*     +0.038 +-0.052      +0.005 +-0.036      +0.018 +-0.045      +0.008 +-0.036 
+  refinement: off vs on              +0.008 +-0.015      +0.004 +-0.018      +0.004 +-0.027      +0.001 +-0.035      -0.029 +-0.036 
+  transport + refine vs oracle       +0.017 +-0.044      +0.010 +-0.038      +0.035 +-0.035      +0.004 +-0.040      +0.032 +-0.045 
+
+  * = the 95% interval excludes zero
+
+grid written to handoff/results/A3_kt_curve.png

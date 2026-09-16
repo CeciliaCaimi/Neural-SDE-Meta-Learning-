@@ -1,0 +1,9 @@
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets drawn independently
+
+180 episodes: 20 classes x 3 transformations x 3 values of K_T
+
+source controls on: mean over 3 transformations, shuffle within transformation, relation-only
+
