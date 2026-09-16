@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import time
 
 import numpy as np
 import torch
@@ -87,6 +88,16 @@ def main() -> None:
                          "switches the source support to nested prefixes so that a sweep "
                          "varies set size alone; the upper bound is the source support "
                          "pool, 300 by default")
+    ap.add_argument("--json-out", default=None,
+                    help="write every per-episode value to this file. Summaries are cheap "
+                         "to recompute from it and expensive to recompute from nothing: "
+                         "without it, asking a different question of the same run means "
+                         "generating every sample again.")
+    ap.add_argument("--progress", type=int, default=0, metavar="N",
+                    help="report progress to stderr every N episodes. The tables are only "
+                         "printed once the whole sweep is done, so without this a long run "
+                         "is indistinguishable from a stalled one. Goes to stderr so the "
+                         "results file stays clean; redirect the two streams separately.")
     ap.add_argument("--source-controls", action="store_true",
                     help="add the mean, within-relation shuffled and relation-only source "
                          "conditions, which together say what the source task is worth")
@@ -169,7 +180,13 @@ def main() -> None:
     k_grid = min(a.k_shots)
     grid_rows = {name: [] for name, _, _ in strategies}
     grid_real = []
+    t_start = time.time()
     for i, e in enumerate(episodes):
+        if a.progress and i and i % a.progress == 0:
+            rate = (time.time() - t_start) / i
+            print(f"  {i}/{len(episodes)} episodes, {rate:.1f}s each, "
+                  f"~{rate * (len(episodes) - i) / 60:.0f} min left",
+                  file=sys.stderr, flush=True)
         b, k = e["batch"], e["k"]
         real = b.tgt_query
         real_sig = transform_signature(real).mean(0)
@@ -235,18 +252,38 @@ def main() -> None:
             ("transport vs shuffled z_S", "shuffled z_S", "transport"),
             ("transport vs relation only", "relation only", "transport"),
         ]
-    hdr = f"\n  {'comparison':<30}" + "".join(f"{'K_T=' + str(k):>18}" for k in a.k_shots)
-    print(hdr)
-    print("  " + "-" * (len(hdr) - 3))
-    for label, worse, better in pairs:
-        row = f"  {label:<30}"
-        for k in a.k_shots:
-            d = [x - y for x, y in zip(res[worse][k]["sig"], res[better][k]["sig"])]
-            mu, h = ci95(d)
-            mark = "*" if abs(mu) > h else " "
-            row += f"{mu:>+11.3f} +-{h:<4.3f}{mark}"
-        print(row)
+    # Both metrics, because they can disagree: the transformation statistic measures the
+    # axis the coordinate was shown to control, the sliced Wasserstein distance is the
+    # headline distributional metric, and a conclusion that holds on only one of them is
+    # a conclusion about the instrument.
+    for metric, what in (("sig", "transformation-statistic space"),
+                         ("sw", "sliced Wasserstein, pixel space")):
+        hdr = f"\n  {'comparison, ' + what:<34}" + "".join(
+            f"{'K_T=' + str(k):>18}" for k in a.k_shots)
+        print(hdr)
+        print("  " + "-" * (len(hdr) - 3))
+        for label, worse, better in pairs:
+            row = f"  {label:<34}"
+            for k in a.k_shots:
+                d = [x - y for x, y in zip(res[worse][k][metric], res[better][k][metric])]
+                mu, h = ci95(d)
+                mark = "*" if abs(mu) > h else " "
+                row += f"{mu:>+11.4f} +-{h:<5.4f}{mark}"
+            print(row)
     print("\n  * = the 95% interval excludes zero")
+
+    if a.json_out:
+        import json
+        with open(a.json_out, "w", encoding="utf-8") as fo:
+            json.dump({"checkpoint": os.path.basename(a.ckpt), "step": step,
+                       "split": a.split, "k_shots": a.k_shots,
+                       "n_samples": a.n_samples, "ddim_steps": a.ddim_steps,
+                       "m_source": m_source, "nested_source": a.m_source is not None,
+                       "episodes": [{"fid": e["fid"], "cor": e["cor"], "k": e["k"]}
+                                    for e in episodes],
+                       "per_episode": {name: {str(k): res[name][k] for k in a.k_shots}
+                                       for name, _, _ in strategies}}, fo)
+        print(f"per-episode values written to {a.json_out}")
 
     if a.grid_out:
         import matplotlib

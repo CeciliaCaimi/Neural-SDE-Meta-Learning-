@@ -1,3 +1,13 @@
+PROVENANCE NOTE. This is the first A1 run, finished 2026-09-16 ~22:30. Its file was
+truncated by the redirect that launched the second run, and the text below was recovered
+from the session transcript rather than from the process's own output stream. The numbers
+are as printed; nothing has been recomputed. Treat the second run's file, which was
+written by its own process, as the citable one, and this as the independent replicate.
+
+What the second run adds: paired differences on the sliced Wasserstein metric as well as
+the transformation statistic, and a per-episode dump so that a different summary never
+again requires regenerating every sample.
+
 checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
 refinement J=25, eta_z=0.01, beta_0=1.0
 sampling   DDIM eta=0, 50 steps, 96 samples per cell
@@ -41,27 +51,16 @@ sliced Wasserstein distance to the real target set, pixel space
 
 the two questions, as paired differences over episodes (positive = the first one is worse)
 
-  comparison, transformation-statistic space             K_T=1             K_T=5            K_T=20
-  ------------------------------------------------------------------------------------------------
-  transport vs reuse z_S                +1.1473 +-0.1053*    +0.5535 +-0.1018*    +0.2156 +-0.0578*
-  transport vs target only              +0.0726 +-0.0516*    +0.0157 +-0.0305     +0.0192 +-0.0425 
-  refinement: off vs on                 -0.0152 +-0.0142*    -0.0061 +-0.0271     -0.0087 +-0.0421 
-  transport + refine vs oracle          +0.0327 +-0.0319*    +0.0220 +-0.0382     +0.0212 +-0.0430 
-  transport vs mean z_S                 +0.0166 +-0.0331     -0.0076 +-0.0304     +0.0109 +-0.0284 
-  transport vs shuffled z_S             +0.0461 +-0.0390*    +0.0347 +-0.0396     +0.0454 +-0.0425*
-  transport vs relation only            +0.1459 +-0.0570*    +0.1248 +-0.0555*    +0.1399 +-0.0541*
-
-  comparison, sliced Wasserstein, pixel space             K_T=1             K_T=5            K_T=20
-  -------------------------------------------------------------------------------------------------
-  transport vs reuse z_S                +0.0373 +-0.0103*    +0.0273 +-0.0090*    +0.0077 +-0.0072*
-  transport vs target only              +0.0181 +-0.0085*    +0.0114 +-0.0072*    -0.0028 +-0.0073 
-  refinement: off vs on                 -0.0014 +-0.0015     +0.0024 +-0.0051     +0.0072 +-0.0070*
-  transport + refine vs oracle          +0.0260 +-0.0085*    +0.0265 +-0.0091*    +0.0172 +-0.0085*
-  transport vs mean z_S                 +0.0301 +-0.0072*    +0.0346 +-0.0085*    +0.0338 +-0.0080*
-  transport vs shuffled z_S             +0.0416 +-0.0125*    +0.0453 +-0.0149*    +0.0436 +-0.0144*
-  transport vs relation only            +0.0254 +-0.0078*    +0.0285 +-0.0088*    +0.0295 +-0.0087*
+  comparison                                 K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------
+  transport vs reuse z_S             +1.147 +-0.105*     +0.554 +-0.102*     +0.216 +-0.058*
+  transport vs target only           +0.073 +-0.052*     +0.016 +-0.030      +0.019 +-0.042
+  refinement: off vs on              -0.015 +-0.014*     -0.006 +-0.027      -0.009 +-0.042
+  transport + refine vs oracle       +0.033 +-0.032*     +0.022 +-0.038      +0.021 +-0.043
+  transport vs mean z_S              +0.017 +-0.033      -0.008 +-0.030      +0.011 +-0.028
+  transport vs shuffled z_S          +0.046 +-0.039*     +0.035 +-0.040      +0.045 +-0.042*
+  transport vs relation only         +0.146 +-0.057*     +0.125 +-0.056*     +0.140 +-0.054*
 
   * = the 95% interval excludes zero
-per-episode values written to handoff/results/A1_per_episode.json
 
 grid written to handoff/results/A1_grid.png
