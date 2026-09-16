@@ -1,0 +1,205 @@
+% Meta-Diffusion: what has been run, and what each run established
+%
+% Compile:  pdflatex results_summary.tex
+% Requires: amsmath amssymb booktabs enumitem xcolor hyperref geometry
+%
+% Every figure quoted here was read out of checkpoints/*_log.jsonl or artifacts/ on
+% 11 September 2026, not from recollection. Where a number is a single diagnostic point
+% rather than an average, it says so.
+
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{shared}{HTML}{1D4E4A}
+\definecolor{overturn}{HTML}{8C3A32}
+
+\hypersetup{colorlinks=true, linkcolor=shared, urlcolor=shared}
+
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\res}{\par\smallskip\textit{Result.}\ }
+\newcommand{\shows}{\par\smallskip\textit{Shows.}\ }
+\newcommand{\dtask}{\Delta_{\mathrm{task}}}
+\newcommand{\KT}{K_{T}}
+
+\setlength{\emergencystretch}{3em}
+\setlist[enumerate]{leftmargin=1.8em, itemsep=8pt, topsep=6pt}
+
+\title{\vspace{-1.5em}Meta-Diffusion: experiments run so far, and what each established}
+\date{11 September 2026}
+\author{}
+
+\begin{document}
+\maketitle
+\vspace{-2em}
+
+\noindent
+The method trains one diffusion network across many tasks, freezes it, and adapts to a new
+task by fitting a $k$-dimensional coordinate $z$ that weights $k$ learned
+score-perturbation directions:
+\[
+  \hat\varepsilon(x_t,t,z) \;=\; \hat\varepsilon_0(x_t,t) \;+\; \textstyle\sum_{\ell} z_\ell\,R_\ell(x_t,t).
+\]
+A transport map predicts the target coordinate from source data alone. Eleven experiments
+have been run. Two domains were used: two-dimensional Gaussian mixtures, where the true
+score is analytic, and CIFAR-100, where it is not.
+
+\section{What has been run}
+
+\begin{enumerate}
+
+\item \textbf{Analytic validation on two-dimensional Gaussian mixtures (E1).}
+Four-component mixtures, where the true score has a closed form, so model output is
+compared against truth rather than against sample appearance.
+\res Source-informed transport beats every baseline at $\KT = 1$, and the advantage
+shrinks as target evidence grows, with paired confidence intervals over 32 tasks and 3
+seeds.
+\shows The intended mechanism is real and the implementation can express it. This remains
+the strongest positive evidence in the programme.
+
+\item \textbf{CIFAR-100 with sibling fine classes as source and target (E2).}
+A deliberately hard, low-relatedness stress test.
+\res The coordinate collapses: relative spread across episodes stays near $0.02$ against a
+$0.05$ threshold. Dissecting a checkpoint showed the pooled encoder features barely
+separate one flower species from another.
+\shows The encoder cannot extract task identity from the denoising gradient alone when
+tasks differ only by a sibling class. The protocol, not the model, needed changing.
+
+\item \textbf{CIFAR-100 with one fixed transformation, clean to blurred (E3).}
+The corrected protocol: same semantic class, clean source images, transformed target
+images, superclasses split 12/4/4 into train, validation and test.
+\res Collapse is solved --- coordinate spread rises to $0.36$ --- but the benefit
+disappears. Basis usage $r_{\mathrm{basis}}$ falls from $0.254$ to $0.011$, and the gain
+over $z = 0$ peaks at $0.084$ near step 2000 and reaches $0.0002$ by step 50{,}000.
+\shows As the 27.8M-parameter backbone matures it models clean and blurred images
+unconditionally, leaving the coordinate nothing to do.
+
+\item \textbf{CIFAR-100 with three transformations: blur, noise, contrast (E4).}
+The hypothesis was that a backbone unable to know \emph{which} corruption applies would be
+forced to use the coordinate.
+\res It was not. The same arc repeats: gain peaks at $0.078$ and settles at $0.0015$;
+$r_{\mathrm{basis}}$ ends at $0.037$. The encoder meanwhile keeps improving, reaching a
+coordinate spread of $1.19$.
+\shows Encoder quality and coordinate usefulness are decoupled. A coordinate can become
+more informative while contributing less.
+
+\item \textbf{Coordinate dimension sweep, $k \in \{16, 32, 64\}$ (E5).}
+Trained separately at matched steps, measured on validation.
+\res A larger $k$ raises the early peak --- $0.084$, $0.105$, $0.129$ --- and then decays
+slightly further, to $0.0007$, $0.0005$ and $0.0004$ at step 20{,}000, with all three
+curves still falling.
+\shows $k$ is not the bottleneck. A larger basis is absorbed faster, which is the
+signature of a backbone taking over the difference rather than of a coordinate short of
+capacity.
+
+\item \textbf{Backbone capacity sweep, 128 / 64 / 32 channels at fixed $k = 32$ (E6).}
+\res Shrinking the backbone changes the picture completely at 20{,}000 steps: basis usage
+rises from $0.024$ to $0.67$ to $1.37$, and the gain over $z=0$ from $0.0005$ to $0.163$
+to $0.386$ --- a 725-fold rise.
+\shows \textcolor{overturn}{This was read as the mechanism switching on, and that reading
+was wrong.} What grew was the size of a constant offset; see E9.
+
+\item \textbf{Convergence of the two small backbones to 60{,}000 steps (E7).}
+\res Every curve is still falling, with the half-life of an exponential fit scaling with
+capacity: 1{,}965 steps at 128 channels, 10{,}160 at 64 and 25{,}380 at 32. Meanwhile the
+denoising loss under the correct coordinate stays flat throughout.
+\shows Capacity buys time, not permanence, and this is not undertraining --- the model has
+converged while the coordinate keeps losing relevance.
+
+\item \textbf{Deployment sweeps over $\KT \in \{1,2,5,10,20\}$ and source evidence (E8).}
+Six adaptation strategies on 40 held-out episodes, paired per episode.
+\res Any non-zero coordinate beats $z = 0$ by $0.0015$ (95\,\% CI $\pm 0.0002$) ---
+statistically real, but 1.7\,\% of the loss. \emph{No coordinate beats any other}:
+transport, refinement and the oracle upper bound all land on $0.0887$, and $\KT$ changes
+nothing.
+\shows Whatever the coordinate contributes does not depend on which coordinate it is.
+
+\item \textbf{Mean-coordinate substitution (E9).} \emph{The decisive experiment.}
+Replace each episode's own coordinate with a single mean coordinate shared by every
+episode, which removes all task-specific content while keeping the common offset.
+\res On the checkpoint where the apparent gain looked healthiest: own coordinate
+$0.0273$, one shared mean $0.0273$, $z = 0$ giving $0.1456$.
+\shows \textbf{Zero per cent of the coordinate's benefit is task-specific.} Its whole
+contribution is a constant the model needs; $z = 0$ is catastrophic only because it
+deletes that constant. This also re-reads E6: a large backbone absorbs the constant into
+its weights, a small one leaves it in the basis, and neither adapts.
+
+\item \textbf{Loss sensitivity to coordinate error (E10).}
+\res The denoising loss around the target coordinate is very flat, and every coordinate
+the pipeline produces falls inside that basin.
+\shows Substantial coordinate error costs almost nothing, so coordinate-space accuracy
+cannot be inferred from the loss, nor the loss from it.
+
+\item \textbf{Coordinate accuracy against an abundant-target reference (E11).}
+Encode a reference from 230 target images, then measure how far the source coordinate sits
+from it before and after transport. 40 validation episodes.
+\res Transport closes \textbf{93\,\% of the distance}, from $3.106 \pm 0.073$ to $0.227
+\pm 0.019$. At $\KT = 1$ the transported coordinate is closer to the truth ($0.227$) than
+the coordinate encoded from the single available target image ($0.397$); abundant evidence
+overtakes it between five and twenty samples ($0.180$, $0.112$).
+\shows The encoder reads tasks and transport predicts them, both demonstrably. The failure
+is downstream of both: the basis cannot turn a correct coordinate into a denoising gain.
+
+\end{enumerate}
+
+\section{Added in the current round, from re-reading the logs}
+
+\begin{enumerate}[resume]
+
+\item \textbf{The shuffled control is not zero on the three-transformation arm.}
+\res Averaged over the last ten diagnostic points of that run, substituting \emph{another
+episode's} coordinate costs $+0.0029$, while deleting the coordinate entirely costs
+$+0.0016$. On every other run this quantity is $+0.00003$.
+\shows A wrong coordinate is worse than no coordinate, but only where episodes differ in
+which transformation applies. The working hypothesis this raises is that the coordinate
+carries transformation identity, not class identity --- which would explain why class-only
+task families produce nothing.
+
+\item \textbf{No training run on disk records the decisive control.}
+\res The mean-coordinate substitution was added to the code after every CIFAR run had
+already finished, so none of the eighteen logs contains it. E9 is a single post-hoc
+measurement on one checkpoint, not a curve against training step.
+\shows The quantity the next stage turns on has never been watched during training. It
+cannot be recovered from existing data, and requires new runs whatever else is decided.
+
+\item \textbf{Pairing is worth a factor of sixty-five.}
+\res Over the converged stretch of one run, the standard deviation of the raw denoising
+loss between diagnostic points is $0.0241$, while the standard deviation of the paired
+difference is $0.00037$. The effect being measured is $0.0015$.
+\shows The effect is sixteen times smaller than the between-point noise it sits in. A raw
+loss curve cannot show it, and any comparison that is not paired returns an arbitrary sign.
+
+\end{enumerate}
+
+\section{Where this leaves the project}
+
+Stated so it can be falsified: \textbf{the method needs a task family whose members lie
+farther apart than the shared backbone can absorb.} Stage 1 qualifies, because one
+unconditional model cannot cover four mixtures with modes in genuinely different places.
+CIFAR-100 class-conditional distributions do not --- denoising a $32 \times 32$ natural
+image scarcely depends on knowing its class, so ignoring $z$ is the correct solution to the
+problem as posed.
+
+Three of the four stages of the pipeline are therefore proven to work: the encoder reads a
+task (E11), transport predicts one (E11), and the mechanism delivers when tasks are far
+enough apart (E1). The fourth --- the basis turning a correct coordinate into a
+task-specific change in the reverse dynamics --- has never been observed on images (E9).
+
+Two rounds of experiments were reported as successes on the strength of the wrong number
+and had to be withdrawn (E6, E7). The control that caught it costs one extra forward pass,
+and is now computed on every run. The order of reading matters: the fraction of the
+benefit that is task-specific, then the gain over $z = 0$, then basis usage.
+
+\paragraph{The open question.}
+\[
+\boxed{\text{Does the task-specific part of } z \text{ produce a task-specific change in the reverse dynamics?}}
+\]
+On the denoising loss the answer so far is no. At the level of generated samples it has
+never been measured, and that measurement is the first item of the next stage.
+
+\end{document}
