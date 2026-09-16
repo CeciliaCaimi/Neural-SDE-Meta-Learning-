@@ -36,6 +36,7 @@ def main(ckpt: str):
     cfg.model.backbone_kwargs = dict(ck_model["backbone_kwargs"])
     cfg.model.encoder_pooling = ck_model.get("encoder_pooling", "mean")
     cfg.model.n_relations = ck_model["n_relations"]
+    cfg.model.transport_kind = ck_model.get("transport_kind", "residual_mlp")
     model, enc, tr = build(cfg, dev)
     enc.load_state_dict(sd["encoder"]); enc.eval()
     print(f"checkpoint: {os.path.basename(ckpt)}  (step {sd.get('step','?')})")

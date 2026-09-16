@@ -24,7 +24,7 @@ from episodes.splits import load_split
 from models.backbone import build_backbone
 from models.score_model import ScoreModel
 from models.set_encoder import SetEncoder
-from models.transport import Transport
+from models.transport import Transport, build_transport
 from training.meta_train import meta_step
 
 import models.unet  # noqa: F401  -- triggers the @register_backbone registration
@@ -100,7 +100,8 @@ def build(
         k=cfg.model.k, hidden=cfg.model.encoder_hidden,
         pooling=cfg.model.encoder_pooling,
     ).to(device)
-    transport = Transport(
+    transport = build_transport(
+        getattr(cfg.model, "transport_kind", "residual_mlp"),
         k=cfg.model.k, n_relations=cfg.model.n_relations,
         relation_dim=cfg.model.relation_dim, hidden=cfg.model.transport_hidden,
         out_moments=cfg.model.transport_out_moments,

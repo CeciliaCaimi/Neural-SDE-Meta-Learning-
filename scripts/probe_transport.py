@@ -55,6 +55,7 @@ def main():
     cfg.model.k = sd["config"]["model"]["k"]
     cfg.model.backbone_kwargs = dict(sd["config"]["model"]["backbone_kwargs"])
     cfg.model.n_relations = sd["config"]["model"]["n_relations"]
+    cfg.model.transport_kind = sd["config"]["model"].get("transport_kind", "residual_mlp")
     split = load_domainshift(os.path.join(_ROOT, cfg.episodes.domainshift_path))
 
     model, enc, tr = build(cfg, dev)

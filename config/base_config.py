@@ -40,6 +40,10 @@ class ModelConfig:
     # "indexed by relation, never semantic class".
     n_relations: int | None = None
     transport_out_moments: bool = False     # the single extension point of A.7; keep False in v1
+    # A5, the transport-structure ablation: residual_mlp (the method) | identity | constant
+    # | linear. Recorded here rather than passed at build time so that every evaluation
+    # script, which rebuilds from the checkpoint's own config, reconstructs the right one.
+    transport_kind: str = "residual_mlp"
 
 
 @dataclass

@@ -76,6 +76,9 @@ def load_checkpoint(path: str, dev: torch.device):
     cfg.model.backbone_kwargs = dict(ck["backbone_kwargs"])
     cfg.model.encoder_pooling = ck.get("encoder_pooling", "mean")
     cfg.model.n_relations = ck["n_relations"]
+    # A5 trains several transport structures; the checkpoint says which one it holds, and
+    # rebuilding from the default would load another map's weights or fail obscurely
+    cfg.model.transport_kind = ck.get("transport_kind", "residual_mlp")
     cfg.episodes.enc_source_images = sd["config"]["episodes"]["enc_source_images"]
 
     model, enc, tr = build(cfg, dev)

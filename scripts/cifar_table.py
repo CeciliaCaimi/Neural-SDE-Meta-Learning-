@@ -90,6 +90,7 @@ def main() -> None:
     cfg.model.backbone_kwargs = dict(ck_model["backbone_kwargs"])
     cfg.model.encoder_pooling = ck_model.get("encoder_pooling", "mean")
     cfg.model.n_relations = ck_model["n_relations"]
+    cfg.model.transport_kind = ck_model.get("transport_kind", "residual_mlp")
 
     ds_path = a.domainshift_path or cfg.episodes.domainshift_path
     split = load_domainshift(ds_path if os.path.isabs(ds_path) else os.path.join(_ROOT, ds_path))

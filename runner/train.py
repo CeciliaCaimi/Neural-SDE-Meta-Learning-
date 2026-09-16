@@ -44,6 +44,11 @@ def parse() -> argparse.Namespace:
                    help="which domain-shift split file to train on. Pass it explicitly "
                         "rather than relying on the default: the split file fixes the "
                         "task family, so two runs that disagree here are not comparable.")
+    p.add_argument("--transport-kind", choices=("residual_mlp", "identity", "constant", "linear"),
+                   default=None,
+                   help="A5, the transport-structure ablation. Each variant is trained "
+                        "jointly, as the current map was, so that the comparison is "
+                        "between structures and not between training objectives.")
     p.add_argument("--smoke", action="store_true", help="small model, few steps; checks the pipeline only")
     return p.parse_args()
 
@@ -88,6 +93,8 @@ def main() -> None:
         cfg.train.diagnose_every = a.diagnose_every
     if a.pooling is not None:
         cfg.model.encoder_pooling = a.pooling
+    if a.transport_kind is not None:
+        cfg.model.transport_kind = a.transport_kind
     if a.scheme is not None:
         cfg.episodes.scheme = a.scheme
     if a.domainshift_path is not None:
