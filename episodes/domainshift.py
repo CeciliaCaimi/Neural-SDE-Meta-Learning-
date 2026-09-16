@@ -136,11 +136,12 @@ class DSBatch:
 class DomainShiftLoader:
     def __init__(self, raw, split: DomainShiftSplit, which: str,
                  device="cuda", enc_source_images=64, query_batch=32,
-                 k_shots=None, seed=0):
+                 k_shots=None, seed=0, nested_source=False):
         self.split = split
         self.which = which
         self.device = torch.device(device)
         self.enc_source_images = enc_source_images
+        self.nested_source = bool(nested_source)
         self.query_batch = query_batch
         self.k_shots = tuple(k_shots or split.config.k_shots)
         self.corruptions = tuple(split.config.corruptions)
@@ -163,6 +164,23 @@ class DomainShiftLoader:
     def _sub(self, pool: np.ndarray, n: int) -> np.ndarray:
         return pool if n >= pool.size else self.rng.choice(pool, n, replace=False)
 
+    def _sub_source(self, pool: np.ndarray, n: int) -> np.ndarray:
+        """The source support, which is the only stream whose size is swept.
+
+        With nested_source the prefix is taken, so the set for M_S = 16 is a subset of the
+        set for M_S = 32 and the sweep varies set size alone. Drawing independently, as
+        _sub does, confounds size with set identity; worse, rng.choice advances the shared
+        generator, so two runs differing only in M_S would not even see the same episodes.
+        Taking the prefix consumes no randomness, which is what keeps the sweep paired.
+
+        Off by default: at the configured M_S the independent draw is what every result on
+        this project so far was measured with, and switching it silently would make old and
+        new numbers incomparable. The M_S sweep turns it on.
+        """
+        if not self.nested_source:
+            return self._sub(pool, n)
+        return pool if n >= pool.size else pool[:n]
+
     def sample(self, k_shot: int | None = None,
                corruption: str | None = None) -> DSBatch:
         """One episode = (semantic class, corruption, K_T). The corruption is its S->T relation."""
@@ -171,7 +189,7 @@ class DomainShiftLoader:
         k = int(k_shot if k_shot is not None else self.rng.choice(self.k_shots))
         cor = corruption or str(self.rng.choice(self.corruptions))
         return DSBatch(
-            src_support=self._fetch(self._sub(cs.src_support, self.enc_source_images), None),
+            src_support=self._fetch(self._sub_source(cs.src_support, self.enc_source_images), None),
             src_query=self._fetch(self._sub(cs.src_query, self.query_batch), None),
             tgt_support=self._fetch(cs.tgt_support_reserve[:k], cor),
             tgt_query=self._fetch(self._sub(cs.tgt_query, self.query_batch), cor),

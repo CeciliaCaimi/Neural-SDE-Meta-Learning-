@@ -18,6 +18,15 @@ The strategies differ **only in initial value and prior centre**; all share one 
     zero                0, no refinement            no-adaptation control (document baseline)
     zero_refine         0, with refinement          isolates refinement on its own
     oracle              refined on abundant target  attainable upper bound
+    relation_only       Delta_gamma(0, c)           the relation alone, source coordinate zeroed
+
+relation_only answers "what did the source data buy us". It keeps the relation descriptor
+c and destroys task identity completely, so if it matches the full method then Delta_gamma
+has merely memorised one coordinate per relation and the source branch is doing no work.
+It does not refine, matching transport_no_refine: refining on the K_T target images would
+put target information back in and defeat the point. Note that Delta_gamma was never
+trained on z_S = 0, so this input is off-distribution and the reading may be pessimistic --
+which is why the mean source coordinate is run beside it as an in-distribution control.
 """
 
 from __future__ import annotations
@@ -35,9 +44,15 @@ from models.score_model import ScoreModel
 STRATEGIES = (
     "target_only", "source_reuse", "transport", "transport_no_refine", "zero", "oracle",
     "zero_refine",   # refine starting from z=0 -- distinct from zero; isolates refinement
+    "relation_only",  # Delta_gamma(0, c): the relation kept, the source coordinate destroyed
     # Unconstrained references, to attribute oracle error to the backbone or to the basis
     "full_ft", "full_ft_oracle",
 )
+
+# Strategies whose result depends on the source coordinate, and which therefore accept a
+# z_s_override. Passing an override to any other strategy is an error rather than a no-op:
+# a control that is silently ignored reads exactly like a control that found nothing.
+SOURCE_DEPENDENT = ("source_reuse", "transport", "transport_no_refine")
 
 
 @dataclass
@@ -59,11 +74,18 @@ def refine(
     weighting: str = "simple",
     gamma: float = 5.0,
     strategy: str = "?",
+    generator: torch.Generator | None = None,
 ) -> AdaptState:
     """Optimise z alone; network parameters stay frozen throughout. Equation (26).
 
     tgt_support : (K_T, C, H, W) -- the only target data permitted to appear here
     prior_center: prior centre z_tilde; None disables the prior (equivalent to beta_0 = 0)
+    generator   : the source of the (t, eps) redrawn at every step. Leaving it None draws
+                  from the global stream, which makes two strategies compared within one
+                  episode refine against **different** noise -- an unpaired difference in
+                  a comparison that is otherwise paired, and one that does not average out
+                  of the interval. Callers that compare strategies should pass a generator
+                  seeded identically for each of them.
     """
     k_t = int(tgt_support.shape[0])
     z = z_init.detach().clone().requires_grad_(True)
@@ -79,7 +101,7 @@ def refine(
             # Redraw (t, eps) on the K_T support images each step to average out timestep variance
             reps = max(1, budget.noise_batch // k_t)
             x0 = tgt_support.repeat(reps, *([1] * (tgt_support.dim() - 1)))
-            nb = q_sample(model.schedule, x0)
+            nb = q_sample(model.schedule, x0, generator=generator)
             pred = model.eps_hat(nb.x_t, nb.t, z.unsqueeze(0).expand(x0.shape[0], -1))
             loss = denoising_loss(nb.eps, pred, nb.t, model.schedule, weighting, gamma)
             if prior_center is not None and budget.beta0 > 0:
@@ -105,6 +127,7 @@ def full_finetune(
     weighting: str = "simple",
     gamma: float = 5.0,
     strategy: str = "full_ft",
+    generator: torch.Generator | None = None,
 ) -> AdaptState:
     """Full score-network fine-tuning -- the comparison listed in sections 3.1 and 12.1.
 
@@ -127,7 +150,7 @@ def full_finetune(
     for _ in range(budget.steps):
         reps = max(1, budget.noise_batch // n)
         x0 = tgt_data.repeat(reps, *([1] * (tgt_data.dim() - 1)))
-        nb = q_sample(m.schedule, x0)
+        nb = q_sample(m.schedule, x0, generator=generator)
         pred = m.eps_hat(nb.x_t, nb.t, z0.unsqueeze(0).expand(x0.shape[0], -1))
         loss = denoising_loss(nb.eps, pred, nb.t, m.schedule, weighting, gamma)
         opt.zero_grad(set_to_none=True)
@@ -152,22 +175,40 @@ def adapt(
     budget: AdaptBudget,
     weighting: str = "simple",
     oracle_data: Tensor | None = None,
+    z_s_override: Tensor | None = None,
+    generator: torch.Generator | None = None,
 ) -> AdaptState:
-    """Dispatch one adaptation by name. Every strategy shares one budget."""
+    """Dispatch one adaptation by name. Every strategy shares one budget.
+
+    z_s_override substitutes a source coordinate for the one the encoder would produce
+    from batch.src_support. It is the seam the source-dependence controls run through:
+    the within-relation shuffled source passes another task's coordinate, and the mean
+    source control passes the average over one relation. Only SOURCE_DEPENDENT strategies
+    accept it.
+    """
     if strategy not in STRATEGIES:
         raise ValueError(f"unknown strategy '{strategy}'; expected one of {STRATEGIES}")
+    if z_s_override is not None and strategy not in SOURCE_DEPENDENT:
+        raise ValueError(
+            f"strategy '{strategy}' does not consume the source coordinate, so a "
+            f"z_s_override would be silently discarded; expected one of {SOURCE_DEPENDENT}")
 
     if strategy in ("full_ft", "full_ft_oracle"):
         data = oracle_data if strategy == "full_ft_oracle" else batch.tgt_support
         if data is None:
             raise ValueError(f"strategy '{strategy}' needs oracle_data, which was not supplied")
-        return full_finetune(model, data, budget, weighting, strategy=strategy)
+        return full_finetune(model, data, budget, weighting, strategy=strategy,
+                             generator=generator)
 
     with torch.no_grad():
-        z_s = encoder(batch.src_support)
+        z_s = encoder(batch.src_support) if z_s_override is None else z_s_override
         rel = None if transport.relation_emb is None else batch.relation.reshape(1)
         if strategy in ("transport", "transport_no_refine"):
             init = transport(z_s.unsqueeze(0), rel).squeeze(0)
+            center = init
+        elif strategy == "relation_only":
+            # Delta_gamma(0, c): the relation descriptor is kept, the source coordinate is not
+            init = transport(torch.zeros_like(z_s).unsqueeze(0), rel).squeeze(0)
             center = init
         elif strategy == "target_only":
             init = encoder(batch.tgt_support)
@@ -182,7 +223,8 @@ def adapt(
             init = transport(z_s.unsqueeze(0), rel).squeeze(0)
             center = None                       # data is abundant, so no prior
 
-    if strategy == "transport_no_refine":
+    # Neither of these consults a target image, so neither refines.
+    if strategy in ("transport_no_refine", "relation_only"):
         return AdaptState(z=init, init_z=init, strategy=strategy, steps_taken=0)
 
     # 'zero' is the "no adaptation" entry of the baseline list: z=0 and **no refinement**.
@@ -193,4 +235,5 @@ def adapt(
 
     support = oracle_data if strategy == "oracle" else batch.tgt_support
 
-    return refine(model, init, support, budget, center, weighting, strategy=strategy)
+    return refine(model, init, support, budget, center, weighting, strategy=strategy,
+                  generator=generator)
