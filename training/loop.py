@@ -142,6 +142,31 @@ def train(cfg: BaseConfig, model_cls: type[ScoreModel] | None = None) -> str:
     np.random.seed(cfg.global_seed)
     device = torch.device(cfg.device if torch.cuda.is_available() else "cpu")
 
+    if cfg.episodes.scheme == "fitzpatrick":
+        # Stage C. The conditions are split, so a model is never evaluated on a condition it
+        # trained on; and with one relation n_relations stays None and the relation
+        # descriptor is omitted, exactly as a single corruption does above.
+        from domains.fitzpatrick import load_fitzpatrick
+        from episodes.fitzpatrick import FitzLoader, load_fitz_split
+        split = load_fitz_split(cfg.episodes.fitz_path)
+        cfg.model.n_relations = None
+        raw = load_fitzpatrick(hashes=split.all_hashes())
+        loader = FitzLoader(
+            raw, split, "train", device=device,
+            enc_source_images=cfg.episodes.enc_source_images,
+            query_batch=cfg.episodes.query_batch,
+            k_shots=cfg.episodes.k_shots, seed=cfg.global_seed)
+        diag_loader = FitzLoader(
+            raw, split, "val", device=device,
+            enc_source_images=cfg.episodes.enc_source_images,
+            query_batch=cfg.episodes.query_batch,
+            k_shots=cfg.episodes.k_shots, seed=cfg.global_seed + 1)
+        diag_loader.images = loader.images
+        print(f"fitzpatrick: {len(split.names('train'))} train / "
+              f"{len(split.names('val'))} val / {len(split.names('test'))} test conditions, "
+              f"{split.relation['source']} -> {split.relation['target']}")
+        return _run(cfg, device, loader, diag_loader, model_cls)
+
     raw = load_cifar100()
     if cfg.episodes.scheme == "domainshift":
         from episodes.domainshift import load_domainshift, DomainShiftLoader
@@ -185,6 +210,17 @@ def train(cfg: BaseConfig, model_cls: type[ScoreModel] | None = None) -> str:
         diag_loader.images = loader.images          # reuse the one resident copy of the images
         diag_loader._on_device = True
 
+    return _run(cfg, device, loader, diag_loader, model_cls)
+
+
+def _run(cfg: BaseConfig, device, loader, diag_loader,
+         model_cls: type[ScoreModel] | None = None) -> str:
+    """Everything after the episode streams exist: build, optimise, diagnose, checkpoint.
+
+    Split out of train() when Stage C added a third scheme. The three schemes differ only in
+    how their two loaders are constructed -- what follows is identical for all of them, and
+    keeping it in one place is what stops a scheme drifting into its own training recipe.
+    """
     model, encoder, transport = build(cfg, device, model_cls)
     modules = [model, encoder, transport]
     params = [p for m in modules for p in m.parameters()]

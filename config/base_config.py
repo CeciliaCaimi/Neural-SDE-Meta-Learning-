@@ -62,9 +62,12 @@ class DiffusionConfig:
 
 @dataclass
 class EpisodeConfig:
-    scheme: str = "sibling"                 # sibling | domainshift
+    scheme: str = "sibling"                 # sibling | domainshift | fitzpatrick
     split_path: str = "artifacts/cifar100_split.json"
     domainshift_path: str = "artifacts/cifar100_domainshift.json"
+    # Stage C. One skin condition is one task and the phototype shift is the relation, so
+    # the conditions themselves are split; see episodes/fitzpatrick.py.
+    fitz_path: str = "artifacts/fitzpatrick_split.json"
     k_shots: tuple[int, ...] = (1, 2, 5, 10, 20)
 
     # Number of source images fed to the encoder during training.

@@ -40,8 +40,13 @@ def parse() -> argparse.Namespace:
                    help="transformation strength; used by the relatedness sweep")
     p.add_argument("--m-source", type=int, default=None,
                    help="M_S: source images fed to the encoder (source-evidence sweep)")
-    p.add_argument("--scheme", choices=("sibling", "domainshift"), default=None,
-                   help="split scheme; domainshift = clean to corrupted")
+    p.add_argument("--scheme", choices=("sibling", "domainshift", "fitzpatrick"), default=None,
+                   help="split scheme; domainshift = clean to corrupted, fitzpatrick = "
+                        "Stage C's real population shift across skin phototype")
+    p.add_argument("--fitz-path", type=str, default=None,
+                   help="which Fitzpatrick condition split to train on. As with the "
+                        "domain-shift file, pass it explicitly: the split file fixes the "
+                        "task partition, so two runs that disagree here are not comparable.")
     p.add_argument("--domainshift-path", type=str, default=None,
                    help="which domain-shift split file to train on. Pass it explicitly "
                         "rather than relying on the default: the split file fixes the "
@@ -53,9 +58,9 @@ def parse() -> argparse.Namespace:
                         "between structures and not between training objectives.")
     p.add_argument("--film-mode", choices=("per_block", "temb"), default=None,
                    help="A2, read only by runner/train_film.py. per_block gives each "
-                        "residual block its own [gamma_j, beta_j] = W_j z + b_j; temb "
-                        "folds z into the shared timestep embedding, which is what E15 "
-                        "measured on the denoising loss.")
+                        "residual block its own [gamma_j, beta_j] = W_j z; temb folds z "
+                        "into the shared timestep embedding, which is what E15 measured "
+                        "on the denoising loss.")
     p.add_argument("--smoke", action="store_true", help="small model, few steps; checks the pipeline only")
     return p.parse_args()
 
@@ -107,6 +112,8 @@ def configure(a: argparse.Namespace) -> BaseConfig:
         cfg.episodes.scheme = a.scheme
     if a.domainshift_path is not None:
         cfg.episodes.domainshift_path = a.domainshift_path
+    if a.fitz_path is not None:
+        cfg.episodes.fitz_path = a.fitz_path
     if a.severity is not None:
         cfg.episodes.severity_override = a.severity
     if a.m_source is not None:
@@ -124,6 +131,8 @@ def configure(a: argparse.Namespace) -> BaseConfig:
         cfg.episodes.split_path = os.path.join(_ROOT, cfg.episodes.split_path)
     if not os.path.isabs(cfg.episodes.domainshift_path):
         cfg.episodes.domainshift_path = os.path.join(_ROOT, cfg.episodes.domainshift_path)
+    if not os.path.isabs(cfg.episodes.fitz_path):
+        cfg.episodes.fitz_path = os.path.join(_ROOT, cfg.episodes.fitz_path)
     if not os.path.isabs(cfg.train.ckpt_dir):
         cfg.train.ckpt_dir = os.path.join(_ROOT, cfg.train.ckpt_dir)
 

@@ -69,7 +69,10 @@ def load_checkpoint(path: str, dev: torch.device):
     mismatched model in silence."""
     sd = torch.load(path, map_location=dev, weights_only=False)
     cfg = BaseConfig()
-    cfg.episodes.scheme = "domainshift"
+    # Stage C checkpoints are not domain-shift ones, and a loader that mislabels the scheme
+    # would send an evaluation script to the wrong split builder. Nothing here reads it, but
+    # the rule is that a rebuilt config says what the run actually was.
+    cfg.episodes.scheme = sd["config"]["episodes"].get("scheme", "domainshift")
     ck = sd["config"]["model"]
     cfg.model.k = ck["k"]
     cfg.model.backbone = ck["backbone"]
