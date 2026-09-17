@@ -140,24 +140,49 @@ generation-level comparison is outstanding.
 
 \subsection{A3 --- Target-scarcity sweep}
 
-300 episodes at $K_T \in \{1,2,5,10,20\}$.
+300 episodes at $K_T \in \{1,2,5,10,20\}$, six strategies.
 
 \begin{table}[h]
 \centering
 \small
 \begin{tabular}{lccccc}
 \toprule
-Full method against & $K_T=1$ & $K_T=2$ & $K_T=5$ & $K_T=10$ & $K_T=20$\\
+Strategy & $K_T=1$ & $K_T=2$ & $K_T=5$ & $K_T=10$ & $K_T=20$\\
 \midrule
-Reuse $z_S$ & $+1.140^{*}$ & $+0.915^{*}$ & $+0.526^{*}$ & $+0.317^{*}$ & $+0.229^{*}$\\
-Half-width & $0.108$ & $0.105$ & $0.099$ & $0.067$ & $0.059$\\
-\midrule
-Target-only & $+0.061^{*}$ & $+0.038$ & $+0.005$ & $+0.018$ & $+0.008$\\
-Half-width & $0.051$ & $0.052$ & $0.036$ & $0.045$ & $0.041$\\
+No adaptation & $1.616 \pm .094$ & $1.620 \pm .091$ & $1.609 \pm .095$ & $1.621 \pm .094$ & $1.586 \pm .090$\\
+Reuse $z_S$ & $1.439 \pm .106$ & $1.212 \pm .098$ & $0.825 \pm .086$ & $0.630 \pm .058$ & $0.521 \pm .050$\\
+Transport & $0.299 \pm .045$ & $0.297 \pm .045$ & $0.299 \pm .042$ & $0.313 \pm .041$ & $0.293 \pm .040$\\
+Transport $+$ refine & $0.291 \pm .045$ & $0.294 \pm .047$ & $0.295 \pm .036$ & $0.312 \pm .043$ & $0.322 \pm .048$\\
+Target-only & $0.360 \pm .052$ & $0.336 \pm .051$ & $0.304 \pm .040$ & $0.331 \pm .053$ & $0.301 \pm .041$\\
+Oracle & $0.274 \pm .043$ & $0.283 \pm .039$ & $0.260 \pm .039$ & $0.308 \pm .041$ & $0.290 \pm .037$\\
 \bottomrule
 \end{tabular}
-\caption{A3. Paired differences in transformation-statistic space, the instrument this sweep
-was run with.}
+\caption{A3, absolute distances. All six strategies, in transformation-statistic space, the
+instrument this sweep was run with; lower is better.}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+Paired difference & $K_T=1$ & $K_T=2$ & $K_T=5$ & $K_T=10$ & $K_T=20$\\
+\midrule
+Transport ahead of reuse $z_S$ & $+1.140^{*}$ & $+0.915^{*}$ & $+0.526^{*}$ & $+0.317^{*}$ & $+0.229^{*}$\\
+\emph{half-width} & $0.108$ & $0.105$ & $0.099$ & $0.067$ & $0.059$\\
+\midrule
+Transport ahead of target-only & $+0.061^{*}$ & $+0.038$ & $+0.005$ & $+0.018$ & $+0.008$\\
+\emph{half-width} & $0.051$ & $0.052$ & $0.036$ & $0.045$ & $0.041$\\
+\midrule
+Refinement's gain over transport & $+0.008$ & $+0.004$ & $+0.004$ & $+0.001$ & $-0.029$\\
+\emph{half-width} & $0.015$ & $0.018$ & $0.027$ & $0.035$ & $0.036$\\
+\midrule
+Transport $+$ refine behind oracle & $+0.017$ & $+0.010$ & $+0.035$ & $+0.004$ & $+0.032$\\
+\emph{half-width} & $0.044$ & $0.038$ & $0.035$ & $0.040$ & $0.045$\\
+\bottomrule
+\end{tabular}
+\caption{A3, paired differences. Each row is signed so that a positive value means what the
+row name says; an asterisk marks an interval excluding zero.}
 \end{table}
 
 \paragraph{Conclusion.} The method beats reusing the source coordinate at every budget, the
@@ -166,6 +191,15 @@ This is the largest effect in the stage. Against target-only modelling the advan
 confined to the smallest budget. \textbf{The plan asked for the crossing point to be named:
 there is no crossing, only a convergence} --- the two become indistinguishable from two
 target images onward, and the method was never shown to fall behind.
+
+\paragraph{Refinement.} Refining the transported coordinate on the available target images
+changes nothing that can be measured here: its gain over transport alone contains zero at
+every budget, and so does the remaining gap to the oracle. \textbf{Refinement neither helps
+nor hurts once transport has landed close.} Its value is real elsewhere in the same table
+--- reusing the source coordinate improves from $1.439$ to $0.521$ across the sweep, and
+that improvement is refinement doing the work --- which is the pattern to expect from a
+procedure that closes distance: useful when the starting coordinate is far away, and
+invisible when it is not. Per the plan, it therefore stays out of the headline method.
 
 \subsection{A4 --- Source-abundance sweep}
 
@@ -235,8 +269,11 @@ Task-specific gain & $+0.1539^{*}$ & $+0.1428^{*}$ & $+0.1536^{*}$ & $+0.1571^{*
 Profile minimum at & $s=1$ & $s=1$ & $s=1$ & $s=1$ & $s=1$\\
 \bottomrule
 \end{tabular}
-\caption{Stage B, the positive control. Columns are the five task families, ordered left to
-right by increasing distance between a task's source and target distributions. The first row
+\caption{Stage B, the positive control, on \textbf{two-dimensional Gaussian mixtures} ---
+not on images. Five checkpoints, one per task family, each $k=16$ with a linear decoder
+trained for 80{,}000 steps and read at $K_T = 5$ over 32 tasks. Columns are the five task
+families, ordered left to right by increasing distance between a task's source and target
+distributions. The first row
 is the reduction in denoising loss obtained by giving a task its \emph{own} coordinate rather
 than the single coordinate shared by all tasks, paired over the 32 tasks; it is the quantity
 the whole mechanism is supposed to produce, and it should be positive. The second row
