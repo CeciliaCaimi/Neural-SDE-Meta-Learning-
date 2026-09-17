@@ -1,0 +1,65 @@
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets drawn independently
+
+180 episodes: 20 classes x 3 transformations x 3 values of K_T
+
+source controls on: mean over 3 transformations, shuffle within transformation, relation-only
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            1.594 +-0.091     1.605 +-0.091     1.614 +-0.084
+  reuse z_S                1.416 +-0.097     0.810 +-0.087     0.529 +-0.056
+  transport                0.310 +-0.042     0.295 +-0.042     0.314 +-0.046
+  transport + refine       0.294 +-0.043     0.305 +-0.042     0.302 +-0.044
+  target only              0.353 +-0.053     0.314 +-0.038     0.304 +-0.046
+  oracle                   0.274 +-0.043     0.308 +-0.042     0.260 +-0.037
+  mean z_S                 0.321 +-0.047     0.295 +-0.042     0.319 +-0.042
+  shuffled z_S             0.365 +-0.048     0.335 +-0.047     0.358 +-0.045
+  relation only            0.448 +-0.039     0.442 +-0.038     0.444 +-0.040
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.270 +-0.020     0.268 +-0.019     0.263 +-0.018
+  reuse z_S                0.252 +-0.018     0.241 +-0.016     0.223 +-0.019
+  transport                0.217 +-0.018     0.214 +-0.018     0.207 +-0.018
+  transport + refine       0.216 +-0.018     0.212 +-0.018     0.198 +-0.019
+  target only              0.235 +-0.018     0.221 +-0.019     0.204 +-0.019
+  oracle                   0.189 +-0.018     0.186 +-0.017     0.188 +-0.018
+  mean z_S                 0.250 +-0.020     0.246 +-0.020     0.240 +-0.019
+  shuffled z_S             0.259 +-0.021     0.252 +-0.020     0.249 +-0.020
+  relation only            0.246 +-0.022     0.242 +-0.021     0.236 +-0.021
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +1.1053 +-0.1019*    +0.5144 +-0.1008*    +0.2148 +-0.0585*
+  transport vs target only              +0.0429 +-0.0496     +0.0183 +-0.0336     -0.0102 +-0.0420 
+  refinement: off vs on                 +0.0165 +-0.0097*    -0.0102 +-0.0273     +0.0120 +-0.0384 
+  transport + refine vs oracle          +0.0201 +-0.0451     -0.0026 +-0.0405     +0.0421 +-0.0361*
+  transport vs mean z_S                 +0.0107 +-0.0302     -0.0005 +-0.0325     +0.0044 +-0.0315 
+  transport vs shuffled z_S             +0.0544 +-0.0345*    +0.0399 +-0.0399*    +0.0441 +-0.0418*
+  transport vs relation only            +0.1378 +-0.0526*    +0.1467 +-0.0565*    +0.1295 +-0.0585*
+
+  comparison, sliced Wasserstein, pixel space             K_T=1             K_T=5            K_T=20
+  -------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +0.0357 +-0.0097*    +0.0265 +-0.0090*    +0.0163 +-0.0096*
+  transport vs target only              +0.0184 +-0.0088*    +0.0069 +-0.0058*    -0.0027 +-0.0083 
+  refinement: off vs on                 +0.0000 +-0.0016     +0.0025 +-0.0045     +0.0088 +-0.0076*
+  transport + refine vs oracle          +0.0270 +-0.0091*    +0.0254 +-0.0103*    +0.0101 +-0.0081*
+  transport vs mean z_S                 +0.0338 +-0.0088*    +0.0319 +-0.0078*    +0.0335 +-0.0085*
+  transport vs shuffled z_S             +0.0421 +-0.0151*    +0.0382 +-0.0144*    +0.0420 +-0.0144*
+  transport vs relation only            +0.0292 +-0.0089*    +0.0275 +-0.0082*    +0.0294 +-0.0088*
+
+  * = the 95% interval excludes zero
+per-episode values written to handoff/results/SEED2002_per_episode.json
