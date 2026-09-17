@@ -1,0 +1,86 @@
+C0b -- ACTUAL RETRIEVAL, Fitzpatrick17k
+==============================================================================
+run            2026-09-17 15:0x to 15:2x
+annotations    the uploaded fitzpatrick17k.csv, 4104341 bytes, 16577 rows
+               byte-identical in size to the table C0 read
+images to      C:\T1D Meta Learning\dataset\fitzpatrick17k\images (outside the repo)
+
+C0 projected its tables from the annotation table, filtering by host and assuming
+every row served by the reachable archive could be fetched; it verified that
+assumption on a sample of 30. This run fetched every one of them, so the counts
+below are of files that exist rather than of rows that ought to resolve.
+
+1. RETRIEVAL BY HOST
+------------------------------------------------------------------------------
+  www.dermaamin.com          12631 rows (76.2%)   40 sampled, 0 retrieved
+                             both dermaamin.com and www.dermaamin.com fail to
+                             resolve; every attempt is URLError before any request
+  atlasdermatologico.com.br   3905 rows (23.6%)   3905 attempted, 3887 retrieved
+                             99.5%, 255.4 MB, mean 66 KB; the 18 losses are all 404
+  (no url)                      41 rows (0.2%)    unretrievable by any route
+
+  Unchanged from C0 one day earlier: the DermaAmin delegation is still down.
+
+manifest records 3887 retrieved files
+
+population              images  conditions     N_S>=30 & N_T>=15   can fund C4
+------------------------------------------------------------------------------
+full dataset             16012         114                    83            39
+reachable archive         3752          92                    16             8
+on disk                   3734          90                    16             8
+
+conditions on disk passing the floor, sorted by target count (C4 needs N_T >= 45)
+  condition                                      source   target   fundable
+  lichen planus                                      73      152   yes
+  basal cell carcinoma                              169       84   yes
+  lupus erythematosus                                30       77   yes
+  squamous cell carcinoma                           133       63   yes
+  porokeratosis actinic                              65       59   yes
+  nematode infection                                 67       58   yes
+  scabies                                            70       56   yes
+  pityriasis rosea                                   42       53   yes
+  melanoma                                           39       40   no
+  neutrophilic dermatoses                            48       39   no
+  folliculitis                                       60       36   no
+  hailey hailey disease                              65       30   no
+  tungiasis                                          65       28   no
+  mycosis fungoides                                  53       27   no
+  photodermatoses                                    31       22   no
+  seborrheic dermatitis                              30       19   no
+
+8 conditions can fund a K_T = 20 support set plus a 25-image held-out query set.
+Splitting those into train/validation/test task sets gives 4/2/2.
+
+3. VERDICT AGAINST THE PLAN
+------------------------------------------------------------------------------
+  The retrieval itself succeeded: 99.5% of what is reachable is now on disk, and
+  the 18 losses change no table. C0's projection was accurate to the unit -- it
+  predicted 16 conditions above the floor and 8 able to fund C4, and the measured
+  counts are 16 and 8.
+
+  What the retrieval cannot fix is that the reachable archive is a quarter of the
+  dataset. Against the plan:
+
+    the plan's floor, N_S >= 30 and N_T >= 15      MET       16 conditions
+    C4's support plus held-out query, N_T >= 45    NOT MET   8 conditions
+
+  Eight fundable conditions allow at best two held-out test tasks. A paired
+  interval over two tasks has one degree of freedom, which is not an interval.
+  C4's headline result is a target-data equivalence statement -- the method at
+  K_T = 2 matching target-only at K_T = 10, or similar -- and that form cannot be
+  stated without a usable interval over held-out tasks.
+
+  With the full dataset the same thresholds give 83 conditions above the floor and
+  39 able to fund C4, roughly five times as many. The authors' image release is
+  therefore the difference between a scaffold and an experiment, and it remains the
+  one blocking item.
+
+4. WHAT IS NOW USABLE
+------------------------------------------------------------------------------
+  C1 and C2 can be built today on the 16 conditions: the domain module, the split
+  builder, and the frozen evaluation predictors all need images, not a task split
+  wide enough to report on. C3, the sanity check on abundant target evidence, is
+  also reachable. Only C4 is blocked.
+
+  manifest.csv beside the images records every row: md5hash, label, phototype,
+  host, url, status, bytes, path. Re-running the fetcher skips what is present.
