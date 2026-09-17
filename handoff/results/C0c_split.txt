@@ -1,0 +1,96 @@
+C0c -- WHAT A TASK SPLIT WOULD ACTUALLY ALLOCATE
+==============================================================================
+run            2026-09-17, from the 3887 files retrieved in C0b
+
+CORRECTION TO C0 AND C0b. Both counted a condition usable if its target side
+could fund a K_T=20 support set plus a 25-image held-out query, and reported 8
+such conditions. That test omits the source side. A condition also has to fund
+M_S source images, and for a TRAINING task a source query batch on top, since
+src_query feeds the source denoising term of the meta objective. Nothing at
+meta-test reads src_query: evaluation touches src_support, tgt_support and
+tgt_query only. So training tasks and held-out tasks have different requirements
+and counting them alike gets both numbers wrong.
+
+1. THE SOURCE SIDE IS THE BINDING CONSTRAINT
+------------------------------------------------------------------------------
+  M_S    train-capable   eval-capable      (source query batch 32 for training)
+   64                2              6
+   32                6              7
+   16                6             12
+    8                7             13
+
+  At the M_S = 64 this project trains with, only two conditions can serve as
+  training tasks. A4 measured that source evidence saturates below M_S = 16 --
+  sixteen source images buy everything the transport map extracts from a source
+  set -- and at M_S = 16 the counts become 6 trainable and 12 evaluable.
+  A4 is therefore not only a deployment result; it is what makes Stage C
+  constructible on the reachable archive at all.
+
+All counts are of files on disk.
+
+A held-out task needs  M_S source + 20 target reserve + 25 held-out target.
+A training task needs  M_S + src_query source + 20 target reserve + a target query.
+
+  M_S   train-capable   eval-capable   (src_query = 32 for training)
+--------------------------------------------------------------
+   64               2              6
+   32               6              7
+   16               6             12
+    8               7             13
+
+==============================================================================
+Per-condition allocation at M_S = 16, target reserve 20
+==============================================================================
+  condition                      src pool tgt pool  reserve  held out  train?
+  ----------------------------------------------------------------------------
+  lichen planus                        73      152       20       132     yes
+  pityriasis rubra pilaris             26      146       20       126      no
+  basal cell carcinoma                169       84       20        64     yes
+  lupus erythematosus                  30       77       20        57      no
+  psoriasis                            29       69       20        49      no
+  squamous cell carcinoma             133       63       20        43     yes
+  porokeratosis actinic                65       59       20        39     yes
+  nematode infection                   67       58       20        38     yes
+  scabies                              70       56       20        36     yes
+  papilomatosis confluentes and        20       54       20        34      no
+  pityriasis rosea                     42       53       20        33      no
+  dariers disease                      22       51       20        31      no
+  ----------------------------------------------------------------------------
+  total                               746      922      240       682
+
+12 conditions are usable as held-out tasks; 6 of them can also carry a training
+source query batch. The plan splits the semantic tasks themselves, so the split is over these.
+
+
+2. THE SPLIT THIS FORCES, AT M_S = 16
+------------------------------------------------------------------------------
+  Only six conditions can fund a training source query batch, so those six are the
+  training tasks. The split is not a free choice on the train side.
+
+  split    tasks   source imgs   support reserve   held-out target
+  train        6           288               120               352
+  val          3            48                60               208
+  test         3            48                60               122
+  total       12           384               240               682
+
+  1306 images of the 1668 held by these twelve conditions are consumed; the rest
+  are source images beyond M_S that no stream reads.
+
+3. WHAT THIS PERMITS AND WHAT IT DOES NOT
+------------------------------------------------------------------------------
+  Three held-out test tasks is better than the one or two implied by C0 and C0b,
+  and a paired interval over three tasks has two degrees of freedom. It is a usable
+  interval, but a very wide one, and no amount of episode sampling narrows it:
+  between-task variation is the term that matters and there are three tasks.
+
+  The held-out target sets of the test tasks are 57, 34 and 31 images. CIFAR
+  evaluates its distributional distance against a query batch of 128. A sliced
+  Wasserstein distance computed against 31 real images is a much noisier instrument
+  than anything in Stage A, and the comparison across the two stages should not be
+  made without saying so.
+
+  C4's headline form is a target-data equivalence statement. Three test tasks with
+  thirty-odd held-out images each can support a directional claim; they cannot
+  support an equivalence claim stated to a budget. With the full dataset the same
+  thresholds give 39 conditions able to fund C4, and the arithmetic above stops
+  being the constraint.
