@@ -75,3 +75,47 @@ def energy_mmd(a: Tensor, b: Tensor) -> float:
     def pd(x: Tensor, y: Tensor) -> Tensor:
         return torch.cdist(x, y).mean()
     return float(2 * pd(a, b) - pd(a, a) - pd(b, b))
+
+
+def kid(a: Tensor, b: Tensor, subset_size: int = 100, n_subsets: int = 100,
+        generator: torch.Generator | None = None) -> tuple[float, float]:
+    """Kernel Inception Distance: the unbiased MMD^2 under the cubic polynomial kernel.
+
+        k(x, y) = (x.y / d + 1) ^ 3
+
+    Returns (mean, 95 % half-width) over ``n_subsets`` random subsets of ``subset_size``
+    drawn from each side, which is how the statistic is normally reported: the unbiased
+    estimator has no closed-form variance, and subset averaging both bounds the cost and
+    supplies the spread.
+
+    ``a`` and ``b`` are feature rows, not images. This project has no InceptionV3, so the
+    features come from evaluation.instruments.TinyCNN -- the same instrument whose held-out
+    accuracy is quoted beside every semantic verdict. That makes this KID's *estimator*
+    standard and its *feature space* local, so the number is comparable between arms
+    measured here and not comparable with a published KID. Say so wherever it is reported.
+    """
+    m = min(a.shape[0], b.shape[0])
+    if subset_size > m:
+        subset_size = m
+    if subset_size < 2:
+        raise ValueError(f"need at least 2 samples per side, got {m}")
+    d = a.shape[1]
+
+    def poly(x: Tensor, y: Tensor) -> Tensor:
+        return (x @ y.t() / d + 1.0).pow(3)
+
+    vals = []
+    n = subset_size
+    eye = torch.eye(n, dtype=torch.bool, device=a.device)
+    for _ in range(n_subsets):
+        ia = torch.randperm(a.shape[0], device=a.device, generator=generator)[:n]
+        ib = torch.randperm(b.shape[0], device=b.device, generator=generator)[:n]
+        xa, xb = a[ia], b[ib]
+        kaa = poly(xa, xa).masked_fill(eye, 0.0).sum() / (n * (n - 1))
+        kbb = poly(xb, xb).masked_fill(eye, 0.0).sum() / (n * (n - 1))
+        kab = poly(xa, xb).mean()
+        vals.append(float(kaa + kbb - 2 * kab))
+    t = torch.tensor(vals)
+    if len(vals) < 2:
+        return float(t.mean()), float("nan")
+    return float(t.mean()), float(1.96 * t.std(unbiased=True) / (len(vals) ** 0.5))

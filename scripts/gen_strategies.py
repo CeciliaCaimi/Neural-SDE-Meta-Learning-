@@ -41,8 +41,12 @@ from adaptation.coordinate import adapt                                   # noqa
 from diffusion.sampler import ddim_sample, make_eps_fn                    # noqa: E402
 from domains.cifar100 import load_cifar100                                # noqa: E402
 from episodes.domainshift import DomainShiftLoader, load_domainshift      # noqa: E402
-from evaluation.instruments import transform_signature                    # noqa: E402
-from evaluation.metrics_analytic import energy_mmd, sliced_wasserstein    # noqa: E402
+from evaluation.instruments import (                                      # noqa: E402
+    train_class_instrument, transform_signature,
+)
+from evaluation.metrics_analytic import (                                 # noqa: E402
+    energy_mmd, kid, sliced_wasserstein,
+)
 from posthoc_controls import ci95, load_checkpoint                        # noqa: E402
 
 # name, strategy in adaptation/coordinate.py, what it is
@@ -98,6 +102,12 @@ def main() -> None:
                          "printed once the whole sweep is done, so without this a long run "
                          "is indistinguishable from a stalled one. Goes to stderr so the "
                          "results file stays clean; redirect the two streams separately.")
+    ap.add_argument("--semantic", action="store_true",
+                    help="add the two semantic readings A2 asks for: the share of "
+                         "generated samples the 20-way instrument assigns to the "
+                         "episode's own class, and a pooled KID in that instrument's "
+                         "feature space. Costs a few minutes to train the instrument, "
+                         "and its own held-out ceiling is printed beside every verdict.")
     ap.add_argument("--source-controls", action="store_true",
                     help="add the mean, within-relation shuffled and relation-only source "
                          "conditions, which together say what the source task is worth")
@@ -121,6 +131,24 @@ def main() -> None:
                          noise_batch=cfg.adapt.noise_batch)
     print(f"checkpoint {os.path.basename(a.ckpt)}  step {step}  "
           f"weights {'EMA' if used_ema else 'raw'}")
+    # A2 compares two conditioning mechanisms, so which one this checkpoint holds, and how
+    # many parameters it spends on reaching the denoiser, belong beside every number.
+    npar = model.n_parameters()
+    is_film = hasattr(model.backbone, "film_parameters")
+    if is_film:
+        # the basis head is inherited for state-dict uniformity, frozen and never evaluated
+        # in this arm, so counting it would overstate the model
+        cond = sum(p.numel() for p in model.backbone.film_parameters())
+        phi = npar["total_phi"] - npar["basis_head"]
+    else:
+        cond = npar["basis_head"]
+        phi = npar["total_phi"]
+    print(f"arm        {cfg.model.score_model} / {cfg.model.backbone}"
+          + (f" ({model.backbone.film_mode})" if is_film else "")
+          + f"  k={cfg.model.k}")
+    print(f"parameters phi {phi/1e6:.3f}M in the evaluated path, of which {cond} carry z; "
+          f"encoder {sum(p.numel() for p in enc.parameters())/1e6:.3f}M, "
+          f"transport {sum(p.numel() for p in tr.parameters())}")
     print(f"refinement J={budget.steps}, eta_z={budget.lr}, beta_0={budget.beta0}")
     print(f"sampling   DDIM eta=0, {a.ddim_steps} steps, {a.n_samples} samples per cell")
     m_source = a.m_source or cfg.episodes.enc_source_images
@@ -175,8 +203,17 @@ def main() -> None:
     # the scale the three statistics are compared on
     f_sd = torch.cat([transform_signature(e["batch"].tgt_query) for e in episodes]).std(0)
 
-    res = {name: {k: {"sig": [], "sw": [], "mmd": []} for k in a.k_shots}
-           for name, _, _ in strategies}
+    # ---- the semantic instrument, and the feature pools the KID is computed from ------
+    instrument, inst_meta = None, None
+    feat_gen: dict[tuple[str, int], list[torch.Tensor]] = {}
+    feat_real: dict[int, list[torch.Tensor]] = {}
+    if a.semantic:
+        instrument, inst_meta = train_class_instrument(raw, split, a.split, dev, seed=a.seed)
+        instrument.eval()
+        print()
+
+    res = {name: {k: {"sig": [], "sw": [], "mmd": [], "cls": [], "sup": []}
+                  for k in a.k_shots} for name, _, _ in strategies}
     k_grid = min(a.k_shots)
     grid_rows = {name: [] for name, _, _ in strategies}
     grid_real = []
@@ -216,6 +253,21 @@ def main() -> None:
             g = torch.Generator(device=dev).manual_seed(0)
             res[name][k]["sw"].append(sliced_wasserstein(fa, fb, n_proj=256, generator=g))
             res[name][k]["mmd"].append(energy_mmd(fa[:64], fb[:64]))
+            if instrument is not None:
+                with torch.no_grad():
+                    pred = instrument(x).argmax(1)
+                    feat_gen.setdefault((name, k), []).append(instrument.features(x).cpu())
+                row = inst_meta["fine_to_row"][e["fid"]]
+                res[name][k]["cls"].append(float((pred == row).float().mean()))
+                # superclass agreement, which the instrument reads far more reliably
+                sup_of = [inst_meta["coarse_to_row"][inst_meta["coarse_of"][f]]
+                          for f in inst_meta["fids"]]
+                sup_t = torch.tensor(sup_of, device=dev)
+                want = inst_meta["coarse_to_row"][inst_meta["coarse_of"][e["fid"]]]
+                res[name][k]["sup"].append(float((sup_t[pred] == want).float().mean()))
+        if instrument is not None:
+            with torch.no_grad():
+                feat_real.setdefault(k, []).append(instrument.features(real).cpu())
 
     def table(metric: str, title: str, note: str) -> None:
         print(f"\n{title}")
@@ -234,6 +286,48 @@ def main() -> None:
           "lower is better; this is the axis the coordinate was shown to control")
     table("sw", "sliced Wasserstein distance to the real target set, pixel space",
           "lower is better")
+
+    if instrument is not None:
+        ceil_f = 100 * float(np.mean(list(inst_meta["acc_fine"].values())))
+        ceil_c = 100 * float(np.mean(list(inst_meta["acc_coarse"].values())))
+        table("cls", "semantic-class consistency: share of samples put in the episode's "
+                     "own class",
+              f"higher is better; the instrument's own ceiling on real held-out images is "
+              f"{ceil_f:.1f}% fine (chance {100/inst_meta['n_fine']:.0f}%)")
+        table("sup", "the same reading at superclass level",
+              f"higher is better; ceiling {ceil_c:.1f}%, "
+              f"chance {100/inst_meta['n_coarse']:.0f}%")
+
+        # Pooled KID. Per-episode sample counts (96 generated against 128 real) are far too
+        # small for this estimator, so every episode at one K_T is pooled and the statistic
+        # is computed once on the pool -- which is what "pooled KID" means and the only
+        # form in which the sample count is adequate here.
+        print("\npooled KID against the real target sets, in the instrument's feature "
+              "space (x1000)")
+        print("  lower is better; the estimator is standard, the feature space is this "
+              "project's own")
+        print("  instrument and not InceptionV3, so these numbers compare arms here and "
+              "nothing published")
+        hdr = f"\n  {'strategy':<20}" + "".join(f"{'K_T=' + str(k):>18}" for k in a.k_shots)
+        print(hdr)
+        print("  " + "-" * (len(hdr) - 3))
+        kid_out: dict[str, dict[str, list[float]]] = {}
+        for name, _, _ in strategies:
+            row = f"  {name:<20}"
+            kid_out[name] = {}
+            for k in a.k_shots:
+                fg = torch.cat(feat_gen[(name, k)])
+                fr = torch.cat(feat_real[k])
+                gk = torch.Generator().manual_seed(a.seed)
+                mu, h = kid(fg, fr, subset_size=min(100, fg.shape[0], fr.shape[0]),
+                            n_subsets=100, generator=gk)
+                kid_out[name][str(k)] = [mu, h, int(fg.shape[0]), int(fr.shape[0])]
+                row += f"{1000*mu:>+11.3f} +-{1000*h:<5.3f}"
+            print(row)
+        n_g = feat_gen[(strategies[0][0], a.k_shots[0])]
+        print(f"\n  pooled from {len(n_g)} episodes per cell, "
+              f"{torch.cat(n_g).shape[0]} generated against "
+              f"{torch.cat(feat_real[a.k_shots[0]]).shape[0]} real samples")
 
     # ---- the two questions, answered as paired differences --------------------------
     print("\n\nthe two questions, as paired differences over episodes (positive = the "
@@ -256,8 +350,13 @@ def main() -> None:
     # axis the coordinate was shown to control, the sliced Wasserstein distance is the
     # headline distributional metric, and a conclusion that holds on only one of them is
     # a conclusion about the instrument.
-    for metric, what in (("sig", "transformation-statistic space"),
-                         ("sw", "sliced Wasserstein, pixel space")):
+    metrics = [("sig", "transformation-statistic space", +1),
+               ("sw", "sliced Wasserstein, pixel space", +1)]
+    if instrument is not None:
+        # higher is better for this one, so the difference is taken the other way round and
+        # "positive = the first one is worse" still holds down the whole column
+        metrics.append(("cls", "semantic-class consistency", -1))
+    for metric, what, sign in metrics:
         hdr = f"\n  {'comparison, ' + what:<34}" + "".join(
             f"{'K_T=' + str(k):>18}" for k in a.k_shots)
         print(hdr)
@@ -265,7 +364,8 @@ def main() -> None:
         for label, worse, better in pairs:
             row = f"  {label:<34}"
             for k in a.k_shots:
-                d = [x - y for x, y in zip(res[worse][k][metric], res[better][k][metric])]
+                d = [sign * (x - y)
+                     for x, y in zip(res[worse][k][metric], res[better][k][metric])]
                 mu, h = ci95(d)
                 mark = "*" if abs(mu) > h else " "
                 row += f"{mu:>+11.4f} +-{h:<5.4f}{mark}"
@@ -275,14 +375,23 @@ def main() -> None:
     if a.json_out:
         import json
         with open(a.json_out, "w", encoding="utf-8") as fo:
-            json.dump({"checkpoint": os.path.basename(a.ckpt), "step": step,
+            payload = {"checkpoint": os.path.basename(a.ckpt), "step": step,
                        "split": a.split, "k_shots": a.k_shots,
                        "n_samples": a.n_samples, "ddim_steps": a.ddim_steps,
                        "m_source": m_source, "nested_source": a.m_source is not None,
+                       "arm": cfg.model.score_model, "backbone": cfg.model.backbone,
+                       "film_mode": getattr(model.backbone, "film_mode", None),
+                       "k": cfg.model.k, "n_params_phi": npar["total_phi"],
+                       "n_params_conditioning": cond,
                        "episodes": [{"fid": e["fid"], "cor": e["cor"], "k": e["k"]}
                                     for e in episodes],
                        "per_episode": {name: {str(k): res[name][k] for k in a.k_shots}
-                                       for name, _, _ in strategies}}, fo)
+                                       for name, _, _ in strategies}}
+            if instrument is not None:
+                payload["kid_pooled"] = kid_out
+                payload["instrument_ceiling"] = {"fine": inst_meta["acc_fine"],
+                                                 "coarse": inst_meta["acc_coarse"]}
+            json.dump(payload, fo)
         print(f"per-episode values written to {a.json_out}")
 
     if a.grid_out:
