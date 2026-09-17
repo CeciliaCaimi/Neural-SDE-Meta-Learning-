@@ -1,0 +1,44 @@
+A1b -- THE REFINED ARM, RE-SUMMARISED FROM THE PER-EPISODE DUMP
+==============================================================================
+checkpoint cifar_ds3_step50000.pt  step 50000  split val
+180 episodes, 96 samples per cell, M_S=64
+metric: sliced Wasserstein to the real target set, the plan's headline
+
+A1's printed comparisons use `transport`, which never consults a target image.
+`transport + refine` is what scripts/gen_strategies.py calls the method. Both are
+given below; they answer different questions and differ in one cell that matters.
+
+-- transport  (transport, no target image) --
+  against                         K_T=1                K_T=5               K_T=20
+  ------------------------------------------------------------------------------
+  mean z_S            +0.0301 +-0.0072*    +0.0346 +-0.0085*    +0.0338 +-0.0080*
+  shuffled z_S        +0.0416 +-0.0125*    +0.0453 +-0.0149*    +0.0436 +-0.0144*
+  relation only       +0.0254 +-0.0078*    +0.0285 +-0.0088*    +0.0295 +-0.0087*
+  target only         +0.0181 +-0.0085*    +0.0114 +-0.0072*    -0.0028 +-0.0073 
+  behind oracle       +0.0246 +-0.0085*    +0.0288 +-0.0095*    +0.0244 +-0.0099*
+
+-- transport + refine  (the method) --
+  against                         K_T=1                K_T=5               K_T=20
+  ------------------------------------------------------------------------------
+  mean z_S            +0.0286 +-0.0074*    +0.0369 +-0.0090*    +0.0410 +-0.0112*
+  shuffled z_S        +0.0402 +-0.0125*    +0.0476 +-0.0158*    +0.0508 +-0.0161*
+  relation only       +0.0240 +-0.0079*    +0.0309 +-0.0086*    +0.0367 +-0.0101*
+  target only         +0.0167 +-0.0086*    +0.0138 +-0.0055*    +0.0044 +-0.0031*
+  behind oracle       +0.0260 +-0.0085*    +0.0265 +-0.0091*    +0.0172 +-0.0085*
+
+  * = the 95% interval excludes zero; positive favours the arm named.
+
+THE CELL THAT MATTERS
+------------------------------------------------------------------------------
+  against target-only at K_T=20:
+    transport            -0.0028 +-0.0073   interval contains zero
+    transport + refine   +0.0044 +-0.0031   interval excludes zero
+
+  The method keeps a margin over target-only modelling at every budget measured.
+  It is a quarter of the margin it holds at one target image, but it is there.
+  Read on the unrefined arm the same cell says the advantage has gone, and that
+  is the reading an earlier draft of the report carried.
+
+  Against the three source controls the refined arm's margins grow with K_T
+  rather than shrink, which is what a procedure that consumes target images
+  should do against controls that are stuck with a wrong coordinate.

@@ -47,8 +47,10 @@ report gives the results of the current experimental stage, block by block again
 governing plan. The plan fixes the criterion in advance: the main claim holds only if the
 correct source task together with a learned source-to-target relation outperforms
 \emph{both} relation-only transfer \emph{and} target-only few-shot modelling. That criterion
-is met when target data are scarce, and only then. Six of the ten deliverables are complete;
-four are not, and each is named with its reason.
+is met at every target budget measured, but the margin over target-only modelling narrows
+from $+0.0167$ at one target image to $+0.0044$ at twenty, so the method earns its keep
+chiefly where target data are scarce. Six of the ten deliverables are complete; four are
+not, and each is named with its reason.
 \end{abstract}
 
 \section{Criterion and notation}
@@ -107,29 +109,53 @@ each holds in the tree that produced the results below.}
 180 episodes, twenty classes by three transformations by $K_T \in \{1,5,20\}$, nine
 conditions.
 
+Two arms are reported. \emph{Transport} applies the map and stops, consulting no target
+image; it is the cleaner comparison against the source controls, because it asks what the
+source coordinate is worth with target evidence held out of the question.
+\emph{Transport\,+\,refine} then refines the predicted coordinate on the $K_T$ target images
+and is what the strategy table names as the method; the plan's criterion is about it.
+
 \begin{table}[h]
 \centering
 \small
 \begin{tabular}{lccc}
 \toprule
-Full method against & $K_T=1$ & $K_T=5$ & $K_T=20$\\
+Arm, against & $K_T=1$ & $K_T=5$ & $K_T=20$\\
 \midrule
-Mean $z_S$ & $+0.0301 \pm 0.0072^{*}$ & $+0.0346 \pm 0.0085^{*}$ & $+0.0338 \pm 0.0080^{*}$\\
-Shuffled $z_S$ & $+0.0416 \pm 0.0125^{*}$ & $+0.0453 \pm 0.0149^{*}$ & $+0.0436 \pm 0.0144^{*}$\\
-Relation-only & $+0.0254 \pm 0.0078^{*}$ & $+0.0285 \pm 0.0088^{*}$ & $+0.0295 \pm 0.0087^{*}$\\
-Target-only & $+0.018 \pm 0.009^{*}$ & $+0.011 \pm 0.007^{*}$ & $-0.003 \pm 0.007$\\
-Oracle (negative $=$ behind) & $-0.026^{*}$ & $-0.027^{*}$ & $-0.017^{*}$\\
+\multicolumn{4}{l}{\emph{Transport} --- no target image consulted}\\
+\quad Mean $z_S$ & $+0.0301 \pm 0.0072^{*}$ & $+0.0346 \pm 0.0085^{*}$ & $+0.0338 \pm 0.0080^{*}$\\
+\quad Shuffled $z_S$ & $+0.0416 \pm 0.0125^{*}$ & $+0.0453 \pm 0.0149^{*}$ & $+0.0436 \pm 0.0144^{*}$\\
+\quad Relation-only & $+0.0254 \pm 0.0078^{*}$ & $+0.0285 \pm 0.0088^{*}$ & $+0.0295 \pm 0.0087^{*}$\\
+\quad Target-only & $+0.0181 \pm 0.0085^{*}$ & $+0.0114 \pm 0.0072^{*}$ & $-0.0028 \pm 0.0073$\\
+\quad Behind the oracle & $+0.0246 \pm 0.0085^{*}$ & $+0.0288 \pm 0.0095^{*}$ & $+0.0244 \pm 0.0099^{*}$\\
+\midrule
+\multicolumn{4}{l}{\emph{Transport\,+\,refine} --- the method}\\
+\quad Mean $z_S$ & $+0.0286 \pm 0.0074^{*}$ & $+0.0369 \pm 0.0090^{*}$ & $+0.0410 \pm 0.0112^{*}$\\
+\quad Shuffled $z_S$ & $+0.0402 \pm 0.0125^{*}$ & $+0.0476 \pm 0.0158^{*}$ & $+0.0508 \pm 0.0161^{*}$\\
+\quad Relation-only & $+0.0240 \pm 0.0079^{*}$ & $+0.0309 \pm 0.0086^{*}$ & $+0.0367 \pm 0.0101^{*}$\\
+\quad Target-only & $+0.0167 \pm 0.0086^{*}$ & $+0.0138 \pm 0.0055^{*}$ & $+0.0044 \pm 0.0031^{*}$\\
+\quad Behind the oracle & $+0.0260 \pm 0.0085^{*}$ & $+0.0265 \pm 0.0091^{*}$ & $+0.0172 \pm 0.0085^{*}$\\
 \bottomrule
 \end{tabular}
-\caption{A1. Paired differences; positive favours the full method.}
+\caption{A1. Paired differences over 180 episodes; positive favours the arm named, except
+in the last line of each block, where positive means the arm is behind the oracle. The
+refined arm is re-summarised from the run's own per-episode dump, not regenerated.}
 \end{table}
 
-\paragraph{Conclusion.} The method beats all three source controls at every budget. It beats
-relation-only transfer and target-only modelling simultaneously at one and five target
-images, which is what the criterion requires, and the advantage over target-only modelling is
-gone by twenty. \textbf{The criterion is met in the low-target-data regime and is bounded
-there:} source information is worth having when target evidence is scarce, and its value
-decays as target evidence accumulates. A gap to the oracle remains at every budget.
+\paragraph{Conclusion.} Both arms beat all three source controls at every budget, so the
+source coordinate is worth having however the method is deployed. The criterion also
+requires beating target-only modelling, and there the two arms part company at the largest
+budget: \textbf{the method with refinement keeps a margin at every budget measured,
+$+0.0167$, $+0.0138$ and $+0.0044$, each interval clear of zero}, while the unrefined arm
+has given that margin up by twenty target images. The criterion is therefore met across the
+range, but the margin at twenty target images is a quarter of the margin at one, so the
+honest statement remains that \textbf{source information is worth most when target evidence
+is scarce} and that its advantage narrows steadily as target evidence accumulates.
+
+Against the source controls the refined arm's margins \emph{grow} with $K_T$ --- against the
+mean source coordinate, from $+0.0286$ to $+0.0410$ --- which is what a procedure that
+consumes target images should do against controls holding a coordinate that is simply wrong.
+A gap to the oracle remains at every budget and for both arms.
 
 \subsection{A2 --- Additive basis against the modulation arm}
 
@@ -420,10 +446,12 @@ stage.}
 
 \section{Conclusion}
 
-The criterion fixed before the stage began is met, and met narrowly: the correct source task
-together with the learned relation beats both relation-only transfer and target-only
-modelling when target data are scarce, with the margin over target-only modelling gone by
-twenty target images. The positive control confirms the mechanism is sound where the ground
+The criterion fixed before the stage began is met: the correct source task together with the
+learned relation beats both relation-only transfer and target-only modelling at every target
+budget measured. It is met narrowly at the top of that range --- the margin over target-only
+modelling falls from $+0.0167$ at one target image to $+0.0044$ at twenty --- and the method
+is therefore worth most where target data are scarce, which is the setting it was built for.
+The positive control confirms the mechanism is sound where the ground
 truth is known and locates the difficulty on images as shallowness rather than absence. Two
 further results are usefully negative: source evidence saturates below the smallest budget
 measured, so the method is cheap on the source side, and the non-linear transport map is not
