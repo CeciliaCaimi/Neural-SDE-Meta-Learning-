@@ -258,11 +258,17 @@ $K_T = 1$ and $K_T = 5$ the same comparison contains zero, and the gap is the ma
 
 \section{Stage B --- Gaussian-mixture positive control}
 
-Five task families of two-dimensional Gaussian mixtures, 32 tasks each. The families are
-ordered by how far apart a task's source and target distributions are placed: the four
-labelled by a perturbation size are increasingly distant, and the fifth pairs source and
-target distributions drawn independently. This axis is the relatedness sweep, included so
-that task distance can be varied deliberately rather than inferred.
+\textbf{Stage B is run entirely on two-dimensional Gaussian mixtures. It touches no image
+data.} That is its purpose: the mixtures are analytically tractable, so the ground truth is
+known and the mechanism can be checked against it without the instrument ambiguity that
+attends any measurement on images. Nothing in this section is evidence about CIFAR-100, and
+the one figure that shows both is labelled accordingly.
+
+Five task families, 32 tasks each, one separately trained checkpoint per family. The
+families are ordered by how far apart a task's source and target distributions are placed:
+the four labelled by a perturbation size are increasingly distant, and the fifth pairs
+source and target distributions drawn independently. This axis is the relatedness sweep,
+included so that task distance can be varied deliberately rather than inferred.
 
 \begin{table}[h]
 \centering
@@ -299,10 +305,14 @@ size.}
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{profile_contrast.png}
-\caption{The coordinate-loss profile on Gaussian mixtures (left) and CIFAR-100 (right),
-plotted as a percentage of the loss at the shared mean coordinate so that the two are
-comparable. The horizontal axis walks the coordinate from that shared mean at $s=0$ through
-the task's own coordinate at $s=1$ and out to twice that displacement.}
+\caption{\textbf{A cross-stage comparison, not a Stage B measurement.} The left panel is
+Stage B, on Gaussian mixtures. The right panel is \emph{not}: it is taken from the
+coordinate controls run on the CIFAR-100 checkpoint in an earlier stage, and is reproduced
+here only so that the two can be placed on one axis. Both are plotted as a percentage of
+the loss at the shared mean coordinate, which is what makes them comparable when the
+absolute loss scales are not. The horizontal axis walks the coordinate from that shared
+mean at $s=0$ through the task's own coordinate at $s=1$ and out to twice that
+displacement.}
 \label{fig:profile}
 \end{figure}
 
