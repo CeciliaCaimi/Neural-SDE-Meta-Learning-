@@ -94,7 +94,11 @@ per cell, 60 episodes per cell.
 0.5 & Output directory & Done.\\
 \bottomrule
 \end{tabular}
+\caption{Stage 0. The five preconditions the plan places before all other work, and whether
+each holds in the tree that produced the results below.}
 \end{table}
+
+\FloatBarrier
 
 \section{Stage A --- CIFAR-100, generation-level evidence}
 
@@ -214,7 +218,11 @@ fewer parameters}, so the architecture can be simplified rather than defended.
 
 \section{Stage B --- Gaussian-mixture positive control}
 
-Five task families spanning a range of source-to-target distances, 32 tasks each.
+Five task families of two-dimensional Gaussian mixtures, 32 tasks each. The families are
+ordered by how far apart a task's source and target distributions are placed: the four
+labelled by a perturbation size are increasingly distant, and the fifth pairs source and
+target distributions drawn independently. This axis is the relatedness sweep, included so
+that task distance can be varied deliberately rather than inferred.
 
 \begin{table}[h]
 \centering
@@ -227,8 +235,15 @@ Task-specific gain & $+0.1539^{*}$ & $+0.1428^{*}$ & $+0.1536^{*}$ & $+0.1571^{*
 Profile minimum at & $s=1$ & $s=1$ & $s=1$ & $s=1$ & $s=1$\\
 \bottomrule
 \end{tabular}
-\caption{Stage B. The improvement from a task's own coordinate over the coordinate shared by
-all tasks, and the location of the coordinate-loss minimum.}
+\caption{Stage B, the positive control. Columns are the five task families, ordered left to
+right by increasing distance between a task's source and target distributions. The first row
+is the reduction in denoising loss obtained by giving a task its \emph{own} coordinate rather
+than the single coordinate shared by all tasks, paired over the 32 tasks; it is the quantity
+the whole mechanism is supposed to produce, and it should be positive. The second row
+reports where the coordinate-loss profile of Figure~\ref{fig:profile} attains its minimum, with $s=1$
+denoting the task's own coordinate; a minimum anywhere else would mean the coordinate points
+in the wrong direction, so this row is the correctness check rather than a measurement of
+size.}
 \end{table}
 
 \begin{figure}[h]
@@ -236,7 +251,9 @@ all tasks, and the location of the coordinate-loss minimum.}
 \includegraphics[width=\textwidth]{profile_contrast.png}
 \caption{The coordinate-loss profile on Gaussian mixtures (left) and CIFAR-100 (right),
 plotted as a percentage of the loss at the shared mean coordinate so that the two are
-comparable.}
+comparable. The horizontal axis walks the coordinate from that shared mean at $s=0$ through
+the task's own coordinate at $s=1$ and out to twice that displacement.}
+\label{fig:profile}
 \end{figure}
 
 \paragraph{Conclusion.} The mechanism behaves as designed where the ground truth is analytic:
@@ -246,6 +263,8 @@ mixtures and $1.6\%$ deep on CIFAR-100, both minimised at the task's own coordin
 \textbf{The mechanism on images is neither absent nor misdirected; it is shallow.} One
 observation is unexplained: the relatedness sweep does not move the task-specific term at
 all, although it was built to.
+
+\FloatBarrier
 
 \section{Stage C --- Demographic scarcity experiment}
 
@@ -292,6 +311,8 @@ C4 & The scarcity sweep & \textbf{Blocked by C0.} The target-data equivalence st
 C5 & Downstream augmentation & Optional and conditional on C4.\\
 \bottomrule
 \end{tabular}
+\caption{Stage C beyond the gate. The five items the plan places after C0, none of which was
+run, with the reason in each case.}
 \end{table}
 
 \FloatBarrier
@@ -325,6 +346,8 @@ target image does not.
 10 & Few-shot face stress test (optional) & \textbf{Not run} --- excluded by the plan\\
 \bottomrule
 \end{tabular}
+\caption{The ten deliverables the plan fixes, and the standing of each at the close of this
+stage.}
 \end{table}
 
 \section{Conclusion}
