@@ -1,0 +1,51 @@
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=300, sets nested (prefix)
+
+60 episodes: 20 classes x 3 transformations x 1 values of K_T
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1
+  ------------------------------------
+  no adaptation            1.589 +-0.093
+  reuse z_S                1.416 +-0.104
+  transport                0.311 +-0.047
+  transport + refine       0.304 +-0.046
+  target only              0.367 +-0.056
+  oracle                   0.277 +-0.043
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1
+  ------------------------------------
+  no adaptation            0.266 +-0.021
+  reuse z_S                0.252 +-0.018
+  transport                0.214 +-0.020
+  transport + refine       0.214 +-0.021
+  target only              0.230 +-0.019
+  oracle                   0.188 +-0.019
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=1
+  ------------------------------------------------------------
+  transport vs reuse z_S                +1.1059 +-0.1094*
+  transport vs target only              +0.0563 +-0.0513*
+  refinement: off vs on                 +0.0071 +-0.0125 
+  transport + refine vs oracle          +0.0269 +-0.0432 
+
+  comparison, sliced Wasserstein, pixel space             K_T=1
+  -------------------------------------------------------------
+  transport vs reuse z_S                +0.0379 +-0.0101*
+  transport vs target only              +0.0160 +-0.0093*
+  refinement: off vs on                 -0.0005 +-0.0019 
+  transport + refine vs oracle          +0.0268 +-0.0099*
+
+  * = the 95% interval excludes zero
+per-episode values written to handoff/results/A4_ms300_per_episode.json

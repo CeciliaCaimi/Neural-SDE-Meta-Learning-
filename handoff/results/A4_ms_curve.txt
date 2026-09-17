@@ -1,0 +1,63 @@
+A4 -- SOURCE-ABUNDANCE SWEEP
+==============================================================================
+checkpoint cifar_ds3_step50000.pt, one checkpoint for every point of the sweep.
+K_T = 1, 60 episodes per value, source sets nested by prefix so that set size is
+the only quantity that varies. Assembled from the per-value files by
+scripts/a4_curve.py; no value here was recomputed.
+
+This sweep varies the source evidence available at DEPLOYMENT. The checkpoint was
+trained once, at M_S = 64. A sweep of the training-time budget is a different
+experiment and is not in the plan.
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+  strategy                          M_S=16            M_S=32            M_S=64           M_S=128           M_S=256           M_S=300
+  ---------------------------------------------------------------------------------------------------------------------------------
+  no adaptation            0.2660 +-0.0210   0.2660 +-0.0210   0.2660 +-0.0210   0.2660 +-0.0210   0.2660 +-0.0210   0.2660 +-0.0210
+  reuse z_S                0.2530 +-0.0170   0.2550 +-0.0170   0.2520 +-0.0180   0.2520 +-0.0180   0.2520 +-0.0180   0.2520 +-0.0180
+  transport                0.2160 +-0.0180   0.2150 +-0.0190   0.2140 +-0.0200   0.2140 +-0.0200   0.2140 +-0.0200   0.2140 +-0.0200
+  transport + refine       0.2160 +-0.0190   0.2160 +-0.0190   0.2140 +-0.0200   0.2140 +-0.0200   0.2140 +-0.0210   0.2140 +-0.0210
+  target only              0.2300 +-0.0190   0.2300 +-0.0190   0.2300 +-0.0190   0.2300 +-0.0190   0.2300 +-0.0190   0.2300 +-0.0190
+  oracle                   0.1880 +-0.0200   0.1870 +-0.0200   0.1880 +-0.0200   0.1880 +-0.0200   0.1880 +-0.0200   0.1880 +-0.0190
+
+distance from the real target domain, transformation-statistic space
+  lower is better
+  strategy                          M_S=16            M_S=32            M_S=64           M_S=128           M_S=256           M_S=300
+  ---------------------------------------------------------------------------------------------------------------------------------
+  no adaptation            1.5890 +-0.0930   1.5890 +-0.0930   1.5890 +-0.0930   1.5890 +-0.0930   1.5890 +-0.0930   1.5890 +-0.0930
+  reuse z_S                1.4390 +-0.1030   1.4370 +-0.1030   1.4200 +-0.1040   1.4210 +-0.1030   1.4180 +-0.1040   1.4160 +-0.1040
+  transport                0.3270 +-0.0450   0.3240 +-0.0450   0.3110 +-0.0460   0.3090 +-0.0470   0.3110 +-0.0470   0.3110 +-0.0470
+  transport + refine       0.3270 +-0.0430   0.3220 +-0.0440   0.3060 +-0.0450   0.3030 +-0.0460   0.3040 +-0.0460   0.3040 +-0.0460
+  target only              0.3670 +-0.0560   0.3670 +-0.0560   0.3670 +-0.0560   0.3670 +-0.0560   0.3670 +-0.0560   0.3670 +-0.0560
+  oracle                   0.2900 +-0.0440   0.2840 +-0.0440   0.2840 +-0.0450   0.2720 +-0.0430   0.2790 +-0.0430   0.2770 +-0.0430
+
+paired differences, sliced Wasserstein (the plan's headline metric)
+  comparison                                M_S=16            M_S=32            M_S=64           M_S=128           M_S=256           M_S=300
+  -----------------------------------------------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                  +0.0377*          +0.0392*          +0.0386*          +0.0382*          +0.0380*          +0.0379*
+  transport vs target only                +0.0141*          +0.0143*          +0.0161*          +0.0161*          +0.0161*          +0.0160*
+  refinement: off vs on                   -0.0008           -0.0002           -0.0004           -0.0004           -0.0005           -0.0005 
+  transport + refine vs oracle            +0.0279*          +0.0282*          +0.0259*          +0.0257*          +0.0266*          +0.0268*
+
+paired differences, transformation-statistic space
+  comparison                                M_S=16            M_S=32            M_S=64           M_S=128           M_S=256           M_S=300
+  -----------------------------------------------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                  +1.1117*          +1.1131*          +1.1088*          +1.1122*          +1.1069*          +1.1059*
+  transport vs target only                +0.0394           +0.0433           +0.0555*          +0.0581*          +0.0563*          +0.0563*
+  refinement: off vs on                   +0.0008           +0.0015           +0.0052           +0.0058           +0.0071           +0.0071 
+  transport + refine vs oracle            +0.0363           +0.0375           +0.0218           +0.0312           +0.0242           +0.0269 
+
+  * = the 95% interval excludes zero
+
+span of the sweep, headline metric
+  M_S from 16 to 300, a factor of 19
+  transport vs reuse z_S           +0.0377 -> +0.0379   (moved 0.0002, half-widths 0.0104 / 0.0101)
+  transport vs target only         +0.0141 -> +0.0160   (moved 0.0019, half-widths 0.0084 / 0.0093)
+  refinement: off vs on            -0.0008 -> -0.0005   (moved 0.0003, half-widths 0.0017 / 0.0019)
+  transport + refine vs oracle     +0.0279 -> +0.0268   (moved 0.0011, half-widths 0.0118 / 0.0099)
+
+The plan's stated expectation for A4 was improvement with increasing source
+evidence, followed by saturation. What the sweep shows is saturation from the
+first point measured: every movement across the whole range is smaller than the
+half-width of the interval at either end. The marginal value of source evidence
+is already exhausted below M_S = 16.
