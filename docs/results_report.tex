@@ -1,0 +1,488 @@
+% Stage A, Stage B and the Stage C feasibility gate: results report.
+%
+% Formatting. This file targets the ICLR conference template. The official style file is
+% distributed by the conference and is not on CTAN, so it cannot be fetched automatically.
+% Drop iclr2026_conference.sty (and iclr2026_conference.bst) beside this file and the
+% document switches to it with no edit; without it the fallback preamble below approximates
+% the same layout using standard packages, so the report compiles today either way.
+%
+%   latexmk -pdf docs/results_report.tex
+
+\documentclass{article}
+
+\IfFileExists{iclr2026_conference.sty}{%
+  \usepackage{iclr2026_conference}%
+  \usepackage{times}%
+  \newcommand{\fallbacknote}{}%
+}{%
+  \usepackage[letterpaper,margin=1in]{geometry}%
+  \usepackage{times}%
+  \usepackage{titlesec}%
+  \titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{\uppercase}%
+  \titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}%
+  \newcommand{\fallbacknote}{%
+    \begin{center}\small\itshape
+    Typeset with the fallback preamble: \texttt{iclr2026\_conference.sty} was not found.
+    \end{center}}%
+}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\graphicspath{{figures/}{../handoff/results/}}
+
+\title{Task Coordinates for Few-Shot Diffusion Adaptation:\\
+Source Dependence, Data Scarcity and Map Structure}
+
+\author{Anonymous authors\\Paper under double-blind review}
+
+\date{17 September 2026}
+
+\begin{document}
+
+\maketitle
+\fallbacknote
+
+\begin{abstract}
+We report the results of the current experimental stage for Meta-Diffusion, a method that
+adapts a frozen denoising diffusion probabilistic model to a new data domain by fitting a
+low-dimensional task coordinate rather than by updating network weights. The stage was
+governed by a criterion fixed in advance: the main claim is supported only if knowledge of
+the correct source task, combined with a learned source-to-target relation, outperforms
+\emph{both} transfer that knows only the relation \emph{and} few-shot modelling that uses
+only target-domain data. On the distributional metric named as headline by the plan, that
+criterion is met in the low-target-data regime and only there. With a single target image
+the method improves on relation-only transfer by $+0.025 \pm 0.008$ and on target-only
+modelling by $+0.018 \pm 0.009$; the advantage over target-only modelling has vanished by
+twenty target images. Three supporting results accompany it: the mechanism behaves as
+designed on an analytically tractable task family, the marginal value of source evidence is
+exhausted below the smallest budget measured, and the transport map must exceed the
+identity but need not be non-linear. Two earlier readings are withdrawn, both traceable to
+a measurement instrument that was blind to the quantity under test.
+\end{abstract}
+
+\section{Objective and the criterion for the claim}
+
+The method under test factors a generative model into two parts of very unequal dimension:
+a high-dimensional score network whose weights are shared across all tasks and frozen at
+meta-test time, and a $k$-dimensional task coordinate that carries everything specific to a
+task. Adaptation to a new domain is then the problem of choosing one short vector rather
+than of retraining a network. A transport map predicts the coordinate for a target domain
+from source-domain data alone, which is what makes the method applicable when target data
+are scarce.
+
+The plan governing this stage states the criterion for the main claim without
+qualification: the claim is supported only if the correct source task \emph{plus} the
+learned source-to-target relation outperforms \emph{both} relation-only transfer \emph{and}
+target-only few-shot modelling, in the low-target-data regime. Any other outcome is to be
+reported as what it is. This report is organised around that sentence.
+
+\section{Method, instruments and terminology}
+
+\paragraph{The model.} The backbone is a denoising diffusion probabilistic model: a network
+trained to predict the noise added to an image at a randomly chosen point along a fixed
+corruption schedule, so that running the schedule backwards generates samples. Generation
+in this report uses the denoising diffusion implicit model sampler with the stochasticity
+parameter set to zero, which makes sampling deterministic given the initial noise.
+
+\paragraph{The coordinate and the transport map.} A set encoder $r_\psi$ maps a set of
+images to a task coordinate $z \in \mathbb{R}^{k}$. Writing $z_S$ for the coordinate
+encoded from source-domain data and $c$ for a descriptor of the source-to-target relation,
+the transport map produces the predicted target coordinate
+$\tilde{z}_T = z_S + \Delta_\gamma(z_S, c)$. Critically, $\Delta_\gamma$ takes no target
+image as input; target images enter only through an optional refinement step that minimises
+the denoising loss over the coordinate alone, with the network frozen.
+
+\paragraph{Evidence budgets.} $M_S$ denotes the number of source-domain images the encoder
+sees when producing $z_S$. $K_T$ denotes the number of target-domain images available at
+adaptation time. These are the two axes swept in this stage.
+
+\paragraph{The strategies compared.} \emph{No adaptation} sets the coordinate to zero.
+\emph{Reuse $z_S$} transfers the source coordinate unchanged. \emph{Transport} applies
+$\Delta_\gamma$; \emph{transport + refine} then refines on the $K_T$ target images.
+\emph{Target only} encodes those same $K_T$ images directly and refines from there, using no
+source data at all, and is therefore the hardest baseline: beating it is what demonstrates
+that source data are worth having. \emph{Oracle} refines on abundant target data and bounds
+what the coordinate can achieve within this basis and backbone.
+
+\paragraph{The source controls.} Three conditions destroy task identity while preserving the
+relation. \emph{Mean $z_S$} substitutes the average source coordinate over all episodes
+sharing a transformation. \emph{Shuffled $z_S$} substitutes another class's coordinate drawn
+from within the same transformation. \emph{Relation-only} evaluates $\Delta_\gamma(0, c)$,
+keeping the relation descriptor and destroying the coordinate entirely.
+
+\paragraph{Two instruments, and why both are reported.} The first is a transformation
+statistic: three fixed convolutions measuring mean absolute Laplacian response, per-image
+standard deviation, and residual above a local average. It reads which image transformation
+was applied and nothing else. The second is the sliced Wasserstein distance in pixel space,
+which compares two sets of images by projecting both onto many random directions, sorting
+each projection, and comparing quantiles; it is the distributional metric the plan names as
+headline. Section~\ref{sec:a1} shows that the choice between them is not cosmetic.
+
+\paragraph{Statistics.} Every comparison is a paired difference computed episode by episode,
+reported with a 95\% confidence interval; an interval that excludes zero is marked with an
+asterisk. An interval containing zero means the sign of the difference is not determined at
+this sample size; it does not establish equality, which would require a separately declared
+margin of indifference that none of these comparisons carries.
+
+\section{Experimental configuration}
+
+All results in Sections~\ref{sec:a1} through \ref{sec:a5} use one checkpoint of the
+three-transformation CIFAR-100 domain-shift task family, trained for 50{,}000 steps, read
+with exponentially moving averaged weights. The task family is Gaussian blur, additive
+Gaussian noise and contrast reduction at severity 3; episodes pair a clean source domain
+with a corrupted target domain of the same semantic class.
+
+\begin{table}[t]
+\centering
+\caption{Training and adaptation configuration. Values are read from the checkpoint's own
+stored configuration and from the adaptation budget object shared by every strategy.}
+\label{tab:config}
+\small
+\begin{tabular}{llll}
+\toprule
+\multicolumn{2}{l}{\textbf{Training}} & \multicolumn{2}{l}{\textbf{Adaptation (meta-test)}}\\
+\midrule
+Backbone & U-Net, 128 base channels & Refinement steps $J$ & 25\\
+Channel multipliers & $(1,2,2)$, 2 residual blocks & Coordinate rate $\eta_z$ & $10^{-2}$\\
+Coordinate dimension $k$ & 16 & Prior weight $\beta_0$ & 1.0, divided by $K_T$\\
+Set encoder pooling & mean & Noise draws per step & 32\\
+Transport hidden width & 64 & & \\
+Relation descriptor $d_c$ & 8 & \multicolumn{2}{l}{\textbf{Sampling}}\\
+Diffusion steps & 1000, cosine schedule & Sampler & implicit, $\eta=0$\\
+Optimiser & AdamW, $2\times10^{-4}$ & Reverse steps & 50\\
+Warmup, gradient clip & 500 steps, 1.0 & Samples per cell & 96\\
+Moving-average decay & 0.999 & Episodes per cell & 60\\
+Loss weights $\lambda_T, \lambda_{tr}$ & 1.0, 1.0 & & \\
+Coordinate penalty $\lambda_z$ & $10^{-4}$ & & \\
+Source budget at training $M_S$ & 64 & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{A departure from the written configuration, now corrected.} The configuration
+file recorded 32 noise draws per refinement step only after this stage began. The field
+previously read 16 and was never passed to the object that consumes it, so every number
+produced before the correction was in fact generated with that object's own default of 32.
+The field was changed to match what had been running rather than the reverse. Any earlier
+document quoting 16 is wrong.
+
+\paragraph{A change that did alter conclusions.} Refinement originally drew its noise from
+an unseeded global stream, so two strategies compared within one episode refined against
+different noise: an unpaired difference inside an otherwise paired comparison. A per-episode
+stream, rewound for each strategy, was introduced part-way through the stage. Two readings
+moved when it was, and both are identified where they occur.
+
+\section{Stage B: the positive control}
+
+Before interpreting a small effect on images, it is worth establishing that the mechanism
+works at all where the ground truth is analytic. Stage B applies the same construction to
+two-dimensional Gaussian mixtures across five task families spanning a range of
+source-to-target distances, with 32 tasks each.
+
+The mechanism behaves exactly as designed. The paired improvement from using a task's own
+coordinate rather than the coordinate shared by all tasks runs from $+0.1428$ to $+0.1571$
+across the five families, every interval excluding zero, and the task-specific share of the
+gain is $1.0$: on analytic mixtures essentially the whole benefit of the coordinate is
+specific to the task rather than a constant offset. The coordinate-loss profile is minimised
+at the task's own coordinate in all five families, which is the correctness check the panel
+exists to perform.
+
+Figure~\ref{fig:profile} places this beside the corresponding measurement on images. The two
+loss scales are not comparable, so the figure plots the depth of the well as a percentage of
+the loss at the shared mean coordinate, which is. The well is 26.1\% deep on mixtures and
+1.6\% deep on CIFAR-100, and both are minimised in the right place with the wrong direction
+rising monotonically. The mechanism on images is therefore neither absent nor misdirected.
+It is shallow, and an earlier reading that described it as flat was overstating.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{profile_contrast.png}
+\caption{The coordinate-loss profile on two-dimensional Gaussian mixtures (left) and on
+CIFAR-100 domain shift (right). The horizontal axis walks the coordinate from the shared
+mean at $s=0$ through the task's own coordinate at $s=1$ and out to twice that displacement.
+Both panels are minimised at $s=1$; the depth of the well differs by roughly sixteenfold.}
+\label{fig:profile}
+\end{figure}
+
+\paragraph{One result the sweep did not produce.} The relatedness sweep was built to vary
+the distance between source and target tasks, and it does not move the task-specific term:
+the five readings are $+0.1539$, $+0.1428$, $+0.1536$, $+0.1571$ and $+0.1533$, from the
+smallest perturbation through to unrelated task pairs. The dial turns; the quantity it was
+built to move does not. We record this as an open question rather than a footnote.
+
+\section{A1: source-dependence controls}
+\label{sec:a1}
+
+This panel decides the main claim. It compares the full method against the three ways of
+destroying task identity while preserving the relation, over 180 episodes at
+$K_T \in \{1, 5, 20\}$.
+
+\begin{table}[t]
+\centering
+\caption{A1, paired differences on the headline metric. Positive values favour the full
+method. All nine cells exclude zero. The final row reports the same comparison against mean
+$z_S$ under the transformation statistic, where every interval contains zero.}
+\label{tab:a1}
+\small
+\begin{tabular}{lccc}
+\toprule
+Full method against & $K_T=1$ & $K_T=5$ & $K_T=20$\\
+\midrule
+Mean $z_S$ & $+0.0301 \pm 0.0072^{*}$ & $+0.0346 \pm 0.0085^{*}$ & $+0.0338 \pm 0.0080^{*}$\\
+Shuffled $z_S$ & $+0.0416 \pm 0.0125^{*}$ & $+0.0453 \pm 0.0149^{*}$ & $+0.0436 \pm 0.0144^{*}$\\
+Relation-only & $+0.0254 \pm 0.0078^{*}$ & $+0.0285 \pm 0.0088^{*}$ & $+0.0295 \pm 0.0087^{*}$\\
+Target-only & $+0.018 \pm 0.009^{*}$ & $+0.011 \pm 0.007^{*}$ & $-0.003 \pm 0.007$\\
+\midrule
+Mean $z_S$, transformation statistic & $+0.017 \pm 0.033$ & $-0.008 \pm 0.030$ & $+0.011 \pm 0.028$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The criterion is met, with a boundary.} At a single target image the method beats
+relation-only transfer and target-only modelling simultaneously, which is what the plan
+requires. The advantage over target-only modelling survives to five target images and is
+gone by twenty. The claim this panel supports is therefore explicitly bounded: source
+information is worth having when target evidence is scarce, and its value decays as target
+evidence accumulates. That boundary is consistent with the task family, in which a single
+target image already reveals which transformation was applied.
+
+\paragraph{The two instruments disagree, and the disagreement is itself the finding.} Under
+the transformation statistic the comparison against mean $z_S$ contains zero at every $K_T$.
+That instrument reads which transformation was applied; the within-relation mean preserves
+the transformation exactly and destroys only task identity. The instrument is therefore
+blind by construction to precisely the quantity the control removes, and a null reading from
+it carries no information about that quantity. An earlier reading of this panel concluded
+that the task-specific content of the coordinate was unused. That conclusion was drawn from
+the blind instrument and is withdrawn.
+
+\paragraph{The gap to the oracle is real.} On the headline metric the full method remains
+behind the oracle by $+0.026$, $+0.027$ and $+0.017$ at the three budgets, every interval
+excluding zero. Earlier statements that the method was indistinguishable from the oracle came
+from the loss-shaped instrument and are likewise withdrawn.
+
+\paragraph{Refinement is not reportable.} The two instruments disagree on its sign, and four
+measurements of the $K_T=1$ cell span 0.023 while their half-widths are approximately 0.014.
+Following the plan's own exclusion list, refinement stays out of the headline method. Its
+value is real when the starting coordinate is far away and unmeasurable once transport has
+landed close.
+
+\section{A3: target-data scarcity}
+
+Over 300 episodes at $K_T \in \{1,2,5,10,20\}$, the method beats reusing the source
+coordinate at every budget, the advantage decaying monotonically from
+$+1.140 \pm 0.108$ to $+0.229 \pm 0.059$ with every interval clear of zero. This is the
+largest and most robust effect in the stage, an order of magnitude above every other
+comparison, and it establishes that the transport map does substantive work.
+
+\paragraph{A retraction.} An earlier run had read the twenty-image budget as the method
+\emph{losing} to target-only modelling, $-0.017 \pm 0.044$, and this was written up as a
+crossing point. The larger run reads $+0.008 \pm 0.036$: the sign reversed and both
+intervals contain zero, so the method was never shown to lose. The correct statement is that
+the two become indistinguishable, not that they cross.
+
+\section{A4: source abundance}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{A4_ms_curve.png}
+\caption{A4. Six source budgets from 16 to 300 images, one target image, 60 episodes each,
+one checkpoint throughout. Left: absolute distance per strategy. Right: paired differences
+with 95\% intervals. Nothing moves.}
+\label{fig:a4}
+\end{figure}
+
+The plan anticipated improvement with increasing source evidence followed by saturation.
+What the sweep shows is saturation from the first point measured. Across a nineteenfold
+range the comparison against reusing the source coordinate moves 0.0002, that against
+target-only modelling 0.0019, and that against the oracle 0.0011, each smaller than the
+half-width of its own interval at either end. Sixteen source images already buy everything
+this transport map extracts from a source set.
+
+Two strategies in the panel never consult the source coordinate, and they return identical
+values at all six budgets. That is the sweep's internal check that it varies only what it
+claims to vary, and it passes.
+
+\paragraph{Scope.} Every point of this sweep is the same checkpoint, trained once at
+$M_S=64$, evaluated with a different number of source images. The sweep therefore measures
+how much source evidence a trained transport map requires at deployment. It does not
+measure how that map would differ had it been trained under a different source budget; that
+is a distinct experiment, discussed in Section~\ref{sec:deferred}.
+
+\section{A5: transport-map structure}
+\label{sec:a5}
+
+Four maps were trained separately under identical conditions and compared episode by
+episode: the residual multilayer perceptron used by the method (6824 parameters), the
+identity (0), a constant relation vector (96), and a linear map (352).
+
+\begin{table}[t]
+\centering
+\caption{A5, paired against the residual multilayer perceptron. Positive values favour it.
+The final row gives the noise floor: the spread across the same four runs of a strategy that
+never consults the transport map, and therefore reflects ordinary run-to-run variation.}
+\label{tab:a5}
+\small
+\begin{tabular}{lccc}
+\toprule
+Variant & $K_T=1$ & $K_T=5$ & $K_T=20$\\
+\midrule
+Identity & $+0.0242 \pm 0.0080^{*}$ & $+0.0256 \pm 0.0089^{*}$ & $+0.0246 \pm 0.0087^{*}$\\
+Constant relation vector & $+0.0082 \pm 0.0051^{*}$ & $+0.0092 \pm 0.0052^{*}$ & $+0.0109 \pm 0.0055^{*}$\\
+Linear map & $+0.0022 \pm 0.0049$ & $+0.0004 \pm 0.0048$ & $+0.0036 \pm 0.0050$\\
+\midrule
+Run-to-run floor & 0.0076 & 0.0036 & 0.0135\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These are four separately trained models, so a difference between them mixes the structure
+of the map with ordinary variation between training runs. The panel therefore prints its own
+floor: a strategy that never consults the transport map spreads by 0.0076 to 0.0135 across
+the same four runs, against a transport spread of 0.0082 to 0.0109 once the identity is
+excluded.
+
+Read against that floor, the defensible conclusion is narrow. The map must be more than the
+identity, by a margin comfortably above the floor at every budget. The constant relation
+vector's margin sits inside the floor. The linear map is indistinguishable from the residual
+multilayer perceptron at all three budgets, with nineteen times fewer parameters. On these
+numbers the linear map is the structure to prefer, and the claim that the non-linear map
+earns its place is not supported.
+
+\section{C0: feasibility of the demographic experiment}
+
+The demographic scarcity experiment requires a dermatological image dataset annotated by
+skin phototype. The annotation table is fully available: 16{,}577 rows over 114 conditions.
+The images are not. One of the two source archives holds 12{,}631 of those rows, 76.2\% of
+the dataset, and its domain fails to resolve for public resolvers as well as locally, with
+the delegation itself reported as unreachable; a sample of thirty of its links returned no
+image bytes at all. The second archive is fully live, and a sample of thirty of its links
+returned thirty images.
+
+Grouping phototypes I--III against IV--VI, chosen from the observed counts rather than in
+advance, the reachable archive yields 16 conditions above the plan's floor. Only 8 of those
+can fund a twenty-image support set together with a held-out query set, which gives a
+five/two/one split of tasks, and a single held-out test task cannot carry a paired interval.
+The reachable subset is therefore scaffolding on which the domain module and evaluation
+predictors can be built, not a basis for the headline scarcity result. Restoring the full
+dataset requires a request form that the authors control.
+
+\section{Deferred experiments and the reasons}
+\label{sec:deferred}
+
+\begin{table}[t]
+\centering
+\caption{Status of the ten deliverables fixed by the plan.}
+\label{tab:status}
+\small
+\begin{tabular}{llp{7.2cm}}
+\toprule
+\# & Deliverable & Status\\
+\midrule
+1 & Gaussian-mixture mechanism result & Complete\\
+2 & Source-dependence controls & Complete\\
+3 & Additive basis against feature-wise linear modulation & \textbf{Deferred}\\
+4 & Target-scarcity curve & Complete\\
+5 & Source-abundance curve & Complete\\
+6 & Transport-structure ablation & Complete\\
+7 & One demographic scarcity experiment & \textbf{Deferred}\\
+8 & Paired 95\% intervals for every headline comparison & Complete\\
+9 & Downstream demographic augmentation (optional) & \textbf{Deferred}\\
+10 & Few-shot face generation stress test (optional) & \textbf{Deferred}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Deliverable 3, the comparison against feature-wise linear modulation.} Feature-wise
+linear modulation is the standard alternative to an additive basis: instead of adding a
+learned direction to the score, it scales and shifts intermediate feature maps as a function
+of the task coordinate. The comparison is deferred because of a repository state, not a
+scientific judgement. The implementation of that arm and the generation scripts that would
+evaluate it live on different branches, and the integration step that the plan places before
+all of Stage A has not been performed. Until those branches are merged no cross-arm
+measurement can run. The arm itself is built and has been measured on the denoising loss;
+only the generation-level comparison is outstanding.
+
+\paragraph{Deliverables 7 and 9, the demographic experiments.} The feasibility gate returned
+a qualified pass, and the qualification is disabling for the headline result: the reachable
+portion of the dataset supports eight usable conditions, which cannot fund a task split with
+more than one held-out test task, and a single test task cannot carry the paired interval
+that every other result in this report carries. Restoring the remaining three quarters of the
+images depends on a request form submitted to the dataset's authors, which is outside our
+control and slow. Deliverable 9 is optional and conditional on deliverable 7, and is
+deferred with it.
+
+\paragraph{Deliverable 10, the few-shot face generation stress test.} Deferred by the plan's
+own exclusion list, which directs that no further time be spent on it during this
+submission cycle.
+
+\paragraph{The dSprites intermediate stage.} Deferred by the same exclusion list. Its
+intended role was to supply a task variable that cannot be read from a single target image,
+and that role has been reassigned to the demographic experiment. We note that
+Section~\ref{sec:a1} gives this decision more weight than it had when it was taken: the
+advantage over target-only modelling disappears by twenty target images precisely because a
+single target image already reveals the task, which is the condition dSprites was designed
+to remove.
+
+\paragraph{The severity sweep.} Deferred by the exclusion list unless required to interpret
+a Stage A result. It was not required. The command-line flag remains wired and verified.
+
+\paragraph{A sweep of the training-time source budget.} We considered whether the flat A4
+curve might reflect what the transport map learned under a fixed training budget rather than
+a property of the task. Testing that would require retraining at several source budgets. The
+plan contains no such experiment: every mention of the source budget in it refers to the
+evaluation script, and the plan's overall posture is that the implementation is frozen. It is
+therefore recorded here as an open question and not run.
+
+\paragraph{Unconstrained fine-tuning references.} Full fine-tuning of the network weights,
+with and without abundant target data, is implemented and reachable but was not run this
+stage. It is the measurement that would attribute the oracle gap reported in
+Section~\ref{sec:a1} either to the task or to the basis and backbone, and we identify it as
+the cheapest informative next step.
+
+\section{Limitations}
+
+Four limitations travel with every number in this report.
+
+First, all CIFAR-100 results come from a \emph{single checkpoint} and a \emph{single seed}.
+Every interval is therefore a within-run interval over episodes and contains no seed-to-seed
+component. This matters most in Section~\ref{sec:a5}, where four separately trained models
+are compared and run-to-run variation is the dominant nuisance term; the floor reported there
+is estimated from four runs, not bounded.
+
+Second, all readings are on the validation split. The test split is untouched and is
+reserved for a single final number.
+
+Third, absolute generative quality is unmeasured. No Fr\'echet or kernel Inception distance
+is implemented in the project, and no real-against-real control establishes the floor of the
+sliced Wasserstein distance at these sample sizes. The oracle row functions as a practical
+floor, but the absolute level of any distance reported here should not be read as a distance
+from zero. What this report establishes is that the coordinate controls generation, not that
+the generated images are good.
+
+Fourth, the two instruments used here disagree in at least one place where the disagreement
+changes a conclusion, and the resolution in Section~\ref{sec:a1} rests on an argument about
+what each instrument can see rather than on a third measurement.
+
+\section{Conclusion}
+
+The criterion fixed before the stage began is met, and met narrowly: knowing the source task
+and the relation beats both relation-only transfer and target-only modelling when target
+data are scarce, and the margin over target-only modelling is gone by twenty target images.
+The positive control confirms that the mechanism is sound where the ground truth is known,
+and locates the difficulty on images precisely: the well is shallow, not absent. Two
+supporting results are negative in a useful way. Source evidence saturates below the smallest
+budget we measured, so the method is cheap on the source side. And the non-linear transport
+map is not distinguishable from a linear one, so the architecture can be simplified rather
+than defended.
+
+The single most informative next measurement is the unconstrained fine-tuning reference,
+which would establish whether the remaining gap to the oracle belongs to the task or to the
+architecture. The branch integration that unblocks deliverable 3 is the next most valuable,
+and is a repository operation rather than an experiment.
+
+\end{document}
