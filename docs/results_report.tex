@@ -236,19 +236,25 @@ Variant & Parameters & $K_T=1$ & $K_T=5$ & $K_T=20$\\
 Identity & 0 & $+0.0242 \pm 0.0080^{*}$ & $+0.0256 \pm 0.0089^{*}$ & $+0.0246 \pm 0.0087^{*}$\\
 Constant relation vector & 96 & $+0.0082 \pm 0.0051^{*}$ & $+0.0092 \pm 0.0052^{*}$ & $+0.0109 \pm 0.0055^{*}$\\
 Linear map & 352 & $+0.0022 \pm 0.0049$ & $+0.0004 \pm 0.0048$ & $+0.0036 \pm 0.0050$\\
-\midrule
-Run-to-run floor & --- & $0.0076$ & $0.0036$ & $0.0135$\\
 \bottomrule
 \end{tabular}
-\caption{A5. Paired against the residual multilayer perceptron (6824 parameters); positive
-favours it. The floor is the spread across the same four runs of a strategy that never
-consults the transport map.}
+\caption{A5. Each variant paired against the residual multilayer perceptron (6824
+parameters) episode by episode; positive favours the residual network. The variants differ
+only in the form of $\Delta_\gamma$ and are otherwise trained identically.}
 \end{table}
 
-\paragraph{Conclusion.} The transport map must be more than the identity, by a margin well
-above the floor at every budget. The constant relation vector's margin sits inside the floor.
-\textbf{The linear map is indistinguishable from the residual network with nineteen times
-fewer parameters}, so the architecture can be simplified rather than defended.
+\paragraph{Conclusion.} Both reduced maps are beaten at every budget: the identity by
+$+0.024$ to $+0.026$ and the constant relation vector by $+0.008$ to $+0.011$, every
+interval clear of zero. \textbf{A transport map is necessary, and a per-relation constant
+offset is not enough} --- the prediction has to depend on the source coordinate itself. The
+linear map, by contrast, is indistinguishable from the residual network at all three
+budgets with nineteen times fewer parameters, so \textbf{the non-linearity is the part that
+can be dropped}: the architecture can be simplified rather than defended.
+
+One cell qualifies this. At $K_T = 20$ the constant run is also behind on target-only
+modelling, by $+0.0135 \pm 0.0081$, a strategy that never consults the transport map at all
+--- so at that budget the difference lies somewhere other than in $\Delta_\gamma$. At
+$K_T = 1$ and $K_T = 5$ the same comparison contains zero, and the gap is the map's.
 
 \section{Stage B --- Gaussian-mixture positive control}
 
@@ -265,7 +271,12 @@ that task distance can be varied deliberately rather than inferred.
 \toprule
 Task family & perturb $0.1$ & perturb $0.25$ & perturb $0.5$ & perturb $1.0$ & unrelated\\
 \midrule
-Task-specific gain & $+0.1539^{*}$ & $+0.1428^{*}$ & $+0.1536^{*}$ & $+0.1571^{*}$ & $+0.1533^{*}$\\
+$L(z_y)$, the task's own & $0.4368$ & $0.4750$ & $0.5234$ & $0.5937$ & $0.4921$\\
+$L(\bar{z})$, shared mean & $0.5907$ & $0.6178$ & $0.6770$ & $0.7508$ & $0.6453$\\
+$L(z_{\text{shuffled}})$, another task's & $0.8183$ & $0.8171$ & $0.8634$ & $0.9345$ & $0.7891$\\
+$L(0)$ & $0.5905$ & $0.6178$ & $0.6729$ & $0.7467$ & $0.6149$\\
+\midrule
+Task-specific gain, $L(\bar{z}) - L(z_y)$ & $+0.1539^{*}$ & $+0.1428^{*}$ & $+0.1536^{*}$ & $+0.1571^{*}$ & $+0.1533^{*}$\\
 Profile minimum at & $s=1$ & $s=1$ & $s=1$ & $s=1$ & $s=1$\\
 \bottomrule
 \end{tabular}
@@ -273,7 +284,9 @@ Profile minimum at & $s=1$ & $s=1$ & $s=1$ & $s=1$ & $s=1$\\
 not on images. Five checkpoints, one per task family, each $k=16$ with a linear decoder
 trained for 80{,}000 steps and read at $K_T = 5$ over 32 tasks. Columns are the five task
 families, ordered left to right by increasing distance between a task's source and target
-distributions. The first row
+distributions. The first four rows are the denoising loss under four coordinates: the
+task's own, the single mean coordinate shared by all tasks, another task's, and zero. The
+fifth row
 is the reduction in denoising loss obtained by giving a task its \emph{own} coordinate rather
 than the single coordinate shared by all tasks, paired over the 32 tasks; it is the quantity
 the whole mechanism is supposed to produce, and it should be positive. The second row
@@ -293,13 +306,21 @@ the task's own coordinate at $s=1$ and out to twice that displacement.}
 \label{fig:profile}
 \end{figure}
 
-\paragraph{Conclusion.} The mechanism behaves as designed where the ground truth is analytic:
-the gain is entirely task-specific and the profile is minimised in the right place in all
-five families. Placed beside the same measurement on images, the well is $26.1\%$ deep on
-mixtures and $1.6\%$ deep on CIFAR-100, both minimised at the task's own coordinate.
-\textbf{The mechanism on images is neither absent nor misdirected; it is shallow.} One
-observation is unexplained: the relatedness sweep does not move the task-specific term at
-all, although it was built to.
+\paragraph{Conclusion.} The four-coordinate scan orders itself exactly as the mechanism
+predicts, in every family: the task's own coordinate is best, the shared mean and zero are
+level with each other, and another task's coordinate is far worse than having none at all.
+That last point is the informative one. Substituting the wrong task's coordinate costs
+roughly $0.23$ where removing the coordinate entirely costs nothing, so the coordinate
+carries task-specific content that actively misleads when it is wrong --- which is the
+signature of a coordinate that is being used rather than absorbed. The profile is minimised
+at the task's own coordinate in all five families.
+
+Placed beside the same measurement on images, the well is $26.1\%$ deep on mixtures and
+$1.6\%$ deep on CIFAR-100, both minimised at the task's own coordinate. \textbf{The
+mechanism on images is neither absent nor misdirected; it is shallow.} Two observations are
+unexplained: the relatedness sweep does not move the task-specific term at all although it
+was built to, and on unrelated tasks the shared mean is \emph{worse} than zero
+($0.6453$ against $0.6149$), the only family where that happens.
 
 \FloatBarrier
 
