@@ -51,6 +51,11 @@ def parse() -> argparse.Namespace:
                    help="A5, the transport-structure ablation. Each variant is trained "
                         "jointly, as the current map was, so that the comparison is "
                         "between structures and not between training objectives.")
+    p.add_argument("--film-mode", choices=("per_block", "temb"), default=None,
+                   help="A2, read only by runner/train_film.py. per_block gives each "
+                        "residual block its own [gamma_j, beta_j] = W_j z + b_j; temb "
+                        "folds z into the shared timestep embedding, which is what E15 "
+                        "measured on the denoising loss.")
     p.add_argument("--smoke", action="store_true", help="small model, few steps; checks the pipeline only")
     return p.parse_args()
 

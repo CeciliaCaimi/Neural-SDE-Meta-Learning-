@@ -19,6 +19,11 @@ class ModelConfig:
     ))
     k: int = 16                             # A.2 starting value; sweep {2,4,8,16,32}
     basis_init_scale: float = 1e-3
+    # A2, the conditioning comparison: basis (equation 21, the method) | film (generic
+    # latent conditioning, baselines/film_conditioning.py). The two arms share every module
+    # name and nearly every parameter shape, so one loads into the other without complaint;
+    # recording the arm here is what stops an evaluation script rebuilding the wrong one.
+    score_model: str = "basis"
     center_coords: bool = False             # E13: z = z_center + delta_z; absorb the shared offset
 
     # Set encoder r_psi

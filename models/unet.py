@@ -42,8 +42,13 @@ class ResBlock(nn.Module):
 
     def __init__(self, in_ch: int, out_ch: int, temb_dim: int, dropout: float = 0.1) -> None:
         super().__init__()
+        self.out_ch = out_ch
         self.in_layers = nn.Sequential(_norm(in_ch), nn.SiLU(), nn.Conv2d(in_ch, out_ch, 3, padding=1))
         self.emb_proj = nn.Linear(temb_dim, 2 * out_ch)
+        # Second modulation input, used only by the FiLM comparison arm: a per-block affine
+        # map of the task coordinate, added to the timestep scale-shift at this same site.
+        # None on the reference backbone, where the whole z branch below is dead code.
+        self.z_proj: nn.Linear | None = None
         self.out_norm = _norm(out_ch)
         self.out_layers = nn.Sequential(
             nn.SiLU(), nn.Dropout(dropout), nn.Conv2d(out_ch, out_ch, 3, padding=1)
@@ -55,9 +60,33 @@ class ResBlock(nn.Module):
         nn.init.normal_(self.out_layers[-1].weight, std=0.02)
         nn.init.zeros_(self.out_layers[-1].bias)
 
-    def forward(self, x: Tensor, temb: Tensor) -> Tensor:
+    def attach_film(self, k: int) -> None:
+        """Give this block its own FiLM projection [gamma_j, beta_j] = W_j z.
+
+        Zero-initialised, so the block starts at gamma_j = beta_j = 0 -- the unmodulated
+        backbone -- and, because the projection carries no bias, z = 0 stays *exactly* the
+        unconditioned network for the life of the run. That is what makes the z = 0 control
+        mean the same thing here as it does in the additive arm, where the basis term
+        vanishes at z = 0 by construction.
+
+        Dropping the bias costs nothing. emb_proj already emits its own bias into the same
+        scale and shift, so a constant b_j is exactly redundant with it: the two
+        parameterisations span the same functions, and only one of them keeps z = 0
+        interpretable.
+        """
+        lin = nn.Linear(k, 2 * self.out_ch, bias=False)
+        nn.init.zeros_(lin.weight)
+        self.z_proj = lin
+
+    def forward(self, x: Tensor, temb: Tensor, z: Tensor | None = None) -> Tensor:
         h = self.in_layers(x)
         scale, shift = self.emb_proj(F.silu(temb))[:, :, None, None].chunk(2, dim=1)
+        if self.z_proj is not None and z is not None:
+            # (1 + scale_t + gamma_j(z)) * h + shift_t + beta_j(z): the coordinate enters
+            # at the site the timestep already modulates, per channel, broadcast over space.
+            gamma, beta = self.z_proj(z.to(h.dtype))[:, :, None, None].chunk(2, dim=1)
+            scale = scale + gamma
+            shift = shift + beta
         h = self.out_norm(h) * (1 + scale) + shift
         return self.skip(x) + self.out_layers(h)
 
@@ -88,9 +117,9 @@ class _Stage(nn.Module):
         super().__init__()
         self.mods = nn.ModuleList(mods)
 
-    def forward(self, x: Tensor, temb: Tensor) -> Tensor:
+    def forward(self, x: Tensor, temb: Tensor, z: Tensor | None = None) -> Tensor:
         for m in self.mods:
-            x = m(x, temb) if isinstance(m, ResBlock) else m(x)
+            x = m(x, temb, z) if isinstance(m, ResBlock) else m(x)
         return x
 
 
@@ -194,15 +223,16 @@ class SmallUNet(DiffusionBackbone):
         temb = self.time_mlp(timestep_embedding(t, self.base_channels))
         return self._trunk(x_t, temb)
 
-    def _trunk(self, x_t: Tensor, temb: Tensor) -> Tensor:
+    def _trunk(self, x_t: Tensor, temb: Tensor, z: Tensor | None = None) -> Tensor:
         """The U-Net body given an already-built time embedding. Factored out so a
-        conditioning variant (see models/film_unet.py) can fold z into temb and reuse it."""
+        conditioning variant (see models/film_unet.py) can fold z into temb, or hand z to
+        every residual block, and reuse the trunk either way. z is None here."""
         h = self.conv_in(x_t)
         skips = [h]
         for stage in self.downs:
-            h = stage(h, temb)
+            h = stage(h, temb, z)
             skips.append(h)
-        h = self.mid(h, temb)
+        h = self.mid(h, temb, z)
         for stage in self.ups:
-            h = stage(torch.cat([h, skips.pop()], dim=1), temb)
+            h = stage(torch.cat([h, skips.pop()], dim=1), temb, z)
         return F.silu(self.out_norm(h))

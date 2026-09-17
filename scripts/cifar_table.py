@@ -91,6 +91,9 @@ def main() -> None:
     cfg.model.encoder_pooling = ck_model.get("encoder_pooling", "mean")
     cfg.model.n_relations = ck_model["n_relations"]
     cfg.model.transport_kind = ck_model.get("transport_kind", "residual_mlp")
+    # A2 trains a second conditioning arm whose state dict loads into the basis
+    # model without raising; the checkpoint says which composition it holds
+    cfg.model.score_model = ck_model.get("score_model", "basis")
 
     ds_path = a.domainshift_path or cfg.episodes.domainshift_path
     split = load_domainshift(ds_path if os.path.isabs(ds_path) else os.path.join(_ROOT, ds_path))

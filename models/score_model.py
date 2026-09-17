@@ -219,3 +219,37 @@ class ScoreModel(nn.Module):
 
     def extra_repr(self) -> str:
         return f"k={self.k}, backbone={type(self.backbone).__name__}"
+
+
+# ---------------------------------------------------------------------------
+# Which composition of z with the network does a checkpoint hold?
+# ---------------------------------------------------------------------------
+#
+# A2 trains two arms that share every module name and almost every parameter shape, so a
+# checkpoint of one loads into the other without complaint and then answers a different
+# question -- the failure mode this project has been bitten by before. The arm is recorded
+# in the config (ModelConfig.score_model) and resolved here, exactly as the backbone name
+# and A5's transport_kind already are, so that rebuilding from a checkpoint cannot pick the
+# wrong composition in silence.
+
+SCORE_MODELS: dict[str, type] = {}
+
+
+def register_score_model(name: str):
+    def deco(cls: type) -> type:
+        if name in SCORE_MODELS:
+            raise KeyError(f"score model '{name}' already taken by {SCORE_MODELS[name].__name__}")
+        if not issubclass(cls, ScoreModel):
+            raise TypeError(f"{cls.__name__} must subclass ScoreModel")
+        SCORE_MODELS[name] = cls
+        return cls
+    return deco
+
+
+def resolve_score_model(name: str) -> type:
+    if name not in SCORE_MODELS:
+        raise KeyError(f"unregistered score model '{name}'; registered: {sorted(SCORE_MODELS)}")
+    return SCORE_MODELS[name]
+
+
+register_score_model("basis")(ScoreModel)

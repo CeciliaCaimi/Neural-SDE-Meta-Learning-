@@ -22,12 +22,19 @@ from domains.cifar100 import load_cifar100
 from episodes.dataset import EpisodeLoader
 from episodes.splits import load_split
 from models.backbone import build_backbone
-from models.score_model import ScoreModel
+from models.score_model import ScoreModel, resolve_score_model
 from models.set_encoder import SetEncoder
 from models.transport import Transport, build_transport
 from training.meta_train import meta_step
 
 import models.unet  # noqa: F401  -- triggers the @register_backbone registration
+import models.film_unet  # noqa: F401  -- registers the "film_unet" backbone
+import baselines.film_conditioning  # noqa: F401  -- registers the "film" score model
+
+# Imported here, not in each caller, so that *every* path which rebuilds from a checkpoint
+# -- the training entry points and all nine evaluation scripts alike -- can resolve a FiLM
+# checkpoint. A registration that only some callers trigger is a silent-wrongness trap:
+# the FiLM state dict loads into the basis model without error.
 
 
 class EMA:
@@ -81,7 +88,7 @@ class EMA:
 def build(
     cfg: BaseConfig,
     device: torch.device,
-    model_cls: type[ScoreModel] = ScoreModel,
+    model_cls: type[ScoreModel] | None = None,
 ) -> tuple[ScoreModel, SetEncoder, Transport]:
     """Assemble the three modules from the config. The backbone is named by string alone.
 
@@ -89,9 +96,13 @@ def build(
     backbone differently (generic latent conditioning, for instance) is swapped in here
     and everything downstream -- the loop, the diagnostics, refinement, both samplers --
     is untouched, because they all reach the model only through ScoreModel.eps_hat.
+    Left at None it is read from cfg.model.score_model, which is the path a checkpoint
+    takes: an evaluation script passes no class and still gets the arm that was trained.
     """
     sched = NoiseSchedule(cfg.diffusion.n_steps, cfg.diffusion.schedule)
     backbone = build_backbone(cfg.model.backbone, **cfg.model.backbone_kwargs)
+    if model_cls is None:
+        model_cls = resolve_score_model(getattr(cfg.model, "score_model", "basis"))
     model = model_cls(backbone, sched, k=cfg.model.k,
                       basis_init_scale=cfg.model.basis_init_scale,
                       center_coords=cfg.model.center_coords).to(device)
@@ -126,7 +137,7 @@ def save_checkpoint(path: str, step: int, cfg: BaseConfig, model, encoder, trans
     )
 
 
-def train(cfg: BaseConfig, model_cls: type[ScoreModel] = ScoreModel) -> str:
+def train(cfg: BaseConfig, model_cls: type[ScoreModel] | None = None) -> str:
     torch.manual_seed(cfg.global_seed)
     np.random.seed(cfg.global_seed)
     device = torch.device(cfg.device if torch.cuda.is_available() else "cpu")

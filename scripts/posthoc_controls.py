@@ -79,6 +79,9 @@ def load_checkpoint(path: str, dev: torch.device):
     # A5 trains several transport structures; the checkpoint says which one it holds, and
     # rebuilding from the default would load another map's weights or fail obscurely
     cfg.model.transport_kind = ck.get("transport_kind", "residual_mlp")
+    # A2 trains a second conditioning arm whose state dict loads into the basis
+    # model without raising; the checkpoint says which composition it holds
+    cfg.model.score_model = ck.get("score_model", "basis")
     cfg.episodes.enc_source_images = sd["config"]["episodes"]["enc_source_images"]
 
     model, enc, tr = build(cfg, dev)

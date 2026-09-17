@@ -56,6 +56,9 @@ def main():
     cfg.model.backbone_kwargs = dict(sd["config"]["model"]["backbone_kwargs"])
     cfg.model.n_relations = sd["config"]["model"]["n_relations"]
     cfg.model.transport_kind = sd["config"]["model"].get("transport_kind", "residual_mlp")
+    # A2 trains a second conditioning arm whose state dict loads into the basis
+    # model without raising; the checkpoint says which composition it holds
+    cfg.model.score_model = sd["config"]["model"].get("score_model", "basis")
     split = load_domainshift(os.path.join(_ROOT, cfg.episodes.domainshift_path))
 
     model, enc, tr = build(cfg, dev)

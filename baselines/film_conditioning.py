@@ -25,9 +25,10 @@ from typing import Sequence
 
 from torch import Tensor
 
-from models.score_model import ScoreModel
+from models.score_model import ScoreModel, register_score_model
 
 
+@register_score_model("film")
 class FiLMScoreModel(ScoreModel):
     """z conditions the backbone (FiLM) instead of an additive score basis."""
 
@@ -39,6 +40,13 @@ class FiLMScoreModel(ScoreModel):
         # smuggle in the very mechanism this baseline exists to exclude.
         for p in self.basis_head.parameters():
             p.requires_grad_(False)
+        # Fail loudly rather than conditioning on nothing: a backbone whose
+        # forward_features ignores z would train an arm that answers a different
+        # question while every diagnostic still reads plausibly.
+        if not getattr(self.backbone, "accepts_z", False):
+            raise TypeError(
+                f"{type(self.backbone).__name__} does not take z in forward_features; "
+                "the FiLM arm needs models/film_unet.py")
 
     # ---- z now reaches the denoiser through the backbone, not a head ----
 
