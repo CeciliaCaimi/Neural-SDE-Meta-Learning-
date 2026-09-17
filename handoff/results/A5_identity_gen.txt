@@ -1,0 +1,51 @@
+checkpoint a5_identity_step50000.pt  step 50000  weights EMA
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets drawn independently
+
+180 episodes: 20 classes x 3 transformations x 3 values of K_T
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            1.692 +-0.060     1.665 +-0.065     1.660 +-0.058
+  reuse z_S                1.644 +-0.095     1.319 +-0.097     0.870 +-0.096
+  transport                1.656 +-0.091     1.656 +-0.089     1.647 +-0.088
+  transport + refine       1.644 +-0.095     1.319 +-0.097     0.870 +-0.096
+  target only              0.660 +-0.081     0.660 +-0.082     0.689 +-0.090
+  oracle                   0.591 +-0.094     0.618 +-0.087     0.593 +-0.079
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.260 +-0.019     0.263 +-0.017     0.265 +-0.019
+  reuse z_S                0.235 +-0.019     0.237 +-0.018     0.229 +-0.023
+  transport                0.234 +-0.019     0.236 +-0.017     0.238 +-0.019
+  transport + refine       0.235 +-0.019     0.237 +-0.018     0.229 +-0.023
+  target only              0.225 +-0.018     0.221 +-0.019     0.222 +-0.023
+  oracle                   0.211 +-0.025     0.209 +-0.023     0.214 +-0.026
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                -0.0125 +-0.0374     -0.3376 +-0.0962*    -0.7769 +-0.1415*
+  transport vs target only              -0.9964 +-0.1296*    -0.9968 +-0.1299*    -0.9576 +-0.1520*
+  refinement: off vs on                 +0.0125 +-0.0374     +0.3376 +-0.0962*    +0.7769 +-0.1415*
+  transport + refine vs oracle          +1.0533 +-0.1535*    +0.7005 +-0.1211*    +0.2768 +-0.0888*
+
+  comparison, sliced Wasserstein, pixel space             K_T=1             K_T=5            K_T=20
+  -------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +0.0007 +-0.0026     +0.0003 +-0.0095     -0.0093 +-0.0141 
+  transport vs target only              -0.0098 +-0.0146     -0.0156 +-0.0143*    -0.0162 +-0.0155*
+  refinement: off vs on                 -0.0007 +-0.0026     -0.0003 +-0.0095     +0.0093 +-0.0141 
+  transport + refine vs oracle          +0.0239 +-0.0176*    +0.0273 +-0.0153*    +0.0155 +-0.0107*
+
+  * = the 95% interval excludes zero
+per-episode values written to handoff/results/A5_identity_per_episode.json
