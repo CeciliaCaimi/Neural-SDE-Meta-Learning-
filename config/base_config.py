@@ -19,6 +19,7 @@ class ModelConfig:
     ))
     k: int = 16                             # A.2 starting value; sweep {2,4,8,16,32}
     basis_init_scale: float = 1e-3
+    center_coords: bool = False             # E13: z = z_center + delta_z; absorb the shared offset
 
     # Set encoder r_psi
     encoder_width: int = 64
@@ -87,6 +88,8 @@ class TrainConfig:
 
     log_every: int = 50
     diagnose_every: int = 500
+    diag_episodes: int = 24                  # E13: diagnostic episodes (was hard-coded 8)
+    diag_noise_draws: int = 4                # E13: noise draws per diagnostic episode (was 1)
     ckpt_every: int = 2_000
     ckpt_dir: str = "checkpoints"
     amp: bool = True                        # bf16 mixed precision

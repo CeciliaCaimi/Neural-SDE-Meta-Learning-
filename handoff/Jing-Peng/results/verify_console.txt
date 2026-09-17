@@ -1,0 +1,31 @@
+== interpreter and device ==
+python 3.12.8  torch 2.6.0+cu126
+gpu 0: NVIDIA A10G  23.7 GB
+1 device(s) -- the four training runs are independent and can go in parallel
+
+== dataset ==
+CIFAR-100 at /opt/ml/code/data/cifar-100-python: 60000 images
+
+== split file ==
+ok  artifacts/cifar100_domainshift_c3.json
+    relations ['gaussian_blur', 'gaussian_noise', 'contrast']  severity 3
+    train/val/test fine classes 60/20/20
+
+== the model_cls seam (your FiLM arm depends on it) ==
+ok  build(cfg, device, model_cls) returns the subclass
+    write runner/train_film.py against this; do not edit training/loop.py
+
+== test suite ==
+ok  tests.test_score_identity  17 / 17 checks passed
+ok  tests.test_backbone_swap  13 / 13 checks passed
+ok  tests.test_gmm_analytic  13 / 13 checks passed
+ok  tests.test_cifar100_episodes  10 / 10 checks passed
+ok  tests.test_document_conformance  specification clauses 21 / 21 passed
+
+== throughput reference (RTX 5080, for comparison) ==
+    128 channels  11.5 it/s   ->  50 000 steps in  72 min
+     64 channels  17.8 it/s
+     32 channels  36.1 it/s   ->  60 000 steps in  28 min
+    if your instance is much slower than this, say so in the results file
+
+preflight complete -- nothing above said FAIL

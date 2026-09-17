@@ -67,6 +67,11 @@ def meta_step(
 
     z_s, z_enc_t, z_tld_t = compute_coordinates(encoder, transport, batch)
 
+    # E13: update the running mean coordinate (EMA into model.z_center). Training-time only,
+    # and outside the meta-test inner loop. No-op on the forward unless center_coords is on.
+    if model.training:
+        model.update_center(z_s, z_enc_t)
+
     # ---- Source branch: L_src on D^q_{y,S} with z_S ----
     nb_s = q_sample(sched, batch.src_query)
     n_s = batch.src_query.shape[0]
@@ -99,6 +104,7 @@ def meta_step(
             # advantage of transport over target-only; > 0 means transport is better here
             "trans_gain": (l_tgt - l_trans).item(),
             "|z_S|": z_s.norm().item(),
+            "z_center_norm": model.z_center.norm().item(),
             "|z_enc_T|": z_enc_t.norm().item(),
             # how far transport moves the coordinate; a constant 0 means Delta_gamma is the identity
             "|dz_transport|": (z_tld_t - z_s).norm().item(),
