@@ -1,27 +1,3 @@
-checkpoint cs32_step6000.pt  step 6000  weights EMA
-arm        basis / small_unet  k=16  transport linear
-split      fitzpatrick_split.json  checksum 94e17ffa2507...  Fitzpatrick I-III -> Fitzpatrick IV-VI
-sampling   DDIM eta=0, 50 steps, 96 samples per cell, 32x32
-  fitzpatrick: decoding 1326 images at 32x32 from C:\T1D Meta Learning\dataset\fitzpatrick17k
-tasks      3 held-out conditions: dariers disease, papilomatosis confluentes and reticulate, pityriasis rubra pilaris
-             dariers disease                              25 held-out target images
-             papilomatosis confluentes and reticulate     24 held-out target images
-             pityriasis rubra pilaris                     105 held-out target images
-
-  phenotype instrument: 2-way, 2645 training images, 240 steps; held-out train/val conditions  74.7%  test conditions (the transfer it is used for)  65.8%  (chance 50.0%)
-    trained on train/val-condition images only; 269 test-condition and 507 held-out-query images withheld
-  condition instrument: 45-way, 2309 training images, 360 steps; held-out  18.8%  dariers disease   0.0%  papilomatosis confluen  20.0%  pityriasis rubra pilar  21.4%  (chance 2.2%)
-    507 held-out-query images withheld; conditions with fewer than 24 images are folded out unless named
-
-the fixed population statistic on the real held-out target sets
-  condition                                         ITA       L*       b*       a*   n
-  dariers disease                                  2.27    51.26    11.24    13.41   25
-  papilomatosis confluentes and reticulate         5.27    52.91    22.78    14.87   24
-  pityriasis rubra pilaris                        21.19    56.95    17.71    14.86   105
-  -- for contrast, the source-population support of each task --
-  dariers disease                                  8.61    55.26    19.24    13.60
-  papilomatosis confluentes and reticulate        20.92    59.91    25.94    15.08
-  pityriasis rubra pilaris                        26.27    57.76    17.31    15.10
 
 
 distance from the real target population, in phototype-statistic space
@@ -334,5 +310,3 @@ what this can and cannot support
   I-II against V-VI the archive collapses to three conditions in total.
 
 per-cell values written to handoff/results/C4_test.json
-
-grid written to handoff/results/C4_test_grid.png
