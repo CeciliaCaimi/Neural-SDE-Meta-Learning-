@@ -1,5 +1,29 @@
 # training/train_meta.py
 # Meta-Training Loop with Randomized Context (Robustness Fix)
+#
+# --- Full pipeline (item 1: factorised z_f/z_g model) ---
+# 1. Generate theta parameters for train/val plus whichever test regimes
+#    you want. The legacy combined-shift regimes (A, B, C) are the default;
+#    pass --regimes factorised to also generate the item-1 regime set
+#    (none, drift_only, diffusion_only, combined, ood_1..ood_5):
+#       python -m data_gen.generate_meta_params --regimes factorised
+# 2. Simulate trajectories and build data/index.csv for every regime that
+#    was just generated (this script is regime-name agnostic, no flag
+#    needed):
+#       python -m data_gen.generate_trajectories
+# 3. Train the factorised model (this script). No regime flag needed here —
+#    training only touches the train/val split; checkpoints land in
+#    checkpoints/meta_epoch_{10,20,...}.pt (gitignored):
+#       python -m training.train_meta
+# 4. Run test-time adaptation + evaluation, selecting which regimes to
+#    score against with --regimes (default is the legacy testA/testB/testC;
+#    pass --regimes factorised for the item-1 regime set):
+#       python -m adaptation.gated_finetuning_regularized --regimes factorised
+#
+# Expect step 2 (trajectory simulation) and step 3 (training, 50 epochs
+# over cfg.dataset_sizes.n_train_thetas thetas x ~80 trajectories each) to be
+# the compute-heavy stages — run those on a GPU box. Steps 1 and 4 are cheap
+# by comparison (theta sampling, and a handful of Adam steps per test task).
 
 import os
 import torch
