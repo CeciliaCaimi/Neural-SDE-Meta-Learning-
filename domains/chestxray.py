@@ -106,7 +106,12 @@ class ZipIndex:
     handles stay open: reopening per image would dominate the decode time.
     """
 
-    def __init__(self, root: str | None = None) -> None:
+    #: The release has twelve archives. An index built from fewer is not an error the caller
+    #: can be allowed to miss: it would either fail later with a confusing "image is in no
+    #: archive", or, worse, let a run train on whatever happened to have arrived.
+    N_ARCHIVES = 12
+
+    def __init__(self, root: str | None = None, allow_partial: bool = False) -> None:
         self.root = root or DEFAULT_ROOT
         paths = sorted(
             os.path.join(self.root, f) for f in os.listdir(self.root)
@@ -116,13 +121,29 @@ class ZipIndex:
                 f"no images_*.zip in {self.root}; run scripts/fetch_cxr.py")
         self._zips: dict[str, zipfile.ZipFile] = {}
         self.where: dict[str, tuple[str, str]] = {}
+        self.incomplete: list[str] = []
         for p in paths:
-            z = zipfile.ZipFile(p)
+            try:
+                z = zipfile.ZipFile(p)
+            except zipfile.BadZipFile:
+                # Almost always a download still in flight: fetch_cxr.py appends, so a
+                # partial file has no readable central directory yet.
+                self.incomplete.append(os.path.basename(p))
+                continue
             self._zips[p] = z
             for member in z.namelist():
                 if member.endswith(".png"):
                     self.where[os.path.basename(member)] = (p, member)
-        self.archives = paths
+        self.archives = list(self._zips)
+        missing = self.N_ARCHIVES - len(self.archives)
+        if (self.incomplete or missing > 0) and not allow_partial:
+            raise RuntimeError(
+                f"{len(self.archives)} of {self.N_ARCHIVES} archives are readable in "
+                f"{self.root}"
+                + (f"; still downloading or corrupt: {', '.join(self.incomplete)}"
+                   if self.incomplete else "")
+                + ". Let scripts/fetch_cxr.py finish, then retry. Pass allow_partial=True "
+                  "only to inspect what has arrived -- never to train or evaluate on it.")
 
     def __len__(self) -> int:
         return len(self.where)
