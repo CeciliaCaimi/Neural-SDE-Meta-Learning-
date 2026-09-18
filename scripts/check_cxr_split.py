@@ -42,7 +42,8 @@ def check(name: str, ok: bool, detail: str = "") -> None:
 
 
 def main() -> int:
-    path = os.path.join(_ROOT, "artifacts", "chestxray_split.json")
+    arg = sys.argv[1] if len(sys.argv) > 1 else "artifacts/chestxray_split_v2.json"
+    path = arg if os.path.isabs(arg) else os.path.join(_ROOT, arg)
     if not os.path.exists(path):
         raise SystemExit(f"{path} not found; run runner/build_cxr_splits.py first")
     with open(path, encoding="utf-8") as f:
@@ -126,6 +127,48 @@ def main() -> int:
     check("no patient appears in two splits",
           not any(len(v) > 1 for v in pat_split.values()),
           f"{sum(1 for v in pat_split.values() if len(v) > 1)} do")
+
+    print("\n4b. inside one (task, relation), support and query are different patients")
+    # Added after the audit of 2026-09-18. v1 passed every check above and still leaked here:
+    # the K_T support and the held-out query of one (task, relation) shared patients in all 30
+    # pairs, so every arm that reads the support was scored partly against the same chests.
+    leak_pairs, leak_imgs = 0, 0
+    for f, t in tasks.items():
+        for rel, tt in t["targets"].items():
+            sp = {ann[n].patient for n in tt["tgt_support_reserve"]}
+            shared = [n for n in tt["tgt_query"] if ann[n].patient in sp]
+            if shared:
+                leak_pairs += 1
+                leak_imgs += len(shared)
+    check("no held-out query image shares a patient with its own K_T support",
+          leak_pairs == 0, f"{leak_pairs} (task, relation) pairs, {leak_imgs} query images")
+    dup_res = [(f, rel) for f, t in tasks.items() for rel, tt in t["targets"].items()
+               if len({ann[n].patient for n in tt["tgt_support_reserve"]})
+               != len(tt["tgt_support_reserve"])]
+    check("every K_T support image is a different patient, so K_T counts people",
+          not dup_res, f"{len(dup_res)} reserves repeat a patient")
+    sq = sum(len({ann[n].patient for n in t["src_support"]}
+                 & {ann[n].patient for n in t["src_query"]}) for t in tasks.values())
+    check("source support and source query share no patient", sq == 0, f"{sq} shared")
+
+    print("\n4c. abundant source, scarce target -- the plan's own wording in C0 and C4")
+    ms, kmax = d["config"]["m_source"], d["config"]["tgt_support_reserve"]
+    check("M_S per episode exceeds the largest K_T", ms > kmax,
+          f"M_S={ms}, max K_T={kmax}, ratio {ms/kmax:.1f}")
+    thin_src = [f for f, t in tasks.items() if len(t["src_support"]) < ms]
+    check("every task's source pool funds M_S", not thin_src, str(thin_src))
+    fixed = [f for f, t in tasks.items() if len(t["src_support"]) <= ms]
+    check("every source pool exceeds M_S, so episodes see different source sets",
+          not fixed, f"{len(fixed)} tasks show the encoder one fixed set every episode")
+    src_n = sum(len(t["src_support"]) + len(t["src_query"]) for t in tasks.values())
+    tgt_n = {rel: sum(len(t["targets"][rel]["tgt_support_reserve"])
+                      + len(t["targets"][rel]["tgt_query"]) for t in tasks.values())
+             for rel in rel_bins}
+    pool20 = sum(1 for t in tasks.values() if len(t["src_support"]) >= 20 * kmax)
+    print(f"     source images allocated {src_n}; target per relation "
+          + ", ".join(f"{r} {n}" for r, n in tgt_n.items()))
+    print(f"     the document's M_S >> K_T test wants a source pool of 20 x max K_T = "
+          f"{20*kmax}: {pool20} of {len(tasks)} tasks meet it (reported, not required here)")
 
     print("\n5. the labels, read from the published annotation")
     bad_bin_src = [n for f, t in tasks.items() for n in t["src_support"] + t["src_query"]

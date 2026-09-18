@@ -1,0 +1,66 @@
+1. the split as the loader will read it
+     source bin 30-45   relations 0-30, 45-60, 60-75   checksum e2a736a45aa7...
+     train  4: Atelectasis, Effusion, Infiltration, Nodule
+     val    3: Consolidation, Emphysema, Pleural_Thickening
+     test   3: Cardiomegaly, Mass, Pneumothorax
+  PASS  three or more relations, which is the reason this dataset replaced Fitzpatrick   3 relations
+  PASS  the task partition is three-way and non-empty
+  PASS  no task appears in two splits
+  PASS  only training tasks fund a source query stream
+
+2. no image is in two places
+  PASS  every image belongs to exactly one task, relation and stream   0 shared, e.g. []
+  PASS  the image count agrees with what the builder recorded   14310 against 14310
+
+3. the population shift is between different patients
+  PASS  no patient is on both sides of the population shift   0 on both sides
+  PASS  no patient appears under two relations   0 relation pairs share a patient
+        260 source patients, 7988 target patients
+
+4. no patient crosses the task split
+  PASS  no patient appears under two tasks   0 do
+  PASS  no patient appears in two splits   0 do
+
+4b. inside one (task, relation), support and query are different patients
+  FAIL  no held-out query image shares a patient with its own K_T support   30 (task, relation) pairs, 1168 query images
+  FAIL  every K_T support image is a different patient, so K_T counts people   22 reserves repeat a patient
+  FAIL  source support and source query share no patient   8 shared
+
+4c. abundant source, scarce target -- the plan's own wording in C0 and C4
+  FAIL  M_S per episode exceeds the largest K_T   M_S=16, max K_T=20, ratio 0.8
+  PASS  every task's source pool funds M_S   []
+  FAIL  every source pool exceeds M_S, so episodes see different source sets   10 tasks show the encoder one fixed set every episode
+     source images allocated 288; target per relation 0-30 3203, 45-60 6563, 60-75 4256
+     the document's M_S >> K_T test wants a source pool of 20 x max K_T = 400: 0 of 10 tasks meet it (reported, not required here)
+
+5. the labels, read from the published annotation
+  PASS  every source image is in the source age bin (30-45)   0 are not
+  PASS  every target image is in the age bin of its own relation   0 are not
+  PASS  every image's finding matches the task it is filed under   0 mismatched
+  PASS  no multi-label image is used   0 are
+  PASS  every task is one of the fourteen findings
+
+6. what the split can fund
+  PASS  every (task, relation) funds the K_T reserve of 20   0 short
+  PASS  every (task, relation) funds a held-out query of 24   []
+     val    3 tasks x 3 relations = 9 episodes per K_T; smallest held-out query per relation 34
+     test   3 tasks x 3 relations = 9 episodes per K_T; smallest held-out query per relation 102
+
+7. the confound the gate flagged: view mix
+     AP and PA are different geometries. A model could score on the population
+     shift by learning the geometry instead, so the mix is reported per side.
+     source 30-45    AP 40.3%
+     target 0-30     AP 45.9%
+     target 45-60    AP 36.9%
+     target 60-75    AP 35.2%
+     spread 10.8 percentage points
+  PASS  the view mix does not differ so much that it could stand in for the shift   10.8 pp -- report it beside every verdict
+
+------------------------------------------------------------------------------
+5 FAILED:
+  - no held-out query image shares a patient with its own K_T support
+  - every K_T support image is a different patient, so K_T counts people
+  - source support and source query share no patient
+  - M_S per episode exceeds the largest K_T
+  - every source pool exceeds M_S, so episodes see different source sets
+------------------------------------------------------------------------------

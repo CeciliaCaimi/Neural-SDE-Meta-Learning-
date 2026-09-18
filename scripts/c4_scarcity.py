@@ -79,7 +79,10 @@ def main() -> None:
     ap.add_argument("ckpt")
     ap.add_argument("--fitz-path", default="artifacts/fitzpatrick_split.json")
     ap.add_argument("--split", default="test", choices=("train", "val", "test"))
-    ap.add_argument("--k-shots", type=int, nargs="+", default=[1, 2, 3, 5, 8, 12, 20])
+    # The plan's C4 grid is {1, 2, 5, 10, 20}. The Fitzpatrick run used {1,2,3,5,8,12,20},
+    # which omits K_T = 10 -- and 10 is the point the plan's headline form needs ("the method
+    # at K_T = 2 matches target-only at K_T = 10"). The default now follows the plan.
+    ap.add_argument("--k-shots", type=int, nargs="+", default=[1, 2, 5, 10, 20])
     ap.add_argument("--repeats", type=int, default=8,
                     help="source-support resamples per (task, K_T). Averages out which "
                          "source photographs the encoder saw; creates no new tasks.")

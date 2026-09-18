@@ -45,7 +45,9 @@ DEFAULT_ROOT = os.environ.get("CHESTXRAY_ROOT") or os.path.normpath(
     os.path.join(_ROOT, "..", "..", "..", "dataset", "chestxray14"))
 
 # What a task has to fund, carried over from stage A and from Stage C's split builder.
-M_S = 16              # source images the encoder sees; A4 showed saturation below sixteen
+M_S = 64              # source images per episode. Was 16, which A4 licenses on evidence but
+                      # which put M_S below max K_T = 20 -- against the plan's "abundant source"
+                      # and the document's M_S >> K_T. 64 is stage A's own value.
 SRC_QUERY = 32        # source query batch, training tasks only
 TGT_RESERVE = 20      # target support reserve, a nested prefix, so max K_T
 TGT_QUERY_MIN = 24    # held-out target images a task needs to be measurable at all
@@ -67,8 +69,11 @@ def main() -> None:
     ap.add_argument("--root", default=DEFAULT_ROOT)
     ap.add_argument("--edges", type=int, nargs="+", default=[0, 30, 45, 60, 75, 96],
                     help="age bin edges, half-open, chosen from the observed counts")
-    ap.add_argument("--source-bin", type=int, default=1,
-                    help="index of the source population bin; the rest are candidate targets")
+    ap.add_argument("--source-bin", type=int, default=2,
+                    help="index of the source population bin; the rest are candidate targets. "
+                         "The plan asks for a source-rich / target-sparse relation, so the "
+                         "default is the richest bin, 45-60. It was 30-45 until the audit of "
+                         "2026-09-18.")
     ap.add_argument("--patient-policy", choices=("modal", "drop"), default="modal",
                     help="what to do with a patient carrying more than one finding. They "
                          "leak across the TASK split, which is the split that makes the "
