@@ -110,6 +110,9 @@ class ZipIndex:
     #: can be allowed to miss: it would either fail later with a confusing "image is in no
     #: archive", or, worse, let a run train on whatever happened to have arrived.
     N_ARCHIVES = 12
+    #: Images in the published release. Checked, because the archives also carry 34999
+    #: resource forks and an index that counted those would look complete while being wrong.
+    N_IMAGES = 112120
 
     def __init__(self, root: str | None = None, allow_partial: bool = False) -> None:
         self.root = root or DEFAULT_ROOT
@@ -122,6 +125,7 @@ class ZipIndex:
         self._zips: dict[str, zipfile.ZipFile] = {}
         self.where: dict[str, tuple[str, str]] = {}
         self.incomplete: list[str] = []
+        self.n_resource_forks = 0
         for p in paths:
             try:
                 z = zipfile.ZipFile(p)
@@ -132,10 +136,24 @@ class ZipIndex:
                 continue
             self._zips[p] = z
             for member in z.namelist():
-                if member.endswith(".png"):
-                    self.where[os.path.basename(member)] = (p, member)
+                # Skip AppleDouble resource forks. Whoever built these archives zipped them
+                # on a Mac, so every image has a "__MACOSX/images/._NAME.png" companion that
+                # is metadata, not a picture. There are 34999 of them, they are not in the
+                # annotation table, and indexing them inflates the image count by a third.
+                if not member.endswith(".png"):
+                    continue
+                base = os.path.basename(member)
+                if member.startswith("__MACOSX/") or base.startswith("._"):
+                    self.n_resource_forks += 1
+                    continue
+                self.where[base] = (p, member)
         self.archives = list(self._zips)
         missing = self.N_ARCHIVES - len(self.archives)
+        if not self.incomplete and missing == 0 and len(self.where) != self.N_IMAGES:
+            raise RuntimeError(
+                f"{len(self.where)} images indexed from twelve archives, but the release has "
+                f"{self.N_IMAGES}. Something about this copy is not the release; do not train "
+                "on it until the difference is understood.")
         if (self.incomplete or missing > 0) and not allow_partial:
             raise RuntimeError(
                 f"{len(self.archives)} of {self.N_ARCHIVES} archives are readable in "
