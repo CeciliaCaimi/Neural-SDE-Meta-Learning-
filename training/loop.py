@@ -142,6 +142,31 @@ def train(cfg: BaseConfig, model_cls: type[ScoreModel] | None = None) -> str:
     np.random.seed(cfg.global_seed)
     device = torch.device(cfg.device if torch.cuda.is_available() else "cpu")
 
+    if cfg.episodes.scheme == "chestxray":
+        # Stage C, second attempt. Several relations, so n_relations is set and the relation
+        # descriptor is carried -- the one structural difference from the fitzpatrick scheme
+        # below, and the reason this dataset replaced it.
+        from domains.chestxray import ZipIndex, load_chestxray
+        from episodes.chestxray import CXRLoader, load_cxr_split
+        split = load_cxr_split(cfg.episodes.cxr_path)
+        cfg.model.n_relations = split.n_relations if split.n_relations > 1 else None
+        raw = load_chestxray(names=split.all_images(), index=ZipIndex())
+        loader = CXRLoader(
+            raw, split, "train", device=device,
+            enc_source_images=cfg.episodes.enc_source_images,
+            query_batch=cfg.episodes.query_batch,
+            k_shots=cfg.episodes.k_shots, seed=cfg.global_seed)
+        diag_loader = CXRLoader(
+            raw, split, "val", device=device,
+            enc_source_images=cfg.episodes.enc_source_images,
+            query_batch=cfg.episodes.query_batch,
+            k_shots=cfg.episodes.k_shots, seed=cfg.global_seed + 1)
+        diag_loader.images = loader.images
+        print(f"chestxray: {len(split.names('train'))} train / {len(split.names('val'))} val "
+              f"/ {len(split.names('test'))} test tasks, {split.n_relations} relations "
+              f"({', '.join(split.relation_names)}) from source {split.source['name']}")
+        return _run(cfg, device, loader, diag_loader, model_cls)
+
     if cfg.episodes.scheme == "fitzpatrick":
         # Stage C. The conditions are split, so a model is never evaluated on a condition it
         # trained on; and with one relation n_relations stays None and the relation

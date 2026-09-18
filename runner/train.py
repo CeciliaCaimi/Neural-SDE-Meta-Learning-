@@ -40,9 +40,14 @@ def parse() -> argparse.Namespace:
                    help="transformation strength; used by the relatedness sweep")
     p.add_argument("--m-source", type=int, default=None,
                    help="M_S: source images fed to the encoder (source-evidence sweep)")
-    p.add_argument("--scheme", choices=("sibling", "domainshift", "fitzpatrick"), default=None,
+    p.add_argument("--scheme",
+                   choices=("sibling", "domainshift", "fitzpatrick", "chestxray"), default=None,
                    help="split scheme; domainshift = clean to corrupted, fitzpatrick = "
-                        "Stage C's real population shift across skin phototype")
+                        "Stage C's skin-phototype shift (one relation), chestxray = Stage "
+                        "C's age shift on ChestX-ray14 (three relations)")
+    p.add_argument("--cxr-path", type=str, default=None,
+                   help="which ChestX-ray14 task split to train on; pass it explicitly, as "
+                        "the split file fixes the task partition and the relation set")
     p.add_argument("--fitz-path", type=str, default=None,
                    help="which Fitzpatrick condition split to train on. As with the "
                         "domain-shift file, pass it explicitly: the split file fixes the "
@@ -114,6 +119,8 @@ def configure(a: argparse.Namespace) -> BaseConfig:
         cfg.episodes.domainshift_path = a.domainshift_path
     if a.fitz_path is not None:
         cfg.episodes.fitz_path = a.fitz_path
+    if a.cxr_path is not None:
+        cfg.episodes.cxr_path = a.cxr_path
     if a.severity is not None:
         cfg.episodes.severity_override = a.severity
     if a.m_source is not None:
@@ -133,6 +140,8 @@ def configure(a: argparse.Namespace) -> BaseConfig:
         cfg.episodes.domainshift_path = os.path.join(_ROOT, cfg.episodes.domainshift_path)
     if not os.path.isabs(cfg.episodes.fitz_path):
         cfg.episodes.fitz_path = os.path.join(_ROOT, cfg.episodes.fitz_path)
+    if not os.path.isabs(cfg.episodes.cxr_path):
+        cfg.episodes.cxr_path = os.path.join(_ROOT, cfg.episodes.cxr_path)
     if not os.path.isabs(cfg.train.ckpt_dir):
         cfg.train.ckpt_dir = os.path.join(_ROOT, cfg.train.ckpt_dir)
 
