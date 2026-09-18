@@ -29,7 +29,8 @@ LAMBDA_HEAD = 0.1  # Weight for forecasting loss
 def simulate_neural_sde_batch(
     sde: NeuralSDE,
     x0: torch.Tensor,         # (batch, d)
-    z: torch.Tensor,          # (batch, z_dim)
+    z_f: torch.Tensor,        # (batch, zf_dim) — drift latent
+    z_g: torch.Tensor,        # (batch, zg_dim) — diffusion latent
     T: float,
     n_steps: int,
     x_max_abs: float,
@@ -43,17 +44,17 @@ def simulate_neural_sde_batch(
     batch_size, d = x0.shape
     dt = T / n_steps
     sqrt_dt = dt ** 0.5
-    
+
     traj = torch.zeros(batch_size, n_steps + 1, d, device=device)
     x = x0.clone()
     traj[:, 0, :] = x
-    
+
     for k in range(n_steps):
         t = torch.tensor(k * dt, device=device)
-        
-        # Drift and diffusion
-        b = sde.f(t, x, z)              # (batch, d)
-        G = sde.g(t, x, z)              # (batch, d, d) diagonal
+
+        # Drift and diffusion, each conditioned on its own latent
+        b = sde.f(t, x, z_f)             # (batch, d)
+        G = sde.g(t, x, z_g)             # (batch, d, d) diagonal
         
         # Brownian increment
         dW = torch.randn(batch_size, d, device=device, generator=generator) * sqrt_dt
@@ -111,8 +112,8 @@ def train_meta_loop():
     
     # Ensure you increased encoder_hidden_dim in config/base_config.py!
     encoder = TrajEncoder(x_dim, z_dim, cfg.latent.encoder_hidden_dim, num_layers=2, dropout=0.1).to(device)
-    sde = NeuralSDE(x_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
-    head = ForecastHead(x_dim, z_dim, cfg.latent.head_hidden_dim).to(device)
+    sde = NeuralSDE(x_dim, z_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
+    head = ForecastHead(x_dim, z_dim, z_dim, cfg.latent.head_hidden_dim).to(device)
 
     params = list(encoder.parameters()) + list(sde.parameters()) + list(head.parameters())
     optimizer = optim.Adam(params, lr=LEARNING_RATE)
@@ -146,13 +147,13 @@ def train_meta_loop():
             # This teaches the encoder to handle "starvation" (short inputs).
             current_obs_len = torch.randint(low=20, high=OBS_LEN + 1, size=(1,)).item()
             
-            obs = traj_batch[:, :current_obs_len, :] 
-            z = encoder(obs)
+            obs = traj_batch[:, :current_obs_len, :]
+            z_f, z_g = encoder(obs)
 
             # -------- B. Neural SDE: Simulate Full Path --------
             x0 = traj_batch[:, 0, :]
             traj_pred = simulate_neural_sde_batch(
-                sde, x0, z, T, n_steps, x_max_abs, gen
+                sde, x0, z_f, z_g, T, n_steps, x_max_abs, gen
             )
 
             # Align lengths if needed
@@ -165,7 +166,7 @@ def train_meta_loop():
 
             # -------- C. Forecast Head --------
             final_pred_sde = traj_pred[:, -1, :]
-            head_pred = head(final_pred_sde, z)
+            head_pred = head(final_pred_sde, z_f, z_g)
             target_final = traj_true[:, -1, :]
 
             # -------- D. Loss --------
