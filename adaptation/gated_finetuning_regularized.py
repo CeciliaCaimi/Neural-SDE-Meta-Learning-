@@ -20,6 +20,7 @@ from models.encoder import TrajEncoder
 from models.neural_sde import NeuralSDE
 from models.head import ForecastHead
 from training.train_meta import simulate_neural_sde_batch
+from sde_basis.parameterised_sde import drift_true, sigma_diag_true
 
 # === HYPERPARAMETERS ===
 ADAPT_STEPS = 50        
@@ -111,12 +112,64 @@ def compute_residual(sde, head, zf, zg, support, gen, cfg):
         valid_len = min(traj.shape[1], T)
         return F.mse_loss(traj[:, :valid_len], support[:, :valid_len]).item()
 
-def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=None):
+def compute_mechanism_error(sde, theta, zf, zg, query_in, query_orig, target_scaler):
+    """Drift/diffusion identification error (item 1's "drift error"/"diffusion
+    error" metrics): compares the adapted model's drift and diffusion
+    functions against the true basis-generated drift/diffusion, evaluated
+    pointwise at every observed query state (no simulation involved — this
+    is a one-step check, the same style as the existing mse_1step metric).
+
+    Args:
+        theta: ground-truth Theta for this task (drift/diffusion basis
+            coefficients), on the same device as query_in/query_orig.
+        zf, zg: the adapted (smart) drift/diffusion latents, shape (1, z_dim).
+        query_in: (N_query, T, D) query trajectory, in the same (possibly
+            normalized) coordinate frame the SDE nets were trained in.
+        query_orig: (N_query, T, D) query trajectory in original simulator
+            units — this is the frame drift_true/sigma_diag_true operate in.
+        target_scaler: the StandardScaler used to go from query_orig to
+            query_in, or None if the model operates on raw data.
+    """
+    B, T, D = query_orig.shape
+    x_raw = query_orig.reshape(-1, D)
+    x_in = query_in.reshape(-1, D)
+    n = x_in.shape[0]
+
+    zf_exp = zf.expand(n, -1)
+    zg_exp = zg.expand(n, -1)
+    t_dummy = torch.zeros(n, device=x_in.device)
+
+    with torch.no_grad():
+        drift_pred = sde.f(t_dummy, x_in, zf_exp)                       # (n, D)
+        diff_pred_mat = sde.g(t_dummy, x_in, zg_exp)                    # (n, D, D)
+        diff_pred = torch.diagonal(diff_pred_mat, dim1=-2, dim2=-1)     # (n, D)
+
+    if target_scaler is not None:
+        # The model's drift/diffusion were learned in normalized coordinates.
+        # For a per-dimension affine normalization x_in = (x_raw - mean) / std,
+        # d(x_in)/dt = (1/std) * d(x_raw)/dt, so we rescale back to raw units
+        # by multiplying by std elementwise (same for the diffusion amplitude).
+        scale = torch.as_tensor(
+            target_scaler.scale_, dtype=drift_pred.dtype, device=drift_pred.device
+        )
+        drift_pred = drift_pred * scale
+        diff_pred = diff_pred * scale
+
+    drift_target = drift_true(x_raw, theta)          # (n, D)
+    diff_target = sigma_diag_true(x_raw, theta)       # (n, D)
+
+    drift_error = F.mse_loss(drift_pred, drift_target).item()
+    diffusion_error = F.mse_loss(diff_pred, diff_target).item()
+    return drift_error, diffusion_error
+
+def gated_inference(encoder, sde, head, support, query, gen, cfg, theta, target_scaler=None):
     """Run gated adaptation and inference for one task.
 
     Args:
         support: (N_shots, T, D) — raw (unnormalized) support trajectories.
         query:   (N_query, T, D) — raw (unnormalized) query trajectories.
+        theta: ground-truth Theta (drift/diffusion basis coefficients) for
+            this task, used only to compute drift_error/diffusion_error.
         target_scaler: StandardScaler fitted on the support set for this task.
             When provided, support and query are normalized before the model
             sees them. Predictions are inverted back to original units before
@@ -142,6 +195,10 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
     # jointly by Adam, so each adapts independently in response to its own
     # gradient (the drift-facing vs. diffusion-facing latent are not tied).
     head_opt, zf_opt, zg_opt, adapt_time = adapt_model(sde, head, zf_init, zg_init, support_in, gen, cfg)
+
+    # 2b. Latent movement under adaptation (item 1's ||Delta z_f||, ||Delta z_g||)
+    delta_zf_norm = (zf_opt - zf_init).norm().item()
+    delta_zg_norm = (zg_opt - zg_init).norm().item()
 
     # 3. Gate
     # d_res is in units of (state value)^2 and is scale-dependent. Dividing by
@@ -188,6 +245,14 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
         mean  = mean_norm
         query_orig = query_in
 
+    # Drift/diffusion identification error (item 1): how well the adapted
+    # model's mechanism functions match the true drift/diffusion, evaluated
+    # at the query states. Uses the "smart" (adapted) latents — the point is
+    # to check what the adapted model *learned*, not the safe fallback.
+    drift_error, diffusion_error = compute_mechanism_error(
+        sde, theta, zf_opt, zg_opt, query_in, query_orig, target_scaler
+    )
+
     mse_rollout = F.mse_loss(mean, query_orig).item()
     mse_final   = F.mse_loss(mean[:, -1], query_orig[:, -1]).item()
     mse_1step   = F.mse_loss(mean[:, 1],  query_orig[:, 1]).item()
@@ -217,6 +282,10 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
         "rmse_per_dim_mean": rmse_per_dim_mean,
         "rmse_per_dim_max": rmse_per_dim_max,
         "nll": nll,
+        "drift_error": drift_error,
+        "diffusion_error": diffusion_error,
+        "delta_zf_norm": delta_zf_norm,
+        "delta_zg_norm": delta_zg_norm,
     }
 
 EXPECTED_COLUMNS = [
@@ -226,6 +295,8 @@ EXPECTED_COLUMNS = [
     "rmse_rollout", "rmse_final",
     "rmse_per_dim_mean", "rmse_per_dim_max",
     "nll",
+    "drift_error", "diffusion_error",
+    "delta_zf_norm", "delta_zg_norm",
 ]
 
 
@@ -266,11 +337,23 @@ def _init_or_repair_csv(path: str) -> set:
     return completed_keys
 
 
-def main():
+def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
+    """
+    Args:
+        regimes: which "test<Regime>" splits to evaluate (e.g.
+            ["testA", "testB", "testC"] or ["testnone", "testdrift_only", ...]).
+            Defaults to the legacy combined-shift regimes ["testA", "testB",
+            "testC"] if omitted. See the module docstring / --regimes CLI flag.
+        checkpoint_path: path to the trained checkpoint (encoder/sde/head
+            state dicts + source_scaler), produced by training/train_meta.py.
+    """
+    if regimes is None:
+        regimes = ["testA", "testB", "testC"]
+
     device = torch.device(cfg.device)
     print("🛡️  Resumable Gated Finetuning (REGULARIZED + NORMALISED) Started...")
 
-    ckpt = torch.load("checkpoints/meta_epoch_50.pt", map_location=device, weights_only=False)
+    ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
     x_dim, z_dim = cfg.basis.x_dim, cfg.latent.latent_dim
     encoder = TrajEncoder(x_dim, z_dim, cfg.latent.encoder_hidden_dim).to(device)
     sde = NeuralSDE(x_dim, z_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
@@ -292,18 +375,29 @@ def main():
         print("     Metrics will be computed in raw simulator units as before.")
         print("     Retrain with train_meta.py to activate full normalization.")
 
+    # --- Ground-truth thetas, needed for the drift_error/diffusion_error
+    # metrics: meta_params maps "test<Regime>" -> List[Theta], keyed by the
+    # same theta_id strings used in index.csv.
+    meta_params = torch.load(cfg.paths.meta_params_path, map_location="cpu", weights_only=False)
+
     gen = torch.Generator(device=device); gen.manual_seed(42)
     index_path = os.path.join(cfg.paths.data_root, "index.csv")
 
     completed_keys = _init_or_repair_csv(RESULTS_PATH)
     buffer = []
 
-    for regime in ["testA", "testB", "testC"]:
+    for regime in regimes:
         try:
             ds_supp  = TrajectoryDataset(index_path, regime, "support")
             ds_query = TrajectoryDataset(index_path, regime, "query")
         except:
             continue
+
+        if regime not in meta_params:
+            print(f"  ⚠️  No ground-truth thetas for regime={regime} in "
+                  f"{cfg.paths.meta_params_path}; skipping.")
+            continue
+        theta_by_id = {t.id: t.to(device) for t in meta_params[regime]}
 
         tasks = ds_supp.metadata["theta_id"].unique()
 
@@ -314,6 +408,8 @@ def main():
             )
             if not needed:
                 continue
+
+            theta = theta_by_id[theta_id]
 
             # Raw (unnormalized) tensors — normalization is applied inside
             # gated_inference via the per-task target_scaler.
@@ -336,7 +432,7 @@ def main():
                 metrics = gated_inference(
                     encoder, sde, head,
                     supp_full[:, :steps], query,
-                    gen, cfg,
+                    gen, cfg, theta,
                     target_scaler=target_scaler,
                 )
                 metrics.update({
@@ -355,11 +451,52 @@ def main():
 
     print("\n✅ Regularized Run Complete.")
     full_df = pd.read_csv(RESULTS_PATH)
-    print(full_df[full_df['regime'] == 'testC'].groupby('steps_available')[
+    # Summarize the hardest/last-requested regime (prefer legacy testC when
+    # present, since that's the strongest of the original three regimes).
+    summary_regime = "testC" if "testC" in regimes else regimes[-1]
+    print(f"\nSummary for regime={summary_regime}:")
+    print(full_df[full_df['regime'] == summary_regime].groupby('steps_available')[
         ['mse_rollout', 'rmse_rollout', 'rmse_per_dim_mean', 'rmse_per_dim_max',
-         'residual_error', 'gate_value']
+         'residual_error', 'gate_value',
+         'drift_error', 'diffusion_error', 'delta_zf_norm', 'delta_zg_norm']
     ].mean())
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Run gated test-time adaptation + evaluation for the "
+                     "factorised (z_f, z_g) model."
+    )
+    parser.add_argument(
+        "--regimes",
+        type=str,
+        default=None,
+        help=(
+            "Comma-separated 'test<Regime>' splits to evaluate, e.g. "
+            "'testA,testB,testC' (the default if omitted). Pass 'factorised' "
+            "as shorthand for the item-1 regime set generated via "
+            "generate_meta_params.py --regimes factorised: " +
+            ",".join(f"test{r}" for r in cfg.factorised_test_regimes) +
+            ". These splits must already exist in data/index.csv (i.e. "
+            "generate_meta_params.py and generate_trajectories.py must have "
+            "been run for the same regime names first)."
+        ),
+    )
+    parser.add_argument(
+        "--checkpoint",
+        type=str,
+        default="checkpoints/meta_epoch_50.pt",
+        help="Path to the trained checkpoint (default: checkpoints/meta_epoch_50.pt).",
+    )
+    args = parser.parse_args()
+
+    if args.regimes is None:
+        selected_regimes = None
+    elif args.regimes.strip() == "factorised":
+        selected_regimes = [f"test{r}" for r in cfg.factorised_test_regimes]
+    else:
+        selected_regimes = [r.strip() for r in args.regimes.split(",") if r.strip()]
+
+    main(regimes=selected_regimes, checkpoint_path=args.checkpoint)
