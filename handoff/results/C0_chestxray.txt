@@ -1,0 +1,76 @@
+C0 -- NIH ChestX-ray14 as the Stage C population-shift dataset
+==============================================================================
+From the annotation table alone. No images are needed to answer this.
+  112120 rows, 30805 patients
+  single-positive-finding rows: 91324 (81 %)
+  patients straddling an age bin, dropped: 1458 (4.7 %)
+  patients carrying more than one finding: 3168 of 11231 (28.2 %)
+  patient policy 'modal': 27198 -> 19320 rows
+  rows surviving every filter: 19320
+  patients surviving: 11231
+
+
+finding by age bin -- images, and distinct patients in brackets
+  finding                           0-30           30-45           45-60           60-75           75-96
+  -----------------------------------------------------------------------------------------------------
+  Atelectasis                 243 ( 153)      440 ( 255)     1079 ( 653)      739 ( 449)       78 (  61)
+  Cardiomegaly                122 (  91)      147 ( 115)      210 ( 174)      134 ( 124)       43 (  34)
+  Consolidation               105 (  71)       79 (  61)      116 (  85)       66 (  45)       16 (  12)
+  Edema                        31 (  19)       75 (  39)       68 (  38)       30 (  19)        2 (   1)
+  Effusion                    254 ( 115)      418 ( 186)      898 ( 369)      656 ( 296)      122 (  53)
+  Emphysema                   101 (  25)       44 (  27)      131 (  91)      188 ( 133)       45 (  38)
+  Fibrosis                     28 (  20)       73 (  62)      158 ( 135)      121 ( 109)       34 (  33)
+  Hernia                        1 (   1)        4 (   3)       31 (  19)       27 (  21)       14 (   9)
+  Infiltration               1616 ( 851)     1717 ( 984)     2333 (1332)     1285 ( 719)      130 (  76)
+  Mass                        225 ( 136)      280 ( 161)      540 ( 315)      319 ( 205)       52 (  25)
+  Nodule                      176 ( 116)      395 ( 257)      717 ( 496)      420 ( 284)       54 (  48)
+  Pleural_Thickening           54 (  48)      102 (  81)      195 ( 162)      166 ( 144)       27 (  23)
+  Pneumonia                    30 (  30)       30 (  29)       30 (  28)        9 (   8)        5 (   5)
+  Pneumothorax                307 (  76)      273 ( 106)      344 ( 144)      283 (  86)       35 (  12)
+  TOTAL                      3293            4077            6850            4443             657       
+
+
+source population: bin 1 = ages 30-45
+Each remaining bin is one relation. The count that matters is not images but
+TASKS -- a task is a finding, and the conditions are split train/val/test so that
+the relation rather than the task is what generalises.
+
+  a task needs, per its own source side: M_S=16 (+32 query if training)
+  and per relation on the target side:   20 reserve + 24 held-out query = 44
+
+  relations used                      train-capable  eval-capable   suggested split
+  ------------------------------------------------------------------------------
+  0-30                                            9            10             4/3/3
+  0-30,45-60                                      9            10             4/3/3
+  0-30,45-60,60-75                                9            10             4/3/3
+  0-30,45-60,60-75,75-96                          5             6             0/3/3
+
+  'train-capable' also funds a source query batch, which only training tasks read.
+  The split is suggested, not fixed: the builder is what fixes it.
+
+
+verdict
+  PASS. 3 relations (0-30, 45-60, 60-75) against source 30-45,
+  10 usable tasks, suggested 4/3/3.
+  Episodes per K_T on the test side: 3 tasks x 3 relations = 9.
+
+  Compare what this replaces. Fitzpatrick17k gave 3 test tasks and ONE relation,
+  and one relation is why C4 failed: the same shift applies to every episode, so
+  a constant coordinate solves the meta-objective and the correct source task is
+  worth nothing. Several relations is the structure CIFAR had, where the method
+  works. That, not the image count, is the reason to switch.
+
+  Still to check before trusting a headline, and none of it needs the images:
+    - between-task variance dominates, so count episodes as tasks x relations
+    - AP and PA views are different imaging geometries; a view imbalance across
+      age bins would be a confound riding along with the population shift
+    - sex is recorded and is a second candidate population axis
+
+
+view position by age bin, as a share of AP -- the confound to rule out
+  AP and PA are different geometries. If the source and target bins differ in view
+  mix, a model could score on the population shift by learning the geometry instead.
+  bin                               0-30           30-45           45-60           60-75           75-96
+  AP share                         46.0%           39.3%           36.4%           34.5%           37.1%
+  spread across bins: 11.5 percentage points
+  Small enough to report rather than design around.
