@@ -60,12 +60,14 @@ from adaptation.coordinate import adapt                                   # noqa
 from diffusion.sampler import ddim_sample, make_eps_fn                    # noqa: E402
 from domains.chestxray import ZipIndex, load_chestxray                    # noqa: E402
 from episodes.chestxray import CXRBatch, load_cxr_split                   # noqa: E402
-from evaluation.cxr_instruments import ceiling_lines, load_instruments    # noqa: E402
+from evaluation.cxr_instruments import (                                  # noqa: E402
+    ceiling_lines, load_instruments, view_gap,
+)
 from evaluation.metrics_analytic import energy_mmd, kid, sliced_wasserstein  # noqa: E402
 from posthoc_controls import ci95, load_checkpoint                        # noqa: E402
 
 METRICS = ("sw", "mmd", "age_gap")          # lower is better
-READINGS = ("age", "age_src", "age_tgt", "ap", "cls")
+READINGS = ("age", "age_src", "age_tgt", "ap", "ap_real", "cls")
 
 
 @torch.no_grad()
@@ -111,6 +113,11 @@ def main() -> None:
     ap.add_argument("--instruments", default="checkpoints/cxr_instruments.pt")
     ap.add_argument("--film-ckpt", default=None)
     ap.add_argument("--ft-budget", default=None, help="JSON written by --mode select-ft")
+    ap.add_argument("--ft-budget-out", default="handoff/results/C4_cxr_ft_budget.json",
+                    help="where --mode select-ft writes the chosen budget. Kept apart from "
+                         "--out-prefix: sharing one path let the per-cell dump overwrite it.")
+    ap.add_argument("--ft-steps", type=int, nargs="+", default=[25, 100, 400])
+    ap.add_argument("--ft-lrs", type=float, nargs="+", default=[1e-5, 1e-4])
     ap.add_argument("--k-shots", type=int, nargs="+", default=None)
     ap.add_argument("--repeats", type=int, default=None)
     ap.add_argument("--n-samples", type=int, default=96)
@@ -165,7 +172,7 @@ def main() -> None:
 
     base_budget = AdaptBudget(steps=cfg.adapt.steps, lr=cfg.adapt.lr, beta0=cfg.adapt.beta0,
                               noise_batch=cfg.adapt.noise_batch)
-    ft_grid = [(s, lr) for s in (25, 100, 400) for lr in (1e-5, 1e-4)]
+    ft_grid = [(s, lr) for s in a.ft_steps for lr in a.ft_lrs]
     if a.mode == "select-ft":
         arms = [(f"full_ft J={s} lr={lr:g}", "full_ft") for s, lr in ft_grid]
 
@@ -225,6 +232,7 @@ def main() -> None:
                     if k == ks[0] and r == 0:
                         real_feats.append(inst.features(real).cpu())
                     real_age = float(inst.predicted_age(real).mean())
+                    real_ap = inst.ap_share(real)
                     fa_real = real.flatten(1)
                     for name, strat in arms:
                         rgen = torch.Generator(device=dev).manual_seed(cell_seed + 1)
@@ -259,6 +267,7 @@ def main() -> None:
                         c["age_tgt"].append(real_age)
                         c["age_gap"].append(abs(age_g - real_age))
                         c["ap"].append(inst.ap_share(x))
+                        c["ap_real"].append(real_ap)
                         c["cls"].append(inst.finding_share(x, task))
                         feats.setdefault((name, k), []).append(inst.features(x).cpu())
                         if st.model is not None:
@@ -294,6 +303,24 @@ def main() -> None:
           "lower is better; read beside the AP share below, which is the confound")
     table("ap", "AP share of the generated set -- the confound, reported beside every age "
           "reading", "real source and target sets differ in AP share by up to 14.7 points")
+
+    # The confound, bounded rather than described: the age instrument reads AP films towards
+    # the middle of the range, by view_gap years at a given bin, so a set whose AP share differs
+    # from the real target set's by d is misread by about d x gap.
+    emit("")
+    emit("confound bound on the age readings, years: mean |AP share gen - AP share real target|")
+    emit("  x |AP-PA gap of the age instrument at the target bin|, per relation and K_T")
+    hdr = f"  {'arm':<22}{'relation':<9}" + "".join(f"{'K_T=' + str(k):>10}" for k in ks)
+    emit(hdr)
+    for n in [x for x in names if x in ("transport", "target only", "FiLM transport")]:
+        for rel in rels:
+            idx = [i for i, c in enumerate(cells) if c["relation"] == rel]
+            gap = abs(view_gap(inst, rel))
+            row = f"  {n:<22}{rel:<9}"
+            for k in ks:
+                d = np.mean([abs(res[n][k]["ap"][i] - res[n][k]["ap_real"][i]) for i in idx])
+                row += f"{d * gap:>10.2f}"
+            emit(row)
     table("cls", "share of generated films the finding instrument assigns to the task's own "
           "finding", f"higher is better; instrument ceiling {100*inst.report['finding_acc']:.1f}%"
           f", chance {100*inst.report['finding_chance']:.1f}%")
@@ -329,11 +356,12 @@ def main() -> None:
             chosen[k] = {"steps": s_, "lr_weights": lr_}
             emit(f"  K_T={k:<3} J={s_:<4} lr_weights={lr_:g}   "
                  f"sw {cell_ci(best, k, 'sw')[0]:.4f}")
-        out = os.path.join(_ROOT, a.out_prefix or "handoff/results/C4_cxr_ft_budget")
-        with open(out + ".json", "w", encoding="utf-8") as f:
+        out = a.ft_budget_out if os.path.isabs(a.ft_budget_out) \
+            else os.path.join(_ROOT, a.ft_budget_out)
+        with open(out, "w", encoding="utf-8") as f:
             json.dump({"chosen": chosen, "grid": ft_grid, "selected_on": "val, sliced Wasserstein",
                        "checkpoint": os.path.basename(a.ckpt)}, f, indent=1)
-        emit(f"\nwritten to {os.path.relpath(out, _ROOT)}.json")
+        emit(f"\nbudget written to {a.ft_budget_out}")
 
     if a.mode in ("sanity", "c4"):
         emit("")
@@ -363,25 +391,32 @@ def main() -> None:
         emit("  transport at K_T=a matches target-only at K_T=b when transport@a - target@b is")
         emit("  not established worse: its 95% interval over cells reaches zero or below. Rule")
         emit("  fixed in the script's docstring before any result. Full matrix below it.")
+        emit("  'transport' consults no target image, so its row is the same at every a: its")
+        emit("  reading is 'transport with ZERO target films matches target-only at K_T = b'.")
+        emit("  'transport+refine' is the version that uses the K_T films, and varies with a.")
         for metric in ("sw", "age_gap"):
-            emit(f"\n  {metric}")
-            for ka in ks:
-                ok = []
-                for kb in ks:
-                    d = [x - y for x, y in zip(res["transport"][ka][metric],
-                                               res["target only"][kb][metric])]
-                    mu, h = ci95(d)
-                    if mu - h <= 0:
-                        ok.append(kb)
-                verdict = (f"matches target-only up to K_T={max(ok)}" if ok
-                           else "worse than target-only at every K_T")
-                emit(f"    transport at K_T={ka:<3} {verdict}")
-            emit("    matrix of paired means transport@a - target@b (rows a, columns b):")
-            emit("      " + "".join(f"{'b=' + str(kb):>10}" for kb in ks))
-            for ka in ks:
-                emit(f"      a={ka:<3}" + "".join(
-                    f"{np.mean([x - y for x, y in zip(res['transport'][ka][metric], res['target only'][kb][metric])]):>+10.4f}"
-                    for kb in ks))
+            for arm in ("transport", "transport+refine"):
+                emit(f"\n  {metric}, {arm}")
+                for ka in ks:
+                    ok = []
+                    for kb in ks:
+                        d = [x - y for x, y in zip(res[arm][ka][metric],
+                                                   res["target only"][kb][metric])]
+                        mu, h = ci95(d)
+                        if mu - h <= 0:
+                            ok.append(kb)
+                    verdict = (f"matches target-only up to K_T={max(ok)}" if ok
+                               else "worse than target-only at every K_T")
+                    emit(f"    {arm} at K_T={ka:<3} {verdict}")
+                emit(f"    paired means {arm}@a - target@b (rows a, columns b):")
+                emit("      " + "".join(f"{'b=' + str(kb):>10}" for kb in ks))
+                for ka in ks:
+                    row = f"      a={ka:<3}"
+                    for kb in ks:
+                        d = [x - y for x, y in zip(res[arm][ka][metric],
+                                                   res["target only"][kb][metric])]
+                        row += f"{np.mean(d):>+10.4f}"
+                    emit(row)
 
     if a.mode == "sanity":
         emit("")
@@ -400,8 +435,9 @@ def main() -> None:
                  f"{'MOVES towards the target' if moved else 'no established shift'}")
             ap_o = np.mean([res['oracle'][k]['ap'][i] for i in idx])
             ap_s = np.mean([res['reuse z_S'][k]['ap'][i] for i in idx])
-            emit(f"  {'':<16}AP share oracle {100*ap_o:.1f}% vs reuse z_S {100*ap_s:.1f}% "
-                 "(if this moved too, part of the age shift may be geometry)")
+            bound = abs(ap_o - ap_s) * abs(view_gap(inst, rel))
+            emit(f"  {'':<16}AP share oracle {100*ap_o:.1f}% vs reuse z_S {100*ap_s:.1f}%; the "
+                 f"view change can account for at most {bound:.2f} of those years")
 
     # pooled KID
     if a.mode == "c4":

@@ -165,7 +165,15 @@ def build_instruments(split: dict, *, device, seed: int = 4321, cap: int = 40000
     x_f = _to_float(raw.images, np.array([i for i, _ in fl]), device)
     y_f = torch.tensor([row[a.finding] for _, a in fl], device=device)
     finding = TinyCNN(len(findings)).to(device)
-    _fit(finding, x_f, y_f, F.cross_entropy, epochs=12, batch=256, lr=2e-3, rng=rng)
+    # Class-balanced loss. The first build used plain cross-entropy and collapsed onto the
+    # majority class: 81.8 % on Infiltration and 0.0 % on all three test findings, which makes
+    # it an instrument that cannot name the tasks it is asked about. Weighting each class by
+    # the inverse of its frequency is the standard remedy; the ceiling reported beside it is
+    # balanced accuracy, for the same reason.
+    counts = torch.bincount(y_f, minlength=len(findings)).float().clamp_min(1)
+    w = (counts.sum() / (len(findings) * counts)).to(device)
+    _fit(finding, x_f, y_f, lambda out, y: F.cross_entropy(out, y, weight=w),
+         epochs=20, batch=256, lr=2e-3, rng=rng)
 
     inst = CXRInstruments(age=age, view=view, finding=finding, findings=findings,
                           age_mean=mu, age_std=sd).eval()
@@ -212,6 +220,9 @@ def build_instruments(split: dict, *, device, seed: int = 4321, cap: int = 40000
         if fh else float("nan"),
         "finding_chance": 1.0 / len(findings),
         "finding_per_class": per_finding,
+        # mean per-class recall: plain accuracy is dominated by Infiltration
+        "finding_bal_acc": float(np.mean([acc for acc, _ in per_finding.values()]))
+        if per_finding else float("nan"),
         "seed": seed, "split_checksum": split.get("checksum", ""),
     }
     return inst
@@ -251,6 +262,16 @@ def ceiling_lines(inst: CXRInstruments) -> list[str]:
            f"  age      MAE {r['age_mae']:.1f} years, r = {r['age_r']:.3f} "
            f"(true age sd {r['age_sd_true']:.1f})",
            f"  view     {100*r['view_acc']:.1f}% (majority class {100*r['view_chance']:.1f}%)",
-           f"  finding  {100*r['finding_acc']:.1f}% over {len(inst.findings)} findings "
-           f"(chance {100*r['finding_chance']:.1f}%)"]
+           f"  finding  balanced accuracy {100*r.get('finding_bal_acc', float('nan')):.1f}% "
+           f"over {len(inst.findings)} findings (chance {100*r['finding_chance']:.1f}%); "
+           f"plain accuracy {100*r['finding_acc']:.1f}%"]
     return out
+
+
+def view_gap(inst: CXRInstruments, bin_name: str) -> float:
+    """Predicted-age difference between AP and PA films of one true age bin, on held-out
+    patients. The instrument reads AP films towards the middle of the age range, so this is
+    positive for young bins and negative for old ones."""
+    t = inst.report["age_by_bin_and_view"]
+    ap_, pa_ = t.get(f"{bin_name}|AP"), t.get(f"{bin_name}|PA")
+    return (ap_[0] - pa_[0]) if ap_ and pa_ else float("nan")

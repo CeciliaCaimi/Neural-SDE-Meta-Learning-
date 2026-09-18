@@ -62,11 +62,23 @@ def main() -> None:
     lines.append("")
     lines.append(f"  monotone across bins: {'YES' if monotone else 'NO'}")
     if gaps:
-        mean_gap = sum(gaps) / len(gaps)
-        lines.append(f"  mean AP - PA gap at equal true age: {mean_gap:+.1f} years -- the "
-                     "confound in the instrument itself. A generated set whose view mix moves")
-        lines.append("  by d reads as an age shift of roughly d x this gap; every verdict prints "
-                     "the AP share beside the age reading so the two can be separated.")
+        # An earlier version printed the mean of these gaps. That hid the pattern: the gap is
+        # positive for young bins and negative for old ones, so its mean is near zero while
+        # the gap at either end is five or six years.
+        lines.append(f"  AP - PA gap at equal true age runs from {max(gaps):+.1f} to "
+                     f"{min(gaps):+.1f} years across the bins: the instrument reads AP films")
+        lines.append("  towards the middle of the age range. The confound on one set's reading "
+                     "is therefore about")
+        lines.append("  (AP share of the generated set - AP share of the real target set) x "
+                     "(the gap at the target bin).")
+        worst = max(abs(g) for g in gaps)
+        means = [r["age_by_bin_and_view"][f"{b}|all"][0] for b in bins
+                 if f"{b}|all" in r["age_by_bin_and_view"]]
+        spacing = min(b_ - a_ for a_, b_ in zip(means, means[1:])) if len(means) > 1 else 0
+        lines.append(f"  With AP-share differences up to 15 points that is at most "
+                     f"{0.15*worst:.1f} years, against {spacing:.1f} years between the closest")
+        lines.append("  pair of adjacent bin means -- bounded and small, and printed beside every "
+                     "age reading so a reader can apply the bound.")
 
     lines += ["", "finding classifier, per class on held-out patients (chance "
               f"{100*r['finding_chance']:.1f}%)"]

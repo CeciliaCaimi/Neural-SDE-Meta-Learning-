@@ -1,0 +1,40 @@
+C2 -- frozen evaluation instruments for ChestX-ray14
+==============================================================================
+
+frozen instruments (seed 4321, split 43f41bf6b4e8...): trained on 40000 films, ceilings on 10000 films of held-out patients; 5675 held-out-query patients excluded
+  age      MAE 7.9 years, r = 0.718 (true age sd 14.7)
+  view     98.8% (majority class 64.9%)
+  finding  balanced accuracy 20.0% over 14 findings (chance 7.1%); plain accuracy 12.1%
+
+predicted age by true age bin, on held-out patients -- must rise with age
+  true bin               all              PA              AP     AP - PA
+  0-30           33.7 (n1249)     32.2 (n 895)     37.6 (n 354)        +5.4
+  30-45          42.7 (n1780)     41.8 (n1260)     45.1 (n 520)        +3.3
+  45-60          51.7 (n5393)     51.8 (n3239)     51.5 (n2154)        -0.3
+  60-75          57.8 (n1078)     58.6 (n 825)     55.1 (n 253)        -3.5
+  75-96          61.4 (n 500)     64.2 (n 273)     58.0 (n 227)        -6.2
+
+  monotone across bins: YES
+  AP - PA gap at equal true age runs from +5.4 to -6.2 years across the bins: the instrument reads AP films
+  towards the middle of the age range. The confound on one set's reading is therefore about
+  (AP share of the generated set - AP share of the real target set) x (the gap at the target bin).
+  With AP-share differences up to 15 points that is at most 0.9 years, against 3.6 years between the closest
+  pair of adjacent bin means -- bounded and small, and printed beside every age reading so a reader can apply the bound.
+
+finding classifier, per class on held-out patients (chance 7.1%)
+  Edema                   74.0%  (n 50)
+  Hernia                  70.0%  (n 10)
+  Fibrosis                27.0%  (n 89)
+  Pneumothorax            20.9%  (n 196)
+  Effusion                16.9%  (n 307)
+  Emphysema               16.9%  (n 83)
+  Cardiomegaly            14.5%  (n 76)   <- a test task
+  Atelectasis             13.2%  (n 310)
+  Nodule                  10.1%  (n 227)
+  Consolidation            8.6%  (n 93)   <- a test task
+  Mass                     4.5%  (n 177)
+  Infiltration             1.6%  (n 555)
+  Pleural_Thickening       1.4%  (n 72)   <- a test task
+  Pneumonia                0.0%  (n 29)
+
+saved to checkpoints/cxr_instruments.pt; every later evaluation loads this file and refuses it if the split checksum differs
