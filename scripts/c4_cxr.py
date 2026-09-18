@@ -325,9 +325,45 @@ def main() -> None:
           "finding", f"higher is better; instrument ceiling {100*inst.report['finding_acc']:.1f}%"
           f", chance {100*inst.report['finding_chance']:.1f}%")
 
+    # The test that a constant offset cannot pass. A model that realises the population shift
+    # has to give different ages for different relations; regress generated age on the real
+    # target age across cells and the intercept absorbs any constant offset, leaving the slope
+    # as the fraction of the shift actually realised. Added after the first C3 run, whose
+    # ratio table below read a uniform ~4-year offset as 28-58 % of the young shifts.
+    def age_slope(n: str, k: int) -> tuple[float, float]:
+        x = np.array(res[n][k]["age_tgt"]); y = np.array(res[n][k]["age"])
+        if len(x) < 3 or np.var(x) < 1e-9:
+            return float("nan"), float("nan")
+        b = float(np.cov(x, y, bias=True)[0, 1] / np.var(x))
+        resid = y - (y.mean() + b * (x - x.mean()))
+        se = math.sqrt(float((resid ** 2).sum()) / (len(x) - 2) / float(((x - x.mean()) ** 2).sum()))
+        return b, 1.96 * se
+
+    emit("")
+    emit("DEMOGRAPHIC CONSISTENCY -- slope of generated age on real target age across cells")
+    emit("  1 = the whole population shift realised, 0 = none; a constant offset cannot move it.")
+    emit("  The interval treats cells as independent; they are nested in tasks, so it is optimistic.")
+    hdr = f"  {'arm':<22}" + "".join(f"{'K_T=' + str(k):>17}" for k in ks)
+    emit(hdr)
+    emit("  " + "-" * (len(hdr) - 3))
+    for n in names:
+        emit(f"  {n:<22}" + "".join(f"{age_slope(n, k)[0]:>10.3f} +-{age_slope(n, k)[1]:<5.3f}"
+                                  for k in ks))
+    emit("")
+    emit("  mean generated age by the relation the episode asked for, at the largest K_T:")
+    emit(f"  {'':<22}" + "".join(f"{r:>10}" for r in rels) + "    spread")
+    for n in names + ["REAL target"]:
+        src_arm = names[0]
+        ages = [np.mean([res[src_arm if n == "REAL target" else n][ks[-1]]
+                         ["age_tgt" if n == "REAL target" else "age"][i]
+                         for i, c in enumerate(cells) if c["relation"] == r]) for r in rels]
+        emit(f"  {n:<22}" + "".join(f"{v:>10.1f}" for v in ages)
+             + f"{max(ages) - min(ages):>10.1f}")
+
     # the fraction of the real population shift a generated set reproduces, per relation
     emit("")
-    emit("fraction of the real source-to-target age shift reproduced, pooled per relation")
+    emit("fraction of the real source-to-target age shift, pooled per relation -- CAUTION: a")
+    emit("  constant offset reads as a nonzero fraction of every shift here; trust the slope above")
     emit("  (mean gen - mean source) / (mean target - mean source), all on the age instrument;")
     emit("  1 = the whole shift, 0 = none. Pooled as a ratio of means, not a mean of ratios.")
     hdr = f"  {'arm':<22}{'relation':<9}" + "".join(f"{'K_T=' + str(k):>10}" for k in ks)
@@ -421,6 +457,16 @@ def main() -> None:
     if a.mode == "sanity":
         emit("")
         emit("C3 VERDICT -- does abundant target evidence move generation to the target group?")
+        k = ks[-1]
+        b_o, h_o = age_slope("oracle", k)
+        realised = b_o - h_o > 0
+        emit(f"  oracle slope of generated on real target age: {b_o:+.3f} +-{h_o:.3f} -> "
+             + ("the shift IS realised, at least in part" if realised
+                else "NO established relation-dependent shift: the pipeline does not realise "
+                     "the population shift even with abundant target evidence"))
+        emit("  per relation, oracle against reuse z_S (read beside the spread table above; a "
+             "difference smaller than the")
+        emit("  spread of generated age across relations is not evidence of a shift):")
         for rel in rels:
             idx = [i for i, c in enumerate(cells) if c["relation"] == rel]
             k = ks[-1]

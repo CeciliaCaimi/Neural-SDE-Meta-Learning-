@@ -1,0 +1,8 @@
+{
+ "run": "cxr2_64",
+ "step": 18000,
+ "val": 0.02521796996006742,
+ "ckpt": "checkpoints/cxr2_64_step18000.pt",
+ "channels": 64,
+ "steps_total": 30000
+}

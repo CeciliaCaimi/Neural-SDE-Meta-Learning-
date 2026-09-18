@@ -1,0 +1,120 @@
+Stage C on ChestX-ray14 -- mode sanity
+==============================================================================
+checkpoint cxr2_64_step18000.pt step 18000 (EMA), 64 channels, k=16, transport linear
+split      chestxray_split_v2.json (43f41bf6b4e8...), source 45-60, relations 0-30, 30-45, 60-75
+episodes   val tasks ['Mass', 'Pneumothorax'] x 3 relations x 2 resamples; K_T in [20]; M_S = 64; 96 samples, DDIM 50 steps
+frozen instruments (seed 4321, split 43f41bf6b4e8...): trained on 40000 films, ceilings on 10000 films of held-out patients; 5675 held-out-query patients excluded
+  age      MAE 7.9 years, r = 0.718 (true age sd 14.7)
+  view     98.8% (majority class 64.9%)
+  finding  balanced accuracy 20.0% over 14 findings (chance 7.1%); plain accuracy 12.1%
+LoRA / adapter baselines (section 11, 'if available'): not available in this code base and not built.
+
+sliced Wasserstein to the real held-out target set, pixel space
+  lower is better; the plan's main small-sample metric
+  arm                              K_T=20
+  --------------------------------------
+  no adaptation             0.3752 +-0.0073
+  reuse z_S                 0.1203 +-0.0188
+  transport                 0.1177 +-0.0180
+  oracle                    0.1198 +-0.0190
+
+|mean predicted age of the generated set - of the real target set|, years
+  lower is better; read beside the AP share below, which is the confound
+  arm                              K_T=20
+  --------------------------------------
+  no adaptation             9.7624 +-2.5967
+  reuse z_S                 8.4106 +-2.2248
+  transport                 8.2193 +-2.2451
+  oracle                    8.3627 +-2.2394
+
+AP share of the generated set -- the confound, reported beside every age reading
+  real source and target sets differ in AP share by up to 14.7 points
+  arm                              K_T=20
+  --------------------------------------
+  no adaptation             0.2222 +-0.0303
+  reuse z_S                 0.3967 +-0.0373
+  transport                 0.3724 +-0.0295
+  oracle                    0.3941 +-0.0335
+
+confound bound on the age readings, years: mean |AP share gen - AP share real target|
+  x |AP-PA gap of the age instrument at the target bin|, per relation and K_T
+  arm                   relation     K_T=20
+  transport             0-30           0.17
+  transport             30-45          0.38
+  transport             60-75          0.16
+
+share of generated films the finding instrument assigns to the task's own finding
+  higher is better; instrument ceiling 12.1%, chance 7.1%
+  arm                              K_T=20
+  --------------------------------------
+  no adaptation             0.0017 +-0.0023
+  reuse z_S                 0.0712 +-0.0287
+  transport                 0.0781 +-0.0307
+  oracle                    0.0686 +-0.0278
+
+DEMOGRAPHIC CONSISTENCY -- slope of generated age on real target age across cells
+  1 = the whole population shift realised, 0 = none; a constant offset cannot move it.
+  The interval treats cells as independent; they are nested in tasks, so it is optimistic.
+  arm                              K_T=20
+  --------------------------------------
+  no adaptation             -0.011 +-0.034
+  reuse z_S                  0.027 +-0.065
+  transport                  0.040 +-0.064
+  oracle                     0.039 +-0.064
+
+  mean generated age by the relation the episode asked for, at the largest K_T:
+                              0-30     30-45     60-75    spread
+  no adaptation               51.0      51.0      50.7       0.3
+  reuse z_S                   47.2      47.8      47.8       0.6
+  transport                   46.9      47.4      47.7       0.8
+  oracle                      47.6      47.8      48.3       0.7
+  REAL target                 35.1      44.3      57.4      22.3
+
+fraction of the real source-to-target age shift, pooled per relation -- CAUTION: a
+  constant offset reads as a nonzero fraction of every shift here; trust the slope above
+  (mean gen - mean source) / (mean target - mean source), all on the age instrument;
+  1 = the whole shift, 0 = none. Pooled as a ratio of means, not a mean of ratios.
+  arm                   relation     K_T=20
+  ----------------------------------------
+  no adaptation         0-30           0.05
+  no adaptation         30-45          0.11
+  no adaptation         60-75         -0.20
+  reuse z_S             0-30           0.28
+  reuse z_S             30-45          0.53
+  reuse z_S             60-75         -0.72
+  transport             0-30           0.29
+  transport             30-45          0.58
+  transport             60-75         -0.73
+  oracle                0-30           0.25
+  oracle                30-45          0.53
+  oracle                60-75         -0.63
+
+paired against transport, over (task, relation, resample) cells; positive = transport is better
+
+  sw
+  comparison                           K_T=20
+  ------------------------------------------
+  vs no adaptation             +0.2575 +-0.0139*
+  vs reuse z_S                 +0.0026 +-0.0030 
+  vs oracle                    +0.0021 +-0.0019*
+
+  age_gap
+  comparison                           K_T=20
+  ------------------------------------------
+  vs no adaptation             +1.5431 +-1.9377 
+  vs reuse z_S                 +0.1912 +-0.2839 
+  vs oracle                    +0.1434 +-0.3401 
+
+  * = the 95% interval excludes zero. Cells are nested in tasks, and between-task
+    variance dominates; with 2 val tasks read the per-task effect as directional.
+
+C3 VERDICT -- does abundant target evidence move generation to the target group?
+  oracle slope of generated on real target age: +0.039 +-0.064 -> NO established relation-dependent shift: the pipeline does not realise the population shift even with abundant target evidence
+  per relation, oracle against reuse z_S (read beside the spread table above; a difference smaller than the
+  spread of generated age across relations is not evidence of a shift):
+  relation 0-30    real source age  51.8, real target  35.1; oracle - reuse z_S = +0.35 +-0.56 years -> no established shift
+                  AP share oracle 37.5% vs reuse z_S 35.9%; the view change can account for at most 0.08 of those years
+  relation 30-45   real source age  51.8, real target  44.3; oracle - reuse z_S = +0.04 +-0.65 years -> no established shift
+                  AP share oracle 43.0% vs reuse z_S 42.7%; the view change can account for at most 0.01 of those years
+  relation 60-75   real source age  51.8, real target  57.4; oracle - reuse z_S = +0.53 +-0.47 years -> MOVES towards the target
+                  AP share oracle 37.8% vs reuse z_S 40.4%; the view change can account for at most 0.09 of those years
