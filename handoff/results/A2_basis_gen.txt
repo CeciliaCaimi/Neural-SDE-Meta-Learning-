@@ -1,0 +1,108 @@
+checkpoint a2_basis_step50000.pt  step 50000  weights EMA
+arm        basis / small_unet  k=16
+parameters phi 27.798M in the evaluated path, of which 55344 carry z; encoder 0.327M, transport 6824
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets drawn independently
+
+180 episodes: 20 classes x 3 transformations x 3 values of K_T
+
+  semantic instrument: 20-way over the val classes, 336 steps on 11000 images
+  held-out accuracy on 50 images per class, by domain:
+    clean            fine  40.1%   superclass  68.0%      (chance 5% / 25%)
+    gaussian_blur    fine  38.4%   superclass  65.1%      (chance 5% / 25%)
+    gaussian_noise   fine  39.8%   superclass  66.7%      (chance 5% / 25%)
+    contrast         fine  38.2%   superclass  65.4%      (chance 5% / 25%)
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            1.682 +-0.061     1.673 +-0.064     1.665 +-0.061
+  reuse z_S                1.492 +-0.094     0.935 +-0.089     0.671 +-0.069
+  transport                0.348 +-0.041     0.361 +-0.036     0.349 +-0.044
+  transport + refine       0.353 +-0.044     0.380 +-0.043     0.355 +-0.046
+  target only              0.434 +-0.056     0.403 +-0.045     0.353 +-0.049
+  oracle                   0.337 +-0.051     0.318 +-0.043     0.319 +-0.044
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.253 +-0.022     0.256 +-0.020     0.258 +-0.022
+  reuse z_S                0.248 +-0.021     0.235 +-0.018     0.235 +-0.022
+  transport                0.206 +-0.022     0.207 +-0.020     0.213 +-0.022
+  transport + refine       0.207 +-0.022     0.207 +-0.021     0.213 +-0.025
+  target only              0.227 +-0.021     0.213 +-0.022     0.217 +-0.024
+  oracle                   0.199 +-0.028     0.197 +-0.026     0.204 +-0.029
+
+semantic-class consistency: share of samples put in the episode's own class
+  higher is better; the instrument's own ceiling on real held-out images is 39.1% fine (chance 5%)
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.052 +-0.009     0.051 +-0.009     0.053 +-0.009
+  reuse z_S                0.109 +-0.028     0.104 +-0.023     0.115 +-0.027
+  transport                0.114 +-0.029     0.108 +-0.026     0.113 +-0.027
+  transport + refine       0.112 +-0.028     0.110 +-0.023     0.132 +-0.032
+  target only              0.087 +-0.020     0.094 +-0.020     0.124 +-0.031
+  oracle                   0.138 +-0.033     0.148 +-0.036     0.135 +-0.033
+
+the same reading at superclass level
+  higher is better; ceiling 66.3%, chance 25%
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.255 +-0.025     0.255 +-0.022     0.245 +-0.021
+  reuse z_S                0.355 +-0.035     0.360 +-0.034     0.359 +-0.029
+  transport                0.359 +-0.033     0.352 +-0.028     0.349 +-0.029
+  transport + refine       0.360 +-0.032     0.362 +-0.029     0.373 +-0.034
+  target only              0.340 +-0.040     0.350 +-0.032     0.357 +-0.034
+  oracle                   0.393 +-0.038     0.392 +-0.037     0.381 +-0.038
+
+pooled KID against the real target sets, in the instrument's feature space (x1000)
+  lower is better; the estimator is standard, the feature space is this project's own
+  instrument and not InceptionV3, so these numbers compare arms here and nothing published
+
+  strategy                         K_T=1             K_T=5            K_T=20
+  --------------------------------------------------------------------------
+  no adaptation           +22.316 +-2.572    +21.222 +-2.546    +17.384 +-2.398
+  reuse z_S               +20.032 +-2.206    +17.937 +-2.230    +10.482 +-1.392
+  transport                +7.337 +-1.509     +6.626 +-1.409     +5.586 +-1.237
+  transport + refine       +8.067 +-1.618     +5.538 +-1.290     +4.185 +-1.183
+  target only             +19.642 +-2.557     +8.182 +-1.599     +5.249 +-1.292
+  oracle                   +6.895 +-1.716     +7.379 +-1.542     +8.838 +-1.647
+
+  pooled from 60 episodes per cell, 5760 generated against 7680 real samples
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +1.1437 +-0.1062*    +0.5744 +-0.1073*    +0.3214 +-0.0632*
+  transport vs target only              +0.0858 +-0.0583*    +0.0425 +-0.0420*    +0.0037 +-0.0449 
+  refinement: off vs on                 -0.0049 +-0.0138     -0.0188 +-0.0308     -0.0060 +-0.0403 
+  transport + refine vs oracle          +0.0161 +-0.0380     +0.0611 +-0.0499*    +0.0362 +-0.0452 
+
+  comparison, sliced Wasserstein, pixel space             K_T=1             K_T=5            K_T=20
+  -------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +0.0414 +-0.0114*    +0.0277 +-0.0092*    +0.0226 +-0.0061*
+  transport vs target only              +0.0206 +-0.0075*    +0.0058 +-0.0054*    +0.0046 +-0.0068 
+  refinement: off vs on                 -0.0011 +-0.0016     +0.0006 +-0.0040     +0.0003 +-0.0058 
+  transport + refine vs oracle          +0.0089 +-0.0103     +0.0101 +-0.0107     +0.0082 +-0.0087 
+
+  comparison, semantic-class consistency             K_T=1             K_T=5            K_T=20
+  --------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +0.0049 +-0.0100     +0.0038 +-0.0131     -0.0016 +-0.0141 
+  transport vs target only              +0.0267 +-0.0155*    +0.0141 +-0.0130*    -0.0115 +-0.0130 
+  refinement: off vs on                 -0.0017 +-0.0023     +0.0023 +-0.0085     +0.0191 +-0.0130*
+  transport + refine vs oracle          +0.0260 +-0.0101*    +0.0380 +-0.0202*    +0.0033 +-0.0133 
+
+  * = the 95% interval excludes zero
+per-episode values written to handoff/results/A2_basis_per_episode.json
+
+grid written to handoff/results/A2_basis_grid.png

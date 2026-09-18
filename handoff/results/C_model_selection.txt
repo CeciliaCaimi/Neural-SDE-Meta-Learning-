@@ -1,0 +1,40 @@
+Stage C model selection, on the three held-out validation conditions
+==============================================================================
+Selection criterion: validation loss_correct. delta_task and r_basis are printed
+beside it and were NOT used to choose -- selecting on the quantity the experiment
+is about would be circular. Where the curve is flat, the minimum is taken.
+
+  run       ckpts   best val  at step  delta_task   r_basis  val at end  overfit
+  ----------------------------------------------------------------------------
+  c_fitz       25     0.0628     2000    +0.00453     0.447      0.1527     2.4x
+  cs128        16     0.0585     2500    +0.00259     0.503      0.1069     1.8x
+  cs64         40     0.0571     3500    +0.00744     1.500      0.1063     1.9x
+  cs32         60     0.0514     6000    +0.00518     2.075      0.0697     1.4x
+
+  c_fitz   128 ch, 50 000 steps -- stage A's configuration
+  cs128    128 ch, 8 000 steps
+  cs64     64 ch, 20 000 steps
+  cs32     32 ch, 30 000 steps -- also drops one level, attention and a block
+
+
+what the sweep says
+  Capacity was the whole problem. At 128 channels the validation loss doubles
+  within a few thousand steps; at 32 it is flat over a budget seven times longer.
+  The training side draws from 808 images behind five conditions, so stage A's
+  50 000 steps is about two thousand epochs. The reachable archive does not fund a
+  128-channel model; it funds a 32-channel one. Say that in the write-up rather
+  than quietly reporting a different architecture from stage A's.
+
+chosen: checkpoints/cs32_step6000.pt
+  validation loss_correct 0.0514   delta_task +0.00518   gain_vs_zero +0.6136   r_basis 2.075
+  task_specific_frac 0.8% -- read this the way the project's own note
+  says to: gain_vs_zero is large because a 32-channel backbone cannot absorb the
+  shared structure, so the basis carries it as a constant offset. The quantity
+  that matters is the absolute delta_task, and at this checkpoint it is about
+  three times the +0.00160 the matched CIFAR run reaches.
+
+disclosure
+  A C4 run on the discarded 50 000-step checkpoint touched the test conditions
+  before this selection was made. Nothing from it informed the selection -- the
+  checkpoint was chosen from the validation curve above -- and its numbers are not
+  reported. It is recorded here because a test-split reading was spent.

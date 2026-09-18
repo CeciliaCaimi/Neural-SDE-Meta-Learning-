@@ -1,0 +1,3 @@
+  40/126 cells, 18.0s each, ~26 min left
+  80/126 cells, 18.0s each, ~14 min left
+  120/126 cells, 18.2s each, ~2 min left
