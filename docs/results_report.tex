@@ -50,7 +50,7 @@ correct source task together with a learned source-to-target relation outperform
 is met at every target budget measured, but the margin over target-only modelling narrows
 from $+0.0167$ at one target image to $+0.0044$ at twenty, so the method earns its keep
 chiefly where target data are scarce. The architectural claim does not survive: against
-matched modulation conditioning the additive basis is indistinguishable on that same metric,
+matched FiLM conditioning the additive basis is indistinguishable on that same metric,
 and what remains is an efficiency result --- the same generation quality from fewer than half
 the parameters. Seven of the ten deliverables are complete; three are not, and each is named
 with its reason.
@@ -67,9 +67,10 @@ $z \in \mathbb{R}^{k}$. Writing $z_S$ for the coordinate encoded from source-dom
 $c$ for a descriptor of the source-to-target relation, the transport map predicts the target
 coordinate $\tilde{z}_T = z_S + \Delta_\gamma(z_S, c)$, taking no target image as input.
 $M_S$ is the number of source images the encoder sees; $K_T$ is the number of target images
-available at adaptation time. Feature-wise linear modulation, the standard alternative to an
-additive basis, scales and shifts intermediate feature maps as a function of the coordinate;
-it is called the modulation arm below.
+available at adaptation time. \textbf{FiLM}, feature-wise linear modulation, is the standard
+alternative to an additive basis: instead of adding a learned direction to the score it
+scales and shifts intermediate feature maps as a function of the coordinate. It is the
+baseline A2 measures against.
 
 \paragraph{Statistics.} Every comparison is a paired difference over episodes with a 95\%
 confidence interval, and an asterisk marks an interval excluding zero.
@@ -125,8 +126,8 @@ per cell, 60 episodes per cell.
 \midrule
 0.1 & Integrate the three branches & Done. All three files coexist in the tree that produced A2.\\
 0.2 & Verify the split file & Done; hash matches the fixed value.\\
-0.3 & Modulation checkpoint & Done. Both A2 arms were retrained from scratch rather than recovered.\\
-0.4 & Evaluation primitives & Four of five written. The kernel Inception distance was not implemented.\\
+0.3 & FiLM checkpoint & Done. Both A2 arms were retrained from scratch rather than recovered.\\
+0.4 & Evaluation primitives & Done. The kernel Inception distance, the last of the five, was written for A2.\\
 0.5 & Output directory & Done.\\
 \bottomrule
 \end{tabular}
@@ -191,23 +192,18 @@ mean source coordinate, from $+0.0286$ to $+0.0410$ --- which is what a procedur
 consumes target images should do against controls holding a coordinate that is simply wrong.
 A gap to the oracle remains at every budget and for both arms.
 
-\subsection{A2 --- Additive basis against the modulation arm}
+\subsection{A2 --- Additive basis against FiLM}
 \label{sec:a2}
 
-The plan asks for the existing loss-level comparison to be extended to generation, matched on
-backbone, latent dimension and budget.
-
-Two networks were trained from scratch under identical conditions and evaluated on the
-same 180 held-out episodes with one shared initial noise per episode. The backbones are the
-same size --- 27.798M against 27.917M parameters --- and the arms share the set encoder, the
-transport map, $k$, the base head and the loss. \textbf{Only the conditioning mechanism
-differs.} In the basis arm the coordinate never enters the backbone: it weights learned
-score-perturbation directions that are added to the output,
-$\hat\varepsilon_z = \hat\varepsilon_0 + \sum_l z_l R_l(x_t,t)$. In the modulation arm it is
-fed to the backbone and folded into every residual block's scale and shift. The parameters
-that carry the coordinate are \textbf{55{,}344 in the basis arm against 118{,}784 in the
-modulation arm}, so the modulation baseline is the larger of the two by more than a factor
-of two; that is deliberate, since a stronger baseline is the one worth beating.
+Two networks trained from scratch under identical conditions, evaluated on the same 180
+held-out episodes with one shared initial noise per episode. The arms share the backbone
+size, the set encoder, the transport map, $k$, the base head and the loss; only the
+conditioning differs. In the basis arm the coordinate never enters the backbone, weighting
+score-perturbation directions added to the output,
+$\hat\varepsilon_z = \hat\varepsilon_0 + \sum_l z_l R_l(x_t,t)$. In the FiLM arm it is fed to
+the backbone and folded into every residual block's scale and shift. The parameters carrying
+the coordinate are \textbf{55{,}344 for the basis against 118{,}784 for FiLM}; FiLM is
+deliberately the larger, since a stronger baseline is the one worth beating.
 
 \begin{table}[h]
 \centering
@@ -217,10 +213,10 @@ of two; that is deliberate, since a stronger baseline is the one worth beating.
 Instrument & Transport arm & Oracle arm\\
 \midrule
 Sliced Wasserstein \emph{(headline)} & tie at all three budgets & \textbf{basis}, all three\\
-Transformation statistic & \textbf{modulation}, all three & tie at all three\\
-Energy discrepancy & \textbf{modulation}, two of three & tie at all three\\
-Class consistency & \textbf{modulation}, two of three & \textbf{basis}, all three\\
-Superclass consistency & \textbf{modulation}, all three & tie at all three\\
+Transformation statistic & \textbf{FiLM}, all three & tie at all three\\
+Energy discrepancy & \textbf{FiLM}, two of three & tie at all three\\
+Class consistency & \textbf{FiLM}, two of three & \textbf{basis}, all three\\
+Superclass consistency & \textbf{FiLM}, all three & tie at all three\\
 Kernel Inception distance & \textbf{basis} (not paired) & tie\\
 \bottomrule
 \end{tabular}
@@ -234,51 +230,38 @@ on abundant target data and bounds what each conditioning mechanism can reach.}
 \small
 \begin{tabular}{lccc}
 \toprule
-Paired difference, modulation minus basis & $K_T=1$ & $K_T=5$ & $K_T=20$\\
+Sliced Wasserstein, FiLM minus basis & $K_T=1$ & $K_T=5$ & $K_T=20$\\
 \midrule
-\multicolumn{4}{l}{\emph{Sliced Wasserstein, the headline metric}}\\
-\quad transport & $+0.0002 \pm 0.0070$ & $-0.0020 \pm 0.0076$ & $-0.0055 \pm 0.0074$\\
-\quad transport $+$ refine & $-0.0008 \pm 0.0074$ & $-0.0014 \pm 0.0086$ & $-0.0052 \pm 0.0089$\\
-\quad reuse $z_S$ & $-0.0191 \pm 0.0072^{*}$ & $-0.0050 \pm 0.0093$ & $-0.0071 \pm 0.0101$\\
-\quad oracle & $+0.0163 \pm 0.0105^{*}$ & $+0.0183 \pm 0.0118^{*}$ & $+0.0147 \pm 0.0119^{*}$\\
-\midrule
-\multicolumn{4}{l}{\emph{Transport arm, the other paired instruments}}\\
-\quad transformation statistic & $-0.0934 \pm 0.0485^{*}$ & $-0.1045 \pm 0.0441^{*}$ & $-0.0944 \pm 0.0468^{*}$\\
-\quad energy discrepancy & $-0.1878 \pm 0.2007$ & $-0.3356 \pm 0.2508^{*}$ & $-0.4521 \pm 0.2795^{*}$\\
-\quad class consistency & $-0.0099 \pm 0.0170$ & $-0.0168 \pm 0.0161^{*}$ & $-0.0142 \pm 0.0138^{*}$\\
-\quad superclass consistency & $-0.0368 \pm 0.0238^{*}$ & $-0.0427 \pm 0.0270^{*}$ & $-0.0439 \pm 0.0235^{*}$\\
+transport & $+0.0002 \pm 0.0070$ & $-0.0020 \pm 0.0076$ & $-0.0055 \pm 0.0074$\\
+transport $+$ refine & $-0.0008 \pm 0.0074$ & $-0.0014 \pm 0.0086$ & $-0.0052 \pm 0.0089$\\
+reuse $z_S$ & $-0.0191 \pm 0.0072^{*}$ & $-0.0050 \pm 0.0093$ & $-0.0071 \pm 0.0101$\\
+oracle & $+0.0163 \pm 0.0105^{*}$ & $+0.0183 \pm 0.0118^{*}$ & $+0.0147 \pm 0.0119^{*}$\\
 \bottomrule
 \end{tabular}
-\caption{A2, signed so that a positive value favours the basis on every instrument,
-including the two where a higher raw score is better.}
+\caption{A2 on the headline metric, signed so that positive favours the basis. The other
+instruments are summarised in the table above; their values are in
+\texttt{A2\_basis\_vs\_film.txt}.}
 \end{table}
 
-\paragraph{The oracle gap, and the explanation that failed.} The basis leads at the oracle on
-the headline metric and on class consistency. The natural reading is that the basis offers a
-loss surface the refinement can descend further, and that transport simply does not land
-close enough to exploit it. A follow-up probe tested exactly that, from the same starting
-coordinate on the same data under the same budget and noise draws, and \textbf{reversed it}:
-the basis descends \emph{less} than the modulation arm from the transported coordinate
+\paragraph{The oracle gap, and the explanation that failed.} The basis leads at the oracle.
+The natural reading is that it offers a loss surface refinement can descend further, and
+that transport does not land close enough to exploit it. A probe tested that from the same
+start, on the same data, under the same budget and noise draws, and reversed it: the basis
+descends \emph{less} than FiLM from the transported coordinate
 ($-0.0024 \pm 0.0005^{*}$ as a fraction of each arm's own starting loss) and much less from
-$z=0$ ($-0.0796 \pm 0.0121^{*}$), along a segment that is \emph{rougher}, not smoother
-($+0.0002 \pm 0.0001^{*}$). The probe was written with its own reading rule: if neither
-descent difference favours the basis, the oracle gap needs another explanation and must be
-reported without this one. It does need another explanation, and none is offered here.
+$z=0$ ($-0.0796 \pm 0.0121^{*}$), along a segment that is rougher rather than smoother. The
+probe carried its own rule for that outcome: the gap then needs another explanation and must
+be reported without this one. None is offered here.
 
-\paragraph{Conclusion.} \textbf{On the metric the plan names as headline, the additive
-reverse-dynamics basis and matched modulation conditioning are indistinguishable on the
-method's own arm} --- the interval contains zero at every target budget, with and without
-refinement. Four of the five paired instruments place the modulation arm \emph{ahead} on that
-arm, three of them significantly. The basis leads only at the oracle, and the mechanism
-proposed for that lead was tested and contradicted. The single reading that favours the
-basis on the transport arm is the kernel Inception distance, which is not paired and whose
-feature space is local to this project.
-
-What survives is an efficiency claim rather than a performance one, and it should be stated
-as one: \textbf{the basis reaches the same generation quality as the modulation arm while
-carrying the task coordinate in 55{,}344 parameters against 118{,}784, fewer than half.}
-That is a real and reportable property of the architecture. It is not the claim the stage set
-out to establish.
+\paragraph{Conclusion.} \textbf{On the headline metric the additive reverse-dynamics basis
+and matched FiLM conditioning are indistinguishable on the method's own arm} --- the interval
+contains zero at every target budget, with refinement and without. Four of the five paired
+instruments place FiLM \emph{ahead} there, three significantly. The basis leads only at the
+oracle, and the mechanism proposed for that lead was contradicted. What survives is an
+efficiency claim rather than a performance one, and it should be stated as one:
+\textbf{the basis reaches the same generation quality as FiLM while carrying the task
+coordinate in 55{,}344 parameters against 118{,}784, fewer than half.} That is a real
+property of the architecture, and it is not the claim the stage set out to establish.
 
 \subsection{A3 --- Target-scarcity sweep}
 
@@ -546,7 +529,7 @@ target image does not.
 \midrule
 1 & Gaussian-mixture mechanism and calibration & Complete\\
 2 & Source-dependence controls & Complete\\
-3 & Additive basis against the modulation arm & Complete; indistinguishable on the headline metric\\
+3 & Additive basis against FiLM & Complete; indistinguishable on the headline metric\\
 4 & Target-scarcity curve, crossing named & Complete; there is no crossing\\
 5 & Source-abundance curve & Complete; saturated from the first point\\
 6 & Transport-structure ablation & Complete\\
@@ -573,7 +556,7 @@ further results are usefully negative: source evidence saturates below the small
 measured, so the method is cheap on the source side, and the non-linear transport map is not
 distinguishable from a linear one, so the architecture can be simplified.
 
-The architectural claim is the one that did not survive. Against a matched modulation
+The architectural claim is the one that did not survive. Against a matched FiLM
 baseline carrying the coordinate in more than twice as many parameters, the additive basis
 is indistinguishable at generation on the headline metric, and behind it on several
 secondary ones; its only clear lead is at the oracle, and the loss-surface explanation
