@@ -411,6 +411,19 @@ def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
 
             theta = theta_by_id[theta_id]
 
+            # A theta can end up with zero usable support and/or query
+            # trajectories if every simulated rollout was unstable (hit
+            # max_state_abs before completing) — more likely at strong OOD
+            # shift magnitudes. Skip it rather than crashing on an empty
+            # stack; generate_trajectories.py already prints a WARNING for
+            # these when they occur.
+            n_supp_rows = int((ds_supp.metadata["theta_id"] == theta_id).sum())
+            n_query_rows = int((ds_query.metadata["theta_id"] == theta_id).sum())
+            if n_supp_rows == 0 or n_query_rows == 0:
+                print(f"  ⚠️  Skipping {regime}/{theta_id}: no usable support/query "
+                      f"trajectories (support={n_supp_rows}, query={n_query_rows}).")
+                continue
+
             # Raw (unnormalized) tensors — normalization is applied inside
             # gated_inference via the per-task target_scaler.
             supp_full = get_task_data(ds_supp, theta_id, device)[:N_SHOTS]
