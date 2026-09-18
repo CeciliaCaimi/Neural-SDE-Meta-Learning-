@@ -1,10 +1,13 @@
 #Changes: Updated config imports to match your BaseConfig structure. Implements Case A/B/C logic.
+# Extended to support the item-1 factorised shift regimes (none, drift_only,
+# diffusion_only, combined, ood_1..ood_5) as a table-driven addition — the
+# legacy A/B/C branches and sample_theta() are untouched.
 
 # data_gen/generate_meta_params.py
 
 import os
 import torch
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 # --- CONFIG & MODULES ---
 from config.base_config import cfg
@@ -45,8 +48,22 @@ def sample_theta(
 
     return Theta(theta_b=theta_b, theta_sigma=theta_sigma, id=theta_id)
 
-def generate_all_meta_params() -> None:
+def generate_all_meta_params(regimes: Optional[Sequence[str]] = None) -> None:
+    """
+    Args:
+        regimes: which named test regimes to generate thetas for, in
+            addition to train/val. Defaults to cfg.test_regimes (the legacy
+            combined-shift regimes "A", "B", "C") so calling this with no
+            arguments reproduces the exact previous behaviour.
+
+            Pass names from cfg.theta_dist.shift_regimes instead (e.g.
+            cfg.factorised_test_regimes, or a hand-picked subset) to generate
+            the item-1 factorised regimes: "none", "drift_only",
+            "diffusion_only", "combined", "ood_1".."ood_5".
+    """
     print("Generating Stabilized Meta-Parameters...")
+
+    regimes = list(regimes) if regimes is not None else list(cfg.test_regimes)
     
     gen = torch.Generator()
     gen.manual_seed(cfg.global_seed)
@@ -100,7 +117,7 @@ def generate_all_meta_params() -> None:
     meta_params["val"] = val_thetas
 
     # --- 3. Test Regimes ---
-    for regime in cfg.test_regimes:
+    for regime in regimes:
         test_list: List[Theta] = []
         n_test = cfg.dataset_sizes.n_test_thetas
 
@@ -115,28 +132,40 @@ def generate_all_meta_params() -> None:
             # No Shift
             drift_mean_vec = b_mean_base
             diff_mean_vec = s_mean_base
-        
+
         elif regime == "B":
             # Mild Shift (Masked)
             shift_b = cfg.theta_dist.drift_mean_shift_test_B
             shift_s = cfg.theta_dist.diffusion_mean_shift_test_B
-            
+
             # Apply shift only to stable terms
             drift_mean_vec = b_mean_base + (shift_b * drift_shift_mask)
             diff_mean_vec = s_mean_base + shift_s # Shift all diffusion terms
-            
+
             b_std = cfg.theta_dist.drift_std_test
 
         elif regime == "C":
             # Strong Shift (Masked)
             shift_b = cfg.theta_dist.drift_mean_shift_test_C
             shift_s = cfg.theta_dist.diffusion_mean_shift_test_C
-            
+
             # Apply shift only to stable terms
             drift_mean_vec = b_mean_base + (shift_b * drift_shift_mask)
             diff_mean_vec = s_mean_base + shift_s
-            
+
             b_std = cfg.theta_dist.drift_std_train * cfg.theta_dist.drift_std_scale_test_C
+
+        elif regime in cfg.theta_dist.shift_regimes:
+            # Item-1 factorised regimes (none / drift_only / diffusion_only /
+            # combined / ood_1..ood_5): same masked-shift mechanism as B/C
+            # above, just table-driven magnitudes. See ThetaDistributionConfig
+            # for the chosen values and rationale.
+            shift_b, shift_s, std_scale = cfg.theta_dist.shift_regimes[regime]
+
+            drift_mean_vec = b_mean_base + (shift_b * drift_shift_mask)
+            diff_mean_vec = s_mean_base + shift_s
+
+            b_std = cfg.theta_dist.drift_std_train * std_scale
 
         else:
             raise ValueError(f"Unknown regime {regime}")
@@ -163,8 +192,35 @@ def generate_all_meta_params() -> None:
     
     # Summary
     print(f"Generated: {len(train_thetas)} Train, {len(val_thetas)} Val")
-    for r in cfg.test_regimes:
+    for r in regimes:
         print(f"Generated {len(meta_params[f'test{r}'])} for Test{r}")
 
 if __name__ == "__main__":
-    generate_all_meta_params()
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Generate meta-training thetas and test-regime thetas."
+    )
+    parser.add_argument(
+        "--regimes",
+        type=str,
+        default=None,
+        help=(
+            "Comma-separated regime names to generate test thetas for. "
+            "Defaults to cfg.test_regimes (legacy combined-shift regimes "
+            "'A,B,C') if omitted. Pass 'factorised' as shorthand for the "
+            "item-1 regime set: " + ",".join(cfg.factorised_test_regimes) +
+            ". Individual names from cfg.theta_dist.shift_regimes (or 'A', "
+            "'B', 'C') are also accepted, e.g. --regimes none,drift_only."
+        ),
+    )
+    args = parser.parse_args()
+
+    if args.regimes is None:
+        selected_regimes = None
+    elif args.regimes.strip() == "factorised":
+        selected_regimes = list(cfg.factorised_test_regimes)
+    else:
+        selected_regimes = [r.strip() for r in args.regimes.split(",") if r.strip()]
+
+    generate_all_meta_params(regimes=selected_regimes)
