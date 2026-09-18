@@ -1,7 +1,19 @@
 # config/base_config.py
 
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Dict, Tuple
+
+import torch
+
+
+def _default_device() -> str:
+    """Pick cuda when available, otherwise fall back to cpu.
+
+    Avoids hardcoding "cuda" as the default, which would crash on a
+    machine without a GPU (e.g. when someone just wants to smoke-test
+    the pipeline before handing the real training job to a GPU box).
+    """
+    return "cuda" if torch.cuda.is_available() else "cpu"
 
 # ------------------------------
 # 1. Time grid
@@ -76,6 +88,46 @@ class ThetaDistributionConfig:
     drift_std_test: float = 1.0
     diffusion_std_test: float = 1.0
 
+    # ---- FACTORISED SHIFT REGIMES (item 1) ----
+    # Named regimes for the drift/diffusion factorisation experiments, on top
+    # of the legacy combined-shift regimes A/B/C above. Each entry is
+    # (drift_mean_shift, diffusion_mean_shift, drift_std_scale):
+    #   - drift_mean_shift / diffusion_mean_shift are applied exactly like the
+    #     existing test_B/test_C shifts: drift_mean_shift is masked by
+    #     drift_shift_mask (only "stable" basis terms are shifted) and
+    #     diffusion_mean_shift is applied to all diffusion terms.
+    #   - drift_std_scale multiplies drift_std_train (1.0 = no widening).
+    #   - diffusion std is intentionally left alone here (matches legacy
+    #     A/B/C, which never vary diffusion_std_test by regime either) so
+    #     that "diffusion-only shift" isolates a mean shift, not a variance
+    #     change.
+    #
+    # Magnitudes chosen so the four basic regimes sit at the *same* mean-shift
+    # scale as legacy test_B (0.5) — big enough to be measurable, mild enough
+    # to isolate drift-only vs diffusion-only vs combined without conflating
+    # them with the OOD severity sweep:
+    #   none            : no shift at all (in-distribution baseline)
+    #   drift_only      : only drift shifted, by the test_B magnitude (0.5)
+    #   diffusion_only  : only diffusion shifted, by the test_B magnitude (0.5)
+    #   combined        : both shifted together, by the test_B magnitude (0.5)
+    #
+    # The ood_1..ood_5 sweep progressively increases the combined shift from
+    # ood_1 (matches "combined"/legacy test_B) through ood_5, which is well
+    # beyond legacy test_C (1.0 shift, 2.0 std scale) — five linearly spaced
+    # levels are enough to see a monotonic trend without exploding the number
+    # of test tasks/trajectories to generate.
+    shift_regimes: Dict[str, Tuple[float, float, float]] = field(default_factory=lambda: {
+        "none": (0.0, 0.0, 1.0),
+        "drift_only": (0.5, 0.0, 1.0),
+        "diffusion_only": (0.0, 0.5, 1.0),
+        "combined": (0.5, 0.5, 1.0),
+        "ood_1": (0.5, 0.5, 1.0),
+        "ood_2": (1.0, 1.0, 1.5),
+        "ood_3": (1.5, 1.5, 2.0),
+        "ood_4": (2.0, 2.0, 2.5),
+        "ood_5": (2.5, 2.5, 3.0),
+    })
+
 # -------------------------------
 # 4. Stability / Safety
 # -------------------------------
@@ -143,9 +195,21 @@ class BaseConfig:
     latent: LatentConfig = field(default_factory=LatentConfig)
     paths: DatasetPathsConfig = field(default_factory=DatasetPathsConfig)
     
-    device: str = "cuda"
+    device: str = field(default_factory=_default_device)
     global_seed: int = 12345
 
+    # Legacy combined-shift regimes (kept as the default so existing
+    # generation/eval runs are unaffected). See ThetaDistributionConfig
+    # for the newer named regimes below.
     test_regimes: Tuple[str, ...] = ("A", "B", "C")
+
+    # Item-1 factorised shift regimes: no shift, drift-only, diffusion-only,
+    # combined, and a 5-level progressively-stronger OOD sweep. Not generated
+    # by default — pass these explicitly (e.g. via --regimes factorised on
+    # data_gen/generate_meta_params.py) to opt in.
+    factorised_test_regimes: Tuple[str, ...] = (
+        "none", "drift_only", "diffusion_only", "combined",
+        "ood_1", "ood_2", "ood_3", "ood_4", "ood_5",
+    )
 
 cfg = BaseConfig()
