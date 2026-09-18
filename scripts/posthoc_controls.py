@@ -73,6 +73,9 @@ def load_checkpoint(path: str, dev: torch.device):
     # would send an evaluation script to the wrong split builder. Nothing here reads it, but
     # the rule is that a rebuilt config says what the run actually was.
     cfg.episodes.scheme = sd["config"]["episodes"].get("scheme", "domainshift")
+    # Stage C evaluation scripts compare this against the split they are about to read: a
+    # checkpoint trained on ChestX-ray14 split v1 must not be scored on v2's episodes.
+    cfg.episodes.cxr_path = sd["config"]["episodes"].get("cxr_path", "")
     ck = sd["config"]["model"]
     cfg.model.k = ck["k"]
     cfg.model.backbone = ck["backbone"]
