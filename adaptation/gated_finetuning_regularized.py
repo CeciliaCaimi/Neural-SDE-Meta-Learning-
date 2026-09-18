@@ -43,67 +43,71 @@ def get_task_data(dataset, theta_id, device):
     data = [dataset[i][0] for i in idx]
     return torch.stack(data).to(device)
 
-def adapt_model(sde, head_init, z_init, support, gen, cfg):
+def adapt_model(sde, head_init, zf_init, zg_init, support, gen, cfg):
     start_time = time.time()
     head = copy.deepcopy(head_init); head.train()
-    z_adapted = z_init.clone().detach(); z_adapted.requires_grad = True
-    
+    zf_adapted = zf_init.clone().detach(); zf_adapted.requires_grad = True
+    zg_adapted = zg_init.clone().detach(); zg_adapted.requires_grad = True
+
     optimizer = optim.Adam([
         {'params': head.parameters(), 'lr': LR_HEAD},
-        {'params': [z_adapted], 'lr': LR_Z}
+        {'params': [zf_adapted], 'lr': LR_Z},
+        {'params': [zg_adapted], 'lr': LR_Z}
     ])
-    
+
     for p in sde.parameters(): p.requires_grad = False
-        
+
     B, T, D = support.shape
     T_full = cfg.time_grid.T; n_steps = cfg.time_grid.n_steps
     dt = T_full / n_steps
     n_sim = T - 1; T_sim = dt * n_sim
     x_max = cfg.stability.max_state_abs
-    
+
     for _ in range(ADAPT_STEPS):
         optimizer.zero_grad()
-        z_batch = z_adapted.expand(B, -1)
-        
+        zf_batch = zf_adapted.expand(B, -1)
+        zg_batch = zg_adapted.expand(B, -1)
+
         # Simulate
-        traj = simulate_neural_sde_batch(sde, support[:, 0], z_batch, T_sim, n_sim, x_max, gen)
+        traj = simulate_neural_sde_batch(sde, support[:, 0], zf_batch, zg_batch, T_sim, n_sim, x_max, gen)
         valid_len = min(traj.shape[1], T)
-        
+
         # Correct Slicing for Loss
         traj_slice = traj[:, :valid_len, :]        # (B, L, D)
         supp_slice = support[:, :valid_len, :]     # (B, L, D)
-        
+
         # 1. Path Loss (Physics)
         loss_path = F.mse_loss(traj_slice, supp_slice)
-        
+
         # 2. Head Loss (Forecast)
         # We predict using the FINAL state of the simulation slice
         final_state_pred = traj_slice[:, -1, :]    # (B, D)
         final_state_target = supp_slice[:, -1, :]  # (B, D)
-        
-        head_pred = head(final_state_pred, z_batch)
+
+        head_pred = head(final_state_pred, zf_batch, zg_batch)
         loss_head = F.mse_loss(head_pred, final_state_target)
-        
-        # 3. Regularization (Suggestion 3)
-        loss_reg = BETA_REG * torch.sum(z_adapted ** 2)
-        
+
+        # 3. Regularization (Suggestion 3) — both latents regularised independently
+        loss_reg = BETA_REG * (torch.sum(zf_adapted ** 2) + torch.sum(zg_adapted ** 2))
+
         total_loss = loss_path + loss_head + loss_reg
-        
+
         total_loss.backward()
         optimizer.step()
-        
-    return head, z_adapted.detach(), time.time() - start_time
 
-def compute_residual(sde, head, z, support, gen, cfg):
+    return head, zf_adapted.detach(), zg_adapted.detach(), time.time() - start_time
+
+def compute_residual(sde, head, zf, zg, support, gen, cfg):
     B, T, D = support.shape
     T_full = cfg.time_grid.T; n_steps = cfg.time_grid.n_steps
     dt = T_full / n_steps
     n_sim = min(T - 1, n_steps); T_sim = dt * n_sim
     x_max = cfg.stability.max_state_abs
-    z_exp = z.expand(B, -1)
-    
+    zf_exp = zf.expand(B, -1)
+    zg_exp = zg.expand(B, -1)
+
     with torch.no_grad():
-        traj = simulate_neural_sde_batch(sde, support[:, 0], z_exp, T_sim, n_sim, x_max, gen)
+        traj = simulate_neural_sde_batch(sde, support[:, 0], zf_exp, zg_exp, T_sim, n_sim, x_max, gen)
         valid_len = min(traj.shape[1], T)
         return F.mse_loss(traj[:, :valid_len], support[:, :valid_len]).item()
 
@@ -130,10 +134,14 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
     # 1. Init
     with torch.no_grad():
         enc_len = min(support_in.shape[1], 50)
-        z_init = encoder(support_in[:, :enc_len]).mean(dim=0, keepdim=True)
+        zf_all, zg_all = encoder(support_in[:, :enc_len])
+        zf_init = zf_all.mean(dim=0, keepdim=True)
+        zg_init = zg_all.mean(dim=0, keepdim=True)
 
-    # 2. Adapt (Regularized)
-    head_opt, z_opt, adapt_time = adapt_model(sde, head, z_init, support_in, gen, cfg)
+    # 2. Adapt (Regularized). z_f and z_g are separate leaf tensors optimized
+    # jointly by Adam, so each adapts independently in response to its own
+    # gradient (the drift-facing vs. diffusion-facing latent are not tied).
+    head_opt, zf_opt, zg_opt, adapt_time = adapt_model(sde, head, zf_init, zg_init, support_in, gen, cfg)
 
     # 3. Gate
     # d_res is in units of (state value)^2 and is scale-dependent. Dividing by
@@ -142,7 +150,10 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
     # regime or observation length. Without sqrt(N), the gate collapses to 0 at
     # high step counts because d_res grows with sequence length.
     # d_norm ≈ 0: model explains all variance; d_norm = 1: no better than mean.
-    d_res = compute_residual(sde, head_opt, z_opt, support_in, gen, cfg)
+    # This is still the single scalar gate from the original design — it is
+    # applied identically to both z_f and z_g (task 3's learned (a_f, a_g)
+    # controller is a separate follow-up, not implemented here).
+    d_res = compute_residual(sde, head_opt, zf_opt, zg_opt, support_in, gen, cfg)
     data_var = support_in.var().item()
     N = support_in.shape[1]  # observation length
     d_norm = d_res / (data_var * (N ** 0.5) + 1e-8)  # sqrt(N)-normalized
@@ -150,15 +161,16 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, target_scaler=
 
     # 4. Predict (in normalized space if scaler is active)
     B_q = query_in.shape[0]
-    z_smart = z_opt.expand(B_q, -1); z_safe = torch.zeros_like(z_smart)
+    zf_smart = zf_opt.expand(B_q, -1); zf_safe = torch.zeros_like(zf_smart)
+    zg_smart = zg_opt.expand(B_q, -1); zg_safe = torch.zeros_like(zg_smart)
     T_full = cfg.time_grid.T; n_steps = cfg.time_grid.n_steps
     x_max = cfg.stability.max_state_abs
 
     mc_preds = []
     with torch.no_grad():
         for _ in range(MC_SAMPLES):
-            t_smart = simulate_neural_sde_batch(sde, query_in[:, 0], z_smart, T_full, n_steps, x_max, gen)
-            t_safe  = simulate_neural_sde_batch(sde, query_in[:, 0], z_safe,  T_full, n_steps, x_max, gen)
+            t_smart = simulate_neural_sde_batch(sde, query_in[:, 0], zf_smart, zg_smart, T_full, n_steps, x_max, gen)
+            t_safe  = simulate_neural_sde_batch(sde, query_in[:, 0], zf_safe,  zg_safe,  T_full, n_steps, x_max, gen)
             mc_preds.append((1 - g) * t_safe + g * t_smart)
 
     mc_tensor = torch.stack(mc_preds, dim=0)
@@ -261,8 +273,8 @@ def main():
     ckpt = torch.load("checkpoints/meta_epoch_50.pt", map_location=device, weights_only=False)
     x_dim, z_dim = cfg.basis.x_dim, cfg.latent.latent_dim
     encoder = TrajEncoder(x_dim, z_dim, cfg.latent.encoder_hidden_dim).to(device)
-    sde = NeuralSDE(x_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
-    head = ForecastHead(x_dim, z_dim, cfg.latent.head_hidden_dim).to(device)
+    sde = NeuralSDE(x_dim, z_dim, z_dim, cfg.latent.sde_hidden_dim).to(device)
+    head = ForecastHead(x_dim, z_dim, z_dim, cfg.latent.head_hidden_dim).to(device)
     encoder.load_state_dict(ckpt['encoder'])
     sde.load_state_dict(ckpt['sde'])
     head.load_state_dict(ckpt['head'])
