@@ -29,5 +29,3 @@ reading it
   the effect is about where transport lands and not about the loss surface. If
   neither difference is established, the oracle gap in the generation table needs
   another explanation and should be reported without this one.
-
-written to handoff/results/A2_refine_probe.txt

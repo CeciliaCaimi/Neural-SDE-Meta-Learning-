@@ -140,14 +140,18 @@ def main() -> None:
                 pts = [loss_at(model, z_tld + s * (st.z - z_tld), abundant, cfg, seed + 500,
                                n_draws=4) for s in (0.0, 0.25, 0.5, 0.75, 1.0)]
                 diffs = np.diff(pts)
-                rough.append(float(np.sum(np.maximum(diffs, 0.0)) / max(1e-9, pts[0] - pts[-1])))
+                # Normalised by the starting loss, not by the descent. Dividing by the
+                # descent looks natural and is ill-conditioned: where an arm barely moves,
+                # the denominator is near zero and the ratio explodes. The first run of this
+                # probe reported 4540 for the basis on exactly that mistake.
+                rough.append(float(np.sum(np.maximum(diffs, 0.0)) / max(1e-9, pts[0])))
             loader.fids = split.fine_ids(a.split)
 
         out[arm] = {"from_transport": rel_drop, "from_zero": rel_drop0, "rough": rough}
         emit(f"\n  {arm:<12} {os.path.basename(ck)}  step {step}  {len(rel_drop)} episodes")
         for key, what in (("from_transport", "descent from the transported coordinate"),
                           ("from_zero", "descent from z = 0 (control)"),
-                          ("rough", "non-monotone share of the segment (lower = smoother)")):
+                          ("rough", "non-monotone rise along the segment, / starting loss")):
             mu, h = ci95(out[arm][key])
             emit(f"    {what:<52} {mu:+.4f} +-{h:.4f}")
 
@@ -157,7 +161,7 @@ def main() -> None:
     emit("  the episodes are the same draw in both arms, so this is paired")
     for key, what in (("from_transport", "descent from the transported coordinate"),
                       ("from_zero", "descent from z = 0"),
-                      ("rough", "non-monotone share (positive = the basis is rougher)")):
+                      ("rough", "non-monotone rise (positive = the basis is rougher)")):
         d = [x - y for x, y in zip(out["basis (Bz)"][key], out["FiLM"][key])]
         mu, h = ci95(d)
         emit(f"  {what:<52} {mu:+.4f} +-{h:.4f}{'*' if abs(mu) > h else ' '}")
