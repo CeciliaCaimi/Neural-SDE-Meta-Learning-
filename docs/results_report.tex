@@ -49,8 +49,11 @@ correct source task together with a learned source-to-target relation outperform
 \emph{both} relation-only transfer \emph{and} target-only few-shot modelling. That criterion
 is met at every target budget measured, but the margin over target-only modelling narrows
 from $+0.0167$ at one target image to $+0.0044$ at twenty, so the method earns its keep
-chiefly where target data are scarce. Six of the ten deliverables are complete; four are
-not, and each is named with its reason.
+chiefly where target data are scarce. The architectural claim does not survive: against
+matched modulation conditioning the additive basis is indistinguishable on that same metric,
+and what remains is an efficiency result --- the same generation quality from fewer than half
+the parameters. Seven of the ten deliverables are complete; three are not, and each is named
+with its reason.
 \end{abstract}
 
 \section{Criterion and notation}
@@ -68,10 +71,41 @@ available at adaptation time. Feature-wise linear modulation, the standard alter
 additive basis, scales and shifts intermediate feature maps as a function of the coordinate;
 it is called the modulation arm below.
 
-\paragraph{Metric.} Distances are the sliced Wasserstein distance to the real target set in
-pixel space, which the plan names as headline; lower is better. Every comparison is a paired
-difference over episodes with a 95\% confidence interval, and an asterisk marks an interval
-excluding zero.
+\paragraph{Statistics.} Every comparison is a paired difference over episodes with a 95\%
+confidence interval, and an asterisk marks an interval excluding zero.
+
+\paragraph{The instruments.} Unless a section says otherwise, a distance is the sliced
+Wasserstein distance, which the plan names as headline. Six measurements appear in this
+report; they are set out here once because A2 uses all of them and they do not agree.
+
+\begin{itemize}\itemsep1pt \parskip0pt
+\item \textbf{Sliced Wasserstein distance}, pixel space. Both sets of images are projected
+onto many random directions; each projection is sorted and compared quantile by quantile,
+and the result is the root mean square over directions. Raw pixels, nothing learned. Lower
+is better.
+\item \textbf{Transformation statistic.} Three fixed convolutions per image: mean absolute
+Laplacian response, which is high-frequency energy; per-image standard deviation, which is
+dynamic range; and mean absolute residual above a local box average. Blur and contrast
+reduction both lower the first, only contrast lowers the second, so the triple separates
+them. No training and no weights, so nothing in it drifts between runs. It was built for
+CIFAR's corruptions and reads nothing outside them. Lower is better.
+\item \textbf{Energy maximum mean discrepancy}, pixel space:
+$2\,\mathbb{E}\|a-b\| - \mathbb{E}\|a-a'\| - \mathbb{E}\|b-b'\|$ over mean pairwise
+Euclidean distances. It requires no kernel width, which is why it sits beside the
+Wasserstein distance rather than a Gaussian-kernel discrepancy. Lower is better.
+\item \textbf{Class consistency.} The share of an episode's generated samples that a trained
+twenty-way classifier assigns to that episode's own class. \emph{Higher} is better. The
+classifier reports its own held-out accuracy beside every verdict; in A2 that ceiling is
+38.9\% on real images, so it is a weak instrument and is read as one.
+\item \textbf{Superclass consistency.} The same at the level of CIFAR-100's twenty coarse
+classes. \emph{Higher} is better.
+\item \textbf{Kernel Inception distance.} The unbiased squared maximum mean discrepancy
+under the cubic polynomial kernel $k(x,y) = (x\!\cdot\!y/d + 1)^{3}$, averaged over random
+subsets. \textbf{The features are not Inception features}: this project has no InceptionV3,
+so they come from the same small convolutional instrument quoted above. The estimator is
+standard and the feature space is local, so the number compares the arms measured here and
+cannot be set beside any published value. Lower is better.
+\end{itemize}
 
 \paragraph{Configuration.} One checkpoint of the three-transformation CIFAR-100 domain-shift
 family --- Gaussian blur, additive Gaussian noise, contrast reduction at severity 3 --- a
@@ -89,9 +123,9 @@ per cell, 60 episodes per cell.
 \toprule
 & Precondition & Status\\
 \midrule
-0.1 & Integrate the three branches & \textbf{Not done.} Both modulation-arm source files are absent from this tree. Blocks A2.\\
+0.1 & Integrate the three branches & Done. All three files coexist in the tree that produced A2.\\
 0.2 & Verify the split file & Done; hash matches the fixed value.\\
-0.3 & Modulation checkpoint & \textbf{Not done.} Absent from this machine. Also blocks A2.\\
+0.3 & Modulation checkpoint & Done. Both A2 arms were retrained from scratch rather than recovered.\\
 0.4 & Evaluation primitives & Four of five written. The kernel Inception distance was not implemented.\\
 0.5 & Output directory & Done.\\
 \bottomrule
@@ -158,11 +192,93 @@ consumes target images should do against controls holding a coordinate that is s
 A gap to the oracle remains at every budget and for both arms.
 
 \subsection{A2 --- Additive basis against the modulation arm}
+\label{sec:a2}
 
-\textbf{Not run.} Preconditions 0.1 and 0.3 are both unmet: the modulation implementation is
-on another branch and its checkpoint is not on this machine. Both are repository operations,
-not experiments. The arm exists and has been measured on the denoising loss; only the
-generation-level comparison is outstanding.
+The plan asks for the existing loss-level comparison to be extended to generation, matched on
+backbone, latent dimension and budget.
+
+Two networks were trained from scratch under identical conditions and evaluated on the
+same 180 held-out episodes with one shared initial noise per episode. The backbones are the
+same size --- 27.798M against 27.917M parameters --- and the arms share the set encoder, the
+transport map, $k$, the base head and the loss. \textbf{Only the conditioning mechanism
+differs.} In the basis arm the coordinate never enters the backbone: it weights learned
+score-perturbation directions that are added to the output,
+$\hat\varepsilon_z = \hat\varepsilon_0 + \sum_l z_l R_l(x_t,t)$. In the modulation arm it is
+fed to the backbone and folded into every residual block's scale and shift. The parameters
+that carry the coordinate are \textbf{55{,}344 in the basis arm against 118{,}784 in the
+modulation arm}, so the modulation baseline is the larger of the two by more than a factor
+of two; that is deliberate, since a stronger baseline is the one worth beating.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Instrument & Transport arm & Oracle arm\\
+\midrule
+Sliced Wasserstein \emph{(headline)} & tie at all three budgets & \textbf{basis}, all three\\
+Transformation statistic & \textbf{modulation}, all three & tie at all three\\
+Energy discrepancy & \textbf{modulation}, two of three & tie at all three\\
+Class consistency & \textbf{modulation}, two of three & \textbf{basis}, all three\\
+Superclass consistency & \textbf{modulation}, all three & tie at all three\\
+Kernel Inception distance & \textbf{basis} (not paired) & tie\\
+\bottomrule
+\end{tabular}
+\caption{A2, the verdict by instrument. A cell reads \emph{tie} when the 95\% interval
+contains zero at that budget. The transport arm is the method's own; the oracle arm refines
+on abundant target data and bounds what each conditioning mechanism can reach.}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Paired difference, modulation minus basis & $K_T=1$ & $K_T=5$ & $K_T=20$\\
+\midrule
+\multicolumn{4}{l}{\emph{Sliced Wasserstein, the headline metric}}\\
+\quad transport & $+0.0002 \pm 0.0070$ & $-0.0020 \pm 0.0076$ & $-0.0055 \pm 0.0074$\\
+\quad transport $+$ refine & $-0.0008 \pm 0.0074$ & $-0.0014 \pm 0.0086$ & $-0.0052 \pm 0.0089$\\
+\quad reuse $z_S$ & $-0.0191 \pm 0.0072^{*}$ & $-0.0050 \pm 0.0093$ & $-0.0071 \pm 0.0101$\\
+\quad oracle & $+0.0163 \pm 0.0105^{*}$ & $+0.0183 \pm 0.0118^{*}$ & $+0.0147 \pm 0.0119^{*}$\\
+\midrule
+\multicolumn{4}{l}{\emph{Transport arm, the other paired instruments}}\\
+\quad transformation statistic & $-0.0934 \pm 0.0485^{*}$ & $-0.1045 \pm 0.0441^{*}$ & $-0.0944 \pm 0.0468^{*}$\\
+\quad energy discrepancy & $-0.1878 \pm 0.2007$ & $-0.3356 \pm 0.2508^{*}$ & $-0.4521 \pm 0.2795^{*}$\\
+\quad class consistency & $-0.0099 \pm 0.0170$ & $-0.0168 \pm 0.0161^{*}$ & $-0.0142 \pm 0.0138^{*}$\\
+\quad superclass consistency & $-0.0368 \pm 0.0238^{*}$ & $-0.0427 \pm 0.0270^{*}$ & $-0.0439 \pm 0.0235^{*}$\\
+\bottomrule
+\end{tabular}
+\caption{A2, signed so that a positive value favours the basis on every instrument,
+including the two where a higher raw score is better.}
+\end{table}
+
+\paragraph{The oracle gap, and the explanation that failed.} The basis leads at the oracle on
+the headline metric and on class consistency. The natural reading is that the basis offers a
+loss surface the refinement can descend further, and that transport simply does not land
+close enough to exploit it. A follow-up probe tested exactly that, from the same starting
+coordinate on the same data under the same budget and noise draws, and \textbf{reversed it}:
+the basis descends \emph{less} than the modulation arm from the transported coordinate
+($-0.0024 \pm 0.0005^{*}$ as a fraction of each arm's own starting loss) and much less from
+$z=0$ ($-0.0796 \pm 0.0121^{*}$), along a segment that is \emph{rougher}, not smoother
+($+0.0002 \pm 0.0001^{*}$). The probe was written with its own reading rule: if neither
+descent difference favours the basis, the oracle gap needs another explanation and must be
+reported without this one. It does need another explanation, and none is offered here.
+
+\paragraph{Conclusion.} \textbf{On the metric the plan names as headline, the additive
+reverse-dynamics basis and matched modulation conditioning are indistinguishable on the
+method's own arm} --- the interval contains zero at every target budget, with and without
+refinement. Four of the five paired instruments place the modulation arm \emph{ahead} on that
+arm, three of them significantly. The basis leads only at the oracle, and the mechanism
+proposed for that lead was tested and contradicted. The single reading that favours the
+basis on the transport arm is the kernel Inception distance, which is not paired and whose
+feature space is local to this project.
+
+What survives is an efficiency claim rather than a performance one, and it should be stated
+as one: \textbf{the basis reaches the same generation quality as the modulation arm while
+carrying the task coordinate in 55{,}344 parameters against 118{,}784, fewer than half.}
+That is a real and reportable property of the architecture. It is not the claim the stage set
+out to establish.
 
 \subsection{A3 --- Target-scarcity sweep}
 
@@ -430,7 +546,7 @@ target image does not.
 \midrule
 1 & Gaussian-mixture mechanism and calibration & Complete\\
 2 & Source-dependence controls & Complete\\
-3 & Additive basis against the modulation arm & \textbf{Not run} --- preconditions 0.1 and 0.3 unmet\\
+3 & Additive basis against the modulation arm & Complete; indistinguishable on the headline metric\\
 4 & Target-scarcity curve, crossing named & Complete; there is no crossing\\
 5 & Source-abundance curve & Complete; saturated from the first point\\
 6 & Transport-structure ablation & Complete\\
@@ -457,10 +573,17 @@ further results are usefully negative: source evidence saturates below the small
 measured, so the method is cheap on the source side, and the non-linear transport map is not
 distinguishable from a linear one, so the architecture can be simplified.
 
-Three items would change what can be claimed. The unconstrained fine-tuning reference, which
+The architectural claim is the one that did not survive. Against a matched modulation
+baseline carrying the coordinate in more than twice as many parameters, the additive basis
+is indistinguishable at generation on the headline metric, and behind it on several
+secondary ones; its only clear lead is at the oracle, and the loss-surface explanation
+advanced for that lead was tested and contradicted. \textbf{What the basis can still claim is
+efficiency: the same generation quality from 55{,}344 parameters against 118{,}784.} That is
+worth reporting, and it is a different paper from the one the stage set out to write.
+
+Two items would change what can be claimed. The unconstrained fine-tuning reference, which
 is implemented but was not run, would establish whether the remaining gap to the oracle
-belongs to the task or to the architecture. The branch integration of 0.1 unblocks
-deliverable~3 and is a repository operation. And the image release behind C0 is the only
+belongs to the task or to the architecture. And the image release behind C0 is the only
 route to a task family in which a single target example does not already reveal the task ---
 which, on the evidence of A1, is where this method has the most to offer.
 
