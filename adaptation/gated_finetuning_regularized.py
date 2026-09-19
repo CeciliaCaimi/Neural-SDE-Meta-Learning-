@@ -21,6 +21,7 @@ from models.neural_sde import NeuralSDE
 from models.head import ForecastHead
 from training.train_meta import simulate_neural_sde_batch
 from sde_basis.parameterised_sde import drift_true, sigma_diag_true
+from adaptation.gate_controller import LearnedGateController, build_controller_input
 
 # === HYPERPARAMETERS ===
 ADAPT_STEPS = 50        
@@ -64,7 +65,15 @@ def adapt_model(sde, head_init, zf_init, zg_init, support, gen, cfg):
     n_sim = T - 1; T_sim = dt * n_sim
     x_max = cfg.stability.max_state_abs
 
-    for _ in range(ADAPT_STEPS):
+    # Gradient norm of the support-set adaptation loss w.r.t. z_f/z_g at the
+    # *initial* point (step 0, before any Adam update has moved them). This
+    # is a byproduct of the first backward() below -- captured here so the
+    # learned gate controller (item 3) can reuse it as an input feature
+    # instead of running a second forward/backward just to get it.
+    grad_norm_zf_init = None
+    grad_norm_zg_init = None
+
+    for step_idx in range(ADAPT_STEPS):
         optimizer.zero_grad()
         zf_batch = zf_adapted.expand(B, -1)
         zg_batch = zg_adapted.expand(B, -1)
@@ -94,9 +103,15 @@ def adapt_model(sde, head_init, zf_init, zg_init, support, gen, cfg):
         total_loss = loss_path + loss_head + loss_reg
 
         total_loss.backward()
+        if step_idx == 0:
+            grad_norm_zf_init = zf_adapted.grad.norm().item()
+            grad_norm_zg_init = zg_adapted.grad.norm().item()
         optimizer.step()
 
-    return head, zf_adapted.detach(), zg_adapted.detach(), time.time() - start_time
+    return (
+        head, zf_adapted.detach(), zg_adapted.detach(), time.time() - start_time,
+        grad_norm_zf_init, grad_norm_zg_init,
+    )
 
 def compute_residual(sde, head, zf, zg, support, gen, cfg):
     B, T, D = support.shape
@@ -162,7 +177,10 @@ def compute_mechanism_error(sde, theta, zf, zg, query_in, query_orig, target_sca
     diffusion_error = F.mse_loss(diff_pred, diff_target).item()
     return drift_error, diffusion_error
 
-def gated_inference(encoder, sde, head, support, query, gen, cfg, theta, target_scaler=None):
+def gated_inference(
+    encoder, sde, head, support, query, gen, cfg, theta, target_scaler=None,
+    gate_mode="scalar", controller=None,
+):
     """Run gated adaptation and inference for one task.
 
     Args:
@@ -175,7 +193,22 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, theta, target_
             sees them. Predictions are inverted back to original units before
             computing RMSE, so all reported metrics are in simulator units.
             When None, the model operates on raw data throughout.
+        gate_mode: "scalar" (default, original design) or "learned" (item 3).
+            "scalar" blends two full *simulation outputs* -- one rolled out
+            with the adapted (zf_opt, zg_opt) latents ("smart"), one with
+            zeroed latents ("safe") -- using a single scalar g shared by
+            both z_f and z_g. "learned" instead blends *in latent space*
+            with a per-task, per-factor (a_f, a_g) from `controller`, then
+            runs one simulation with the blended latents. See
+            adaptation/gate_controller.py for why these are structurally
+            different (output-blend vs. latent-blend), not just a
+            reparameterization of the same thing.
+        controller: a LearnedGateController, required when gate_mode="learned".
     """
+    if gate_mode not in ("scalar", "learned"):
+        raise ValueError(f"Unknown gate_mode={gate_mode!r}, expected 'scalar' or 'learned'")
+    if gate_mode == "learned" and controller is None:
+        raise ValueError("gate_mode='learned' requires a controller (LearnedGateController)")
     # --- 0. Normalize inputs (two-scalar: target scaler fitted on support) ---
     if target_scaler is not None:
         support_in = apply_scaler_to_trajectories(support, target_scaler)
@@ -194,41 +227,78 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, theta, target_
     # 2. Adapt (Regularized). z_f and z_g are separate leaf tensors optimized
     # jointly by Adam, so each adapts independently in response to its own
     # gradient (the drift-facing vs. diffusion-facing latent are not tied).
-    head_opt, zf_opt, zg_opt, adapt_time = adapt_model(sde, head, zf_init, zg_init, support_in, gen, cfg)
+    # grad_norm_zf_init/grad_norm_zg_init are a byproduct of adapt_model's
+    # first Adam step (gradient at the initial point) -- unused in
+    # gate_mode="scalar", reused by gate_mode="learned" below (item 3).
+    head_opt, zf_opt, zg_opt, adapt_time, grad_norm_zf_init, grad_norm_zg_init = adapt_model(
+        sde, head, zf_init, zg_init, support_in, gen, cfg
+    )
 
     # 2b. Latent movement under adaptation (item 1's ||Delta z_f||, ||Delta z_g||)
     delta_zf_norm = (zf_opt - zf_init).norm().item()
     delta_zg_norm = (zg_opt - zg_init).norm().item()
 
-    # 3. Gate
     # d_res is in units of (state value)^2 and is scale-dependent. Dividing by
     # the empirical variance of the support data AND sqrt(N) yields a dimensionless
     # NMSE so that GATE_TAU is meaningful regardless of raw vs. normalized data
     # regime or observation length. Without sqrt(N), the gate collapses to 0 at
     # high step counts because d_res grows with sequence length.
     # d_norm ≈ 0: model explains all variance; d_norm = 1: no better than mean.
-    # This is still the single scalar gate from the original design — it is
-    # applied identically to both z_f and z_g (task 3's learned (a_f, a_g)
-    # controller is a separate follow-up, not implemented here).
+    # Computed in both gate modes as a shared diagnostic (residual_error column).
     d_res = compute_residual(sde, head_opt, zf_opt, zg_opt, support_in, gen, cfg)
     data_var = support_in.var().item()
     N = support_in.shape[1]  # observation length
     d_norm = d_res / (data_var * (N ** 0.5) + 1e-8)  # sqrt(N)-normalized
-    g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_norm))).item()
 
-    # 4. Predict (in normalized space if scaler is active)
-    B_q = query_in.shape[0]
-    zf_smart = zf_opt.expand(B_q, -1); zf_safe = torch.zeros_like(zf_smart)
-    zg_smart = zg_opt.expand(B_q, -1); zg_safe = torch.zeros_like(zg_smart)
     T_full = cfg.time_grid.T; n_steps = cfg.time_grid.n_steps
     x_max = cfg.stability.max_state_abs
+    B_q = query_in.shape[0]
 
-    mc_preds = []
-    with torch.no_grad():
-        for _ in range(MC_SAMPLES):
-            t_smart = simulate_neural_sde_batch(sde, query_in[:, 0], zf_smart, zg_smart, T_full, n_steps, x_max, gen)
-            t_safe  = simulate_neural_sde_batch(sde, query_in[:, 0], zf_safe,  zg_safe,  T_full, n_steps, x_max, gen)
-            mc_preds.append((1 - g) * t_safe + g * t_smart)
+    if gate_mode == "scalar":
+        # 3. Gate: the original single scalar g, applied identically to both
+        # z_f and z_g -- but as an *output* blend, not a latent blend. Two
+        # full simulations are rolled out (one with the adapted latents, one
+        # with zeroed latents) and their trajectories are mixed with g.
+        g = torch.sigmoid(torch.tensor(GATE_ALPHA * (GATE_TAU - d_norm))).item()
+        a_f = a_g = float("nan")  # not applicable to this mode
+
+        zf_smart = zf_opt.expand(B_q, -1); zf_safe = torch.zeros_like(zf_smart)
+        zg_smart = zg_opt.expand(B_q, -1); zg_safe = torch.zeros_like(zg_smart)
+
+        mc_preds = []
+        with torch.no_grad():
+            for _ in range(MC_SAMPLES):
+                t_smart = simulate_neural_sde_batch(sde, query_in[:, 0], zf_smart, zg_smart, T_full, n_steps, x_max, gen)
+                t_safe  = simulate_neural_sde_batch(sde, query_in[:, 0], zf_safe,  zg_safe,  T_full, n_steps, x_max, gen)
+                mc_preds.append((1 - g) * t_safe + g * t_smart)
+    else:
+        # 3. Learned controller gate (item 3): drift/diffusion residuals,
+        # computed on the support set *pre-adaptation* (zf_init/zg_init),
+        # reusing item 1's compute_mechanism_error exactly as a drift-facing
+        # and diffusion-facing residual pair.
+        drift_residual_pre, diffusion_residual_pre = compute_mechanism_error(
+            sde, theta, zf_init, zg_init, support_in, support, target_scaler
+        )
+        ctrl_input = build_controller_input(
+            zf_init, zg_init, drift_residual_pre, diffusion_residual_pre,
+            grad_norm_zf_init, grad_norm_zg_init,
+        )
+        with torch.no_grad():
+            a_f, a_g = controller(ctrl_input)[0].tolist()
+        g = float("nan")  # a single scalar gate value doesn't apply here
+
+        # z_f' = z_f(0) + a_f * Delta z_f ; z_g' = z_g(0) + a_g * Delta z_g
+        # -- blended in latent space, then ONE simulation per MC sample
+        # (no separate "smart"/"safe" rollouts to mix at the output level).
+        zf_pred = (zf_init + a_f * (zf_opt - zf_init)).expand(B_q, -1)
+        zg_pred = (zg_init + a_g * (zg_opt - zg_init)).expand(B_q, -1)
+
+        mc_preds = []
+        with torch.no_grad():
+            for _ in range(MC_SAMPLES):
+                mc_preds.append(
+                    simulate_neural_sde_batch(sde, query_in[:, 0], zf_pred, zg_pred, T_full, n_steps, x_max, gen)
+                )
 
     mc_tensor = torch.stack(mc_preds, dim=0)
     mean_norm = mc_tensor.mean(dim=0)
@@ -273,7 +343,8 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, theta, target_
     nll = F.gaussian_nll_loss(mean_norm, query_in, var_norm).item()
 
     return {
-        "gate_value": g, "residual_error": d_res, "adapt_time": adapt_time,
+        "gate_value": g, "a_f": a_f, "a_g": a_g,
+        "residual_error": d_res, "adapt_time": adapt_time,
         "mse_rollout": mse_rollout,
         "mse_final": mse_final,
         "mse_1step": mse_1step,
@@ -290,7 +361,7 @@ def gated_inference(encoder, sde, head, support, query, gen, cfg, theta, target_
 
 EXPECTED_COLUMNS = [
     "regime", "theta_id", "steps_available",
-    "gate_value", "residual_error", "adapt_time",
+    "gate_value", "a_f", "a_g", "residual_error", "adapt_time",
     "mse_rollout", "mse_final", "mse_1step",
     "rmse_rollout", "rmse_final",
     "rmse_per_dim_mean", "rmse_per_dim_max",
@@ -337,7 +408,10 @@ def _init_or_repair_csv(path: str) -> set:
     return completed_keys
 
 
-def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
+def main(
+    regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt",
+    gate_mode="scalar", controller_checkpoint=None, results_path=None,
+):
     """
     Args:
         regimes: which "test<Regime>" splits to evaluate (e.g.
@@ -346,12 +420,25 @@ def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
             "testC"] if omitted. See the module docstring / --regimes CLI flag.
         checkpoint_path: path to the trained checkpoint (encoder/sde/head
             state dicts + source_scaler), produced by training/train_meta.py.
+        gate_mode: "scalar" (default, original design) or "learned" (item 3
+            controller). See gated_inference() for what each mode does.
+        controller_checkpoint: path to a controller checkpoint saved by
+            training/train_controller.py. Required when gate_mode="learned".
+        results_path: where to write the results CSV. Defaults to
+            RESULTS_PATH for gate_mode="scalar" (unchanged legacy path) or
+            "results/gated_controller_final.csv" for gate_mode="learned", so
+            the two modes never overwrite each other's results.
     """
     if regimes is None:
         regimes = ["testA", "testB", "testC"]
+    if gate_mode not in ("scalar", "learned"):
+        raise ValueError(f"Unknown gate_mode={gate_mode!r}, expected 'scalar' or 'learned'")
+    if results_path is None:
+        results_path = RESULTS_PATH if gate_mode == "scalar" else "results/gated_controller_final.csv"
 
     device = torch.device(cfg.device)
     print("🛡️  Resumable Gated Finetuning (REGULARIZED + NORMALISED) Started...")
+    print(f"  gate_mode={gate_mode}")
 
     ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
     x_dim, z_dim = cfg.basis.x_dim, cfg.latent.latent_dim
@@ -362,6 +449,18 @@ def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
     sde.load_state_dict(ckpt['sde'])
     head.load_state_dict(ckpt['head'])
     encoder.eval(); sde.eval(); head.eval()
+
+    controller = None
+    if gate_mode == "learned":
+        if controller_checkpoint is None:
+            raise ValueError("gate_mode='learned' requires --controller-checkpoint")
+        ctrl_ckpt = torch.load(controller_checkpoint, map_location=device, weights_only=False)
+        controller = LearnedGateController(
+            z_dim=ctrl_ckpt.get("z_dim", z_dim),
+            hidden_dim=ctrl_ckpt.get("hidden_dim", 32),
+        ).to(device)
+        controller.load_state_dict(ctrl_ckpt["controller"])
+        controller.eval()
 
     # --- Two-scalar approach: load source scaler from checkpoint ---
     # The source scaler was fitted on training data by train_meta.py and
@@ -383,7 +482,7 @@ def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
     gen = torch.Generator(device=device); gen.manual_seed(42)
     index_path = os.path.join(cfg.paths.data_root, "index.csv")
 
-    completed_keys = _init_or_repair_csv(RESULTS_PATH)
+    completed_keys = _init_or_repair_csv(results_path)
     buffer = []
 
     for regime in regimes:
@@ -447,6 +546,7 @@ def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
                     supp_full[:, :steps], query,
                     gen, cfg, theta,
                     target_scaler=target_scaler,
+                    gate_mode=gate_mode, controller=controller,
                 )
                 metrics.update({
                     "regime": regime,
@@ -456,21 +556,21 @@ def main(regimes=None, checkpoint_path="checkpoints/meta_epoch_50.pt"):
                 buffer.append(metrics)
 
             if len(buffer) >= SAVE_EVERY:
-                pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(RESULTS_PATH, mode='a', header=False, index=False)
+                pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(results_path, mode='a', header=False, index=False)
                 buffer = []
 
     if buffer:
-        pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(RESULTS_PATH, mode='a', header=False, index=False)
+        pd.DataFrame(buffer, columns=EXPECTED_COLUMNS).to_csv(results_path, mode='a', header=False, index=False)
 
     print("\n✅ Regularized Run Complete.")
-    full_df = pd.read_csv(RESULTS_PATH)
+    full_df = pd.read_csv(results_path)
     # Summarize the hardest/last-requested regime (prefer legacy testC when
     # present, since that's the strongest of the original three regimes).
     summary_regime = "testC" if "testC" in regimes else regimes[-1]
     print(f"\nSummary for regime={summary_regime}:")
     print(full_df[full_df['regime'] == summary_regime].groupby('steps_available')[
         ['mse_rollout', 'rmse_rollout', 'rmse_per_dim_mean', 'rmse_per_dim_max',
-         'residual_error', 'gate_value',
+         'residual_error', 'gate_value', 'a_f', 'a_g',
          'drift_error', 'diffusion_error', 'delta_zf_norm', 'delta_zg_norm']
     ].mean())
 
@@ -503,6 +603,39 @@ if __name__ == "__main__":
         default="checkpoints/meta_epoch_50.pt",
         help="Path to the trained checkpoint (default: checkpoints/meta_epoch_50.pt).",
     )
+    parser.add_argument(
+        "--gate-mode",
+        type=str,
+        default="scalar",
+        choices=["scalar", "learned"],
+        help=(
+            "Which gate to use at test time (item 3). 'scalar' (default) is "
+            "the original single-scalar gate applied identically to z_f/z_g "
+            "via an output-level blend of two simulations. 'learned' uses "
+            "the LearnedGateController (training/train_controller.py) to "
+            "predict a per-task (a_f, a_g) and blends in latent space "
+            "instead. The scalar gate remains the default -- it is not "
+            "removed, and removal is deferred pending a real comparison "
+            "(see training/train_controller.py's module docstring)."
+        ),
+    )
+    parser.add_argument(
+        "--controller-checkpoint",
+        type=str,
+        default=None,
+        help="Path to a controller checkpoint from training/train_controller.py. Required when --gate-mode=learned.",
+    )
+    parser.add_argument(
+        "--results-path",
+        type=str,
+        default=None,
+        help=(
+            "Where to write the results CSV. Defaults to "
+            "results/gated_regularized_final.csv for --gate-mode=scalar or "
+            "results/gated_controller_final.csv for --gate-mode=learned, so "
+            "the two modes never overwrite each other."
+        ),
+    )
     args = parser.parse_args()
 
     if args.regimes is None:
@@ -512,4 +645,8 @@ if __name__ == "__main__":
     else:
         selected_regimes = [r.strip() for r in args.regimes.split(",") if r.strip()]
 
-    main(regimes=selected_regimes, checkpoint_path=args.checkpoint)
+    main(
+        regimes=selected_regimes, checkpoint_path=args.checkpoint,
+        gate_mode=args.gate_mode, controller_checkpoint=args.controller_checkpoint,
+        results_path=args.results_path,
+    )
