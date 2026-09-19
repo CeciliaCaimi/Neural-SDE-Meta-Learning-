@@ -9,7 +9,7 @@ Device Consistency: Explicitly ensures new tensors are created on the correct de
 '''
 
 import torch
-from typing import Tuple
+from typing import Callable, Tuple
 from sde_basis.parameters import Theta
 from sde_basis.parameterised_sde import drift_true, sigma_diag_true
 
@@ -112,6 +112,78 @@ def simulate_batch(
             x_next[~valid_mask] = 0.0
         
         # 7. Update and Store
+        x = x_next
+        trajs[:, k + 1, :] = x
+
+    return trajs, valid_mask
+
+
+def simulate_batch_generic(
+    drift_fn: Callable[[torch.Tensor], torch.Tensor],
+    diffusion_fn: Callable[[torch.Tensor], torch.Tensor],
+    L: torch.Tensor,
+    x0: torch.Tensor,
+    T: float,
+    n_steps: int,
+    x_max_abs: float,
+    generator: torch.Generator,
+) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+    Item 5: the same Euler-Maruyama integration as simulate_batch above
+    (identical stepping, correlated-noise, stability-check and defensive-
+    freeze logic), generalised to take plain drift/diffusion callables
+    instead of a (Theta, fixed-basis) pair.
+
+    Deliberately duplicated rather than refactored into a shared helper
+    that simulate_batch would also call, so that simulate_batch -- which
+    items 1-4's already-queued real-GPU runs depend on -- is not touched.
+
+    Parameters
+    ----------
+    drift_fn, diffusion_fn : Callable[[torch.Tensor], torch.Tensor]
+        Each takes the current state x, shape (batch, d), and returns a
+        tensor of the same shape -- the same (..., d) -> (..., d), diagonal-
+        only shape contract as drift_true(x, theta) / sigma_diag_true(x,
+        theta) in sde_basis/parameterised_sde.py, just already bound to a
+        specific mechanism + coefficients (see data_gen/mechanism_library.py)
+        instead of dispatching through a Theta.
+    L, x0, T, n_steps, x_max_abs, generator : see simulate_batch.
+
+    Returns
+    -------
+    trajs : torch.Tensor, shape (batch_size, n_steps + 1, d).
+    valid_mask : torch.Tensor, shape (batch_size,).
+    """
+    batch_size, d = x0.shape
+    device = x0.device
+    dt = T / n_steps
+    sqrt_dt = dt ** 0.5
+
+    trajs = torch.zeros(batch_size, n_steps + 1, d, device=device)
+    trajs[:, 0, :] = x0
+
+    x = x0.clone()
+    valid_mask = torch.ones(batch_size, dtype=torch.bool, device=device)
+    L_broad = L.unsqueeze(0)
+
+    for k in range(n_steps):
+        b = drift_fn(x)
+        sigma = diffusion_fn(x)
+
+        xi = torch.randn(batch_size, d, 1, generator=generator, device=device)
+        noise_corr = torch.matmul(L_broad, xi).squeeze(-1)
+
+        dx = b * dt + sigma * noise_corr * sqrt_dt
+        x_next = x + dx
+
+        is_finite = torch.isfinite(x_next).all(dim=1)
+        is_bounded = (x_next.abs().max(dim=1).values <= x_max_abs)
+        still_valid = is_finite & is_bounded
+        valid_mask = valid_mask & still_valid
+
+        if (~valid_mask).any():
+            x_next[~valid_mask] = 0.0
+
         x = x_next
         trajs[:, k + 1, :] = x
 
