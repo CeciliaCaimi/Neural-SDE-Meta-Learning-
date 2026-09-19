@@ -48,6 +48,18 @@ shared 9-entry table, not independently-sampled severities.
   - `multiplicative`: `gbm_multiplicative`, `gbm_with_floor`,
     `bounded_multiplicative`
 
+  Not all 8 are shape-distinct: `near_constant_weak_state`
+  (`c + eps*|x|`, `eps` small), `abs_linear_state` (`c0 + c1*|x|`,
+  `c0`/`c1` comparable), and `gbm_with_floor` (`c*|x| + floor`, `c`
+  dominant) are the same affine family `c0 + c1*|x|`, differing only in
+  which coefficient's sampling range dominates. They're a deliberate
+  spectrum across one functional form (near-constant -> balanced ->
+  near-multiplicative), placed in different categories by which term
+  dominates, not three distinct functional shapes -- the shape diversity
+  within `state_dependent`/`multiplicative` comes from `cir_sqrt` /
+  `quadratic_state` / `gbm_multiplicative` / `bounded_multiplicative`
+  instead.
+
 Each mechanism has its own coefficient-distribution `sampler`. A task
 (`MechanismTheta`) is built by drawing a drift instance (mechanism name +
 sampled coefficients) and a diffusion instance **completely
