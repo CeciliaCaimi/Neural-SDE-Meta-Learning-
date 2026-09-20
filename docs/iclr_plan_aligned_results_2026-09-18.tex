@@ -38,11 +38,11 @@ This report maps every completed or conditionally required experiment to the ten
 
 \section{Reporting Convention}
 
-Results are paired within the same held-out semantic task, domain relation, support draw, and sampling noise whenever the design permits. For a lower-is-better distance, a reported paired advantage is
+Results are paired within the same held-out semantic task, domain relation, support draw, and sampling noise whenever the design permits. Raw-performance tables contain only absolute means and 95\% CIs. They are followed by comparison tables containing paired differences. For a lower-is-better distance, a reported paired advantage is
 \begin{equation}
   \Delta=d(\text{comparator},\mathcal D_T)-d(\text{candidate},\mathcal D_T),
 \end{equation}
-so positive values favour the candidate. A superscript $\sigstar$ is attached directly to a value only when its paired 95\% CI excludes zero. There is no separate significance column. Absolute entries are mean $\pm$ 95\% CI. Sliced Wasserstein (SW), phototype-statistic distance, and energy MMD are lower-is-better; semantic consistency is higher-is-better. Frozen predictors are treated as measurement instruments with reported ceilings, not as ground truth.
+so positive values favour the candidate. For higher-is-better consistency, the subtraction is reversed so that positive again favours the named candidate. Every comparison-table header explicitly states the subtraction and which method a positive value supports. A superscript $\sigstar$ appears only on a paired difference whose 95\% CI excludes zero; stars are not placed on raw values. Absolute entries are mean $\pm$ 95\% CI. Sliced Wasserstein (SW), phototype-statistic distance, and energy MMD are lower-is-better; semantic consistency is higher-is-better. Frozen predictors are treated as measurement instruments with reported ceilings, not as ground truth.
 
 \section{Results, Module by Module}
 
@@ -106,7 +106,7 @@ Test independence unit & disease mean (four test diseases) \\
 All required $\KT$ values, the five prespecified controls, FiLM, disjoint target queries, and disease-level paired intervals were included. The FiLM advantage cannot be attributed to a larger model because FiLM has 560 fewer trainable parameters in this experiment.
 
 \begin{table}[h]
-\caption{Distance to the real held-out target population across four test diseases. All entries are absolute mean $\pm$ 95\% CI; lower is better. A superscript $\sigstar$ marks a significant paired difference from additive correct-source transport. The direction is determined by the values themselves. ``Population only'' is $\Delta_\gamma(0)$ and is not the strict $z=0$ control.}
+\caption{Raw distance to the real held-out target population across four test diseases. Entries are absolute mean $\pm$ 95\% CI and lower is better; no significance testing is encoded in this raw-performance table. ``Population only'' is $\Delta_\gamma(0)$ and is not the strict $z=0$ control.}
 \label{tab:fitz-absolute}
 \centering
 \scriptsize
@@ -115,26 +115,26 @@ All required $\KT$ values, the five prespecified controls, FiLM, disjoint target
 \toprule
 Metric & Method & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
 \midrule
-Phototype & Target only & $2.512\pm0.435$ & $2.515\pm0.430$ & $2.513\pm0.431$ & $2.515\pm0.433$ & $2.518\pm0.444\sigstar$ \\
-& Source reuse & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ \\
-& Population only & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ \\
+Phototype & Target only & $2.512\pm0.435$ & $2.515\pm0.430$ & $2.513\pm0.431$ & $2.515\pm0.433$ & $2.518\pm0.444$ \\
+& Source reuse & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ \\
+& Population only & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ \\
 & Wrong-task source $+$ relation & $2.503\pm0.444$ & $2.504\pm0.445$ & $2.508\pm0.443$ & $2.511\pm0.441$ & $2.513\pm0.449$ \\
 & Correct source $+$ transport & $2.501\pm0.444$ & $2.502\pm0.447$ & $2.507\pm0.443$ & $2.511\pm0.438$ & $2.508\pm0.450$ \\
-& FiLM $+$ transport & $2.297\pm0.456\sigstar$ & $2.297\pm0.456\sigstar$ & $2.297\pm0.456\sigstar$ & $2.297\pm0.455\sigstar$ & $2.297\pm0.456\sigstar$ \\
+& FiLM $+$ transport & $2.297\pm0.456$ & $2.297\pm0.456$ & $2.297\pm0.456$ & $2.297\pm0.455$ & $2.297\pm0.456$ \\
 \midrule
 SW & Target only & $0.362\pm0.044$ & $0.363\pm0.044$ & $0.362\pm0.044$ & $0.363\pm0.045$ & $0.363\pm0.044$ \\
-& Source reuse & $0.364\pm0.045\sigstar$ & $0.364\pm0.045$ & $0.364\pm0.045\sigstar$ & $0.364\pm0.045\sigstar$ & $0.364\pm0.045\sigstar$ \\
-& Population only & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ \\
+& Source reuse & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ \\
+& Population only & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ \\
 & Wrong-task source $+$ relation & $0.362\pm0.044$ & $0.362\pm0.046$ & $0.361\pm0.046$ & $0.362\pm0.045$ & $0.362\pm0.044$ \\
 & Correct source $+$ transport & $0.362\pm0.045$ & $0.362\pm0.047$ & $0.362\pm0.045$ & $0.362\pm0.046$ & $0.362\pm0.045$ \\
-& FiLM $+$ transport & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047\sigstar$ & $0.360\pm0.047\sigstar$ & $0.360\pm0.047$ \\
+& FiLM $+$ transport & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ \\
 \midrule
-Energy MMD & Target only & $7.113\pm1.804$ & $7.163\pm1.816$ & $7.120\pm1.814$ & $7.132\pm1.845$ & $7.137\pm1.817\sigstar$ \\
-& Source reuse & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ \\
-& Population only & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ \\
+Energy MMD & Target only & $7.113\pm1.804$ & $7.163\pm1.816$ & $7.120\pm1.814$ & $7.132\pm1.845$ & $7.137\pm1.817$ \\
+& Source reuse & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ \\
+& Population only & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ \\
 & Wrong-task source $+$ relation & $7.099\pm1.821$ & $7.116\pm1.841$ & $7.087\pm1.848$ & $7.105\pm1.846$ & $7.099\pm1.806$ \\
 & Correct source $+$ transport & $7.095\pm1.852$ & $7.114\pm1.887$ & $7.110\pm1.859$ & $7.110\pm1.867$ & $7.109\pm1.838$ \\
-& FiLM $+$ transport & $6.901\pm1.864\sigstar$ & $6.901\pm1.862\sigstar$ & $6.901\pm1.862\sigstar$ & $6.903\pm1.861\sigstar$ & $6.903\pm1.861\sigstar$ \\
+& FiLM $+$ transport & $6.901\pm1.864$ & $6.901\pm1.862$ & $6.901\pm1.862$ & $6.903\pm1.861$ & $6.903\pm1.861$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -143,34 +143,48 @@ Energy MMD & Target only & $7.113\pm1.804$ & $7.163\pm1.816$ & $7.120\pm1.814$ &
 Correct-source transport is marginally closer than direct source reuse, but it is indistinguishable from wrong-source transport on every metric and at every $\KT$. Population-only obtains an artificially low pixel SW while being much worse in phototype space and energy MMD, indicating a generic low-frequency output rather than valid target-population transfer. FiLM has better absolute phototype and MMD values, but it does not restore disease-source specificity.
 
 \begin{table}[h]
-\caption{Paired advantage of correct-source transport over wrong-task-source transport. Positive favours the correct source; $\sigstar$ would mark a paired CI excluding zero.}
+\caption{Paired demographic comparisons corresponding to Table~\ref{tab:fitz-absolute}. Every entry is $\Delta=d(\text{comparator})-d(\text{correct source+transport})$; positive values favour correct-source transport. A superscript $\sigstar$ marks a 95\% paired CI excluding zero.}
 \label{tab:fitz-wrong}
 \centering
 \small
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lccccc}
+\begin{tabular}{llccccc}
 \toprule
-Metric & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
+Metric & Comparator ($\Delta=d_C-d_{\rm correct}$; $+=$ correct) & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
 \midrule
-Phototype & $+0.0021\pm0.0104$ & $+0.0017\pm0.0061$ & $+0.0010\pm0.0085$ & $-0.0001\pm0.0065$ & $+0.0042\pm0.0098$ \\
-SW & $+0.0001\pm0.0011$ & $-0.0000\pm0.0013$ & $-0.0011\pm0.0013$ & $-0.0001\pm0.0008$ & $-0.0002\pm0.0006$ \\
-Energy MMD & $+0.0037\pm0.0316$ & $+0.0022\pm0.0526$ & $-0.0232\pm0.0242$ & $-0.0051\pm0.0230$ & $-0.0100\pm0.0342$ \\
+Phototype & Target only & $+0.0114\pm0.0213$ & $+0.0121\pm0.0181$ & $+0.0053\pm0.0146$ & $+0.0043\pm0.0095$ & $+0.0095\pm0.0069\sigstar$ \\
+& Source reuse & $+0.0237\pm0.0040\sigstar$ & $+0.0224\pm0.0049\sigstar$ & $+0.0175\pm0.0085\sigstar$ & $+0.0140\pm0.0127\sigstar$ & $+0.0163\pm0.0087\sigstar$ \\
+& Population only & $+1.5454\pm0.1420\sigstar$ & $+1.5441\pm0.1440\sigstar$ & $+1.5392\pm0.1412\sigstar$ & $+1.5357\pm0.1374\sigstar$ & $+1.5380\pm0.1479\sigstar$ \\
+& Wrong-task source $+$ relation & $+0.0021\pm0.0104$ & $+0.0017\pm0.0061$ & $+0.0010\pm0.0085$ & $-0.0001\pm0.0065$ & $+0.0042\pm0.0098$ \\
+& FiLM $+$ transport & $-0.2042\pm0.0478\sigstar$ & $-0.2058\pm0.0507\sigstar$ & $-0.2103\pm0.0540\sigstar$ & $-0.2135\pm0.0558\sigstar$ & $-0.2117\pm0.0481\sigstar$ \\
+\midrule
+SW & Target only & $-0.0002\pm0.0016$ & $+0.0012\pm0.0024$ & $+0.0001\pm0.0015$ & $+0.0005\pm0.0008$ & $+0.0005\pm0.0007$ \\
+& Source reuse & $+0.0023\pm0.0016\sigstar$ & $+0.0020\pm0.0022$ & $+0.0021\pm0.0015\sigstar$ & $+0.0022\pm0.0017\sigstar$ & $+0.0022\pm0.0009\sigstar$ \\
+& Population only & $-0.0752\pm0.0385\sigstar$ & $-0.0755\pm0.0403\sigstar$ & $-0.0754\pm0.0389\sigstar$ & $-0.0754\pm0.0396\sigstar$ & $-0.0753\pm0.0385\sigstar$ \\
+& Wrong-task source $+$ relation & $+0.0001\pm0.0011$ & $-0.0000\pm0.0013$ & $-0.0011\pm0.0013$ & $-0.0001\pm0.0008$ & $-0.0002\pm0.0006$ \\
+& FiLM $+$ transport & $-0.0017\pm0.0023$ & $-0.0021\pm0.0025$ & $-0.0020\pm0.0019\sigstar$ & $-0.0018\pm0.0015\sigstar$ & $-0.0017\pm0.0034$ \\
+\midrule
+Energy MMD & Target only & $+0.0184\pm0.0488$ & $+0.0493\pm0.0733$ & $+0.0097\pm0.0552$ & $+0.0223\pm0.0298$ & $+0.0274\pm0.0243\sigstar$ \\
+& Source reuse & $+0.0814\pm0.0625\sigstar$ & $+0.0625\pm0.0603\sigstar$ & $+0.0666\pm0.0658\sigstar$ & $+0.0668\pm0.0631\sigstar$ & $+0.0670\pm0.0102\sigstar$ \\
+& Population only & $+1.3295\pm0.4949\sigstar$ & $+1.3106\pm0.5511\sigstar$ & $+1.3147\pm0.5009\sigstar$ & $+1.3148\pm0.5160\sigstar$ & $+1.3151\pm0.5205\sigstar$ \\
+& Wrong-task source $+$ relation & $+0.0037\pm0.0316$ & $+0.0022\pm0.0526$ & $-0.0232\pm0.0242$ & $-0.0051\pm0.0230$ & $-0.0100\pm0.0342$ \\
+& FiLM $+$ transport & $-0.1936\pm0.0267\sigstar$ & $-0.2129\pm0.0712\sigstar$ & $-0.2084\pm0.0160\sigstar$ & $-0.2067\pm0.0205\sigstar$ & $-0.2063\pm0.0729\sigstar$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
 \paragraph{Source-identity conclusion.}
-No entry is significant. The implementation uses the intended disease coordinate, but the learned Fitzpatrick representation is effectively insensitive to which disease source coordinate is supplied. This supports coordinate/task collapse rather than a coordinate-indexing error.
+No correct-versus-wrong-source entry is significant. Correct transport does significantly beat direct source reuse on most cells, but FiLM is significantly better on phototype and MMD. The implementation uses the intended disease coordinate, yet the learned Fitzpatrick representation is effectively insensitive to which disease source coordinate is supplied. This supports coordinate/task collapse rather than a coordinate-indexing error.
 
 \begin{table}[h]
-\caption{Target-data-equivalence check: correct-source transport at $\KT=2$ versus target-only modelling at each target budget. Positive means transport has lower distance.}
+\caption{Paired target-data-equivalence comparison using the raw values in Table~\ref{tab:fitz-absolute}. Each entry is $\Delta=d(\text{target only at stated }\KT)-d(\text{correct transport at }\KT=2)$; positive values favour correct transport at $\KT=2$.}
 \label{tab:fitz-equivalence}
 \centering
 \small
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}
 \toprule
-Metric & Target $\KT=1$ & Target $\KT=2$ & Target $\KT=5$ & Target $\KT=10$ & Target $\KT=20$ \\
+Metric ($+=$ correct transport at $\KT=2$) & Target $\KT=1$ & Target $\KT=2$ & Target $\KT=5$ & Target $\KT=10$ & Target $\KT=20$ \\
 \midrule
 Phototype & $+0.0101\pm0.0233$ & $+0.0121\pm0.0181$ & $+0.0102\pm0.0173$ & $+0.0127\pm0.0140$ & $+0.0156\pm0.0029\sigstar$ \\
 SW & $-0.0005\pm0.0030$ & $+0.0012\pm0.0024$ & $+0.0000\pm0.0032$ & $+0.0004\pm0.0017$ & $+0.0003\pm0.0026$ \\
@@ -183,20 +197,23 @@ Energy MMD & $-0.0006\pm0.0972$ & $+0.0493\pm0.0733$ & $+0.0055\pm0.0955$ & $+0.
 The intervals are mostly compatible with equality, but target-only performance is itself nearly invariant to $\KT$. Therefore the planned statement ``transport at $\KT=2$ is equivalent to target-only at $\KT=10$'' would be misleading: the experiment does not show a genuine target-data-efficiency gain.
 
 \begin{table}[h]
-\caption{Strict zero-coordinate audit at $\KT=2$. ``Relation only'' is $\Delta_\gamma(0)$; strict zero is literal $z=0$. Lower is better.}
+\caption{Strict zero-coordinate audit at $\KT=2$. The first block gives raw lower-is-better performance. In the comparison block, $\Delta=d(\text{control})-d(\text{correct source+transport})$, so positive values favour correct-source transport. ``Relation only'' is $\Delta_\gamma(0)$; strict zero is literal $z=0$.}
 \label{tab:strictzero}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
-Method & Phototype & SW & Energy MMD \\
+Method or comparison ($\Delta>0$: correct) & Phototype & SW & Energy MMD \\
 \midrule
 Correct source $+$ transport & $2.5024\pm0.4469$ & $0.3622\pm0.0468$ & $7.1140\pm1.8867$ \\
 Relation only & $4.0465\pm0.3111$ & $0.2867\pm0.0094$ & $8.4246\pm1.4825$ \\
 Strict $z=0$ & $3.9891\pm0.3135$ & $0.2843\pm0.0121$ & $8.1995\pm1.5442$ \\
-Relation only $-$ strict $z=0$ & $+0.0574\pm0.0070\sigstar$ & $+0.0024\pm0.0037$ & $+0.2251\pm0.0721\sigstar$ \\
+\midrule
+$\Delta$: relation only $-$ correct & $+1.5441\pm0.1440\sigstar$ & $-0.0755\pm0.0403\sigstar$ & $+1.3106\pm0.5511\sigstar$ \\
+$\Delta$: strict $z=0$ $-$ correct & $+1.4867\pm0.1446\sigstar$ & $-0.0779\pm0.0367\sigstar$ & $+1.0855\pm0.4830\sigstar$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Control conclusion.}
@@ -225,14 +242,14 @@ The demographic protocol was completed, but its central claim failed: correct-so
 \subsection{3. Add an Explicit Zero-Shot Target-Transfer Result}
 
 \begin{table}[h]
-\caption{CIFAR-100 zero-shot ($\KT=0$) validation. For SW and semantic consistency, paired differences compare each control with correct-source transport.}
+\caption{CIFAR-100 zero-shot ($\KT=0$) validation. Raw performance and paired comparisons are shown together. For SW, $\Delta=\SW(\text{control})-\SW(\text{correct})$; for semantic consistency, $\Delta=C(\text{correct})-C(\text{control})$. Thus positive values in both comparison columns favour correct-source transport.}
 \label{tab:cifar-zero}
 \centering
 \small
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
-Method & SW $\downarrow$ & SW advantage & Semantic $\uparrow$ & Semantic advantage \\
+Method & Raw SW $\downarrow$ & $\Delta$ SW (positive: correct) & Raw semantic $\uparrow$ & $\Delta$ semantic (positive: correct) \\
 \midrule
 Correct source $+$ transport & $0.210\pm0.020$ & -- & $0.111\pm0.023$ & -- \\
 Source reuse & $0.248\pm0.018$ & $+0.0384\pm0.0113\sigstar$ & $0.113\pm0.023$ & $-0.0017\pm0.0090$ \\
@@ -246,20 +263,27 @@ Relation only & $0.236\pm0.022$ & $+0.0260\pm0.0090\sigstar$ & $0.051\pm0.008$ &
 With no target image, the correct source plus learned relation is closer to the real target distribution than all controls. It preserves source semantics at the level of direct reuse and is significantly more semantic than wrong-source and relation-only generation.
 
 \begin{table}[h]
-\caption{Fitzpatrick17k zero-shot paired advantage of correct-source transport. Positive favours correct transport; lower is better for all three metrics.}
+\caption{Fitzpatrick17k zero-shot performance. The first block reports raw lower-is-better distances. In the comparison block, $\Delta=d(\text{comparator})-d(\text{correct})$, so positive values favour correct-source transport.}
 \label{tab:fitz-zero}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
-Comparator & Phototype & SW & Energy MMD \\
+Method or comparison ($\Delta>0$: correct) & Phototype & SW & Energy MMD \\
 \midrule
-Source reuse & $+0.0218\pm0.0065\sigstar$ & $+0.0004\pm0.0009$ & $+0.0336\pm0.0332\sigstar$ \\
-Population only & $+1.5435\pm0.1453\sigstar$ & $-0.0771\pm0.0392\sigstar$ & $+1.2816\pm0.5233\sigstar$ \\
-Wrong-task source $+$ relation & $-0.0003\pm0.0067$ & $-0.0001\pm0.0005$ & $-0.0037\pm0.0205$ \\
-FiLM $+$ transport & $-0.2065\pm0.0510\sigstar$ & $-0.0036\pm0.0025\sigstar$ & $-0.2423\pm0.0575\sigstar$ \\
+Correct source $+$ transport & $2.503\pm0.448$ & $0.364\pm0.046$ & $7.143\pm1.857$ \\
+Source reuse & $2.525\pm0.442$ & $0.364\pm0.045$ & $7.176\pm1.828$ \\
+Population only & $4.046\pm0.311$ & $0.287\pm0.009$ & $8.425\pm1.482$ \\
+Wrong-task source $+$ relation & $2.503\pm0.445$ & $0.364\pm0.045$ & $7.139\pm1.840$ \\
+FiLM $+$ transport & $2.296\pm0.456$ & $0.360\pm0.047$ & $6.901\pm1.862$ \\
+\midrule
+$\Delta$: source reuse $-$ correct & $+0.0218\pm0.0065\sigstar$ & $+0.0004\pm0.0009$ & $+0.0336\pm0.0332\sigstar$ \\
+$\Delta$: population only $-$ correct & $+1.5435\pm0.1453\sigstar$ & $-0.0771\pm0.0392\sigstar$ & $+1.2816\pm0.5233\sigstar$ \\
+$\Delta$: wrong task $-$ correct & $-0.0003\pm0.0067$ & $-0.0001\pm0.0005$ & $-0.0037\pm0.0205$ \\
+$\Delta$: FiLM $-$ correct & $-0.2065\pm0.0510\sigstar$ & $-0.0036\pm0.0025\sigstar$ & $-0.2423\pm0.0575\sigstar$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Module conclusion.}
@@ -268,22 +292,30 @@ Zero-target transfer is established on controlled CIFAR shifts, including source
 \subsection{4. Reframe the FiLM Result as Generality and Efficiency}
 
 \begin{table}[h]
-\caption{FiLM source-dependence on 180 paired CIFAR validation episodes. Entries are comparator-minus-correct-transport differences; positive favours correct transport.}
+\caption{FiLM source-dependence on 180 paired CIFAR validation episodes. Each metric first reports raw performance. For SW, $\Delta=\SW(\text{comparator})-\SW(\text{correct})$; for semantic consistency, $\Delta=C(\text{correct})-C(\text{comparator})$. Positive $\Delta$ therefore favours correct-source transport.}
 \label{tab:film-source}
 \centering
 \small
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccc}
 \toprule
-Metric & Comparator & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+Metric & Method or comparison & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
 \midrule
-SW & Mean source & $+0.0397\pm0.0084\sigstar$ & $+0.0430\pm0.0091\sigstar$ & $+0.0430\pm0.0096\sigstar$ \\
-& Shuffled source & $+0.0501\pm0.0154\sigstar$ & $+0.0533\pm0.0169\sigstar$ & $+0.0537\pm0.0167\sigstar$ \\
-& Relation only & $+0.0342\pm0.0077\sigstar$ & $+0.0361\pm0.0082\sigstar$ & $+0.0380\pm0.0090\sigstar$ \\
+SW & Correct source $+$ transport & $0.207\pm0.022$ & $0.205\pm0.019$ & $0.207\pm0.021$ \\
+& Mean source & $0.246\pm0.024$ & $0.248\pm0.020$ & $0.250\pm0.023$ \\
+& Shuffled source & $0.257\pm0.025$ & $0.259\pm0.023$ & $0.261\pm0.024$ \\
+& Relation only & $0.241\pm0.023$ & $0.242\pm0.020$ & $0.245\pm0.023$ \\
+& $\Delta$: mean $-$ correct (positive: correct) & $+0.0397\pm0.0084\sigstar$ & $+0.0430\pm0.0091\sigstar$ & $+0.0430\pm0.0096\sigstar$ \\
+& $\Delta$: shuffled $-$ correct (positive: correct) & $+0.0501\pm0.0154\sigstar$ & $+0.0533\pm0.0169\sigstar$ & $+0.0537\pm0.0167\sigstar$ \\
+& $\Delta$: relation $-$ correct (positive: correct) & $+0.0342\pm0.0077\sigstar$ & $+0.0361\pm0.0082\sigstar$ & $+0.0380\pm0.0090\sigstar$ \\
 \midrule
-Semantic consistency & Mean source & $+0.0708\pm0.0226\sigstar$ & $+0.0717\pm0.0256\sigstar$ & $+0.0708\pm0.0235\sigstar$ \\
-& Shuffled source & $+0.0724\pm0.0221\sigstar$ & $+0.0714\pm0.0254\sigstar$ & $+0.0729\pm0.0244\sigstar$ \\
-& Relation only & $+0.0696\pm0.0211\sigstar$ & $+0.0773\pm0.0245\sigstar$ & $+0.0719\pm0.0217\sigstar$ \\
+Semantic consistency & Correct source $+$ transport & $0.125\pm0.026$ & $0.125\pm0.028$ & $0.125\pm0.027$ \\
+& Mean source & $0.055\pm0.008$ & $0.053\pm0.010$ & $0.054\pm0.009$ \\
+& Shuffled source & $0.053\pm0.011$ & $0.054\pm0.013$ & $0.052\pm0.012$ \\
+& Relation only & $0.056\pm0.009$ & $0.048\pm0.009$ & $0.053\pm0.009$ \\
+& $\Delta$: correct $-$ mean (positive: correct) & $+0.0708\pm0.0226\sigstar$ & $+0.0717\pm0.0256\sigstar$ & $+0.0708\pm0.0235\sigstar$ \\
+& $\Delta$: correct $-$ shuffled (positive: correct) & $+0.0724\pm0.0221\sigstar$ & $+0.0714\pm0.0254\sigstar$ & $+0.0729\pm0.0244\sigstar$ \\
+& $\Delta$: correct $-$ relation (positive: correct) & $+0.0696\pm0.0211\sigstar$ & $+0.0773\pm0.0245\sigstar$ & $+0.0719\pm0.0217\sigstar$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -296,6 +328,7 @@ Every FiLM source-dependence comparison is significant for both SW and semantic 
 \label{tab:efficiency}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcc}
 \toprule
 Quantity & Additive basis & FiLM \\
@@ -307,9 +340,9 @@ Total evaluated trainable parameters & $\approx28.132$M & $\approx28.251$M \\
 SW, $\KT=1$ & $0.2064\pm0.0222$ & $0.2066\pm0.0224$ \\
 SW, $\KT=5$ & $0.2074\pm0.0202$ & $0.2054\pm0.0185$ \\
 SW, $\KT=20$ & $0.2128\pm0.0224$ & $0.2074\pm0.0214$ \\
-Paired FiLM-minus-basis, $\KT=1,5,20$ & \multicolumn{2}{c}{$+0.0002\pm0.0070,\;-0.0020\pm0.0076,\;-0.0055\pm0.0074$} \\
+$\Delta=$FiLM$-$basis, $\KT=1,5,20$ (positive: basis) & \multicolumn{2}{c}{$+0.0002\pm0.0070,\;-0.0020\pm0.0076,\;-0.0055\pm0.0074$} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Module conclusion.}
@@ -318,19 +351,28 @@ The basis and FiLM tie on the headline SW transfer metric, while the basis uses 
 \subsection{5. Test Whether the Simple Task-Space Geometry Is Representation-Independent}
 
 \begin{table}[h]
-\caption{Linear versus nonlinear transport. Basis entries are linear-minus-residual SW and positive favours the residual MLP; FiLM entries are nonlinear-minus-linear and positive favours linear.}
+\caption{Linear versus nonlinear transport. Each block reports raw lower-is-better performance followed by a paired difference. For the basis, $\Delta=\SW(\text{linear})-\SW(\text{residual})$, so positive favours the residual MLP. For FiLM, $\Delta=d(\text{nonlinear})-d(\text{linear})$, so positive favours linear transport.}
 \label{tab:linear}
 \centering
 \small
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccc}
 \toprule
-Representation & Metric & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+Representation & Metric or comparison & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
 \midrule
-Additive basis & SW difference & $+0.0022\pm0.0049$ & $+0.0004\pm0.0048$ & $+0.0036\pm0.0050$ \\
-FiLM & SW improvement & $+0.0093\pm0.0037\sigstar$ & $+0.0112\pm0.0040\sigstar$ & $+0.0087\pm0.0042\sigstar$ \\
-FiLM & MMD improvement & $+0.2479\pm0.1658\sigstar$ & $+0.2810\pm0.1588\sigstar$ & $+0.1958\pm0.1640\sigstar$ \\
-FiLM & Statistic improvement & $+0.0170\pm0.0116\sigstar$ & $+0.0087\pm0.0126$ & $+0.0046\pm0.0144$ \\
+Additive basis & Residual MLP SW & $0.2102\pm0.0190$ & $0.2109\pm0.0165$ & $0.2138\pm0.0193$ \\
+& Linear SW & $0.2124\pm0.0211$ & $0.2113\pm0.0183$ & $0.2174\pm0.0210$ \\
+& $\Delta$: linear $-$ residual (positive: residual) & $+0.0022\pm0.0049$ & $+0.0004\pm0.0048$ & $+0.0036\pm0.0050$ \\
+\midrule
+FiLM & Nonlinear SW & $0.2066\pm0.0224$ & $0.2054\pm0.0185$ & $0.2074\pm0.0214$ \\
+& Linear SW & $0.1973\pm0.0206$ & $0.1942\pm0.0164$ & $0.1987\pm0.0193$ \\
+& $\Delta$: nonlinear $-$ linear (positive: linear) & $+0.0093\pm0.0037\sigstar$ & $+0.0112\pm0.0040\sigstar$ & $+0.0087\pm0.0042\sigstar$ \\
+& Nonlinear MMD & $3.0686\pm0.7686$ & $2.9091\pm0.5972$ & $3.1186\pm0.8714$ \\
+& Linear MMD & $2.8207\pm0.6413$ & $2.6281\pm0.4690$ & $2.9228\pm0.7610$ \\
+& $\Delta$: nonlinear $-$ linear (positive: linear) & $+0.2479\pm0.1658\sigstar$ & $+0.2810\pm0.1588\sigstar$ & $+0.1958\pm0.1640\sigstar$ \\
+& Nonlinear statistic & $0.2548\pm0.0502$ & $0.2564\pm0.0455$ & $0.2548\pm0.0461$ \\
+& Linear statistic & $0.2378\pm0.0473$ & $0.2476\pm0.0391$ & $0.2502\pm0.0435$ \\
+& $\Delta$: nonlinear $-$ linear (positive: linear) & $+0.0170\pm0.0116\sigstar$ & $+0.0087\pm0.0126$ & $+0.0046\pm0.0144$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -350,7 +392,7 @@ Fine-tuning learning rates and step counts were selected only on validation task
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccc}
 \toprule
-Metric & Method/comparison & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+Metric & Method/comparison ($\Delta>0$: transport) & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
 \midrule
 SW & Target only & $0.2027\pm0.0139$ & $0.1950\pm0.0148$ & $0.1840\pm0.0111$ \\
 & Transport & $0.1839\pm0.0122$ & $0.1896\pm0.0120$ & $0.1896\pm0.0122$ \\
@@ -361,6 +403,7 @@ SW & Target only & $0.2027\pm0.0139$ & $0.1950\pm0.0148$ & $0.1840\pm0.0111$ \\
 Energy MMD & Target only & $2.9767\pm0.4119$ & $2.5707\pm0.3651$ & $2.4511\pm0.3003$ \\
 & Transport & $2.4096\pm0.3095$ & $2.4178\pm0.2800$ & $2.4747\pm0.3384$ \\
 & Full fine-tune & $5.9775\pm0.8855$ & $3.6582\pm0.5675$ & $1.8834\pm0.2059$ \\
+& Target only $-$ transport & $+0.5671\pm0.2705\sigstar$ & $+0.1529\pm0.1795$ & $-0.0236\pm0.1922$ \\
 & Full FT $-$ transport & $+3.5679\pm0.7806\sigstar$ & $+1.2404\pm0.5851\sigstar$ & $-0.5913\pm0.4109\sigstar$ \\
 \bottomrule
 \end{tabular}}
@@ -374,25 +417,31 @@ Transport is substantially safer than full fine-tuning at $\KT=1$ and $5$, where
 The optional gate was satisfied only after demographic and zero-shot experiments were secured. On Fitzpatrick17k, 50\% means four of eight training diseases and 25\% means two of eight; validation and test diseases are unchanged. The same experiment was then repeated on the original CIFAR image setting, where 50\% retains 30 of 60 training fine classes while all 12 training superclasses remain represented.
 
 \begin{table}[h]
-\caption{Fitzpatrick task scarcity at $\KT=2$. Entries are basis distance minus FiLM distance, reported as the positive magnitude of FiLM's advantage; all are paired and lower is better.}
+\caption{Fitzpatrick task scarcity at $\KT=2$. Raw lower-is-better distances are followed by $\Delta=d(\text{basis})-d(\text{FiLM})$; positive values in the comparison rows favour FiLM.}
 \label{tab:fitz-scarcity}
 \centering
 \small
-\begin{tabular}{lccc}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccc}
 \toprule
-Training diseases & Phototype & SW & Energy MMD \\
+Training diseases & Method or comparison & Phototype & SW & Energy MMD \\
 \midrule
-50\% (4/8) & $+0.2083\pm0.0467\sigstar$ & $+0.0213\pm0.0046\sigstar$ & $+0.7726\pm0.2469\sigstar$ \\
-25\% (2/8) & $+0.2754\pm0.0624\sigstar$ & $+0.0159\pm0.0081\sigstar$ & $+0.7344\pm0.3830\sigstar$ \\
+50\% (4/8) & Additive basis & $2.585\pm0.544$ & $0.351\pm0.045$ & $6.990\pm1.976$ \\
+& FiLM & $2.376\pm0.529$ & $0.330\pm0.041$ & $6.217\pm1.744$ \\
+& $\Delta=$basis$-$FiLM (positive: FiLM) & $+0.2083\pm0.0467\sigstar$ & $+0.0213\pm0.0046\sigstar$ & $+0.7726\pm0.2469\sigstar$ \\
+\midrule
+25\% (2/8) & Additive basis & $2.627\pm0.520$ & $0.304\pm0.041$ & $6.203\pm1.812$ \\
+& FiLM & $2.352\pm0.477$ & $0.288\pm0.033$ & $5.468\pm1.450$ \\
+& $\Delta=$basis$-$FiLM (positive: FiLM) & $+0.2754\pm0.0624\sigstar$ & $+0.0159\pm0.0081\sigstar$ & $+0.7344\pm0.3830\sigstar$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Fitzpatrick scarcity conclusion.}
 The proposed stronger structural bias does not help the additive basis when disease tasks are scarce. FiLM is significantly better at both 50\% and 25\% on all three distances, while correct and wrong disease sources remain effectively tied.
 
 \begin{table}[h]
-\caption{CIFAR 50\% meta-training-task experiment. Differences are FiLM minus basis; negative distance differences and positive consistency differences favour FiLM.}
+\caption{CIFAR 50\% meta-training-task experiment. Raw performance is followed by paired comparison rows. For lower-is-better distances, $\Delta=d(\text{basis})-d(\text{FiLM})$; for higher-is-better superclass consistency, $\Delta=C(\text{FiLM})-C(\text{basis})$. Positive values therefore favour FiLM throughout.}
 \label{tab:cifar-scarcity}
 \centering
 \small
@@ -401,11 +450,17 @@ The proposed stronger structural bias does not help the additive basis when dise
 \toprule
 Metric/comparison & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
 \midrule
-50\% basis SW & $0.2097\pm0.0189$ & $0.2060\pm0.0170$ & $0.2141\pm0.0171$ \\
-50\% FiLM SW & $0.1912\pm0.0185$ & $0.1851\pm0.0142$ & $0.1920\pm0.0156$ \\
-FiLM $-$ basis SW & $-0.0185\pm0.0108\sigstar$ & $-0.0208\pm0.0114\sigstar$ & $-0.0221\pm0.0122\sigstar$ \\
-FiLM $-$ basis MMD & $-0.3907\pm0.2611\sigstar$ & $-0.6022\pm0.2983\sigstar$ & $-0.6564\pm0.3460\sigstar$ \\
-FiLM $-$ basis superclass consistency & $+0.0411\pm0.0202\sigstar$ & $+0.0488\pm0.0223\sigstar$ & $+0.0458\pm0.0216\sigstar$ \\
+Basis SW & $0.2097\pm0.0189$ & $0.2060\pm0.0170$ & $0.2141\pm0.0171$ \\
+FiLM SW & $0.1912\pm0.0185$ & $0.1851\pm0.0142$ & $0.1920\pm0.0156$ \\
+$\Delta=$basis$-$FiLM SW (positive: FiLM) & $+0.0185\pm0.0108\sigstar$ & $+0.0208\pm0.0114\sigstar$ & $+0.0221\pm0.0122\sigstar$ \\
+\midrule
+Basis MMD & $3.0305\pm0.5120$ & $3.0344\pm0.4623$ & $3.3888\pm0.5750$ \\
+FiLM MMD & $2.6398\pm0.4855$ & $2.4322\pm0.3778$ & $2.7324\pm0.4727$ \\
+$\Delta=$basis$-$FiLM MMD (positive: FiLM) & $+0.3907\pm0.2611\sigstar$ & $+0.6022\pm0.2983\sigstar$ & $+0.6564\pm0.3460\sigstar$ \\
+\midrule
+Basis superclass consistency & $0.3378\pm0.0274$ & $0.3394\pm0.0263$ & $0.3389\pm0.0278$ \\
+FiLM superclass consistency & $0.3790\pm0.0290$ & $0.3882\pm0.0292$ & $0.3847\pm0.0273$ \\
+$\Delta=$FiLM$-$basis consistency (positive: FiLM) & $+0.0411\pm0.0202\sigstar$ & $+0.0488\pm0.0223\sigstar$ & $+0.0458\pm0.0216\sigstar$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -414,22 +469,28 @@ FiLM $-$ basis superclass consistency & $+0.0411\pm0.0202\sigstar$ & $+0.0488\pm
 The image-domain replication again contradicts an additive-basis scarcity advantage: FiLM is significantly better at all three target budgets on SW, MMD, and superclass consistency. Because this useful separation appeared, the requested 25\% CIFAR extension was started; it remains \ongoing{} and is excluded from the present conclusions.
 
 \begin{table}[h]
-\caption{Fitzpatrick coordinate compression at $\KT=2$. Lower is better.}
+\caption{Fitzpatrick coordinate compression at $\KT=2$. Raw lower-is-better distances are followed by paired compression differences $\Delta=d(k_{\mathrm{low}})-d(k=16)$; positive values favour $k=16$, whereas negative values favour the stated lower dimension.}
 \label{tab:compression}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccc}
 \toprule
 Conditioning & $k$ & Phototype & SW & Energy MMD \\
 \midrule
-Additive basis & 4 & $2.1825$ & $0.3797$ & $7.1651$ \\
-Additive basis & 8 & $2.2024$ & $0.3786$ & $7.1714$ \\
-Additive basis & 16 & $2.2670$ & $0.3825$ & $7.3803$ \\
-FiLM & 4 & $2.2946$ & $0.3703$ & $7.2555$ \\
-FiLM & 8 & $2.0951$ & $0.3892$ & $7.4385$ \\
-FiLM & 16 & $2.0573$ & $0.3853$ & $7.3159$ \\
+Additive basis & 4 & $2.1825\pm0.4918$ & $0.3797\pm0.0507$ & $7.1651\pm2.0164$ \\
+Additive basis & 8 & $2.2024\pm0.5004$ & $0.3786\pm0.0517$ & $7.1714\pm2.0831$ \\
+Additive basis & 16 & $2.2670\pm0.5096$ & $0.3825\pm0.0541$ & $7.3803\pm2.1970$ \\
+& $\Delta$: $k=4-k=16$ (positive: $k=16$) & $-0.0845\pm0.0246\sigstar$ & $-0.0028\pm0.0036$ & $-0.2151\pm0.1818\sigstar$ \\
+& $\Delta$: $k=8-k=16$ (positive: $k=16$) & $-0.0646\pm0.0126\sigstar$ & $-0.0038\pm0.0024\sigstar$ & $-0.2088\pm0.1205\sigstar$ \\
+\midrule
+FiLM & 4 & $2.2946\pm0.5106$ & $0.3703\pm0.0495$ & $7.2555\pm2.0280$ \\
+FiLM & 8 & $2.0951\pm0.4838$ & $0.3892\pm0.0507$ & $7.4385\pm2.0309$ \\
+FiLM & 16 & $2.0573\pm0.4928$ & $0.3853\pm0.0526$ & $7.3159\pm2.0913$ \\
+& $\Delta$: $k=4-k=16$ (positive: $k=16$) & $+0.2373\pm0.0434\sigstar$ & $-0.0151\pm0.0052\sigstar$ & $-0.0604\pm0.1669$ \\
+& $\Delta$: $k=8-k=16$ (positive: $k=16$) & $+0.0378\pm0.0219\sigstar$ & $+0.0039\pm0.0025\sigstar$ & $+0.1226\pm0.0644\sigstar$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Module conclusion.}
@@ -438,19 +499,20 @@ The additive basis meets the literal compression criterion because $k=4$ and $8$
 \subsection{8. Diagnose the Additive-Basis Oracle Advantage Only if Cheap}
 
 \begin{table}[h]
-\caption{Matched refinement-loss probe. Values are fractional loss descent from the stated start; paired difference is basis minus FiLM.}
+\caption{Matched refinement-loss probe. Raw values are fractional loss descent from the stated start. The comparison column is $\Delta=$basis$-$FiLM: positive favours the basis for descent, but for non-monotone rise it means the basis path is rougher, not better.}
 \label{tab:oracle-probe}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
-Diagnostic & Additive basis & FiLM & Paired difference \\
+Diagnostic & Raw additive basis & Raw FiLM & $\Delta=$basis$-$FiLM (sign stated below) \\
 \midrule
 Descent from transported coordinate & $0.0004\pm0.0001$ & $0.0027\pm0.0005$ & $-0.0024\pm0.0005\sigstar$ \\
 Descent from $z=0$ & $0.0313\pm0.0051$ & $0.1108\pm0.0128$ & $-0.0796\pm0.0121\sigstar$ \\
 Non-monotone rise along segment & $0.0002\pm0.0001$ & $0.0000$ & $+0.0002\pm0.0001\sigstar$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Module conclusion.}
@@ -489,9 +551,10 @@ The following compact tables collect the foundational results that were already 
 \label{tab:gmm}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
-Task family & Own-coordinate loss & Mean-coordinate loss & $\Delta_{\mathrm{task}}$ \\
+Task family & Own-coordinate loss & Mean-coordinate loss & $\Delta_{\mathrm{task}}$ ($+=$ own coordinate) \\
 \midrule
 Related, perturbation 0.10 & $0.4368$ & $0.5907$ & $+0.1539\pm0.0241\sigstar$ \\
 Related, perturbation 0.25 & $0.4750$ & $0.6178$ & $+0.1428\pm0.0238\sigstar$ \\
@@ -499,28 +562,74 @@ Related, perturbation 0.50 & $0.5234$ & $0.6770$ & $+0.1536\pm0.0331\sigstar$ \\
 Related, perturbation 1.00 & $0.5937$ & $0.7508$ & $+0.1571\pm0.0350\sigstar$ \\
 Unrelated & $0.4921$ & $0.6453$ & $+0.1533\pm0.0392\sigstar$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Positive-control conclusion.}
 Across all mixture families, the correct coordinate significantly lowers denoising loss and the coordinate-loss profile is minimised at the true task coordinate. The coordinate mechanism works when the ground truth is known.
 
 \begin{table}[h]
-\caption{Core CIFAR target-scarcity and source-budget results for the additive basis. SW is lower-is-better.}
+\caption{Core CIFAR source-dependence result in pixel SW. Raw lower-is-better performance is followed by $\Delta=\SW(\text{comparator})-\SW(\text{correct source+transport})$; positive values favour correct-source transport.}
 \label{tab:core-cifar}
 \centering
-\small
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Method or comparison & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+\midrule
+Correct source $+$ transport & $0.210\pm0.019$ & $0.211\pm0.016$ & $0.214\pm0.019$ \\
+Source reuse & $0.248\pm0.018$ & $0.238\pm0.016$ & $0.222\pm0.019$ \\
+Target only & $0.228\pm0.018$ & $0.222\pm0.018$ & $0.211\pm0.021$ \\
+Mean source & $0.240\pm0.021$ & $0.245\pm0.019$ & $0.248\pm0.021$ \\
+Shuffled source & $0.252\pm0.021$ & $0.256\pm0.020$ & $0.257\pm0.022$ \\
+Relation only & $0.236\pm0.022$ & $0.239\pm0.020$ & $0.243\pm0.023$ \\
+\midrule
+$\Delta$: source reuse $-$ correct (positive: correct) & $+0.0373\pm0.0103\sigstar$ & $+0.0273\pm0.0090\sigstar$ & $+0.0077\pm0.0072\sigstar$ \\
+$\Delta$: target only $-$ correct (positive: correct) & $+0.0181\pm0.0085\sigstar$ & $+0.0114\pm0.0072\sigstar$ & $-0.0028\pm0.0073$ \\
+$\Delta$: mean source $-$ correct (positive: correct) & $+0.0301\pm0.0072\sigstar$ & $+0.0346\pm0.0085\sigstar$ & $+0.0338\pm0.0080\sigstar$ \\
+$\Delta$: shuffled source $-$ correct (positive: correct) & $+0.0416\pm0.0125\sigstar$ & $+0.0453\pm0.0149\sigstar$ & $+0.0436\pm0.0144\sigstar$ \\
+$\Delta$: relation only $-$ correct (positive: correct) & $+0.0254\pm0.0078\sigstar$ & $+0.0285\pm0.0088\sigstar$ & $+0.0295\pm0.0087\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[h]
+\caption{CIFAR target-scarcity curve in transformation-statistic distance. Raw lower-is-better performance is followed by $\Delta=d(\text{comparator})-d(\text{correct source+transport})$; positive values favour correct-source transport.}
+\label{tab:kt-curve}
+\centering
+\scriptsize
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}
 \toprule
-$\KT$ & 1 & 2 & 5 & 10 & 20 \\
+Method or comparison & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
 \midrule
-Correct transport SW & $0.212\pm0.021$ & $0.207\pm0.019$ & $0.210\pm0.017$ & $0.217\pm0.019$ & $0.212\pm0.018$ \\
-Target-only SW & $0.230\pm0.020$ & $0.220\pm0.020$ & $0.224\pm0.020$ & $0.220\pm0.022$ & $0.208\pm0.019$ \\
+Correct source $+$ transport & $0.299\pm0.045$ & $0.297\pm0.045$ & $0.299\pm0.042$ & $0.313\pm0.041$ & $0.293\pm0.040$ \\
+Source reuse & $1.439\pm0.106$ & $1.212\pm0.098$ & $0.825\pm0.086$ & $0.630\pm0.058$ & $0.521\pm0.050$ \\
+Target only & $0.360\pm0.052$ & $0.336\pm0.051$ & $0.304\pm0.040$ & $0.331\pm0.053$ & $0.301\pm0.041$ \\
 \midrule
-$\MS$ at $\KT=1$ & 16 & 32 & 64 & 128 & 300 \\
-Correct transport SW & $0.216\pm0.018$ & $0.215\pm0.019$ & $0.214\pm0.020$ & $0.214\pm0.020$ & $0.214\pm0.020$ \\
-Transport advantage over target only & $+0.0141\sigstar$ & $+0.0143\sigstar$ & $+0.0161\sigstar$ & $+0.0161\sigstar$ & $+0.0160\sigstar$ \\
+$\Delta$: source reuse $-$ correct (positive: correct) & $+1.140\pm0.108\sigstar$ & $+0.915\pm0.105\sigstar$ & $+0.526\pm0.099\sigstar$ & $+0.317\pm0.067\sigstar$ & $+0.229\pm0.059\sigstar$ \\
+$\Delta$: target only $-$ correct (positive: correct) & $+0.061\pm0.051\sigstar$ & $+0.038\pm0.052$ & $+0.005\pm0.036$ & $+0.018\pm0.045$ & $+0.008\pm0.036$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[h]
+\caption{CIFAR deployment-time source-budget sweep at $\KT=1$ in pixel SW. Raw lower-is-better performance is followed by $\Delta=\SW(\text{comparator})-\SW(\text{correct source+transport})$; positive values favour correct-source transport.}
+\label{tab:source-budget}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+Method or comparison & $\MS=16$ & $\MS=32$ & $\MS=64$ & $\MS=128$ & $\MS=256$ & $\MS=300$ \\
+\midrule
+Correct source $+$ transport & $0.216\pm0.018$ & $0.215\pm0.019$ & $0.214\pm0.020$ & $0.214\pm0.020$ & $0.214\pm0.020$ & $0.214\pm0.020$ \\
+Source reuse & $0.253\pm0.017$ & $0.255\pm0.017$ & $0.252\pm0.018$ & $0.252\pm0.018$ & $0.252\pm0.018$ & $0.252\pm0.018$ \\
+Target only & $0.230\pm0.019$ & $0.230\pm0.019$ & $0.230\pm0.019$ & $0.230\pm0.019$ & $0.230\pm0.019$ & $0.230\pm0.019$ \\
+\midrule
+$\Delta$: source reuse $-$ correct (positive: correct) & $+0.0377\sigstar$ & $+0.0392\sigstar$ & $+0.0386\sigstar$ & $+0.0382\sigstar$ & $+0.0380\sigstar$ & $+0.0379\sigstar$ \\
+$\Delta$: target only $-$ correct (positive: correct) & $+0.0141\sigstar$ & $+0.0143\sigstar$ & $+0.0161\sigstar$ & $+0.0161\sigstar$ & $+0.0161\sigstar$ & $+0.0160\sigstar$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
