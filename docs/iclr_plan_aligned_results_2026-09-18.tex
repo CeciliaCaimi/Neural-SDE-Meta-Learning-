@@ -1,0 +1,600 @@
+% Plan-aligned experimental report for the 18 September 2026 plan.
+% Compile from this directory with:
+%   pdflatex -interaction=nonstopmode iclr_plan_aligned_results_2026-09-18.tex
+\documentclass{article}
+
+\usepackage{iclr2026_conference,times}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{url}
+
+\newcommand{\KT}{K_T}
+\newcommand{\MS}{M_S}
+\newcommand{\SW}{\mathrm{SW}}
+\newcommand{\MMD}{\mathrm{MMD}}
+\newcommand{\CI}{95\%\ \mathrm{CI}}
+\newcommand{\sigstar}{^{*}}
+\newcommand{\ongoing}{\textcolor{blue}{ongoing}}
+\newcommand{\notrun}{\textcolor{gray}{not run by protocol}}
+\setlist{nosep,leftmargin=1.35em}
+\setlength{\emergencystretch}{3em}
+\AfterEndEnvironment{table}{\FloatBarrier}
+
+\title{Meta-Diffusion: Results Aligned with the 18 September Experimental Plan}
+\author{Anonymous Authors}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This report maps every completed or conditionally required experiment to the ten modules of the 18 September 2026 plan. On controlled CIFAR-100 domain shifts, source identity matters, a reusable source-to-target map exists, the map is approximately linear, and its value is concentrated in the extreme target-scarce regime. The effect also survives FiLM conditioning. On the verified Fitzpatrick17k demographic experiment, however, correct- and wrong-disease source coordinates are statistically indistinguishable, performance is nearly invariant to the target-data budget, and the frozen disease classifier is too weak for a valid semantic conclusion. The real-demographic result therefore does not establish a reduction in target-population data requirements. Optional representation experiments do not reveal the proposed additive-basis advantage: FiLM is stronger under both Fitzpatrick task scarcity and the completed 50\% CIFAR task-scarcity condition. All significance marks are based on paired 95\% confidence intervals.
+\end{abstract}
+
+\section{Reporting Convention}
+
+Results are paired within the same held-out semantic task, domain relation, support draw, and sampling noise whenever the design permits. For a lower-is-better distance, a reported paired advantage is
+\begin{equation}
+  \Delta=d(\text{comparator},\mathcal D_T)-d(\text{candidate},\mathcal D_T),
+\end{equation}
+so positive values favour the candidate. A superscript $\sigstar$ is attached directly to a value only when its paired 95\% CI excludes zero. There is no separate significance column. Absolute entries are mean $\pm$ 95\% CI. Sliced Wasserstein (SW), phototype-statistic distance, and energy MMD are lower-is-better; semantic consistency is higher-is-better. Frozen predictors are treated as measurement instruments with reported ceilings, not as ground truth.
+
+\section{Results, Module by Module}
+
+\subsection{1. Complete the Demographic Scarcity Experiment}
+
+The full image archive was recovered from the public SFU Fitzpatrick17k-Renamed release. The release was used only as a byte source: every image was mapped to the official Fitzpatrick17k CSV and checked against its supplied \texttt{md5hash}. The published Fitzpatrick17k-C allow-list was then applied to remove known duplicates and erroneous images. Consequently, the NIH ChestX-ray14 fallback was not needed for the headline experiment.
+
+\begin{table}[h]
+\caption{Fitzpatrick17k recovery, verification, and experiment allocation.}
+\label{tab:recovery}
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Check & Result \\
+\midrule
+Images in SFU archive / official CSV rows & 16,577 / 16,577 \\
+Images whose bytes match official \texttt{md5hash} & 16,577 \\
+Rows retained by Fitzpatrick17k-C & 11,394 \\
+Rows excluded by the cleaned release & 5,183 \\
+Clean, verified images with Fitzpatrick type I--VI & 11,098 \\
+Disease conditions represented & 114 \\
+Conditions supporting $\KT=20$ plus 25 target queries & 18 \\
+Strictly eligible held-out-task pool & 16 diseases \\
+Final disease-level split & 8 train / 4 validation / 4 test \\
+Images allocated by the final split & 3,712 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+The data-access gate was cleared without using an unverified mirror: all 16,577 official rows were byte-verified, cleaning was applied before training, and four validation plus four test diseases were deliberately reserved. The use of eight training tasks is a split-design choice, not a claim that the dataset contains only eight usable diseases.
+
+\subsection{2. Demographic Experiment Protocol}
+
+The semantic task is skin condition; the source population is Fitzpatrick I--III and the target population is Fitzpatrick IV--VI. Validation and test episodes receive abundant source-population images, including for held-out diseases; the semantic task itself, not the availability of source examples, is held out from meta-training. The target support and real target query are disjoint.
+
+\begin{table}[h]
+\caption{Headline Fitzpatrick17k protocol and model specification.}
+\label{tab:fitz-protocol}
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Component & Setting \\
+\midrule
+Task/domain split & disease; Fitzpatrick I--III $\rightarrow$ IV--VI \\
+Task partition & 8 train / 4 validation / 4 test diseases \\
+Source and target budgets & $\MS=32$; $\KT\in\{1,2,5,10,20\}$ \\
+Evaluation & 8 paired repeats; 96 images/cell; DDIM-50 \\
+Training & 20,000 steps; AdamW, lr $2\times10^{-4}$; EMA 0.999 \\
+Score model & $32\times32$ small U-Net, base width 32, $k=16$ \\
+Transport & linear $z_T=Az_S+b$; 272 parameters \\
+Total trainable parameters & basis 1,046,803; FiLM 1,046,243 \\
+Test independence unit & disease mean (four test diseases) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Protocol conclusion.}
+All required $\KT$ values, the five prespecified controls, FiLM, disjoint target queries, and disease-level paired intervals were included. The FiLM advantage cannot be attributed to a larger model because FiLM has 560 fewer trainable parameters in this experiment.
+
+\begin{table}[h]
+\caption{Distance to the real held-out target population across four test diseases. All entries are absolute mean $\pm$ 95\% CI; lower is better. ``Population only'' is $\Delta_\gamma(0)$ and is not the strict $z=0$ control.}
+\label{tab:fitz-absolute}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccc}
+\toprule
+Metric & Method & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
+\midrule
+Phototype & Target only & $2.512\pm0.435$ & $2.515\pm0.430$ & $2.513\pm0.431$ & $2.515\pm0.433$ & $2.518\pm0.444$ \\
+& Source reuse & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ \\
+& Population only & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ \\
+& Wrong-task source $+$ relation & $2.503\pm0.444$ & $2.504\pm0.445$ & $2.508\pm0.443$ & $2.511\pm0.441$ & $2.513\pm0.449$ \\
+& Correct source $+$ transport & $2.501\pm0.444$ & $2.502\pm0.447$ & $2.507\pm0.443$ & $2.511\pm0.438$ & $2.508\pm0.450$ \\
+& FiLM $+$ transport & $2.297\pm0.456$ & $2.297\pm0.456$ & $2.297\pm0.456$ & $2.297\pm0.455$ & $2.297\pm0.456$ \\
+\midrule
+SW & Target only & $0.362\pm0.044$ & $0.363\pm0.044$ & $0.362\pm0.044$ & $0.363\pm0.045$ & $0.363\pm0.044$ \\
+& Source reuse & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ \\
+& Population only & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ \\
+& Wrong-task source $+$ relation & $0.362\pm0.044$ & $0.362\pm0.046$ & $0.361\pm0.046$ & $0.362\pm0.045$ & $0.362\pm0.044$ \\
+& Correct source $+$ transport & $0.362\pm0.045$ & $0.362\pm0.047$ & $0.362\pm0.045$ & $0.362\pm0.046$ & $0.362\pm0.045$ \\
+& FiLM $+$ transport & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ \\
+\midrule
+Energy MMD & Target only & $7.113\pm1.804$ & $7.163\pm1.816$ & $7.120\pm1.814$ & $7.132\pm1.845$ & $7.137\pm1.817$ \\
+& Source reuse & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ \\
+& Population only & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ \\
+& Wrong-task source $+$ relation & $7.099\pm1.821$ & $7.116\pm1.841$ & $7.087\pm1.848$ & $7.105\pm1.846$ & $7.099\pm1.806$ \\
+& Correct source $+$ transport & $7.095\pm1.852$ & $7.114\pm1.887$ & $7.110\pm1.859$ & $7.110\pm1.867$ & $7.109\pm1.838$ \\
+& FiLM $+$ transport & $6.901\pm1.864$ & $6.901\pm1.862$ & $6.901\pm1.862$ & $6.903\pm1.861$ & $6.903\pm1.861$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Distance conclusion.}
+Correct-source transport is marginally closer than direct source reuse, but it is indistinguishable from wrong-source transport on every metric and at every $\KT$. Population-only obtains an artificially low pixel SW while being much worse in phototype space and energy MMD, indicating a generic low-frequency output rather than valid target-population transfer. FiLM has better absolute phototype and MMD values, but it does not restore disease-source specificity.
+
+\begin{table}[h]
+\caption{Paired advantage of correct-source transport over wrong-task-source transport. Positive favours the correct source; $\sigstar$ would mark a paired CI excluding zero.}
+\label{tab:fitz-wrong}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Metric & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
+\midrule
+Phototype & $+0.0021\pm0.0104$ & $+0.0017\pm0.0061$ & $+0.0010\pm0.0085$ & $-0.0001\pm0.0065$ & $+0.0042\pm0.0098$ \\
+SW & $+0.0001\pm0.0011$ & $-0.0000\pm0.0013$ & $-0.0011\pm0.0013$ & $-0.0001\pm0.0008$ & $-0.0002\pm0.0006$ \\
+Energy MMD & $+0.0037\pm0.0316$ & $+0.0022\pm0.0526$ & $-0.0232\pm0.0242$ & $-0.0051\pm0.0230$ & $-0.0100\pm0.0342$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Source-identity conclusion.}
+No entry is significant. The implementation uses the intended disease coordinate, but the learned Fitzpatrick representation is effectively insensitive to which disease source coordinate is supplied. This supports coordinate/task collapse rather than a coordinate-indexing error.
+
+\begin{table}[h]
+\caption{Target-data-equivalence check: correct-source transport at $\KT=2$ versus target-only modelling at each target budget. Positive means transport has lower distance.}
+\label{tab:fitz-equivalence}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Metric & Target $\KT=1$ & Target $\KT=2$ & Target $\KT=5$ & Target $\KT=10$ & Target $\KT=20$ \\
+\midrule
+Phototype & $+0.0101\pm0.0233$ & $+0.0121\pm0.0181$ & $+0.0102\pm0.0173$ & $+0.0127\pm0.0140$ & $+0.0156\pm0.0029\sigstar$ \\
+SW & $-0.0005\pm0.0030$ & $+0.0012\pm0.0024$ & $+0.0000\pm0.0032$ & $+0.0004\pm0.0017$ & $+0.0003\pm0.0026$ \\
+Energy MMD & $-0.0006\pm0.0972$ & $+0.0493\pm0.0733$ & $+0.0055\pm0.0955$ & $+0.0180\pm0.0495$ & $+0.0229\pm0.0736$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Equivalence conclusion.}
+The intervals are mostly compatible with equality, but target-only performance is itself nearly invariant to $\KT$. Therefore the planned statement ``transport at $\KT=2$ is equivalent to target-only at $\KT=10$'' would be misleading: the experiment does not show a genuine target-data-efficiency gain.
+
+\begin{table}[h]
+\caption{Strict zero-coordinate audit at $\KT=2$. ``Relation only'' is $\Delta_\gamma(0)$; strict zero is literal $z=0$. Lower is better.}
+\label{tab:strictzero}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Method & Phototype & SW & Energy MMD \\
+\midrule
+Correct source $+$ transport & $2.5024\pm0.4469$ & $0.3622\pm0.0468$ & $7.1140\pm1.8867$ \\
+Relation only & $4.0465\pm0.3111$ & $0.2867\pm0.0094$ & $8.4246\pm1.4825$ \\
+Strict $z=0$ & $3.9891\pm0.3135$ & $0.2843\pm0.0121$ & $8.1995\pm1.5442$ \\
+Relation only $-$ strict $z=0$ & $+0.0574\pm0.0070\sigstar$ & $+0.0024\pm0.0037$ & $+0.2251\pm0.0721\sigstar$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Control conclusion.}
+Relation-only and strict $z=0$ are distinct controls, but neither provides a credible demographic solution. Their low SW conflicts with both fixed phototype distance and energy MMD, so SW alone is insufficient for this failure mode.
+
+\begin{table}[h]
+\caption{Measurement-instrument audit for the demographic experiment.}
+\label{tab:instruments}
+\centering
+\small
+\begin{tabular}{p{0.25\textwidth}p{0.34\textwidth}p{0.31\textwidth}}
+\toprule
+Instrument & Held-out ceiling & Use in conclusion \\
+\midrule
+Fixed phototype statistics & non-learned & Primary demographic distance \\
+Frozen phenotype predictor & 72.8\% on test diseases (chance 50\%) & Auxiliary consistency only \\
+Frozen 113-way disease predictor & 9.5\% held-out (chance 0.9\%) & Too weak for semantic claims \\
+Pooled KID feature extractor & same disease predictor & Skipped; below 10\% threshold \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+The demographic protocol was completed, but its central claim failed: correct-source transport does not beat wrong-source transport and does not demonstrate reduced target-data requirements. Because this result is not clearly positive, the plan's downstream demographic augmentation experiment was correctly not run.
+
+\subsection{3. Add an Explicit Zero-Shot Target-Transfer Result}
+
+\begin{table}[h]
+\caption{CIFAR-100 zero-shot ($\KT=0$) validation. For SW and semantic consistency, paired differences compare each control with correct-source transport.}
+\label{tab:cifar-zero}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Method & SW $\downarrow$ & SW advantage & Semantic $\uparrow$ & Semantic advantage \\
+\midrule
+Correct source $+$ transport & $0.210\pm0.020$ & -- & $0.111\pm0.023$ & -- \\
+Source reuse & $0.248\pm0.018$ & $+0.0384\pm0.0113\sigstar$ & $0.113\pm0.023$ & $-0.0017\pm0.0090$ \\
+Wrong source $+$ relation & $0.248\pm0.021$ & $+0.0386\pm0.0141\sigstar$ & $0.052\pm0.010$ & $+0.0597\pm0.0204\sigstar$ \\
+Relation only & $0.236\pm0.022$ & $+0.0260\pm0.0090\sigstar$ & $0.051\pm0.008$ & $+0.0606\pm0.0210\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{CIFAR conclusion.}
+With no target image, the correct source plus learned relation is closer to the real target distribution than all controls. It preserves source semantics at the level of direct reuse and is significantly more semantic than wrong-source and relation-only generation.
+
+\begin{table}[h]
+\caption{Fitzpatrick17k zero-shot paired advantage of correct-source transport. Positive favours correct transport; lower is better for all three metrics.}
+\label{tab:fitz-zero}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Comparator & Phototype & SW & Energy MMD \\
+\midrule
+Source reuse & $+0.0218\pm0.0065\sigstar$ & $+0.0004\pm0.0009$ & $+0.0336\pm0.0332\sigstar$ \\
+Population only & $+1.5435\pm0.1453\sigstar$ & $-0.0771\pm0.0392\sigstar$ & $+1.2816\pm0.5233\sigstar$ \\
+Wrong-task source $+$ relation & $-0.0003\pm0.0067$ & $-0.0001\pm0.0005$ & $-0.0037\pm0.0205$ \\
+FiLM $+$ transport & $-0.2065\pm0.0510\sigstar$ & $-0.0036\pm0.0025\sigstar$ & $-0.2423\pm0.0575\sigstar$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+Zero-target transfer is established on controlled CIFAR shifts, including source specificity. It is not established on Fitzpatrick17k because correct and wrong disease sources remain indistinguishable at $\KT=0$.
+
+\subsection{4. Reframe the FiLM Result as Generality and Efficiency}
+
+\begin{table}[h]
+\caption{FiLM source-dependence on 180 paired CIFAR validation episodes. Entries are comparator-minus-correct-transport differences; positive favours correct transport.}
+\label{tab:film-source}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Metric & Comparator & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+\midrule
+SW & Mean source & $+0.0397\pm0.0084\sigstar$ & $+0.0430\pm0.0091\sigstar$ & $+0.0430\pm0.0096\sigstar$ \\
+& Shuffled source & $+0.0501\pm0.0154\sigstar$ & $+0.0533\pm0.0169\sigstar$ & $+0.0537\pm0.0167\sigstar$ \\
+& Relation only & $+0.0342\pm0.0077\sigstar$ & $+0.0361\pm0.0082\sigstar$ & $+0.0380\pm0.0090\sigstar$ \\
+\midrule
+Semantic consistency & Mean source & $+0.0708\pm0.0226\sigstar$ & $+0.0717\pm0.0256\sigstar$ & $+0.0708\pm0.0235\sigstar$ \\
+& Shuffled source & $+0.0724\pm0.0221\sigstar$ & $+0.0714\pm0.0254\sigstar$ & $+0.0729\pm0.0244\sigstar$ \\
+& Relation only & $+0.0696\pm0.0211\sigstar$ & $+0.0773\pm0.0245\sigstar$ & $+0.0719\pm0.0217\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Generality conclusion.}
+Every FiLM source-dependence comparison is significant for both SW and semantic consistency. The source-informed phenomenon is therefore not tied to the additive reverse-dynamics basis.
+
+\begin{table}[h]
+\caption{Matched CIFAR conditioning comparison. SW values are correct-source transport; paired difference is FiLM minus basis, so positive favours the basis.}
+\label{tab:efficiency}
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Quantity & Additive basis & FiLM \\
+\midrule
+Coordinate-conditioning parameters & 55,344 & 118,784 \\
+Score-model parameters & 27.798M & 27.917M \\
+Encoder $+$ transport parameters & 0.334M & 0.334M \\
+Total evaluated trainable parameters & $\approx28.132$M & $\approx28.251$M \\
+SW, $\KT=1$ & $0.2064\pm0.0222$ & $0.2066\pm0.0224$ \\
+SW, $\KT=5$ & $0.2074\pm0.0202$ & $0.2054\pm0.0185$ \\
+SW, $\KT=20$ & $0.2128\pm0.0224$ & $0.2074\pm0.0214$ \\
+Paired FiLM-minus-basis, $\KT=1,5,20$ & \multicolumn{2}{c}{$+0.0002\pm0.0070,\;-0.0020\pm0.0076,\;-0.0055\pm0.0074$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+The basis and FiLM tie on the headline SW transfer metric, while the basis uses 46.6\% as many coordinate-conditioning parameters. This supports an efficiency claim, not a generation-quality superiority claim. Matched latency, FLOPs, and peak-memory measurements were not recorded and are not inferred from parameter counts.
+
+\subsection{5. Test Whether the Simple Task-Space Geometry Is Representation-Independent}
+
+\begin{table}[h]
+\caption{Linear versus nonlinear transport. Basis entries are linear-minus-residual SW and positive favours the residual MLP; FiLM entries are nonlinear-minus-linear and positive favours linear.}
+\label{tab:linear}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Representation & Metric & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+\midrule
+Additive basis & SW difference & $+0.0022\pm0.0049$ & $+0.0004\pm0.0048$ & $+0.0036\pm0.0050$ \\
+FiLM & SW improvement & $+0.0093\pm0.0037\sigstar$ & $+0.0112\pm0.0040\sigstar$ & $+0.0087\pm0.0042\sigstar$ \\
+FiLM & MMD improvement & $+0.2479\pm0.1658\sigstar$ & $+0.2810\pm0.1588\sigstar$ & $+0.1958\pm0.1640\sigstar$ \\
+FiLM & Statistic improvement & $+0.0170\pm0.0116\sigstar$ & $+0.0087\pm0.0126$ & $+0.0046\pm0.0144$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Module conclusion.}
+Linear transport is statistically equivalent to the residual MLP for the additive basis and significantly better in FiLM pixel-space SW and MMD. The representation-independent conclusion is stronger than planned: the source-target relation is adequately described by an approximately linear coordinate map, so linear transport should be the default.
+
+\subsection{6. Run the Unconstrained Fine-Tuning Reference}
+
+Fine-tuning learning rates and step counts were selected only on validation tasks: 25 steps at $10^{-5}$ for $\KT=1$, 25 steps at $10^{-4}$ for $\KT=5$, and 400 steps at $10^{-5}$ for $\KT=20$. These budgets were then frozen before the once-only test evaluation.
+
+\begin{table}[h]
+\caption{CIFAR test-set full fine-tuning reference. Paired rows are comparator minus transport; positive favours transport.}
+\label{tab:fullft}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Metric & Method/comparison & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+\midrule
+SW & Target only & $0.2027\pm0.0139$ & $0.1950\pm0.0148$ & $0.1840\pm0.0111$ \\
+& Transport & $0.1839\pm0.0122$ & $0.1896\pm0.0120$ & $0.1896\pm0.0122$ \\
+& Full fine-tune & $0.2675\pm0.0193$ & $0.2124\pm0.0183$ & $0.1465\pm0.0091$ \\
+& Target only $-$ transport & $+0.0189\pm0.0092\sigstar$ & $+0.0054\pm0.0069$ & $-0.0056\pm0.0067$ \\
+& Full FT $-$ transport & $+0.0836\pm0.0180\sigstar$ & $+0.0228\pm0.0202\sigstar$ & $-0.0431\pm0.0149\sigstar$ \\
+\midrule
+Energy MMD & Target only & $2.9767\pm0.4119$ & $2.5707\pm0.3651$ & $2.4511\pm0.3003$ \\
+& Transport & $2.4096\pm0.3095$ & $2.4178\pm0.2800$ & $2.4747\pm0.3384$ \\
+& Full fine-tune & $5.9775\pm0.8855$ & $3.6582\pm0.5675$ & $1.8834\pm0.2059$ \\
+& Full FT $-$ transport & $+3.5679\pm0.7806\sigstar$ & $+1.2404\pm0.5851\sigstar$ & $-0.5913\pm0.4109\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Module conclusion.}
+Transport is substantially safer than full fine-tuning at $\KT=1$ and $5$, where unconstrained optimisation overfits. At $\KT=20$, full fine-tuning becomes significantly better. Thus the low-data advantage is not simply an artefact of withholding a stronger optimiser; the restricted coordinate space is beneficial under severe scarcity but becomes a limitation once enough target data are available.
+
+\subsection{7. Optional Representation-Strength Experiments}
+
+The optional gate was satisfied only after demographic and zero-shot experiments were secured. On Fitzpatrick17k, 50\% means four of eight training diseases and 25\% means two of eight; validation and test diseases are unchanged. The same experiment was then repeated on the original CIFAR image setting, where 50\% retains 30 of 60 training fine classes while all 12 training superclasses remain represented.
+
+\begin{table}[h]
+\caption{Fitzpatrick task scarcity at $\KT=2$. Entries are basis distance minus FiLM distance, reported as the positive magnitude of FiLM's advantage; all are paired and lower is better.}
+\label{tab:fitz-scarcity}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Training diseases & Phototype & SW & Energy MMD \\
+\midrule
+50\% (4/8) & $+0.2083\pm0.0467\sigstar$ & $+0.0213\pm0.0046\sigstar$ & $+0.7726\pm0.2469\sigstar$ \\
+25\% (2/8) & $+0.2754\pm0.0624\sigstar$ & $+0.0159\pm0.0081\sigstar$ & $+0.7344\pm0.3830\sigstar$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Fitzpatrick scarcity conclusion.}
+The proposed stronger structural bias does not help the additive basis when disease tasks are scarce. FiLM is significantly better at both 50\% and 25\% on all three distances, while correct and wrong disease sources remain effectively tied.
+
+\begin{table}[h]
+\caption{CIFAR 50\% meta-training-task experiment. Differences are FiLM minus basis; negative distance differences and positive consistency differences favour FiLM.}
+\label{tab:cifar-scarcity}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Metric/comparison & $\KT=1$ & $\KT=5$ & $\KT=20$ \\
+\midrule
+50\% basis SW & $0.2097\pm0.0189$ & $0.2060\pm0.0170$ & $0.2141\pm0.0171$ \\
+50\% FiLM SW & $0.1912\pm0.0185$ & $0.1851\pm0.0142$ & $0.1920\pm0.0156$ \\
+FiLM $-$ basis SW & $-0.0185\pm0.0108\sigstar$ & $-0.0208\pm0.0114\sigstar$ & $-0.0221\pm0.0122\sigstar$ \\
+FiLM $-$ basis MMD & $-0.3907\pm0.2611\sigstar$ & $-0.6022\pm0.2983\sigstar$ & $-0.6564\pm0.3460\sigstar$ \\
+FiLM $-$ basis superclass consistency & $+0.0411\pm0.0202\sigstar$ & $+0.0488\pm0.0223\sigstar$ & $+0.0458\pm0.0216\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{CIFAR scarcity conclusion.}
+The image-domain replication again contradicts an additive-basis scarcity advantage: FiLM is significantly better at all three target budgets on SW, MMD, and superclass consistency. Because this useful separation appeared, the requested 25\% CIFAR extension was started; it remains \ongoing{} and is excluded from the present conclusions.
+
+\begin{table}[h]
+\caption{Fitzpatrick coordinate compression at $\KT=2$. Lower is better.}
+\label{tab:compression}
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+Conditioning & $k$ & Phototype & SW & Energy MMD \\
+\midrule
+Additive basis & 4 & $2.1825$ & $0.3797$ & $7.1651$ \\
+Additive basis & 8 & $2.2024$ & $0.3786$ & $7.1714$ \\
+Additive basis & 16 & $2.2670$ & $0.3825$ & $7.3803$ \\
+FiLM & 4 & $2.2946$ & $0.3703$ & $7.2555$ \\
+FiLM & 8 & $2.0951$ & $0.3892$ & $7.4385$ \\
+FiLM & 16 & $2.0573$ & $0.3853$ & $7.3159$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+The additive basis meets the literal compression criterion because $k=4$ and $8$ are not worse than $k=16$, but performance is almost invariant to $\KT$ and \texttt{gain\_vs\_shuffled} remains approximately zero. The apparent low-$k$ benefit is therefore better interpreted as regularisation under coordinate collapse, not efficient encoding of disease-specific information. Across both scarcity datasets, there is no evidence for an additive-basis representation-strength advantage.
+
+\subsection{8. Diagnose the Additive-Basis Oracle Advantage Only if Cheap}
+
+\begin{table}[h]
+\caption{Matched refinement-loss probe. Values are fractional loss descent from the stated start; paired difference is basis minus FiLM.}
+\label{tab:oracle-probe}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Diagnostic & Additive basis & FiLM & Paired difference \\
+\midrule
+Descent from transported coordinate & $0.0004\pm0.0001$ & $0.0027\pm0.0005$ & $-0.0024\pm0.0005\sigstar$ \\
+Descent from $z=0$ & $0.0313\pm0.0051$ & $0.1108\pm0.0128$ & $-0.0796\pm0.0121\sigstar$ \\
+Non-monotone rise along segment & $0.0002\pm0.0001$ & $0.0000$ & $+0.0002\pm0.0001\sigstar$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+The cheap diagnostic contradicts the proposed explanation: the basis does not descend further and its interpolation path is not smoother. The oracle advantage remains unexplained; it does not justify a new alignment loss or an architectural change.
+
+\subsection{9. Final Method Simplifications}
+
+\begin{table}[h]
+\caption{Method decisions implied by the completed evidence.}
+\label{tab:simplifications}
+\centering
+\small
+\begin{tabular}{p{0.24\textwidth}p{0.42\textwidth}p{0.25\textwidth}}
+\toprule
+Component & Evidence & Final decision \\
+\midrule
+Target-time refinement & negligible/inconsistent gain after transport & Remove from headline method \\
+Transport map & linear ties basis MLP and beats FiLM MLP & Use linear map by default \\
+Conditioning & basis ties FiLM SW with fewer conditioning parameters & Keep basis as compact variant \\
+Architecture claim & FiLM often matches or beats basis & Do not claim basis quality superiority \\
+FFHQ-FSIG & not the viable natural demographic result & Retain only as stress test/limitation \\
+Demographic downstream augmentation & generation result not clearly positive & Do not run under the plan's gate \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+The final method should be source-informed linear coordinate transport without target-time refinement. The additive basis is an efficiency-oriented implementation, while FiLM establishes architectural generality. No method change is warranted by the failed oracle diagnostic.
+
+\subsection{10. Final Experimental Package}
+
+The following compact tables collect the foundational results that were already established when the 18 September plan was written and the package status after executing the plan.
+
+\begin{table}[h]
+\caption{Gaussian-mixture positive control. $\Delta_{\mathrm{task}}=L(\bar z)-L(z_y)$; positive values favour the task-specific coordinate.}
+\label{tab:gmm}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Task family & Own-coordinate loss & Mean-coordinate loss & $\Delta_{\mathrm{task}}$ \\
+\midrule
+Related, perturbation 0.10 & $0.4368$ & $0.5907$ & $+0.1539\pm0.0241\sigstar$ \\
+Related, perturbation 0.25 & $0.4750$ & $0.6178$ & $+0.1428\pm0.0238\sigstar$ \\
+Related, perturbation 0.50 & $0.5234$ & $0.6770$ & $+0.1536\pm0.0331\sigstar$ \\
+Related, perturbation 1.00 & $0.5937$ & $0.7508$ & $+0.1571\pm0.0350\sigstar$ \\
+Unrelated & $0.4921$ & $0.6453$ & $+0.1533\pm0.0392\sigstar$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Positive-control conclusion.}
+Across all mixture families, the correct coordinate significantly lowers denoising loss and the coordinate-loss profile is minimised at the true task coordinate. The coordinate mechanism works when the ground truth is known.
+
+\begin{table}[h]
+\caption{Core CIFAR target-scarcity and source-budget results for the additive basis. SW is lower-is-better.}
+\label{tab:core-cifar}
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+$\KT$ & 1 & 2 & 5 & 10 & 20 \\
+\midrule
+Correct transport SW & $0.212\pm0.021$ & $0.207\pm0.019$ & $0.210\pm0.017$ & $0.217\pm0.019$ & $0.212\pm0.018$ \\
+Target-only SW & $0.230\pm0.020$ & $0.220\pm0.020$ & $0.224\pm0.020$ & $0.220\pm0.022$ & $0.208\pm0.019$ \\
+\midrule
+$\MS$ at $\KT=1$ & 16 & 32 & 64 & 128 & 300 \\
+Correct transport SW & $0.216\pm0.018$ & $0.215\pm0.019$ & $0.214\pm0.020$ & $0.214\pm0.020$ & $0.214\pm0.020$ \\
+Transport advantage over target only & $+0.0141\sigstar$ & $+0.0143\sigstar$ & $+0.0161\sigstar$ & $+0.0161\sigstar$ & $+0.0160\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Scarcity conclusion.}
+Transport is most useful at very low target support and target-only catches up by $\KT=20$. Increasing source evidence from $\MS=16$ to 300 changes transport SW by only 0.002, so deployment-time source evidence is already saturated at the smallest tested budget.
+
+\begin{table}[h]
+\caption{Final package status against the twelve requested items.}
+\label{tab:package}
+\centering
+\scriptsize
+\begin{tabular}{p{0.34\textwidth}p{0.13\textwidth}p{0.36\textwidth}}
+\toprule
+Required item & Status & Headline reading \\
+\midrule
+1. Gaussian-mixture calibration & Complete & Correct coordinate wins in all five families \\
+2. CIFAR source-dependence controls & Complete & Correct source beats mean, shuffled, and relation-only \\
+3. Target-scarcity curve & Complete & Largest benefit at low $\KT$; gone by $\KT=20$ \\
+4. Source-budget saturation & Complete & Saturated by $\MS=16$ \\
+5. Transport-structure ablation & Complete & Linear is sufficient \\
+6. Additive basis vs FiLM & Complete & SW tie; basis uses fewer conditioning parameters \\
+7. FiLM generality check & Complete & Source-specific effect reproduced \\
+8. Explicit $\KT=0$ transfer & Complete & Positive on CIFAR; negative on Fitzpatrick \\
+9. Demographic scarcity & Complete & Central source-specificity claim fails \\
+10. Unconstrained full fine-tuning & Complete & Worse at low $\KT$, better at $\KT=20$ \\
+11. Paired 95\% CIs & Complete & Used for all headline comparisons \\
+12. Downstream demographic augmentation & \notrun & Gate not met: demographic generation not clearly positive \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Module conclusion.}
+Eleven of twelve package items are complete; the twelfth was explicitly conditional and was not triggered. The package supports the controlled-domain mechanism and its generality, but the requested viable real-demographic transfer result is negative rather than confirmatory.
+
+\section{Conclusions}
+
+\begin{table}[h]
+\caption{Direct answer to the question posed by each module of the 18 September plan.}
+\label{tab:verdicts}
+\centering
+\small
+\begin{tabular}{cp{0.82\textwidth}}
+\toprule
+Module & Answer \\
+\midrule
+1 & The full Fitzpatrick17k archive was recovered, hash-verified, cleaned, and split with held-out diseases; the data gate was passed. \\
+2 & The demographic protocol was completed, but correct-source transport equals wrong-source transport and does not reduce the target-data requirement. \\
+3 & Zero-shot source-informed transfer is positive and source-specific on CIFAR, but not on Fitzpatrick17k. \\
+4 & The principle generalises to FiLM; the additive basis offers conditioning-parameter efficiency, not superior generation quality. \\
+5 & The relation is adequately linear under both representations; linear transport is the final default. \\
+6 & Coordinate transport is preferable to full fine-tuning at $\KT\le5$, whereas full fine-tuning wins at $\KT=20$. \\
+7 & Neither disease-task scarcity nor CIFAR task scarcity supports an additive-basis advantage; the completed evidence favours FiLM. Low-$k$ Fitzpatrick results are confounded by coordinate collapse. \\
+8 & The cheap oracle diagnostic does not support the smoother/better-target-representation hypothesis, so no architectural change is justified. \\
+9 & The defensible method is linear source-informed transport without refinement; the basis is retained only as the compact implementation. \\
+10 & The final package is complete except for the conditionally gated downstream augmentation test; its final narrative stops before a real-demographic data-reduction claim. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The resulting claim is deliberately narrower than the original desired chain:
+\[
+\boxed{
+\begin{gathered}
+\text{source identity matters on controlled shifts}
+\\
+\rightarrow\ \text{a reusable, approximately linear map exists}
+\\
+\rightarrow\
+\text{it is most useful under extreme target scarcity}
+\\
+\rightarrow\ \text{it generalises across basis and FiLM conditioning},
+\end{gathered}}
+\]
+but the final step---reduction of real target-population data requirements---is not supported by the Fitzpatrick17k evidence. The correct scientific conclusion is therefore positive for the controlled mechanism and negative for current real-demographic generalisation.
+
+\end{document}
