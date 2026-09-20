@@ -40,7 +40,8 @@ def _norm(ch: int) -> nn.GroupNorm:
 class ResBlock(nn.Module):
     """GroupNorm-SiLU-Conv twice, with the timestep injected as a scale-shift."""
 
-    def __init__(self, in_ch: int, out_ch: int, temb_dim: int, dropout: float = 0.1) -> None:
+    def __init__(self, in_ch: int, out_ch: int, temb_dim: int, dropout: float = 0.1,
+                 z_film_dim: int | None = None) -> None:
         super().__init__()
         self.in_layers = nn.Sequential(_norm(in_ch), nn.SiLU(), nn.Conv2d(in_ch, out_ch, 3, padding=1))
         self.emb_proj = nn.Linear(temb_dim, 2 * out_ch)
@@ -54,11 +55,24 @@ class ResBlock(nn.Module):
         # initialisation, which would stop the time embedding reaching the features.
         nn.init.normal_(self.out_layers[-1].weight, std=0.02)
         nn.init.zeros_(self.out_layers[-1].bias)
+        # E15 FiLM arm: a *dedicated* per-block projection of the task coordinate z into a
+        # feature-wise affine (gamma, beta), applied at the same place the timestep scale-shift
+        # is. None keeps this block a plain time-only ResBlock (the additive-basis arm), so the
+        # basis backbone is byte-identical. Zero-init means z=0 (and init) is the identity.
+        if z_film_dim is not None:
+            self.z_proj = nn.Linear(z_film_dim, 2 * out_ch)
+            nn.init.zeros_(self.z_proj.weight)
+            nn.init.zeros_(self.z_proj.bias)
+        else:
+            self.z_proj = None
 
-    def forward(self, x: Tensor, temb: Tensor) -> Tensor:
+    def forward(self, x: Tensor, temb: Tensor, z: Tensor | None = None) -> Tensor:
         h = self.in_layers(x)
         scale, shift = self.emb_proj(F.silu(temb))[:, :, None, None].chunk(2, dim=1)
         h = self.out_norm(h) * (1 + scale) + shift
+        if self.z_proj is not None and z is not None:
+            zscale, zshift = self.z_proj(z)[:, :, None, None].chunk(2, dim=1)
+            h = h * (1 + zscale) + zshift              # per-block FiLM from z: (1+gamma_j) h + beta_j
         return self.skip(x) + self.out_layers(h)
 
 
@@ -88,9 +102,9 @@ class _Stage(nn.Module):
         super().__init__()
         self.mods = nn.ModuleList(mods)
 
-    def forward(self, x: Tensor, temb: Tensor) -> Tensor:
+    def forward(self, x: Tensor, temb: Tensor, z: Tensor | None = None) -> Tensor:
         for m in self.mods:
-            x = m(x, temb) if isinstance(m, ResBlock) else m(x)
+            x = m(x, temb, z) if isinstance(m, ResBlock) else m(x)
         return x
 
 
@@ -126,9 +140,11 @@ class SmallUNet(DiffusionBackbone):
         attn_resolutions: tuple[int, ...] = (16,),
         dropout: float = 0.1,
         max_timestep: int = 999,
+        z_film_dim: int | None = None,
     ) -> None:
         super().__init__()
         self.max_timestep = max_timestep
+        self.z_film_dim = z_film_dim        # E15: per-block FiLM projection width (None = time-only)
         self._spec = BackboneSpec(
             feature_channels=base_channels,
             image_channels=image_channels,
@@ -152,7 +168,7 @@ class SmallUNet(DiffusionBackbone):
         for i, mult in enumerate(channel_mult):
             out_ch = base_channels * mult
             for _ in range(num_res_blocks):
-                mods: list[nn.Module] = [ResBlock(ch, out_ch, temb_dim, dropout)]
+                mods: list[nn.Module] = [ResBlock(ch, out_ch, temb_dim, dropout, z_film_dim=z_film_dim)]
                 ch = out_ch
                 if res in attn_resolutions:
                     mods.append(AttnBlock(ch))
@@ -165,7 +181,8 @@ class SmallUNet(DiffusionBackbone):
 
         # ---- Middle ----
         self.mid = _Stage(
-            ResBlock(ch, ch, temb_dim, dropout), AttnBlock(ch), ResBlock(ch, ch, temb_dim, dropout)
+            ResBlock(ch, ch, temb_dim, dropout, z_film_dim=z_film_dim), AttnBlock(ch),
+            ResBlock(ch, ch, temb_dim, dropout, z_film_dim=z_film_dim)
         )
 
         # ---- Upsampling path ----
@@ -173,7 +190,7 @@ class SmallUNet(DiffusionBackbone):
         for i, mult in reversed(list(enumerate(channel_mult))):
             out_ch = base_channels * mult
             for j in range(num_res_blocks + 1):
-                mods = [ResBlock(ch + skip_chans.pop(), out_ch, temb_dim, dropout)]
+                mods = [ResBlock(ch + skip_chans.pop(), out_ch, temb_dim, dropout, z_film_dim=z_film_dim)]
                 ch = out_ch
                 if res in attn_resolutions:
                     mods.append(AttnBlock(ch))
@@ -194,15 +211,17 @@ class SmallUNet(DiffusionBackbone):
         temb = self.time_mlp(timestep_embedding(t, self.base_channels))
         return self._trunk(x_t, temb)
 
-    def _trunk(self, x_t: Tensor, temb: Tensor) -> Tensor:
+    def _trunk(self, x_t: Tensor, temb: Tensor, z: Tensor | None = None) -> Tensor:
         """The U-Net body given an already-built time embedding. Factored out so a
-        conditioning variant (see models/film_unet.py) can fold z into temb and reuse it."""
+        conditioning variant (see models/film_unet.py) can fold z into temb and reuse it.
+        ``z`` (B, z_film_dim), when the blocks were built with z_film_dim, adds a dedicated
+        per-block FiLM; it is ignored by the plain time-only backbone."""
         h = self.conv_in(x_t)
         skips = [h]
         for stage in self.downs:
-            h = stage(h, temb)
+            h = stage(h, temb, z)
             skips.append(h)
-        h = self.mid(h, temb)
+        h = self.mid(h, temb, z)
         for stage in self.ups:
-            h = stage(torch.cat([h, skips.pop()], dim=1), temb)
+            h = stage(torch.cat([h, skips.pop()], dim=1), temb, z)
         return F.silu(self.out_norm(h))

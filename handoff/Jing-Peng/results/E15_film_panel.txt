@@ -1,20 +1,29 @@
-E15 — Generic latent conditioning (FiLM) vs the structured additive basis
+E15 - Generic latent conditioning (FiLM) vs the structured additive basis
 ==============================================================================
 Same SetEncoder / Transport / k=16 / 128-channel backbone / 50k steps / centring off.
-Only the conditioning differs:
+FiLM here is the spec-correct PER-BLOCK form: a dedicated affine (gamma_j, beta_j) = W_j z + b_j
+at every residual block (NOT routed through the shared timestep-embedding path).
   basis (ctr128_off): eps_hat = eps_hat_0 + sum_l z_l R_l(x,t)      [equation 21]
-  FiLM  (film128)   : z folded into the timestep embedding of the U-Net
+  FiLM  (film128)   : per-block feature-wise affine modulation of the U-Net features by z
+Source: re-run jp-genpair-20260918-130056 (both arms trained together, 50k steps, EMA weights).
+Values: final (last-20%-mean).
 
-Values shown as  final (last-20%-mean)   [EMA weights].
+   metric                        basis(ctr128_off)     FiLM(film128)
+   loss_correct                           +0.0777           +0.0790
+   gain_vs_zero                           +0.0014           +0.0122
+   delta_task (gain_vs_mean_z)            +0.0016           +0.0104
+   gain_vs_shuffled                       +0.0028           +0.0240
+   r_basis                                +0.0353           +0.0702
 
-   metric                   basis(ctr128_off)   FiLM(film128)
-   loss_correct                       +0.0667         +0.0703
-   gain_vs_zero                       +0.0014         +0.0084
-   delta_task                         +0.0015         +0.0098
-   gain_vs_mean_z                     +0.0015         +0.0098
-   gain_vs_shuffled                   +0.0031         +0.0302
-   r_basis                            +0.0352         +0.0688
+   parameter budgets (reported, not asserted equal):
+     basis(ctr128_off): phi 27.80M + encoder 0.33M + transport 6.8K
+     FiLM (film128)   : phi 27.92M + encoder 0.33M + transport 6.8K
 
-   reading (lower loss_correct is better): basis beats FiLM (basis 0.0667 vs FiLM 0.0703).
-   coordinate usefulness (gain_vs_zero): basis +0.0014 vs FiLM +0.0084.
+   reading: the additive basis is the better denoiser (loss_correct 0.0777 < 0.0790),
+   while per-block FiLM leans on z more (gain_vs_zero 0.0122 vs 0.0014, gain_vs_shuffled
+   0.0240 vs 0.0028, r_basis 0.070 vs 0.035). A correctly-implemented generic FiLM does
+   not overturn the structured reverse-dynamics basis at the denoising level.
 
+   NOTE: denoising loss is a supporting diagnostic. The decisive E15 comparison is
+   generation-level (basis vs FiLM at K_T in {1,5,20}); run it with the step-50000
+   checkpoints in S3 (see results README) using the measurement package's evaluator.
