@@ -106,7 +106,7 @@ Test independence unit & disease mean (four test diseases) \\
 All required $\KT$ values, the five prespecified controls, FiLM, disjoint target queries, and disease-level paired intervals were included. The FiLM advantage cannot be attributed to a larger model because FiLM has 560 fewer trainable parameters in this experiment.
 
 \begin{table}[h]
-\caption{Distance to the real held-out target population across four test diseases. All entries are absolute mean $\pm$ 95\% CI; lower is better. ``Population only'' is $\Delta_\gamma(0)$ and is not the strict $z=0$ control.}
+\caption{Distance to the real held-out target population across four test diseases. All entries are absolute mean $\pm$ 95\% CI; lower is better. A superscript $\sigstar$ marks a significant paired difference from additive correct-source transport. The direction is determined by the values themselves. ``Population only'' is $\Delta_\gamma(0)$ and is not the strict $z=0$ control.}
 \label{tab:fitz-absolute}
 \centering
 \scriptsize
@@ -115,26 +115,26 @@ All required $\KT$ values, the five prespecified controls, FiLM, disjoint target
 \toprule
 Metric & Method & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
 \midrule
-Phototype & Target only & $2.512\pm0.435$ & $2.515\pm0.430$ & $2.513\pm0.431$ & $2.515\pm0.433$ & $2.518\pm0.444$ \\
-& Source reuse & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ & $2.525\pm0.442$ \\
-& Population only & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ & $4.046\pm0.311$ \\
+Phototype & Target only & $2.512\pm0.435$ & $2.515\pm0.430$ & $2.513\pm0.431$ & $2.515\pm0.433$ & $2.518\pm0.444\sigstar$ \\
+& Source reuse & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ & $2.525\pm0.442\sigstar$ \\
+& Population only & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ & $4.046\pm0.311\sigstar$ \\
 & Wrong-task source $+$ relation & $2.503\pm0.444$ & $2.504\pm0.445$ & $2.508\pm0.443$ & $2.511\pm0.441$ & $2.513\pm0.449$ \\
 & Correct source $+$ transport & $2.501\pm0.444$ & $2.502\pm0.447$ & $2.507\pm0.443$ & $2.511\pm0.438$ & $2.508\pm0.450$ \\
-& FiLM $+$ transport & $2.297\pm0.456$ & $2.297\pm0.456$ & $2.297\pm0.456$ & $2.297\pm0.455$ & $2.297\pm0.456$ \\
+& FiLM $+$ transport & $2.297\pm0.456\sigstar$ & $2.297\pm0.456\sigstar$ & $2.297\pm0.456\sigstar$ & $2.297\pm0.455\sigstar$ & $2.297\pm0.456\sigstar$ \\
 \midrule
 SW & Target only & $0.362\pm0.044$ & $0.363\pm0.044$ & $0.362\pm0.044$ & $0.363\pm0.045$ & $0.363\pm0.044$ \\
-& Source reuse & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ & $0.364\pm0.045$ \\
-& Population only & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ & $0.287\pm0.009$ \\
+& Source reuse & $0.364\pm0.045\sigstar$ & $0.364\pm0.045$ & $0.364\pm0.045\sigstar$ & $0.364\pm0.045\sigstar$ & $0.364\pm0.045\sigstar$ \\
+& Population only & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ & $0.287\pm0.009\sigstar$ \\
 & Wrong-task source $+$ relation & $0.362\pm0.044$ & $0.362\pm0.046$ & $0.361\pm0.046$ & $0.362\pm0.045$ & $0.362\pm0.044$ \\
 & Correct source $+$ transport & $0.362\pm0.045$ & $0.362\pm0.047$ & $0.362\pm0.045$ & $0.362\pm0.046$ & $0.362\pm0.045$ \\
-& FiLM $+$ transport & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047$ \\
+& FiLM $+$ transport & $0.360\pm0.047$ & $0.360\pm0.047$ & $0.360\pm0.047\sigstar$ & $0.360\pm0.047\sigstar$ & $0.360\pm0.047$ \\
 \midrule
-Energy MMD & Target only & $7.113\pm1.804$ & $7.163\pm1.816$ & $7.120\pm1.814$ & $7.132\pm1.845$ & $7.137\pm1.817$ \\
-& Source reuse & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ & $7.176\pm1.828$ \\
-& Population only & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ & $8.425\pm1.482$ \\
+Energy MMD & Target only & $7.113\pm1.804$ & $7.163\pm1.816$ & $7.120\pm1.814$ & $7.132\pm1.845$ & $7.137\pm1.817\sigstar$ \\
+& Source reuse & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ & $7.176\pm1.828\sigstar$ \\
+& Population only & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ & $8.425\pm1.482\sigstar$ \\
 & Wrong-task source $+$ relation & $7.099\pm1.821$ & $7.116\pm1.841$ & $7.087\pm1.848$ & $7.105\pm1.846$ & $7.099\pm1.806$ \\
 & Correct source $+$ transport & $7.095\pm1.852$ & $7.114\pm1.887$ & $7.110\pm1.859$ & $7.110\pm1.867$ & $7.109\pm1.838$ \\
-& FiLM $+$ transport & $6.901\pm1.864$ & $6.901\pm1.862$ & $6.901\pm1.862$ & $6.903\pm1.861$ & $6.903\pm1.861$ \\
+& FiLM $+$ transport & $6.901\pm1.864\sigstar$ & $6.901\pm1.862\sigstar$ & $6.901\pm1.862\sigstar$ & $6.903\pm1.861\sigstar$ & $6.903\pm1.861\sigstar$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
