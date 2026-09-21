@@ -1,0 +1,509 @@
+% Meta-Diffusion technical report aligned with the executable experiment plan.
+% Compile from docs/ with:
+%   pdflatex -interaction=nonstopmode -output-directory=../output/pdf iclr_executable_plan_results_2026-09-21.tex
+\documentclass{article}
+
+\usepackage{iclr2026_conference,times}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{url}
+
+\newcommand{\KT}{K_T}
+\newcommand{\MS}{M_S}
+\newcommand{\SW}{\mathrm{SW}}
+\newcommand{\MMD}{\mathrm{MMD}}
+\newcommand{\CI}{95\%\ \mathrm{CI}}
+\newcommand{\sigstar}{^{*}}
+\newcommand{\method}{\textsc{Meta-Diffusion}}
+\setlist{nosep,leftmargin=1.35em}
+\setlength{\emergencystretch}{3em}
+\AfterEndEnvironment{table}{\FloatBarrier}
+
+\title{Meta-Diffusion:\\
+Plan-Aligned Results\\
+and Fitzpatrick17k Source Specificity}
+\author{Anonymous Authors}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We report the completion of a pre-registered experiment sequence designed to distinguish
+reusable population transport from genuinely source-task-specific transport.  The sequence
+audits the data and frozen method (P0), raises Fitzpatrick17k task resolution from diseases to
+pathology families (P1), introduces hierarchical wrong-source controls (P2), tests a
+source-only task-separability explanation (P3), repeats the family protocol under a stronger
+Fitzpatrick I--III to V--VI shift (P4), audits the completed CIFAR package (P5), and applies a
+strict gate to downstream demographic augmentation (P6).  On Fitzpatrick17k, correct-source
+transport improves energy MMD over a population-only control, but is statistically
+indistinguishable from wrong-task transport under both phenotype definitions.  The frozen
+family classifier also fails its pre-specified per-family validity rule, so semantic nulls are
+classified as inconclusive rather than equivalence.  Source-only task separability does not
+provide a supported explanation.  In contrast, audited CIFAR evidence retains a clear
+correct-versus-wrong-source advantage at $\KT=0$, survives FiLM conditioning, and supports an
+approximately linear task-space relation.  The resulting claim is therefore deliberately
+narrow: source-specific coordinate transport is supported in the controlled CIFAR setting,
+whereas the frozen method learns primarily a shared phenotype offset on Fitzpatrick17k.
+\end{abstract}
+
+\section{Scope and Reporting Convention}
+
+The core model, training recipe, linear transport, and no-refinement headline inference were
+frozen before the new family-level outcomes were inspected.  No new head, larger coordinate,
+nonlinear transport, or architecture rescue was introduced.  All within-task comparisons use
+the same support draw, real target query, and DDIM noise.  Repeats reduce Monte Carlo noise but
+are not treated as independent semantic tasks.
+
+Raw-performance tables report absolute means $\pm$ 95\% confidence-interval half-widths.  A
+separate comparison table reports absolute paired differences.  For lower-is-better
+distances, the comparison is
+\begin{equation}
+  \Delta_d=d(\text{comparator},\mathcal D_T)
+          -d(\text{correct source+transport},\mathcal D_T),
+\end{equation}
+so positive values favour correct-source transport.  For higher-is-better semantic or
+phenotype consistency, the subtraction is reversed, again making positive values favour
+correct transport.  A superscript $\sigstar$ is attached directly to a paired result only
+when its 95\% interval excludes zero.  No star is placed on an unpaired raw mean.
+
+The reported measurements are: phenotype target share and semantic consistency
+(higher is better), and fixed phototype-statistic distance, sliced Wasserstein distance
+(SW), and energy MMD (lower is better).  A frozen predictor is a measurement instrument, not
+ground truth.  Failure of its independent validity gate prevents a semantic claim and is not
+replaced post hoc by a distributional metric.
+
+\section{P0: Prerequisite and Reproducibility Gate}
+
+The experiment used the verified SFU Fitzpatrick17k-Renamed archive as a byte source.  Images
+were matched to the official CSV using the supplied MD5 hashes and filtered with the
+Fitzpatrick17k-C allow-list.  Known near-duplicate components were collapsed before task
+allocation.  The official schema contains no subject identifier; consequently patient-level
+leakage cannot be checked directly, and hash/near-duplicate filtering is the strongest
+available safeguard.
+
+\begin{table}[h]
+\caption{P0 dataset, environment, and frozen-protocol audit.}
+\label{tab:p0}
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Audit item & Verified value \\
+\midrule
+Official CSV / archive rows & 16,577 / 16,577 \\
+Byte-verified rows retained by Fitzpatrick17k-C & 11,394 \\
+Retained rows with Fitzpatrick I--VI & 11,098 \\
+P1 eligible pathology families (target IV--VI) & 6 \\
+P4 eligible pathology families (target V--VI) & 5 \\
+P1 task-level folds / P4 cyclic folds & 3 / 5 \\
+Training / evaluation seeds & 12,345 / 4,321 \\
+Python / PyTorch / CUDA & 3.12.13 / 2.11.0 / 12.8 \\
+GPU & NVIDIA RTX 5080, 16,303 MiB \\
+Frozen coordinate dimension / source budget & $k=16$ / $\MS=32$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All manifests passed on-disk, population-side, taxonomy, duplicate, and capacity checks.
+Target support is disjoint from target query and nested across $\KT\in\{1,2,5,10,20\}$.
+The family-level semantic-instrument check remains an outcome-validity gate and was therefore
+not used to select tasks or folds.
+
+\paragraph{P0 conclusion.}
+The prerequisite gate passed.  Data provenance, exclusions, task folds, frozen checkpoints,
+seeds, comparison direction, and independent statistical units were fixed before the new
+outcomes were inspected.
+
+\section{P1: Pathology-Family Semantic Resolution}
+
+The task is the official \texttt{nine\_partition\_label}; source is Fitzpatrick I--III and
+target is IV--VI.  Six families meet the pre-model requirement of at least 64 clean source
+and 45 clean target images.  Three task-level folds test every family exactly once.  Model
+selection uses only the validation family in each fold and chooses training steps 16,000,
+10,000, and 10,000.  Evaluation uses 96 generated images per cell, DDIM-50, eight paired
+repeats, and no target-time refinement.
+
+\subsection{Absolute zero-shot performance}
+
+\begin{table}[h]
+\caption{P1 raw performance at $\KT=0$ over six outer-test pathology families.  Entries are
+absolute family means $\pm$ 95\% CI.  Phenotype share and family consistency are
+higher-is-better; all three distances are lower-is-better.}
+\label{tab:p1raw}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Method & Phenotype share $\uparrow$ & Family consistency $\uparrow$ & Statistic dist. $\downarrow$ & SW $\downarrow$ & Energy MMD $\downarrow$ \\
+\midrule
+Source reuse & $0.0000\pm0.0000$ & $0.1651\pm0.3227$ & $1.7452\pm0.2089$ & $0.3081\pm0.0192$ & $5.7946\pm1.0078$ \\
+Population only & $0.0000\pm0.0000$ & $0.1641\pm0.3216$ & $3.0504\pm0.2209$ & $0.2683\pm0.0110$ & $6.8472\pm1.0089$ \\
+Wrong-family source $+$ relation & $0.0000\pm0.0000$ & $0.1656\pm0.3230$ & $1.7185\pm0.2170$ & $0.3064\pm0.0200$ & $5.7468\pm1.0114$ \\
+Correct-family source $+$ transport & $0.0002\pm0.0004$ & $0.1656\pm0.3230$ & $1.7188\pm0.2178$ & $0.3063\pm0.0199$ & $5.7436\pm1.0026$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[h]
+\caption{P1 paired effects at $\KT=0$.  Every entry is oriented so positive values favour
+correct-family transport.  A star means the paired 95\% CI excludes zero.}
+\label{tab:p1paired}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Comparator ($\Delta>0$: correct-family transport) & Phenotype share & Family consistency & Statistic dist. & SW & Energy MMD \\
+\midrule
+Source reuse & $+0.00022\pm0.00043$ & $+0.00043\pm0.00054$ & $+0.02635\pm0.01482\sigstar$ & $+0.00178\pm0.00218$ & $+0.05099\pm0.05141$ \\
+Population only & $+0.00022\pm0.00043$ & $+0.00152\pm0.00191$ & $+1.33162\pm0.08916\sigstar$ & $-0.03795\pm0.02043\sigstar$ & $+1.10360\pm0.49696\sigstar$ \\
+Wrong-family source $+$ relation & $+0.00022\pm0.00043$ & $+0.00000\pm0.00000$ & $-0.00029\pm0.00160$ & $+0.00007\pm0.00091$ & $+0.00317\pm0.01925$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The semantic evaluator obtains overall fold accuracies of 67.6--68.7\%, but its minimum
+outer-test-family accuracies are 0.0\%, 0.0\%, and 15.3\%, below the locked 25\% per-family
+threshold.  Hence the primary correct-minus-wrong semantic effect of exactly zero is
+uninformative rather than evidence of equivalence.  The independently valid secondary
+correct-versus-wrong effects all include zero.
+
+\subsection{Target-only data-efficiency comparison}
+
+Because the headline correct, wrong, source-reuse, and population-only coordinates receive no
+target-time refinement, they are invariant to $\KT$.  Nonzero target budgets therefore test
+the target-only comparator rather than further adapting transport.
+
+\begin{table}[h]
+\caption{P1 target-only raw distances and paired effects against the fixed correct-family
+transport.  Within each metric, the first row is target-only raw performance and the second
+is $\Delta=d(\text{target only})-d(\text{correct transport})$; positive supports correct
+transport.}
+\label{tab:p1budget}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccc}
+\toprule
+Metric & Quantity & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
+\midrule
+Statistic dist. & Target only raw & $1.7322\pm0.2193$ & $1.7306\pm0.2201$ & $1.7412\pm0.2117$ & $1.7369\pm0.2147$ & $1.7356\pm0.2158$ \\
+& Paired $\Delta$ ($+=$ correct) & $+0.0134\pm0.0227$ & $+0.0118\pm0.0127$ & $+0.0224\pm0.0119\sigstar$ & $+0.0180\pm0.0080\sigstar$ & $+0.0168\pm0.0092\sigstar$ \\
+\midrule
+SW & Target only raw & $0.3045\pm0.0194$ & $0.3055\pm0.0191$ & $0.3041\pm0.0190$ & $0.3047\pm0.0204$ & $0.3039\pm0.0194$ \\
+& Paired $\Delta$ ($+=$ correct) & $-0.0018\pm0.0037$ & $-0.0007\pm0.0012$ & $-0.0022\pm0.0018\sigstar$ & $-0.0016\pm0.0014\sigstar$ & $-0.0024\pm0.0020\sigstar$ \\
+\midrule
+Energy MMD & Target only raw & $5.7208\pm0.9739$ & $5.7303\pm0.9850$ & $5.6749\pm0.9871$ & $5.7091\pm1.0350$ & $5.6900\pm1.0112$ \\
+& Paired $\Delta$ ($+=$ correct) & $-0.0228\pm0.0745$ & $-0.0133\pm0.0315$ & $-0.0687\pm0.0379\sigstar$ & $-0.0345\pm0.0374$ & $-0.0536\pm0.0371\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The distance metrics disagree in direction, and target-only itself changes little with
+$\KT$.  Consequently, no scientifically meaningful ``transport at $\KT=2$ equals target-only
+at $\KT=10$'' statement is supported.
+
+\paragraph{P1 conclusion.}
+Raising semantic resolution to pathology families does not recover a source-specific
+advantage.  The primary result is inconclusive because its evaluator fails the validity gate;
+valid distributional diagnostics independently show no resolved correct-versus-wrong effect.
+
+\section{P2: Hierarchical Wrong-Source Control}
+
+The frozen disease-level checkpoint is evaluated on four test diseases with correct disease,
+wrong disease in the same pathology family, wrong disease in a different family, source
+reuse, and population-only conditions.  Wrong sources are deterministic and selected without
+using model outcomes.
+
+\begin{table}[h]
+\caption{P2 raw zero-shot performance over four disease tasks.  Consistency measures are
+higher-is-better; distances are lower-is-better.}
+\label{tab:p2raw}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Method & Phenotype share $\uparrow$ & Disease consistency $\uparrow$ & Statistic dist. $\downarrow$ & SW $\downarrow$ & Energy MMD $\downarrow$ \\
+\midrule
+Source reuse & $0.1390\pm0.0103$ & $0.0199\pm0.0224$ & $2.5248\pm0.4420$ & $0.3642\pm0.0448$ & $7.1765\pm1.8278$ \\
+Population only & $0.0000\pm0.0000$ & $0.0000\pm0.0000$ & $4.0465\pm0.3111$ & $0.2867\pm0.0094$ & $8.4246\pm1.4825$ \\
+Wrong disease, same family & $0.1423\pm0.0101$ & $0.0199\pm0.0224$ & $2.5020\pm0.4478$ & $0.3638\pm0.0454$ & $7.1466\pm1.8509$ \\
+Wrong disease, different family & $0.1426\pm0.0098$ & $0.0205\pm0.0231$ & $2.5025\pm0.4462$ & $0.3639\pm0.0454$ & $7.1444\pm1.8488$ \\
+Correct disease $+$ transport & $0.1419\pm0.0094$ & $0.0199\pm0.0221$ & $2.5030\pm0.4480$ & $0.3638\pm0.0456$ & $7.1429\pm1.8566$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[h]
+\caption{P2 hierarchical paired effects at $\KT=0$.  Positive values favour the first named
+condition.  A star denotes a paired 95\% interval excluding zero.}
+\label{tab:p2paired}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Comparison ($\Delta>0$: first condition) & Phenotype share & Disease consistency & Statistic dist. & SW & Energy MMD \\
+\midrule
+Correct vs. same-family wrong & $-0.00033\pm0.00283$ & $+0.00000\pm0.00104$ & $-0.00101\pm0.00777$ & $+0.00009\pm0.00062$ & $+0.00365\pm0.01937$ \\
+Same-family vs. different-family wrong & $-0.00033\pm0.00191$ & $-0.00065\pm0.00074$ & $+0.00053\pm0.00532$ & $+0.00004\pm0.00038$ & $-0.00219\pm0.01319$ \\
+Correct vs. population only & $+0.14193\pm0.00938\sigstar$ & $+0.01986\pm0.02214$ & $+1.54346\pm0.14526\sigstar$ & $-0.07706\pm0.03919\sigstar$ & $+1.28164\pm0.52335\sigstar$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The disease instrument reaches 20.8\% overall but only 53.1\%, 0\%, 6.2\%, and 0\% on the
+four individual test diseases.  It is therefore unsuitable for a strong semantic ordering.
+The correct/same-family/different-family distance contrasts are also numerically small and all
+include zero.  Population-only again produces low pixel SW while failing phenotype and energy
+MMD checks, demonstrating why no single pixel metric is sufficient.
+
+\paragraph{P2 conclusion.}
+Neither $\text{correct}>\text{same-family wrong}>\text{different-family wrong}$ nor a
+family-only ordering is resolved.  The null hierarchy is not an equivalence result.
+
+\section{P3: Outcome-Independent Source-Task Separability}
+
+Official ImageNet ResNet-18 penultimate features were extracted from source-population
+images only, L2-normalised per image, and averaged by disease.  Separation is Euclidean
+distance to the pre-assigned different-family wrong source from P2.
+
+\begin{table}[h]
+\caption{P3 source-only separation and held-out semantic effect.}
+\label{tab:p3}
+\centering
+\scriptsize
+\begin{tabular}{lcc}
+\toprule
+Target disease & Separation & Correct-minus-wrong effect \\
+\midrule
+Basal cell carcinoma & 0.2488 & 0.0000 \\
+Neurofibromatosis & 0.2807 & 0.0000 \\
+Pityriasis rosea & 0.3289 & $-0.0026$ \\
+Vitiligo & 0.2971 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Spearman $\rho=-0.775$ with a task-bootstrap interval $[-1.000,-0.775]$.  Only 6,793 of
+10,000 bootstrap draws have defined rank variance because $n=4$ and three outcome effects are
+exactly zero.  Moreover, the outcome is measured by the weak disease instrument described
+above.
+
+\paragraph{P3 conclusion.}
+Greater source-task separability does not predict a larger correct-source advantage in the
+locked analysis.  The result is unsupported/unresolved, not a negative causal mechanism, and
+task identifiability should not be the paper's central explanation.
+
+\section{P4: Stronger Phenotype Separation}
+
+P4 was triggered because P1 was inconclusive and the pre-outcome counts were adequate.  The
+only domain change is target Fitzpatrick V--VI; source remains I--III.  Five families are
+tested in five cyclic outer folds, with each family's two appearances averaged before
+inference.  Validation-only selection chooses steps 16,000, 4,000, 4,000, 4,000, and 10,000.
+The architecture is a 32$\times$32 additive-basis small U-Net (0.72M parameters), set encoder
+(0.33M), linear transport (0.3K), coordinate dimension 16, and no target-time refinement.
+
+\begin{table}[h]
+\caption{P4 raw performance at $\KT=0$ over five pathology families.  The stronger target is
+Fitzpatrick V--VI.}
+\label{tab:p4raw}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Method & Phenotype share $\uparrow$ & Family consistency $\uparrow$ & Statistic dist. $\downarrow$ & SW $\downarrow$ & Energy MMD $\downarrow$ \\
+\midrule
+Source reuse & $0.0311\pm0.0359$ & $0.2033\pm0.3807$ & $1.8099\pm0.2613$ & $0.2649\pm0.0446$ & $4.5031\pm0.7991$ \\
+Population only & $0.0000\pm0.0000$ & $0.1997\pm0.3909$ & $2.2577\pm0.4548$ & $0.2527\pm0.0275$ & $5.4122\pm1.1998$ \\
+Wrong-task source $+$ relation & $0.0320\pm0.0369$ & $0.2033\pm0.3807$ & $1.7943\pm0.2765$ & $0.2637\pm0.0454$ & $4.4233\pm0.8218$ \\
+Correct source $+$ transport & $0.0315\pm0.0363$ & $0.2031\pm0.3808$ & $1.7950\pm0.2769$ & $0.2638\pm0.0461$ & $4.4244\pm0.8362$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[h]
+\caption{P4 paired effects at $\KT=0$.  All entries are oriented so positive values favour
+correct-source transport.}
+\label{tab:p4paired}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Comparator ($\Delta>0$: correct transport) & Phenotype share & Family consistency & Statistic dist. & SW & Energy MMD \\
+\midrule
+Source reuse & $+0.00039\pm0.00051$ & $-0.00013\pm0.00102$ & $+0.01494\pm0.01616$ & $+0.00117\pm0.00272$ & $+0.07874\pm0.08272$ \\
+Population only & $+0.03151\pm0.03635$ & $+0.00339\pm0.01614$ & $+0.46273\pm0.46930$ & $-0.01112\pm0.02383$ & $+0.98779\pm0.70849\sigstar$ \\
+Wrong-task source $+$ relation & $-0.00052\pm0.00074$ & $-0.00013\pm0.00026$ & $-0.00068\pm0.00273$ & $-0.00003\pm0.00134$ & $-0.00107\pm0.03907$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The phenotype instrument is useful on outer-test families (81.2--92.7\%, chance 50\%).  The
+semantic instrument has 69.9--70.5\% overall accuracy, yet worst-family accuracies of 0.0\%,
+0.0\%, 0.0\%, 12.7\%, and 2.5\%, so every fold fails the locked per-family rule.  Pooled KID
+is consequently skipped.  Correct transport significantly improves energy MMD over
+population-only, but the correct-versus-wrong-task effect is $-0.0011\pm0.0391$ and is
+unresolved.  The same near-zero pattern holds for every other valid secondary metric.
+
+\begin{table}[h]
+\caption{P4 target-only raw distances and paired effects against fixed correct transport.
+For each metric, $\Delta=d(\text{target only})-d(\text{correct transport})$; positive values
+support correct transport.}
+\label{tab:p4budget}
+\centering
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccc}
+\toprule
+Metric & Quantity & $\KT=1$ & $\KT=2$ & $\KT=5$ & $\KT=10$ & $\KT=20$ \\
+\midrule
+Statistic dist. & Target only raw & $1.8082\pm0.2694$ & $1.8050\pm0.2706$ & $1.8044\pm0.2691$ & $1.7997\pm0.2702$ & $1.7972\pm0.2689$ \\
+& Paired $\Delta$ ($+=$ correct) & $+0.0132\pm0.0109\sigstar$ & $+0.0100\pm0.0121$ & $+0.0094\pm0.0086\sigstar$ & $+0.0047\pm0.0071$ & $+0.0022\pm0.0106$ \\
+\midrule
+SW & Target only raw & $0.2597\pm0.0413$ & $0.2622\pm0.0440$ & $0.2624\pm0.0443$ & $0.2632\pm0.0449$ & $0.2630\pm0.0447$ \\
+& Paired $\Delta$ ($+=$ correct) & $-0.0041\pm0.0052$ & $-0.0016\pm0.0022$ & $-0.0013\pm0.0020$ & $-0.0006\pm0.0014$ & $-0.0008\pm0.0017$ \\
+\midrule
+Energy MMD & Target only raw & $4.3571\pm0.7399$ & $4.3970\pm0.7715$ & $4.4157\pm0.7973$ & $4.4171\pm0.7974$ & $4.3974\pm0.7895$ \\
+& Paired $\Delta$ ($+=$ correct) & $-0.0673\pm0.1207$ & $-0.0274\pm0.0679$ & $-0.0086\pm0.0460$ & $-0.0073\pm0.0406$ & $-0.0270\pm0.0576$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{P4 conclusion.}
+A larger phenotype gap does not recover disease-family-specific source use.  The model learns
+a reusable population shift relative to population-only on energy MMD, but obtains the same
+shift from the wrong source task.  Under the registered stop rule, demographic model tuning
+ends here.
+
+\section{P5: Frozen CIFAR Package}
+
+P5 was audited from existing raw per-episode artifacts rather than re-estimated
+opportunistically.  The saved files contain matched episodes and paired intervals.
+
+\begin{table}[h]
+\caption{Audited CIFAR evidence.  All stated improvements are paired; starred rows have a
+95\% interval excluding zero in the underlying artifact.}
+\label{tab:p5}
+\centering
+\small
+\begin{tabular}{p{0.22\textwidth}p{0.68\textwidth}}
+\toprule
+Plan item & Verified result \\
+\midrule
+$\KT=0$ source specificity & Correct transport improves SW over wrong source by $0.0386\pm0.0141\sigstar$ and fine-class consistency by $0.0597\pm0.0204\sigstar$. \\
+FiLM generality & Correct transport beats shuffled, mean-source, and relation-only controls on SW and semantic consistency at $\KT=1,5,20$. \\
+Linear relation & Linear transport is not worse than the nonlinear MLP and improves SW by 0.0093, 0.0112, and 0.0087 at $\KT=1,5,20$. \\
+Basis vs. FiLM & Transported generation quality is unresolved as different.  Basis uses 55,344 conditioning parameters versus 118,784 for FiLM (46.6\%). \\
+Full fine-tuning & Transport is significantly safer at $\KT=1,5$; full fine-tuning becomes significantly better at $\KT=20$. \\
+25\% training tasks & In the frozen one-seed run, basis improves SW by 0.0181--0.0203 and energy MMD by 0.4668--0.4975 over FiLM at $\KT=1,5,20$. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Latency, FLOPs, and peak-memory numbers were not present as matched measurements and are not
+inferred from parameter count.  The 25\% task result is limited to one training seed.
+
+\paragraph{P5 conclusion.}
+The controlled core survives audit: source identity matters at zero target examples, the
+relation is approximately linear, its benefit concentrates in the low-data regime, and it
+generalises across conditioning mechanisms.  The additive basis is an efficiency result, not
+a demonstrated generation-quality winner over FiLM.
+
+\section{P6: Optional Downstream Demographic Augmentation}
+
+P6 was \textbf{not run---gate not met}.  Its strict trigger required a clearly positive P1
+correct-versus-wrong family-semantic result.  P1 instead failed the semantic-instrument
+validity rule and showed no resolved correct-versus-wrong advantage on the valid secondary
+metrics.  Launching or tuning a downstream classifier would therefore violate the plan.
+
+\section{Discussion}
+
+The Fitzpatrick pattern is consistent across four complementary analyses.  First, family
+resolution does not separate correct from wrong source coordinates.  Second, wrong diseases
+within and outside a family are indistinguishable.  Third, a frozen source-only separability
+score does not predict the source advantage.  Fourth, increasing the phenotype gap to V--VI
+improves neither task-source specificity nor semantic-instrument validity.  Training
+diagnostics independently show that a shared mean coordinate captures nearly all coordinate
+gain: shuffled task coordinates and correct coordinates yield effectively identical losses.
+
+This does not imply that demographic transport is impossible, nor does it prove that all
+source tasks are equivalent.  The semantic evaluator fails on several held-out families and
+diseases, the number of independent tasks is small, and patient identifiers are unavailable.
+It does show that the frozen method and available measurements do not justify a real-data
+source-specific claim.  In particular, a significant improvement over population-only is
+insufficient: wrong-task transport achieves the same improvement, identifying a shared
+population offset rather than a task-conditioned relation.
+
+\section{Conclusion}
+
+The executable plan is complete through its registered stopping conditions.  On CIFAR,
+\method{} supports the sequence
+\[
+\boxed{\begin{gathered}
+\text{source identity matters}
+\;\rightarrow\;
+\text{an approximately linear relation exists}
+\\[-1pt]
+\rightarrow\;
+\text{benefit is largest under target scarcity}
+\;\rightarrow\;
+\text{the principle survives FiLM}.
+\end{gathered}}
+\]
+On Fitzpatrick17k, the corresponding source-specific demographic extension is not supported.
+Correct and wrong task sources remain unresolved at disease and family resolution, including
+under the stronger V--VI target.  The strongest defensible interpretation is therefore that
+the frozen model learns a shared phenotype shift but does not demonstrate disease-specific
+coordinate transport.  The invalid semantic instrument requires the headline family result
+to remain inconclusive, not equivalent.  No demographic architecture rescue or downstream
+augmentation is warranted under the locked protocol.
+
+\appendix
+\section{Frozen Configuration and Artifact Map}
+
+\begin{table}[h]
+\caption{Frozen family-level training and evaluation configuration.}
+\label{tab:config}
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Component & Value \\
+\midrule
+Image resolution / backbone width & $32\times32$ / 32 \\
+Conditioning / coordinate dimension & additive basis / 16 \\
+Transport & linear, approximately 0.3K parameters \\
+Training & 20,000 steps, AdamW, lr $2\times10^{-4}$ \\
+EMA / training seed & 0.999 / 12,345 \\
+Source support & $\MS=32$ \\
+Target budgets & $\KT=0,1,2,5,10,20$ \\
+Generation & DDIM-50, $\eta=0$, 96 images/cell \\
+Paired repeats / evaluation seed & 8 / 4,321 \\
+Headline target-time refinement & disabled \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Machine-readable raw cells, family/disease-level values, checkpoint-selection records,
+manifests, hashes, commands, and complete tables are stored under
+\texttt{experiments/meta\_diffusion\_final/}.  The principal files are
+\texttt{protocol\_lock.md}, \texttt{prerequisite\_audit.md},
+\texttt{metrics/p1\_family\_aggregate.json},
+\texttt{metrics/p2\_hierarchical.json},
+\texttt{metrics/p3\_task\_separability.json},
+\texttt{metrics/p4\_v\_vi\_aggregate.json}, and
+\texttt{runs/execution\_log.md}.  Debug runs are explicitly named and excluded from every
+reported estimate.
+
+\end{document}
