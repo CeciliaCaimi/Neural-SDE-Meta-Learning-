@@ -1,0 +1,149 @@
+
+
+distance from the real target population, in phototype-statistic space
+  lower is better; the instrument is fixed (ITA, L*, b*, a*) and trains nothing
+
+  -- benign dermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       2.308      
+  population only                    3.841      
+  wrong-task source + relation       1.977      
+  correct source + transport         1.977      
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       1.707      
+  population only                    3.610      
+  wrong-task source + relation       1.705      
+  correct source + transport         1.704      
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       2.008 +-0.589
+  population only                    3.726 +-0.226
+  wrong-task source + relation       1.841 +-0.266
+  correct source + transport         1.840 +-0.268
+
+
+sliced Wasserstein distance to the real held-out target set, pixel space
+  lower is better; intervals treat diseases, not images, as independent units
+
+  -- benign dermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.628      
+  population only                    0.731      
+  wrong-task source + relation       0.631      
+  correct source + transport         0.628      
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.783      
+  population only                    0.756      
+  wrong-task source + relation       0.767      
+  correct source + transport         0.767      
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.705 +-0.152
+  population only                    0.744 +-0.024
+  wrong-task source + relation       0.699 +-0.134
+  correct source + transport         0.698 +-0.136
+
+
+energy MMD to the real held-out target set, pixel space
+  lower is better; the small-sample distributional cross-check to sliced Wasserstein
+
+  -- benign dermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      25.167      
+  population only                   32.295      
+  wrong-task source + relation      25.298      
+  correct source + transport        25.326      
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      38.819      
+  population only                   35.343      
+  wrong-task source + relation      38.899      
+  correct source + transport        38.930      
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      31.993 +-13.379
+  population only                   33.819 +-2.987
+  wrong-task source + relation      32.099 +-13.329
+  correct source + transport        32.128 +-13.332
+
+
+the individual typology angle of the generated set
+  not a distance: read it against the real target row printed above, and against the source row. higher = lighter skin
+
+  -- benign dermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      27.114      
+  population only                   89.941      
+  wrong-task source + relation      25.445      
+  correct source + transport        25.456      
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       1.221      
+  population only                   89.985      
+  wrong-task source + relation       1.231      
+  correct source + transport         1.362      
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      14.167 +-25.375
+  population only                   89.963 +-0.043
+  wrong-task source + relation      13.338 +-23.730
+  correct source + transport        13.409 +-23.612
+
+
+the claim: correct source plus learned relation against every way of not having it
+  paired within (task, K_T, repeat); positive = correct-source transport is better
+
+  phototype-statistic space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.1675 +-0.3216 
+  vs population only                    +1.8852 +-0.0415*
+  vs wrong-task source + relation       +0.0003 +-0.0013 
+
+  sliced Wasserstein, pixel space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.0073 +-0.0160 
+  vs population only                    +0.0457 +-0.1117 
+  vs wrong-task source + relation       +0.0011 +-0.0022 
+
+  energy MMD, pixel space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       -0.1349 +-0.0476*
+  vs population only                    +1.6911 +-10.3446 
+  vs wrong-task source + relation       -0.0292 +-0.0024*
+
+  * = the 95% interval over disease-level mean paired differences excludes zero.
+    Repeats reduce within-disease noise; they are not counted as independent tasks.
+
+
+what this can and cannot support
+  The full verified and cleaned archive supplies 2 held-out disease tasks.
+  Paired intervals use one mean difference per disease. They are statistically valid
+  for this split but necessarily imprecise with four test diseases; repeat-level noise
+  is averaged within disease and never treated as independent evidence.
+
+per-cell values written to experiments\meta_diffusion_final\runs\p1_family_debug_eval.json

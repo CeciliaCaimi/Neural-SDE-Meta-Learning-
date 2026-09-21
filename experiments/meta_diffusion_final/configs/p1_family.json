@@ -1,0 +1,60 @@
+{
+  "protocol_version": "2026-09-21-p1-locked",
+  "task_field": "nine_partition_label",
+  "source_phototypes": [1, 2, 3],
+  "target_phototypes": [4, 5, 6],
+  "eligibility": {
+    "min_source": 64,
+    "target_support_reserve": 20,
+    "min_target_query": 25
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "train": ["inflammatory", "malignant epidermal", "malignant melanoma"],
+      "val": ["genodermatoses"],
+      "test": ["benign dermal", "benign epidermal"]
+    },
+    {
+      "fold": 1,
+      "train": ["benign dermal", "benign epidermal", "malignant melanoma"],
+      "val": ["malignant epidermal"],
+      "test": ["genodermatoses", "inflammatory"]
+    },
+    {
+      "fold": 2,
+      "train": ["benign epidermal", "genodermatoses", "inflammatory"],
+      "val": ["benign dermal"],
+      "test": ["malignant epidermal", "malignant melanoma"]
+    }
+  ],
+  "model": {
+    "score_model": "basis",
+    "backbone": "small_unet",
+    "base_channels": 32,
+    "channel_mult": [1, 2],
+    "num_res_blocks": 1,
+    "coordinate_dim": 16,
+    "transport": "linear",
+    "target_time_refinement": false
+  },
+  "training": {
+    "steps": 20000,
+    "learning_rate": 0.0002,
+    "ema": 0.999,
+    "seed": 12345,
+    "m_source": 32,
+    "source_query": 32
+  },
+  "evaluation": {
+    "k_t": [0, 1, 2, 5, 10, 20],
+    "repeats": 8,
+    "samples_per_cell": 96,
+    "ddim_steps": 50,
+    "seed": 4321,
+    "primary_budget": 0,
+    "primary_metric": "family_semantic_consistency",
+    "minimum_meaningful_effect": 0.05,
+    "ci": "family mean +/- 1.96 * sample standard error"
+  }
+}

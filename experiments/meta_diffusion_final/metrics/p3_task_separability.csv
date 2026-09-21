@@ -1,0 +1,5 @@
+task,wrong_source,source_images_task,source_images_wrong,separation,semantic_effect_correct_minus_wrong
+basal cell carcinoma,dariers disease,302,65,0.24877646565437317,0.0
+neurofibromatosis,pityriasis rosea,47,61,0.2806861102581024,0.0
+pityriasis rosea,squamous cell carcinoma,61,269,0.3288598358631134,-0.0026041665114462376
+vitiligo,basal cell carcinoma,45,302,0.2970997989177704,0.0

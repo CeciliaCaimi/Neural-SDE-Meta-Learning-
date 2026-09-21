@@ -1,0 +1,55 @@
+{
+  "encoder": "torchvision ResNet-18 IMAGENET1K_V1",
+  "preprocessing": "ImageClassification(\n    crop_size=[224]\n    resize_size=[256]\n    mean=[0.485, 0.456, 0.406]\n    std=[0.229, 0.224, 0.225]\n    interpolation=InterpolationMode.BILINEAR\n)",
+  "population": "Fitzpatrick I-III only",
+  "feature": "per-image L2-normalised 512-d penultimate activation; task mean",
+  "effect": "K_T=0 family-semantic share, correct minus preassigned different-family wrong",
+  "n_independent_tasks": 4,
+  "spearman_rho": -0.7745966692414834,
+  "task_bootstrap_95_ci": [
+    -1.0,
+    -0.7745966692414834
+  ],
+  "bootstrap_valid_draws": 6793,
+  "semantic_instrument_accuracy": {
+    "held-out": 0.2084063047285464,
+    "basal cell carcinoma": 0.53125,
+    "neurofibromatosis": 0.0,
+    "pityriasis rosea": 0.0625,
+    "vitiligo": 0.0
+  },
+  "rows": [
+    {
+      "task": "basal cell carcinoma",
+      "wrong_source": "dariers disease",
+      "source_images_task": 302,
+      "source_images_wrong": 65,
+      "separation": 0.24877646565437317,
+      "semantic_effect_correct_minus_wrong": 0.0
+    },
+    {
+      "task": "neurofibromatosis",
+      "wrong_source": "pityriasis rosea",
+      "source_images_task": 47,
+      "source_images_wrong": 61,
+      "separation": 0.2806861102581024,
+      "semantic_effect_correct_minus_wrong": 0.0
+    },
+    {
+      "task": "pityriasis rosea",
+      "wrong_source": "squamous cell carcinoma",
+      "source_images_task": 61,
+      "source_images_wrong": 269,
+      "separation": 0.3288598358631134,
+      "semantic_effect_correct_minus_wrong": -0.0026041665114462376
+    },
+    {
+      "task": "vitiligo",
+      "wrong_source": "basal cell carcinoma",
+      "source_images_task": 45,
+      "source_images_wrong": 302,
+      "separation": 0.2970997989177704,
+      "semantic_effect_correct_minus_wrong": 0.0
+    }
+  ]
+}

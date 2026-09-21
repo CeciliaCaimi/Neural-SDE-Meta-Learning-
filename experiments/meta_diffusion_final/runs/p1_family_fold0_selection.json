@@ -1,0 +1,32 @@
+{
+  "basis": {
+    "run": "p1_family_fold0_basis",
+    "step": 16000,
+    "validation_loss_correct": 0.053201802055506654,
+    "checkpoint": "checkpoints/p1_family_fold0_basis_step16000.pt",
+    "score_model": "basis",
+    "split": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments/meta_diffusion_final/manifests/p1_family_fold0.json",
+    "diagnostics": {
+      "loss_correct": 0.053201802055506654,
+      "loss_zero": 0.4305784155925115,
+      "loss_shuffled": 0.053205069891798,
+      "loss_random": 0.4615994157890479,
+      "loss_target_only": 0.05345432972535491,
+      "loss_mean_z": 0.05407966390096893,
+      "r_basis": 1.364902348568042,
+      "|dz_transport|": 0.2275849338620901,
+      "z_s_vs_enc_rel": 0.19214979776491722,
+      "z_spread_rel": 0.07756106555461884,
+      "gain_vs_zero": 0.3773766135370048,
+      "gain_vs_shuffled": 3.2678362913429737e-06,
+      "gain_vs_target_only": 0.00025252766984825564,
+      "gain_vs_mean_z": 0.0008778618454622772,
+      "delta_task": 0.0008778618454622772,
+      "z_center_norm": 0.5470197796821594,
+      "task_specific_frac": 0.0023262221716243044
+    },
+    "warnings": [
+      "gain_vs_zero=0.3774 looks healthy but only 0.2% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation"
+    ]
+  }
+}

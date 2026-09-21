@@ -1,0 +1,208 @@
+
+
+distance from the real target population, in phototype-statistic space
+  lower is better; the instrument is fixed (ITA, L*, b*, a*) and trains nothing
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       1.646 +-0.113
+  population only                    1.473 +-0.018
+  wrong-task source + relation       1.618 +-0.117
+  correct source + transport         1.621 +-0.117
+
+  -- genodermatoses --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       1.564 +-0.085
+  population only                    1.499 +-0.013
+  wrong-task source + relation       1.541 +-0.087
+  correct source + transport         1.536 +-0.087
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       1.605 +-0.080
+  population only                    1.486 +-0.025
+  wrong-task source + relation       1.580 +-0.075
+  correct source + transport         1.579 +-0.083
+
+
+sliced Wasserstein distance to the real held-out target set, pixel space
+  lower is better; intervals treat diseases, not images, as independent units
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.243 +-0.009
+  population only                    0.251 +-0.002
+  wrong-task source + relation       0.238 +-0.009
+  correct source + transport         0.239 +-0.009
+
+  -- genodermatoses --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.214 +-0.009
+  population only                    0.218 +-0.001
+  wrong-task source + relation       0.210 +-0.009
+  correct source + transport         0.209 +-0.009
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.229 +-0.029
+  population only                    0.235 +-0.033
+  wrong-task source + relation       0.224 +-0.027
+  correct source + transport         0.224 +-0.029
+
+
+energy MMD to the real held-out target set, pixel space
+  lower is better; the small-sample distributional cross-check to sliced Wasserstein
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       3.959 +-0.473
+  population only                    4.477 +-0.029
+  wrong-task source + relation       3.781 +-0.477
+  correct source + transport         3.804 +-0.471
+
+  -- genodermatoses --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       3.847 +-0.266
+  population only                    3.968 +-0.046
+  wrong-task source + relation       3.709 +-0.269
+  correct source + transport         3.673 +-0.265
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       3.903 +-0.110
+  population only                    4.222 +-0.498
+  wrong-task source + relation       3.745 +-0.070
+  correct source + transport         3.738 +-0.128
+
+
+the individual typology angle of the generated set
+  not a distance: read it against the real target row printed above, and against the source row. higher = lighter skin
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      19.125 +-2.526
+  population only                   39.155 +-0.725
+  wrong-task source + relation      16.919 +-2.448
+  correct source + transport        17.198 +-2.477
+
+  -- genodermatoses --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      17.718 +-3.004
+  population only                   38.453 +-0.553
+  wrong-task source + relation      15.905 +-3.016
+  correct source + transport        15.515 +-3.097
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      18.422 +-1.379
+  population only                   38.804 +-0.688
+  wrong-task source + relation      16.412 +-0.993
+  correct source + transport        16.356 +-1.649
+
+
+share of samples the population predictor calls Fitzpatrick V-VI
+  higher is better; the predictor's own ceiling: held-out train/val conditions 99.4%  test conditions (the transfer it is used for) 81.2% (chance 50.0%)
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.000 +-0.000
+  population only                    0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000
+  correct source + transport         0.000 +-0.000
+
+  -- genodermatoses --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.000 +-0.000
+  population only                    0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000
+  correct source + transport         0.000 +-0.000
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.000 +-0.000
+  population only                    0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000
+  correct source + transport         0.000 +-0.000
+
+
+share of samples the condition predictor calls the right condition
+  higher is better; ceiling held-out 69.9%  benign epidermal 0.0%  genodermatoses 0.0%, chance 20.0% -- a ceiling near chance means this row is uninformative, not that the arms agree
+
+  -- benign epidermal --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.000 +-0.000
+  population only                    0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000
+  correct source + transport         0.000 +-0.000
+
+  -- genodermatoses --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.000 +-0.000
+  population only                    0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000
+  correct source + transport         0.000 +-0.000
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.000 +-0.000
+  population only                    0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000
+  correct source + transport         0.000 +-0.000
+
+
+the claim: correct source plus learned relation against every way of not having it
+  paired within (task, K_T, repeat); positive = correct-source transport is better
+
+  phototype-statistic space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.0261 +-0.0034*
+  vs population only                    -0.0928 +-0.1089 
+  vs wrong-task source + relation       +0.0008 +-0.0089 
+
+  sliced Wasserstein, pixel space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.0047 +-0.0005*
+  vs population only                    +0.0106 +-0.0037*
+  vs wrong-task source + relation       +0.0001 +-0.0018 
+
+  energy MMD, pixel space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.1643 +-0.0182*
+  vs population only                    +0.4841 +-0.3702*
+  vs wrong-task source + relation       +0.0071 +-0.0575 
+
+  * = the 95% interval over disease-level mean paired differences excludes zero.
+    Repeats reduce within-disease noise; they are not counted as independent tasks.
+
+
+pooled KID skipped: condition feature extractor held-out accuracy 0.699 is below the prespecified usefulness threshold 1.000
+
+
+what this can and cannot support
+  The full verified and cleaned archive supplies 2 held-out disease tasks.
+  Paired intervals use one mean difference per disease. They are statistically valid
+  for this split but necessarily imprecise with four test diseases; repeat-level noise
+  is averaged within disease and never treated as independent evidence.
+
+per-cell values written to experiments\meta_diffusion_final\runs\p4_v_vi_fold1_zero.json

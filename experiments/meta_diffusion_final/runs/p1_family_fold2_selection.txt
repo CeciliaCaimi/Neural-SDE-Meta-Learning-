@@ -1,0 +1,8 @@
+Fitzpatrick17k model selection on validation diseases
+rule: minimum validation loss_correct among saved checkpoint steps; structural diagnostics are reported but not selected on
+
+  run                               trained   best val    step   delta_task   gain_shuf   r_basis  warnings
+  p1_family_fold2_basis               20000    0.04681   10000     +0.00157    -0.00000     1.716         2
+
+chosen checkpoints:
+  basis    checkpoints/p1_family_fold2_basis_step10000.pt (validation loss 0.04681)

@@ -1,0 +1,27 @@
+{
+  "task_field": "nine_partition_label",
+  "output_prefix": "p4_v_vi",
+  "source_population": "Fitzpatrick I-III",
+  "target_population": "Fitzpatrick V-VI",
+  "source_phototypes": [1, 2, 3],
+  "target_phototypes": [5, 6],
+  "eligibility": {
+    "min_source": 64,
+    "target_support_reserve": 20,
+    "min_target_query": 25
+  },
+  "training": {
+    "m_source": 32,
+    "source_query": 32,
+    "steps": 20000,
+    "seed": 12345
+  },
+  "cross_validation": "5 cyclic folds; each family appears twice as an outer-test task",
+  "folds": [
+    {"fold": 0, "test": ["benign dermal", "benign epidermal"], "val": ["genodermatoses"], "train": ["inflammatory", "malignant epidermal"]},
+    {"fold": 1, "test": ["benign epidermal", "genodermatoses"], "val": ["inflammatory"], "train": ["benign dermal", "malignant epidermal"]},
+    {"fold": 2, "test": ["genodermatoses", "inflammatory"], "val": ["malignant epidermal"], "train": ["benign dermal", "benign epidermal"]},
+    {"fold": 3, "test": ["inflammatory", "malignant epidermal"], "val": ["benign dermal"], "train": ["benign epidermal", "genodermatoses"]},
+    {"fold": 4, "test": ["malignant epidermal", "benign dermal"], "val": ["benign epidermal"], "train": ["genodermatoses", "inflammatory"]}
+  ]
+}

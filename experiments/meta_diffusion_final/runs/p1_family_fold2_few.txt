@@ -1,0 +1,263 @@
+
+
+distance from the real target population, in phototype-statistic space
+  lower is better; the instrument is fixed (ITA, L*, b*, a*) and trains nothing
+
+  -- malignant epidermal --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        2.178 +-0.357     2.183 +-0.362     2.183 +-0.362     2.184 +-0.354     2.179 +-0.358
+  source reuse                       2.176 +-0.357     2.176 +-0.357     2.176 +-0.357     2.176 +-0.357     2.176 +-0.357
+  population only                    3.540 +-0.015     3.540 +-0.015     3.540 +-0.015     3.540 +-0.015     3.540 +-0.015
+  wrong-task source + relation       2.175 +-0.360     2.175 +-0.360     2.175 +-0.360     2.175 +-0.360     2.175 +-0.360
+  correct source + transport         2.178 +-0.360     2.178 +-0.360     2.178 +-0.360     2.178 +-0.360     2.178 +-0.360
+
+  -- malignant melanoma --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        1.548 +-0.189     1.547 +-0.188     1.555 +-0.186     1.562 +-0.178     1.558 +-0.177
+  source reuse                       1.561 +-0.194     1.561 +-0.194     1.561 +-0.194     1.561 +-0.194     1.561 +-0.194
+  population only                    3.032 +-0.022     3.032 +-0.022     3.032 +-0.022     3.032 +-0.022     3.032 +-0.022
+  wrong-task source + relation       1.547 +-0.189     1.547 +-0.189     1.547 +-0.189     1.547 +-0.189     1.547 +-0.189
+  correct source + transport         1.548 +-0.189     1.548 +-0.189     1.548 +-0.189     1.548 +-0.189     1.548 +-0.189
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        1.863 +-0.617     1.865 +-0.623     1.869 +-0.615     1.873 +-0.610     1.869 +-0.609
+  source reuse                       1.868 +-0.603     1.868 +-0.603     1.868 +-0.603     1.868 +-0.603     1.868 +-0.603
+  population only                    3.286 +-0.498     3.286 +-0.498     3.286 +-0.498     3.286 +-0.498     3.286 +-0.498
+  wrong-task source + relation       1.861 +-0.615     1.861 +-0.615     1.861 +-0.615     1.861 +-0.615     1.861 +-0.615
+  correct source + transport         1.863 +-0.617     1.863 +-0.617     1.863 +-0.617     1.863 +-0.617     1.863 +-0.617
+
+
+sliced Wasserstein distance to the real held-out target set, pixel space
+  lower is better; intervals treat diseases, not images, as independent units
+
+  -- malignant epidermal --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.339 +-0.012     0.338 +-0.014     0.339 +-0.012     0.339 +-0.012     0.338 +-0.013
+  source reuse                       0.339 +-0.012     0.339 +-0.012     0.339 +-0.012     0.339 +-0.012     0.339 +-0.012
+  population only                    0.272 +-0.001     0.272 +-0.001     0.272 +-0.001     0.272 +-0.001     0.272 +-0.001
+  wrong-task source + relation       0.340 +-0.012     0.340 +-0.012     0.340 +-0.012     0.340 +-0.012     0.340 +-0.012
+  correct source + transport         0.340 +-0.012     0.340 +-0.012     0.340 +-0.012     0.340 +-0.012     0.340 +-0.012
+
+  -- malignant melanoma --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.302 +-0.007     0.303 +-0.008     0.302 +-0.010     0.300 +-0.011     0.300 +-0.010
+  source reuse                       0.302 +-0.007     0.302 +-0.007     0.302 +-0.007     0.302 +-0.007     0.302 +-0.007
+  population only                    0.243 +-0.001     0.243 +-0.001     0.243 +-0.001     0.243 +-0.001     0.243 +-0.001
+  wrong-task source + relation       0.304 +-0.007     0.304 +-0.007     0.304 +-0.007     0.304 +-0.007     0.304 +-0.007
+  correct source + transport         0.304 +-0.007     0.304 +-0.007     0.304 +-0.007     0.304 +-0.007     0.304 +-0.007
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.321 +-0.036     0.320 +-0.035     0.320 +-0.036     0.320 +-0.039     0.319 +-0.037
+  source reuse                       0.320 +-0.036     0.320 +-0.036     0.320 +-0.036     0.320 +-0.036     0.320 +-0.036
+  population only                    0.257 +-0.028     0.257 +-0.028     0.257 +-0.028     0.257 +-0.028     0.257 +-0.028
+  wrong-task source + relation       0.322 +-0.035     0.322 +-0.035     0.322 +-0.035     0.322 +-0.035     0.322 +-0.035
+  correct source + transport         0.322 +-0.035     0.322 +-0.035     0.322 +-0.035     0.322 +-0.035     0.322 +-0.035
+
+
+energy MMD to the real held-out target set, pixel space
+  lower is better; the small-sample distributional cross-check to sliced Wasserstein
+
+  -- malignant epidermal --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        7.387 +-0.857     7.349 +-0.869     7.336 +-0.815     7.399 +-0.851     7.369 +-0.867
+  source reuse                       7.397 +-0.862     7.397 +-0.862     7.397 +-0.862     7.397 +-0.862     7.397 +-0.862
+  population only                    8.119 +-0.035     8.119 +-0.035     8.119 +-0.035     8.119 +-0.035     8.119 +-0.035
+  wrong-task source + relation       7.401 +-0.848     7.401 +-0.848     7.401 +-0.848     7.401 +-0.848     7.401 +-0.848
+  correct source + transport         7.406 +-0.837     7.406 +-0.837     7.406 +-0.837     7.406 +-0.837     7.406 +-0.837
+
+  -- malignant melanoma --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        4.993 +-0.499     4.989 +-0.523     4.967 +-0.569     4.937 +-0.570     4.950 +-0.534
+  source reuse                       4.981 +-0.497     4.981 +-0.497     4.981 +-0.497     4.981 +-0.497     4.981 +-0.497
+  population only                    5.301 +-0.031     5.301 +-0.031     5.301 +-0.031     5.301 +-0.031     5.301 +-0.031
+  wrong-task source + relation       5.013 +-0.474     5.013 +-0.474     5.013 +-0.474     5.013 +-0.474     5.013 +-0.474
+  correct source + transport         5.014 +-0.478     5.014 +-0.478     5.014 +-0.478     5.014 +-0.478     5.014 +-0.478
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        6.190 +-2.346     6.169 +-2.313     6.151 +-2.321     6.168 +-2.412     6.160 +-2.371
+  source reuse                       6.189 +-2.368     6.189 +-2.368     6.189 +-2.368     6.189 +-2.368     6.189 +-2.368
+  population only                    6.710 +-2.761     6.710 +-2.761     6.710 +-2.761     6.710 +-2.761     6.710 +-2.761
+  wrong-task source + relation       6.207 +-2.340     6.207 +-2.340     6.207 +-2.340     6.207 +-2.340     6.207 +-2.340
+  correct source + transport         6.210 +-2.345     6.210 +-2.345     6.210 +-2.345     6.210 +-2.345     6.210 +-2.345
+
+
+the individual typology angle of the generated set
+  not a distance: read it against the real target row printed above, and against the source row. higher = lighter skin
+
+  -- malignant epidermal --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                       14.523 +-1.884    14.458 +-1.793    15.005 +-1.850    14.984 +-1.923    14.878 +-1.746
+  source reuse                      14.955 +-1.849    14.955 +-1.849    14.955 +-1.849    14.955 +-1.849    14.955 +-1.849
+  population only                   70.647 +-1.022    70.647 +-1.022    70.647 +-1.022    70.647 +-1.022    70.647 +-1.022
+  wrong-task source + relation      14.510 +-1.895    14.510 +-1.895    14.510 +-1.895    14.510 +-1.895    14.510 +-1.895
+  correct source + transport        14.495 +-1.876    14.495 +-1.876    14.495 +-1.876    14.495 +-1.876    14.495 +-1.876
+
+  -- malignant melanoma --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                       12.887 +-2.761    12.657 +-2.798    12.548 +-2.849    12.342 +-2.966    12.521 +-3.023
+  source reuse                      13.800 +-2.889    13.800 +-2.889    13.800 +-2.889    13.800 +-2.889    13.800 +-2.889
+  population only                   71.629 +-0.951    71.629 +-0.951    71.629 +-0.951    71.629 +-0.951    71.629 +-0.951
+  wrong-task source + relation      12.877 +-2.753    12.877 +-2.753    12.877 +-2.753    12.877 +-2.753    12.877 +-2.753
+  correct source + transport        12.940 +-2.814    12.940 +-2.814    12.940 +-2.814    12.940 +-2.814    12.940 +-2.814
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                       13.705 +-1.603    13.557 +-1.764    13.777 +-2.408    13.663 +-2.589    13.700 +-2.310
+  source reuse                      14.378 +-1.132    14.378 +-1.132    14.378 +-1.132    14.378 +-1.132    14.378 +-1.132
+  population only                   71.138 +-0.962    71.138 +-0.962    71.138 +-0.962    71.138 +-0.962    71.138 +-0.962
+  wrong-task source + relation      13.694 +-1.600    13.694 +-1.600    13.694 +-1.600    13.694 +-1.600    13.694 +-1.600
+  correct source + transport        13.718 +-1.524    13.718 +-1.524    13.718 +-1.524    13.718 +-1.524    13.718 +-1.524
+
+
+share of samples the population predictor calls Fitzpatrick IV-VI
+  higher is better; the predictor's own ceiling: held-out train/val conditions 98.7%  test conditions (the transfer it is used for) 81.1% (chance 50.0%)
+
+  -- malignant epidermal --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  source reuse                       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  population only                    0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  correct source + transport         0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+
+  -- malignant melanoma --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  source reuse                       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  population only                    0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  correct source + transport         0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  source reuse                       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  population only                    0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  correct source + transport         0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+
+
+share of samples the condition predictor calls the right condition
+  higher is better; ceiling held-out 68.1%  malignant epidermal 12.1%  malignant melanoma 25.0%, chance 16.7% -- a ceiling near chance means this row is uninformative, not that the arms agree
+
+  -- malignant epidermal --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  source reuse                       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  population only                    0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  correct source + transport         0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+
+  -- malignant melanoma --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  source reuse                       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  population only                    0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  correct source + transport         0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+
+  -- across the 2 tasks, interval over tasks --
+  arm                                      K_T=1           K_T=2           K_T=5          K_T=10          K_T=20
+  -------------------------------------------------------------------------------------------------------------
+  target only                        0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  source reuse                       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  population only                    0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  wrong-task source + relation       0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+  correct source + transport         0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000     0.000 +-0.000
+
+
+the claim: correct source plus learned relation against every way of not having it
+  paired within (task, K_T, repeat); positive = correct-source transport is better
+
+  phototype-statistic space
+  comparison                                     K_T=1             K_T=2             K_T=5            K_T=10            K_T=20
+  ---------------------------------------------------------------------------------------------------------------------------
+  vs target only                        -0.0003 +-0.0001*    +0.0019 +-0.0056     +0.0056 +-0.0021*    +0.0097 +-0.0072*    +0.0054 +-0.0088 
+  vs source reuse                       +0.0050 +-0.0140     +0.0050 +-0.0140     +0.0050 +-0.0140     +0.0050 +-0.0140     +0.0050 +-0.0140 
+  vs population only                    +1.4222 +-0.1195*    +1.4222 +-0.1195*    +1.4222 +-0.1195*    +1.4222 +-0.1195*    +1.4222 +-0.1195*
+  vs wrong-task source + relation       -0.0024 +-0.0019*    -0.0024 +-0.0019*    -0.0024 +-0.0019*    -0.0024 +-0.0019*    -0.0024 +-0.0019*
+
+  sliced Wasserstein, pixel space
+  comparison                                     K_T=1             K_T=2             K_T=5            K_T=10            K_T=20
+  ---------------------------------------------------------------------------------------------------------------------------
+  vs target only                        -0.0011 +-0.0007*    -0.0015 +-0.0005*    -0.0018 +-0.0008*    -0.0021 +-0.0033     -0.0026 +-0.0020*
+  vs source reuse                       -0.0017 +-0.0010*    -0.0017 +-0.0010*    -0.0017 +-0.0010*    -0.0017 +-0.0010*    -0.0017 +-0.0010*
+  vs population only                    -0.0645 +-0.0073*    -0.0645 +-0.0073*    -0.0645 +-0.0073*    -0.0645 +-0.0073*    -0.0645 +-0.0073*
+  vs wrong-task source + relation       -0.0002 +-0.0000*    -0.0002 +-0.0000*    -0.0002 +-0.0000*    -0.0002 +-0.0000*    -0.0002 +-0.0000*
+
+  energy MMD, pixel space
+  comparison                                     K_T=1             K_T=2             K_T=5            K_T=10            K_T=20
+  ---------------------------------------------------------------------------------------------------------------------------
+  vs target only                        -0.0199 +-0.0015*    -0.0408 +-0.0320*    -0.0584 +-0.0232*    -0.0416 +-0.0679     -0.0503 +-0.0264*
+  vs source reuse                       -0.0210 +-0.0237     -0.0210 +-0.0237     -0.0210 +-0.0237     -0.0210 +-0.0237     -0.0210 +-0.0237 
+  vs population only                    +0.5003 +-0.4169*    +0.5003 +-0.4169*    +0.5003 +-0.4169*    +0.5003 +-0.4169*    +0.5003 +-0.4169*
+  vs wrong-task source + relation       -0.0027 +-0.0043     -0.0027 +-0.0043     -0.0027 +-0.0043     -0.0027 +-0.0043     -0.0027 +-0.0043 
+
+  * = the 95% interval over disease-level mean paired differences excludes zero.
+    Repeats reduce within-disease noise; they are not counted as independent tasks.
+
+
+target-data equivalence: correct-source transport at K_T=2 vs target only
+  positive = transport at K_T=2 has the lower distance; interval is over diseases
+
+  phototype-statistic distance
+  target-only budget             paired difference                 reading
+  -----------------------------------------------------------------------
+  K_T=1                        -0.0003 +-0.0001         target only lower
+  K_T=2                        +0.0019 +-0.0056    interval contains zero
+  K_T=5                        +0.0056 +-0.0021       transport K=2 lower
+  K_T=10                       +0.0097 +-0.0072       transport K=2 lower
+  K_T=20                       +0.0054 +-0.0088    interval contains zero
+  closest point estimate: target only K_T=1; this is a paired compatibility reading, not a formal equivalence test
+
+  sliced Wasserstein
+  target-only budget             paired difference                 reading
+  -----------------------------------------------------------------------
+  K_T=1                        -0.0011 +-0.0007         target only lower
+  K_T=2                        -0.0015 +-0.0005         target only lower
+  K_T=5                        -0.0018 +-0.0008         target only lower
+  K_T=10                       -0.0021 +-0.0033    interval contains zero
+  K_T=20                       -0.0026 +-0.0020         target only lower
+  closest point estimate: target only K_T=1; this is a paired compatibility reading, not a formal equivalence test
+
+  energy MMD
+  target-only budget             paired difference                 reading
+  -----------------------------------------------------------------------
+  K_T=1                        -0.0199 +-0.0015         target only lower
+  K_T=2                        -0.0408 +-0.0320         target only lower
+  K_T=5                        -0.0584 +-0.0232         target only lower
+  K_T=10                       -0.0416 +-0.0679    interval contains zero
+  K_T=20                       -0.0503 +-0.0264         target only lower
+  closest point estimate: target only K_T=1; this is a paired compatibility reading, not a formal equivalence test
+
+
+pooled KID skipped: condition feature extractor held-out accuracy 0.681 is below the prespecified usefulness threshold 0.833
+
+
+what this can and cannot support
+  The full verified and cleaned archive supplies 2 held-out disease tasks.
+  Paired intervals use one mean difference per disease. They are statistically valid
+  for this split but necessarily imprecise with four test diseases; repeat-level noise
+  is averaged within disease and never treated as independent evidence.
+
+per-cell values written to experiments\meta_diffusion_final\runs\p1_family_fold2_few.json

@@ -1,0 +1,3951 @@
+{
+  "comparisons": {
+    "0": {
+      "cls": {
+        "absolute": {
+          "source reuse": {
+            "mean": 0.01985677154152654,
+            "half_width_95": 0.022355022346805527,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.032552084303461015,
+              "neurofibromatosis": 0.0013020833721384406,
+              "pityriasis rosea": 0.04557291849050671,
+              "vitiligo": 0.0
+            }
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.019856771599734202,
+            "half_width_95": 0.02235502238913466,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.03255208453629166,
+              "neurofibromatosis": 0.0013020833721384406,
+              "pityriasis rosea": 0.04557291849050671,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.020507813344011083,
+            "half_width_95": 0.023071902347063772,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.03385416802484542,
+              "neurofibromatosis": 0.0013020833721384406,
+              "pityriasis rosea": 0.04687500197906047,
+              "vitiligo": 0.0
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.019856771716149524,
+            "half_width_95": 0.02213543172685895,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.03385416802484542,
+              "neurofibromatosis": 0.0013020833721384406,
+              "pityriasis rosea": 0.044270835467614233,
+              "vitiligo": 0.0
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 1.1641532182693481e-10,
+            "half_width_95": 0.0010418835958535535,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020834885537624,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": -0.0013020830228924751,
+              "vitiligo": 0.0
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.0006510417442768812,
+            "half_width_95": 0.000736723087571404,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.0013020834885537624,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": -0.0013020834885537624,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.019856771716149524,
+            "half_width_95": 0.02213543172685895,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.03385416802484542,
+              "neurofibromatosis": 0.0013020833721384406,
+              "pityriasis rosea": 0.044270835467614233,
+              "vitiligo": 0.0
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.019856771599734202,
+            "half_width_95": 0.02235502238913466,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.03255208453629166,
+              "neurofibromatosis": 0.0013020833721384406,
+              "pityriasis rosea": 0.04557291849050671,
+              "vitiligo": 0.0
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.020507813344011083,
+            "half_width_95": 0.023071902347063772,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.03385416802484542,
+              "neurofibromatosis": 0.0013020833721384406,
+              "pityriasis rosea": 0.04687500197906047,
+              "vitiligo": 0.0
+            }
+          }
+        }
+      },
+      "ph": {
+        "absolute": {
+          "source reuse": {
+            "mean": 0.13899739924818277,
+            "half_width_95": 0.010333836718759317,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.1445312537252903,
+              "neurofibromatosis": 0.13151041977107525,
+              "pityriasis rosea": 0.15104166977107525,
+              "vitiligo": 0.1289062537252903
+            }
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.14225260820239782,
+            "half_width_95": 0.01012156598308879,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.14973958674818277,
+              "neurofibromatosis": 0.13151042070239782,
+              "pityriasis rosea": 0.15234375465661287,
+              "vitiligo": 0.13541667070239782
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.1425781287252903,
+            "half_width_95": 0.009801461982412229,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.14843750279396772,
+              "neurofibromatosis": 0.13411458767950535,
+              "pityriasis rosea": 0.15364583767950535,
+              "vitiligo": 0.13411458674818277
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.1419270874466747,
+            "half_width_95": 0.009376953169996283,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.14583333767950535,
+              "neurofibromatosis": 0.13411458767950535,
+              "pityriasis rosea": 0.15364583767950535,
+              "vitiligo": 0.13411458674818277
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.0003255207557231188,
+            "half_width_95": 0.002829438105456566,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.0039062490686774254,
+              "neurofibromatosis": 0.002604166977107525,
+              "pityriasis rosea": 0.0013020830228924751,
+              "vitiligo": -0.0013020839542150497
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.00032552052289247513,
+            "half_width_95": 0.0019140629056427264,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020839542150497,
+              "neurofibromatosis": -0.002604166977107525,
+              "pityriasis rosea": -0.0013020830228924751,
+              "vitiligo": 0.0013020839542150497
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.1419270874466747,
+            "half_width_95": 0.009376953169996283,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.14583333767950535,
+              "neurofibromatosis": 0.13411458767950535,
+              "pityriasis rosea": 0.15364583767950535,
+              "vitiligo": 0.13411458674818277
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.14225260820239782,
+            "half_width_95": 0.01012156598308879,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.14973958674818277,
+              "neurofibromatosis": 0.13151042070239782,
+              "pityriasis rosea": 0.15234375465661287,
+              "vitiligo": 0.13541667070239782
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.1425781287252903,
+            "half_width_95": 0.009801461982412229,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.14843750279396772,
+              "neurofibromatosis": 0.13411458767950535,
+              "pityriasis rosea": 0.15364583767950535,
+              "vitiligo": 0.13411458674818277
+            }
+          }
+        }
+      },
+      "sig": {
+        "absolute": {
+          "source reuse": {
+            "mean": 2.5247886925935745,
+            "half_width_95": 0.44201455206292806,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7252639532089233,
+              "neurofibromatosis": 2.013989105820656,
+              "pityriasis rosea": 3.041227251291275,
+              "vitiligo": 2.318674460053444
+            }
+          },
+          "population only": {
+            "mean": 4.046491138637066,
+            "half_width_95": 0.3111450907115265,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 4.24468332529068,
+              "neurofibromatosis": 3.6806073784828186,
+              "pityriasis rosea": 4.37033474445343,
+              "vitiligo": 3.890339106321335
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 2.5020152889192104,
+            "half_width_95": 0.4478286692183299,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7072800993919373,
+              "neurofibromatosis": 1.9746278673410416,
+              "pityriasis rosea": 3.0196622908115387,
+              "vitiligo": 2.306490898132324
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 2.502545353025198,
+            "half_width_95": 0.4462277033525152,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7042994499206543,
+              "neurofibromatosis": 1.981921747326851,
+              "pityriasis rosea": 3.0221159756183624,
+              "vitiligo": 2.3018442392349243
+            }
+          },
+          "correct source + transport": {
+            "mean": 2.5030280612409115,
+            "half_width_95": 0.44795889244060705,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7046034932136536,
+              "neurofibromatosis": 1.9830565303564072,
+              "pityriasis rosea": 3.026322692632675,
+              "vitiligo": 2.29812952876091
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.0010127723217010498,
+            "half_width_95": 0.007765682258593908,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026766061782836914,
+              "neurofibromatosis": -0.0084286630153656,
+              "pityriasis rosea": -0.006660401821136475,
+              "vitiligo": 0.008361369371414185
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0005300641059875488,
+            "half_width_95": 0.005324960039288246,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.002980649471282959,
+              "neurofibromatosis": 0.007293879985809326,
+              "pityriasis rosea": 0.0024536848068237305,
+              "vitiligo": -0.004646658897399902
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.5434630773961544,
+            "half_width_95": 0.1452599142620185,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5400798320770264,
+              "neurofibromatosis": 1.6975508481264114,
+              "pityriasis rosea": 1.344012051820755,
+              "vitiligo": 1.5922095775604248
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.5444758497178555,
+            "half_width_95": 0.14452191900249556,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5374032258987427,
+              "neurofibromatosis": 1.705979511141777,
+              "pityriasis rosea": 1.3506724536418915,
+              "vitiligo": 1.5838482081890106
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.543945785611868,
+            "half_width_95": 0.14341834072257745,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5403838753700256,
+              "neurofibromatosis": 1.6986856311559677,
+              "pityriasis rosea": 1.3482187688350677,
+              "vitiligo": 1.5884948670864105
+            }
+          }
+        }
+      },
+      "sw": {
+        "absolute": {
+          "source reuse": {
+            "mean": 0.36420340090990067,
+            "half_width_95": 0.04481363620809133,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40229179337620735,
+              "neurofibromatosis": 0.3385315574705601,
+              "pityriasis rosea": 0.40319662168622017,
+              "vitiligo": 0.31279363110661507
+            }
+          },
+          "population only": {
+            "mean": 0.286694448441267,
+            "half_width_95": 0.009363353719837285,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.2857690118253231,
+              "neurofibromatosis": 0.2792454771697521,
+              "pityriasis rosea": 0.300432913005352,
+              "vitiligo": 0.2813303917646408
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.3638407913967967,
+            "half_width_95": 0.04543985420128662,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.4023623578250408,
+              "neurofibromatosis": 0.33742548897862434,
+              "pityriasis rosea": 0.4035849906504154,
+              "vitiligo": 0.31199032813310623
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.363876823335886,
+            "half_width_95": 0.045400026895874745,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40202148631215096,
+              "neurofibromatosis": 0.3379201330244541,
+              "pityriasis rosea": 0.4038013741374016,
+              "vitiligo": 0.31176429986953735
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.3637552335858345,
+            "half_width_95": 0.045627478530987704,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40198536589741707,
+              "neurofibromatosis": 0.33797603473067284,
+              "pityriasis rosea": 0.40389516949653625,
+              "vitiligo": 0.31116436421871185
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 8.555781096220016e-05,
+            "half_width_95": 0.0006183508237301715,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0003769919276237488,
+              "neurofibromatosis": -0.0005505457520484924,
+              "pityriasis rosea": -0.00031017884612083435,
+              "vitiligo": 0.0008259639143943787
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 3.603193908929825e-05,
+            "half_width_95": 0.0003810606252393069,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.00034087151288986206,
+              "neurofibromatosis": 0.000494644045829773,
+              "pityriasis rosea": 0.00021638348698616028,
+              "vitiligo": -0.00022602826356887817
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": -0.07706078514456749,
+            "half_width_95": 0.03918597265908628,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11621635407209396,
+              "neurofibromatosis": -0.058730557560920715,
+              "pityriasis rosea": -0.10346225649118423,
+              "vitiligo": -0.029833972454071045
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": -0.07714634295552969,
+            "half_width_95": 0.039007906673883326,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11659334599971771,
+              "neurofibromatosis": -0.05818001180887222,
+              "pityriasis rosea": -0.1031520776450634,
+              "vitiligo": -0.030659936368465424
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": -0.07718237489461899,
+            "half_width_95": 0.03895479909261805,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11625247448682785,
+              "neurofibromatosis": -0.058674655854701996,
+              "pityriasis rosea": -0.10336846113204956,
+              "vitiligo": -0.030433908104896545
+            }
+          }
+        }
+      },
+      "mmd": {
+        "absolute": {
+          "source reuse": {
+            "mean": 7.176485896110535,
+            "half_width_95": 1.8278251138284747,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.65583848953247,
+              "neurofibromatosis": 5.725451946258545,
+              "pityriasis rosea": 8.914713382720947,
+              "vitiligo": 5.409939765930176
+            }
+          },
+          "population only": {
+            "mean": 8.424566388130188,
+            "half_width_95": 1.482467356238915,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 9.179347038269043,
+              "neurofibromatosis": 7.165003776550293,
+              "pityriasis rosea": 10.190461158752441,
+              "vitiligo": 7.163453578948975
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 7.146573901176453,
+            "half_width_95": 1.8509047005411734,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.633580207824707,
+              "neurofibromatosis": 5.652626037597656,
+              "pityriasis rosea": 8.91897439956665,
+              "vitiligo": 5.381114959716797
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 7.144388318061829,
+            "half_width_95": 1.8488068037369947,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.617496013641357,
+              "neurofibromatosis": 5.664854526519775,
+              "pityriasis rosea": 8.924956798553467,
+              "vitiligo": 5.370245933532715
+            }
+          },
+          "correct source + transport": {
+            "mean": 7.142925977706909,
+            "half_width_95": 1.856629789180958,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.624180793762207,
+              "neurofibromatosis": 5.666975975036621,
+              "pityriasis rosea": 8.92843770980835,
+              "vitiligo": 5.352109432220459
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.003647923469543457,
+            "half_width_95": 0.01936928265659455,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0093994140625,
+              "neurofibromatosis": -0.014349937438964844,
+              "pityriasis rosea": -0.009463310241699219,
+              "vitiligo": 0.02900552749633789
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.0021855831146240234,
+            "half_width_95": 0.013185219001622948,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.01608419418334961,
+              "neurofibromatosis": 0.01222848892211914,
+              "pityriasis rosea": 0.005982398986816406,
+              "vitiligo": -0.010869026184082031
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.2816404104232788,
+            "half_width_95": 0.5233478608052742,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5551662445068359,
+              "neurofibromatosis": 1.4980278015136719,
+              "pityriasis rosea": 1.2620234489440918,
+              "vitiligo": 1.8113441467285156
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.2779924869537354,
+            "half_width_95": 0.5202616249423978,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5457668304443359,
+              "neurofibromatosis": 1.5123777389526367,
+              "pityriasis rosea": 1.271486759185791,
+              "vitiligo": 1.7823386192321777
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.2801780700683594,
+            "half_width_95": 0.5147863687565226,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5618510246276855,
+              "neurofibromatosis": 1.5001492500305176,
+              "pityriasis rosea": 1.2655043601989746,
+              "vitiligo": 1.7932076454162598
+            }
+          }
+        }
+      }
+    },
+    "1": {
+      "cls": {
+        "absolute": {
+          "target only": {
+            "mean": 0.0387369804084301,
+            "half_width_95": 0.064229193307386,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13671875465661287,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833604969084,
+              "vitiligo": 0.005208333372138441
+            }
+          },
+          "source reuse": {
+            "mean": 0.04036458465270698,
+            "half_width_95": 0.06736887968341362,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.1432291716337204,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.011718750232830644,
+              "vitiligo": 0.006510416744276881
+            }
+          },
+          "population only": {
+            "mean": 0.028645834187045693,
+            "half_width_95": 0.05614583500660956,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.11458333674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.03971354285022244,
+            "half_width_95": 0.0652862974679388,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13932292070239782,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.00032552063930779696,
+            "half_width_95": 0.001221717107373258,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020839542150497,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": -0.0013020832557231188,
+              "vitiligo": -0.0013020832557231188
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.011067708663176745,
+            "half_width_95": 0.010340400322807029,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.02473958395421505,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          }
+        }
+      },
+      "ph": {
+        "absolute": {
+          "target only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.002756565136162328,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0052083334885537624,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "source reuse": {
+            "mean": 0.005533854331588373,
+            "half_width_95": 0.002179256087221284,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.007812500232830644,
+              "pityriasis rosea": 0.0052083334885537624,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.00032552084303461015,
+            "half_width_95": 0.0006380208523478359,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        }
+      },
+      "sig": {
+        "absolute": {
+          "target only": {
+            "mean": 2.5124995596706867,
+            "half_width_95": 0.435115345560161,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.695169597864151,
+              "neurofibromatosis": 1.9942784756422043,
+              "pityriasis rosea": 3.0217254161834717,
+              "vitiligo": 2.33882474899292
+            }
+          },
+          "source reuse": {
+            "mean": 2.5247886925935745,
+            "half_width_95": 0.44201455206292806,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7252639532089233,
+              "neurofibromatosis": 2.013989105820656,
+              "pityriasis rosea": 3.041227251291275,
+              "vitiligo": 2.318674460053444
+            }
+          },
+          "population only": {
+            "mean": 4.046491138637066,
+            "half_width_95": 0.3111450907115265,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 4.24468332529068,
+              "neurofibromatosis": 3.6806073784828186,
+              "pityriasis rosea": 4.37033474445343,
+              "vitiligo": 3.890339106321335
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 2.5020152889192104,
+            "half_width_95": 0.4478286692183299,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7072800993919373,
+              "neurofibromatosis": 1.9746278673410416,
+              "pityriasis rosea": 3.0196622908115387,
+              "vitiligo": 2.306490898132324
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 2.502545353025198,
+            "half_width_95": 0.4462277033525152,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7042994499206543,
+              "neurofibromatosis": 1.981921747326851,
+              "pityriasis rosea": 3.0221159756183624,
+              "vitiligo": 2.3018442392349243
+            }
+          },
+          "correct source + transport": {
+            "mean": 2.5030280612409115,
+            "half_width_95": 0.44795889244060705,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7046034932136536,
+              "neurofibromatosis": 1.9830565303564072,
+              "pityriasis rosea": 3.026322692632675,
+              "vitiligo": 2.29812952876091
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.0010127723217010498,
+            "half_width_95": 0.007765682258593908,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026766061782836914,
+              "neurofibromatosis": -0.0084286630153656,
+              "pityriasis rosea": -0.006660401821136475,
+              "vitiligo": 0.008361369371414185
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0005300641059875488,
+            "half_width_95": 0.005324960039288246,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.002980649471282959,
+              "neurofibromatosis": 0.007293879985809326,
+              "pityriasis rosea": 0.0024536848068237305,
+              "vitiligo": -0.004646658897399902
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.5434630773961544,
+            "half_width_95": 0.1452599142620185,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5400798320770264,
+              "neurofibromatosis": 1.6975508481264114,
+              "pityriasis rosea": 1.344012051820755,
+              "vitiligo": 1.5922095775604248
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.5444758497178555,
+            "half_width_95": 0.14452191900249556,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5374032258987427,
+              "neurofibromatosis": 1.705979511141777,
+              "pityriasis rosea": 1.3506724536418915,
+              "vitiligo": 1.5838482081890106
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.543945785611868,
+            "half_width_95": 0.14341834072257745,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5403838753700256,
+              "neurofibromatosis": 1.6986856311559677,
+              "pityriasis rosea": 1.3482187688350677,
+              "vitiligo": 1.5884948670864105
+            }
+          }
+        }
+      },
+      "sw": {
+        "absolute": {
+          "target only": {
+            "mean": 0.3617059774696827,
+            "half_width_95": 0.043852462790191116,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.3972056806087494,
+              "neurofibromatosis": 0.3378663696348667,
+              "pityriasis rosea": 0.40121056139469147,
+              "vitiligo": 0.3105412982404232
+            }
+          },
+          "source reuse": {
+            "mean": 0.36420340090990067,
+            "half_width_95": 0.04481363620809133,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40229179337620735,
+              "neurofibromatosis": 0.3385315574705601,
+              "pityriasis rosea": 0.40319662168622017,
+              "vitiligo": 0.31279363110661507
+            }
+          },
+          "population only": {
+            "mean": 0.286694448441267,
+            "half_width_95": 0.009363353719837285,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.2857690118253231,
+              "neurofibromatosis": 0.2792454771697521,
+              "pityriasis rosea": 0.300432913005352,
+              "vitiligo": 0.2813303917646408
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.3638407913967967,
+            "half_width_95": 0.04543985420128662,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.4023623578250408,
+              "neurofibromatosis": 0.33742548897862434,
+              "pityriasis rosea": 0.4035849906504154,
+              "vitiligo": 0.31199032813310623
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.363876823335886,
+            "half_width_95": 0.045400026895874745,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40202148631215096,
+              "neurofibromatosis": 0.3379201330244541,
+              "pityriasis rosea": 0.4038013741374016,
+              "vitiligo": 0.31176429986953735
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.3637552335858345,
+            "half_width_95": 0.045627478530987704,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40198536589741707,
+              "neurofibromatosis": 0.33797603473067284,
+              "pityriasis rosea": 0.40389516949653625,
+              "vitiligo": 0.31116436421871185
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 8.555781096220016e-05,
+            "half_width_95": 0.0006183508237301715,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0003769919276237488,
+              "neurofibromatosis": -0.0005505457520484924,
+              "pityriasis rosea": -0.00031017884612083435,
+              "vitiligo": 0.0008259639143943787
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 3.603193908929825e-05,
+            "half_width_95": 0.0003810606252393069,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.00034087151288986206,
+              "neurofibromatosis": 0.000494644045829773,
+              "pityriasis rosea": 0.00021638348698616028,
+              "vitiligo": -0.00022602826356887817
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": -0.07706078514456749,
+            "half_width_95": 0.03918597265908628,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11621635407209396,
+              "neurofibromatosis": -0.058730557560920715,
+              "pityriasis rosea": -0.10346225649118423,
+              "vitiligo": -0.029833972454071045
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": -0.07714634295552969,
+            "half_width_95": 0.039007906673883326,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11659334599971771,
+              "neurofibromatosis": -0.05818001180887222,
+              "pityriasis rosea": -0.1031520776450634,
+              "vitiligo": -0.030659936368465424
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": -0.07718237489461899,
+            "half_width_95": 0.03895479909261805,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11625247448682785,
+              "neurofibromatosis": -0.058674655854701996,
+              "pityriasis rosea": -0.10336846113204956,
+              "vitiligo": -0.030433908104896545
+            }
+          }
+        }
+      },
+      "mmd": {
+        "absolute": {
+          "target only": {
+            "mean": 7.113424181938171,
+            "half_width_95": 1.8041172062523119,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.49898910522461,
+              "neurofibromatosis": 5.664007186889648,
+              "pityriasis rosea": 8.898133277893066,
+              "vitiligo": 5.392567157745361
+            }
+          },
+          "source reuse": {
+            "mean": 7.176485896110535,
+            "half_width_95": 1.8278251138284747,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.65583848953247,
+              "neurofibromatosis": 5.725451946258545,
+              "pityriasis rosea": 8.914713382720947,
+              "vitiligo": 5.409939765930176
+            }
+          },
+          "population only": {
+            "mean": 8.424566388130188,
+            "half_width_95": 1.482467356238915,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 9.179347038269043,
+              "neurofibromatosis": 7.165003776550293,
+              "pityriasis rosea": 10.190461158752441,
+              "vitiligo": 7.163453578948975
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 7.146573901176453,
+            "half_width_95": 1.8509047005411734,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.633580207824707,
+              "neurofibromatosis": 5.652626037597656,
+              "pityriasis rosea": 8.91897439956665,
+              "vitiligo": 5.381114959716797
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 7.144388318061829,
+            "half_width_95": 1.8488068037369947,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.617496013641357,
+              "neurofibromatosis": 5.664854526519775,
+              "pityriasis rosea": 8.924956798553467,
+              "vitiligo": 5.370245933532715
+            }
+          },
+          "correct source + transport": {
+            "mean": 7.142925977706909,
+            "half_width_95": 1.856629789180958,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.624180793762207,
+              "neurofibromatosis": 5.666975975036621,
+              "pityriasis rosea": 8.92843770980835,
+              "vitiligo": 5.352109432220459
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.003647923469543457,
+            "half_width_95": 0.01936928265659455,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0093994140625,
+              "neurofibromatosis": -0.014349937438964844,
+              "pityriasis rosea": -0.009463310241699219,
+              "vitiligo": 0.02900552749633789
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.0021855831146240234,
+            "half_width_95": 0.013185219001622948,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.01608419418334961,
+              "neurofibromatosis": 0.01222848892211914,
+              "pityriasis rosea": 0.005982398986816406,
+              "vitiligo": -0.010869026184082031
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.2816404104232788,
+            "half_width_95": 0.5233478608052742,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5551662445068359,
+              "neurofibromatosis": 1.4980278015136719,
+              "pityriasis rosea": 1.2620234489440918,
+              "vitiligo": 1.8113441467285156
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.2779924869537354,
+            "half_width_95": 0.5202616249423978,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5457668304443359,
+              "neurofibromatosis": 1.5123777389526367,
+              "pityriasis rosea": 1.271486759185791,
+              "vitiligo": 1.7823386192321777
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.2801780700683594,
+            "half_width_95": 0.5147863687565226,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5618510246276855,
+              "neurofibromatosis": 1.5001492500305176,
+              "pityriasis rosea": 1.2655043601989746,
+              "vitiligo": 1.7932076454162598
+            }
+          }
+        }
+      }
+    },
+    "2": {
+      "cls": {
+        "absolute": {
+          "target only": {
+            "mean": 0.03808593857684173,
+            "half_width_95": 0.06376272851143892,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13541667070239782,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.011718750232830644,
+              "vitiligo": 0.005208333372138441
+            }
+          },
+          "source reuse": {
+            "mean": 0.04036458465270698,
+            "half_width_95": 0.06736887968341362,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.1432291716337204,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.011718750232830644,
+              "vitiligo": 0.006510416744276881
+            }
+          },
+          "population only": {
+            "mean": 0.028645834187045693,
+            "half_width_95": 0.05614583500660956,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.11458333674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.03971354285022244,
+            "half_width_95": 0.0652862974679388,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13932292070239782,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.00032552063930779696,
+            "half_width_95": 0.001221717107373258,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020839542150497,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": -0.0013020832557231188,
+              "vitiligo": -0.0013020832557231188
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.011067708663176745,
+            "half_width_95": 0.010340400322807029,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.02473958395421505,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          }
+        }
+      },
+      "ph": {
+        "absolute": {
+          "target only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "source reuse": {
+            "mean": 0.005533854331588373,
+            "half_width_95": 0.002179256087221284,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.007812500232830644,
+              "pityriasis rosea": 0.0052083334885537624,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.00032552084303461015,
+            "half_width_95": 0.0006380208523478359,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        }
+      },
+      "sig": {
+        "absolute": {
+          "target only": {
+            "mean": 2.5145209692418575,
+            "half_width_95": 0.43017787556740184,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.701623648405075,
+              "neurofibromatosis": 2.0135725289583206,
+              "pityriasis rosea": 3.0199000537395477,
+              "vitiligo": 2.3229876458644867
+            }
+          },
+          "source reuse": {
+            "mean": 2.5247886925935745,
+            "half_width_95": 0.44201455206292806,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7252639532089233,
+              "neurofibromatosis": 2.013989105820656,
+              "pityriasis rosea": 3.041227251291275,
+              "vitiligo": 2.318674460053444
+            }
+          },
+          "population only": {
+            "mean": 4.046491138637066,
+            "half_width_95": 0.3111450907115265,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 4.24468332529068,
+              "neurofibromatosis": 3.6806073784828186,
+              "pityriasis rosea": 4.37033474445343,
+              "vitiligo": 3.890339106321335
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 2.5020152889192104,
+            "half_width_95": 0.4478286692183299,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7072800993919373,
+              "neurofibromatosis": 1.9746278673410416,
+              "pityriasis rosea": 3.0196622908115387,
+              "vitiligo": 2.306490898132324
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 2.502545353025198,
+            "half_width_95": 0.4462277033525152,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7042994499206543,
+              "neurofibromatosis": 1.981921747326851,
+              "pityriasis rosea": 3.0221159756183624,
+              "vitiligo": 2.3018442392349243
+            }
+          },
+          "correct source + transport": {
+            "mean": 2.5030280612409115,
+            "half_width_95": 0.44795889244060705,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7046034932136536,
+              "neurofibromatosis": 1.9830565303564072,
+              "pityriasis rosea": 3.026322692632675,
+              "vitiligo": 2.29812952876091
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.0010127723217010498,
+            "half_width_95": 0.007765682258593908,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026766061782836914,
+              "neurofibromatosis": -0.0084286630153656,
+              "pityriasis rosea": -0.006660401821136475,
+              "vitiligo": 0.008361369371414185
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0005300641059875488,
+            "half_width_95": 0.005324960039288246,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.002980649471282959,
+              "neurofibromatosis": 0.007293879985809326,
+              "pityriasis rosea": 0.0024536848068237305,
+              "vitiligo": -0.004646658897399902
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.5434630773961544,
+            "half_width_95": 0.1452599142620185,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5400798320770264,
+              "neurofibromatosis": 1.6975508481264114,
+              "pityriasis rosea": 1.344012051820755,
+              "vitiligo": 1.5922095775604248
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.5444758497178555,
+            "half_width_95": 0.14452191900249556,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5374032258987427,
+              "neurofibromatosis": 1.705979511141777,
+              "pityriasis rosea": 1.3506724536418915,
+              "vitiligo": 1.5838482081890106
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.543945785611868,
+            "half_width_95": 0.14341834072257745,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5403838753700256,
+              "neurofibromatosis": 1.6986856311559677,
+              "pityriasis rosea": 1.3482187688350677,
+              "vitiligo": 1.5884948670864105
+            }
+          }
+        }
+      },
+      "sw": {
+        "absolute": {
+          "target only": {
+            "mean": 0.36343178525567055,
+            "half_width_95": 0.044339918002414144,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.400615181773901,
+              "neurofibromatosis": 0.33946624770760536,
+              "pityriasis rosea": 0.40208305791020393,
+              "vitiligo": 0.3115626536309719
+            }
+          },
+          "source reuse": {
+            "mean": 0.36420340090990067,
+            "half_width_95": 0.04481363620809133,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40229179337620735,
+              "neurofibromatosis": 0.3385315574705601,
+              "pityriasis rosea": 0.40319662168622017,
+              "vitiligo": 0.31279363110661507
+            }
+          },
+          "population only": {
+            "mean": 0.286694448441267,
+            "half_width_95": 0.009363353719837285,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.2857690118253231,
+              "neurofibromatosis": 0.2792454771697521,
+              "pityriasis rosea": 0.300432913005352,
+              "vitiligo": 0.2813303917646408
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.3638407913967967,
+            "half_width_95": 0.04543985420128662,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.4023623578250408,
+              "neurofibromatosis": 0.33742548897862434,
+              "pityriasis rosea": 0.4035849906504154,
+              "vitiligo": 0.31199032813310623
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.363876823335886,
+            "half_width_95": 0.045400026895874745,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40202148631215096,
+              "neurofibromatosis": 0.3379201330244541,
+              "pityriasis rosea": 0.4038013741374016,
+              "vitiligo": 0.31176429986953735
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.3637552335858345,
+            "half_width_95": 0.045627478530987704,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40198536589741707,
+              "neurofibromatosis": 0.33797603473067284,
+              "pityriasis rosea": 0.40389516949653625,
+              "vitiligo": 0.31116436421871185
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 8.555781096220016e-05,
+            "half_width_95": 0.0006183508237301715,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0003769919276237488,
+              "neurofibromatosis": -0.0005505457520484924,
+              "pityriasis rosea": -0.00031017884612083435,
+              "vitiligo": 0.0008259639143943787
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 3.603193908929825e-05,
+            "half_width_95": 0.0003810606252393069,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.00034087151288986206,
+              "neurofibromatosis": 0.000494644045829773,
+              "pityriasis rosea": 0.00021638348698616028,
+              "vitiligo": -0.00022602826356887817
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": -0.07706078514456749,
+            "half_width_95": 0.03918597265908628,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11621635407209396,
+              "neurofibromatosis": -0.058730557560920715,
+              "pityriasis rosea": -0.10346225649118423,
+              "vitiligo": -0.029833972454071045
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": -0.07714634295552969,
+            "half_width_95": 0.039007906673883326,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11659334599971771,
+              "neurofibromatosis": -0.05818001180887222,
+              "pityriasis rosea": -0.1031520776450634,
+              "vitiligo": -0.030659936368465424
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": -0.07718237489461899,
+            "half_width_95": 0.03895479909261805,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11625247448682785,
+              "neurofibromatosis": -0.058674655854701996,
+              "pityriasis rosea": -0.10336846113204956,
+              "vitiligo": -0.030433908104896545
+            }
+          }
+        }
+      },
+      "mmd": {
+        "absolute": {
+          "target only": {
+            "mean": 7.1633405685424805,
+            "half_width_95": 1.8156689270943225,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.611559391021729,
+              "neurofibromatosis": 5.75214958190918,
+              "pityriasis rosea": 8.906682014465332,
+              "vitiligo": 5.382971286773682
+            }
+          },
+          "source reuse": {
+            "mean": 7.176485896110535,
+            "half_width_95": 1.8278251138284747,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.65583848953247,
+              "neurofibromatosis": 5.725451946258545,
+              "pityriasis rosea": 8.914713382720947,
+              "vitiligo": 5.409939765930176
+            }
+          },
+          "population only": {
+            "mean": 8.424566388130188,
+            "half_width_95": 1.482467356238915,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 9.179347038269043,
+              "neurofibromatosis": 7.165003776550293,
+              "pityriasis rosea": 10.190461158752441,
+              "vitiligo": 7.163453578948975
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 7.146573901176453,
+            "half_width_95": 1.8509047005411734,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.633580207824707,
+              "neurofibromatosis": 5.652626037597656,
+              "pityriasis rosea": 8.91897439956665,
+              "vitiligo": 5.381114959716797
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 7.144388318061829,
+            "half_width_95": 1.8488068037369947,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.617496013641357,
+              "neurofibromatosis": 5.664854526519775,
+              "pityriasis rosea": 8.924956798553467,
+              "vitiligo": 5.370245933532715
+            }
+          },
+          "correct source + transport": {
+            "mean": 7.142925977706909,
+            "half_width_95": 1.856629789180958,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.624180793762207,
+              "neurofibromatosis": 5.666975975036621,
+              "pityriasis rosea": 8.92843770980835,
+              "vitiligo": 5.352109432220459
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.003647923469543457,
+            "half_width_95": 0.01936928265659455,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0093994140625,
+              "neurofibromatosis": -0.014349937438964844,
+              "pityriasis rosea": -0.009463310241699219,
+              "vitiligo": 0.02900552749633789
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.0021855831146240234,
+            "half_width_95": 0.013185219001622948,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.01608419418334961,
+              "neurofibromatosis": 0.01222848892211914,
+              "pityriasis rosea": 0.005982398986816406,
+              "vitiligo": -0.010869026184082031
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.2816404104232788,
+            "half_width_95": 0.5233478608052742,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5551662445068359,
+              "neurofibromatosis": 1.4980278015136719,
+              "pityriasis rosea": 1.2620234489440918,
+              "vitiligo": 1.8113441467285156
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.2779924869537354,
+            "half_width_95": 0.5202616249423978,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5457668304443359,
+              "neurofibromatosis": 1.5123777389526367,
+              "pityriasis rosea": 1.271486759185791,
+              "vitiligo": 1.7823386192321777
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.2801780700683594,
+            "half_width_95": 0.5147863687565226,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5618510246276855,
+              "neurofibromatosis": 1.5001492500305176,
+              "pityriasis rosea": 1.2655043601989746,
+              "vitiligo": 1.7932076454162598
+            }
+          }
+        }
+      }
+    },
+    "5": {
+      "cls": {
+        "absolute": {
+          "target only": {
+            "mean": 0.038736980059184134,
+            "half_width_95": 0.06342988368601885,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13541666977107525,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.005208333372138441
+            }
+          },
+          "source reuse": {
+            "mean": 0.04036458465270698,
+            "half_width_95": 0.06736887968341362,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.1432291716337204,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.011718750232830644,
+              "vitiligo": 0.006510416744276881
+            }
+          },
+          "population only": {
+            "mean": 0.028645834187045693,
+            "half_width_95": 0.05614583500660956,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.11458333674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.03971354285022244,
+            "half_width_95": 0.0652862974679388,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13932292070239782,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.00032552063930779696,
+            "half_width_95": 0.001221717107373258,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020839542150497,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": -0.0013020832557231188,
+              "vitiligo": -0.0013020832557231188
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.011067708663176745,
+            "half_width_95": 0.010340400322807029,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.02473958395421505,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          }
+        }
+      },
+      "ph": {
+        "absolute": {
+          "target only": {
+            "mean": 0.004557291802484542,
+            "half_width_95": 0.0016473627571174864,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.0052083334885537624,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "source reuse": {
+            "mean": 0.005533854331588373,
+            "half_width_95": 0.002179256087221284,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.007812500232830644,
+              "pityriasis rosea": 0.0052083334885537624,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.00032552084303461015,
+            "half_width_95": 0.0006380208523478359,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        }
+      },
+      "sig": {
+        "absolute": {
+          "target only": {
+            "mean": 2.512569859623909,
+            "half_width_95": 0.4305346115379992,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.6992696821689606,
+              "neurofibromatosis": 2.015625521540642,
+              "pityriasis rosea": 3.0205891132354736,
+              "vitiligo": 2.31479512155056
+            }
+          },
+          "source reuse": {
+            "mean": 2.5247886925935745,
+            "half_width_95": 0.44201455206292806,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7252639532089233,
+              "neurofibromatosis": 2.013989105820656,
+              "pityriasis rosea": 3.041227251291275,
+              "vitiligo": 2.318674460053444
+            }
+          },
+          "population only": {
+            "mean": 4.046491138637066,
+            "half_width_95": 0.3111450907115265,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 4.24468332529068,
+              "neurofibromatosis": 3.6806073784828186,
+              "pityriasis rosea": 4.37033474445343,
+              "vitiligo": 3.890339106321335
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 2.5020152889192104,
+            "half_width_95": 0.4478286692183299,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7072800993919373,
+              "neurofibromatosis": 1.9746278673410416,
+              "pityriasis rosea": 3.0196622908115387,
+              "vitiligo": 2.306490898132324
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 2.502545353025198,
+            "half_width_95": 0.4462277033525152,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7042994499206543,
+              "neurofibromatosis": 1.981921747326851,
+              "pityriasis rosea": 3.0221159756183624,
+              "vitiligo": 2.3018442392349243
+            }
+          },
+          "correct source + transport": {
+            "mean": 2.5030280612409115,
+            "half_width_95": 0.44795889244060705,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7046034932136536,
+              "neurofibromatosis": 1.9830565303564072,
+              "pityriasis rosea": 3.026322692632675,
+              "vitiligo": 2.29812952876091
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.0010127723217010498,
+            "half_width_95": 0.007765682258593908,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026766061782836914,
+              "neurofibromatosis": -0.0084286630153656,
+              "pityriasis rosea": -0.006660401821136475,
+              "vitiligo": 0.008361369371414185
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0005300641059875488,
+            "half_width_95": 0.005324960039288246,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.002980649471282959,
+              "neurofibromatosis": 0.007293879985809326,
+              "pityriasis rosea": 0.0024536848068237305,
+              "vitiligo": -0.004646658897399902
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.5434630773961544,
+            "half_width_95": 0.1452599142620185,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5400798320770264,
+              "neurofibromatosis": 1.6975508481264114,
+              "pityriasis rosea": 1.344012051820755,
+              "vitiligo": 1.5922095775604248
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.5444758497178555,
+            "half_width_95": 0.14452191900249556,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5374032258987427,
+              "neurofibromatosis": 1.705979511141777,
+              "pityriasis rosea": 1.3506724536418915,
+              "vitiligo": 1.5838482081890106
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.543945785611868,
+            "half_width_95": 0.14341834072257745,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5403838753700256,
+              "neurofibromatosis": 1.6986856311559677,
+              "pityriasis rosea": 1.3482187688350677,
+              "vitiligo": 1.5884948670864105
+            }
+          }
+        }
+      },
+      "sw": {
+        "absolute": {
+          "target only": {
+            "mean": 0.36222675163298845,
+            "half_width_95": 0.04417526709340137,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.3971148692071438,
+              "neurofibromatosis": 0.3373386226594448,
+              "pityriasis rosea": 0.40310243144631386,
+              "vitiligo": 0.31135108321905136
+            }
+          },
+          "source reuse": {
+            "mean": 0.36420340090990067,
+            "half_width_95": 0.04481363620809133,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40229179337620735,
+              "neurofibromatosis": 0.3385315574705601,
+              "pityriasis rosea": 0.40319662168622017,
+              "vitiligo": 0.31279363110661507
+            }
+          },
+          "population only": {
+            "mean": 0.286694448441267,
+            "half_width_95": 0.009363353719837285,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.2857690118253231,
+              "neurofibromatosis": 0.2792454771697521,
+              "pityriasis rosea": 0.300432913005352,
+              "vitiligo": 0.2813303917646408
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.3638407913967967,
+            "half_width_95": 0.04543985420128662,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.4023623578250408,
+              "neurofibromatosis": 0.33742548897862434,
+              "pityriasis rosea": 0.4035849906504154,
+              "vitiligo": 0.31199032813310623
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.363876823335886,
+            "half_width_95": 0.045400026895874745,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40202148631215096,
+              "neurofibromatosis": 0.3379201330244541,
+              "pityriasis rosea": 0.4038013741374016,
+              "vitiligo": 0.31176429986953735
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.3637552335858345,
+            "half_width_95": 0.045627478530987704,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40198536589741707,
+              "neurofibromatosis": 0.33797603473067284,
+              "pityriasis rosea": 0.40389516949653625,
+              "vitiligo": 0.31116436421871185
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 8.555781096220016e-05,
+            "half_width_95": 0.0006183508237301715,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0003769919276237488,
+              "neurofibromatosis": -0.0005505457520484924,
+              "pityriasis rosea": -0.00031017884612083435,
+              "vitiligo": 0.0008259639143943787
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 3.603193908929825e-05,
+            "half_width_95": 0.0003810606252393069,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.00034087151288986206,
+              "neurofibromatosis": 0.000494644045829773,
+              "pityriasis rosea": 0.00021638348698616028,
+              "vitiligo": -0.00022602826356887817
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": -0.07706078514456749,
+            "half_width_95": 0.03918597265908628,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11621635407209396,
+              "neurofibromatosis": -0.058730557560920715,
+              "pityriasis rosea": -0.10346225649118423,
+              "vitiligo": -0.029833972454071045
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": -0.07714634295552969,
+            "half_width_95": 0.039007906673883326,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11659334599971771,
+              "neurofibromatosis": -0.05818001180887222,
+              "pityriasis rosea": -0.1031520776450634,
+              "vitiligo": -0.030659936368465424
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": -0.07718237489461899,
+            "half_width_95": 0.03895479909261805,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11625247448682785,
+              "neurofibromatosis": -0.058674655854701996,
+              "pityriasis rosea": -0.10336846113204956,
+              "vitiligo": -0.030433908104896545
+            }
+          }
+        }
+      },
+      "mmd": {
+        "absolute": {
+          "target only": {
+            "mean": 7.119522333145142,
+            "half_width_95": 1.8138860887952752,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.493969917297363,
+              "neurofibromatosis": 5.6764817237854,
+              "pityriasis rosea": 8.929165840148926,
+              "vitiligo": 5.378471851348877
+            }
+          },
+          "source reuse": {
+            "mean": 7.176485896110535,
+            "half_width_95": 1.8278251138284747,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.65583848953247,
+              "neurofibromatosis": 5.725451946258545,
+              "pityriasis rosea": 8.914713382720947,
+              "vitiligo": 5.409939765930176
+            }
+          },
+          "population only": {
+            "mean": 8.424566388130188,
+            "half_width_95": 1.482467356238915,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 9.179347038269043,
+              "neurofibromatosis": 7.165003776550293,
+              "pityriasis rosea": 10.190461158752441,
+              "vitiligo": 7.163453578948975
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 7.146573901176453,
+            "half_width_95": 1.8509047005411734,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.633580207824707,
+              "neurofibromatosis": 5.652626037597656,
+              "pityriasis rosea": 8.91897439956665,
+              "vitiligo": 5.381114959716797
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 7.144388318061829,
+            "half_width_95": 1.8488068037369947,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.617496013641357,
+              "neurofibromatosis": 5.664854526519775,
+              "pityriasis rosea": 8.924956798553467,
+              "vitiligo": 5.370245933532715
+            }
+          },
+          "correct source + transport": {
+            "mean": 7.142925977706909,
+            "half_width_95": 1.856629789180958,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.624180793762207,
+              "neurofibromatosis": 5.666975975036621,
+              "pityriasis rosea": 8.92843770980835,
+              "vitiligo": 5.352109432220459
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.003647923469543457,
+            "half_width_95": 0.01936928265659455,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0093994140625,
+              "neurofibromatosis": -0.014349937438964844,
+              "pityriasis rosea": -0.009463310241699219,
+              "vitiligo": 0.02900552749633789
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.0021855831146240234,
+            "half_width_95": 0.013185219001622948,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.01608419418334961,
+              "neurofibromatosis": 0.01222848892211914,
+              "pityriasis rosea": 0.005982398986816406,
+              "vitiligo": -0.010869026184082031
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.2816404104232788,
+            "half_width_95": 0.5233478608052742,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5551662445068359,
+              "neurofibromatosis": 1.4980278015136719,
+              "pityriasis rosea": 1.2620234489440918,
+              "vitiligo": 1.8113441467285156
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.2779924869537354,
+            "half_width_95": 0.5202616249423978,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5457668304443359,
+              "neurofibromatosis": 1.5123777389526367,
+              "pityriasis rosea": 1.271486759185791,
+              "vitiligo": 1.7823386192321777
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.2801780700683594,
+            "half_width_95": 0.5147863687565226,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5618510246276855,
+              "neurofibromatosis": 1.5001492500305176,
+              "pityriasis rosea": 1.2655043601989746,
+              "vitiligo": 1.7932076454162598
+            }
+          }
+        }
+      }
+    },
+    "10": {
+      "cls": {
+        "absolute": {
+          "target only": {
+            "mean": 0.037434896774357185,
+            "half_width_95": 0.06334425742909935,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13411458674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.011718750232830644,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "source reuse": {
+            "mean": 0.04036458465270698,
+            "half_width_95": 0.06736887968341362,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.1432291716337204,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.011718750232830644,
+              "vitiligo": 0.006510416744276881
+            }
+          },
+          "population only": {
+            "mean": 0.028645834187045693,
+            "half_width_95": 0.05614583500660956,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.11458333674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.03971354285022244,
+            "half_width_95": 0.0652862974679388,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13932292070239782,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.00032552063930779696,
+            "half_width_95": 0.001221717107373258,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020839542150497,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": -0.0013020832557231188,
+              "vitiligo": -0.0013020832557231188
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.011067708663176745,
+            "half_width_95": 0.010340400322807029,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.02473958395421505,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          }
+        }
+      },
+      "ph": {
+        "absolute": {
+          "target only": {
+            "mean": 0.0035807292733807117,
+            "half_width_95": 0.002415507962128486,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0052083334885537624,
+              "pityriasis rosea": 0.0052083334885537624,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "source reuse": {
+            "mean": 0.005533854331588373,
+            "half_width_95": 0.002179256087221284,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.007812500232830644,
+              "pityriasis rosea": 0.0052083334885537624,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.00032552084303461015,
+            "half_width_95": 0.0006380208523478359,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        }
+      },
+      "sig": {
+        "absolute": {
+          "target only": {
+            "mean": 2.515140764415264,
+            "half_width_95": 0.4333210702432272,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.709492415189743,
+              "neurofibromatosis": 2.0109603106975555,
+              "pityriasis rosea": 3.021168053150177,
+              "vitiligo": 2.318942278623581
+            }
+          },
+          "source reuse": {
+            "mean": 2.5247886925935745,
+            "half_width_95": 0.44201455206292806,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7252639532089233,
+              "neurofibromatosis": 2.013989105820656,
+              "pityriasis rosea": 3.041227251291275,
+              "vitiligo": 2.318674460053444
+            }
+          },
+          "population only": {
+            "mean": 4.046491138637066,
+            "half_width_95": 0.3111450907115265,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 4.24468332529068,
+              "neurofibromatosis": 3.6806073784828186,
+              "pityriasis rosea": 4.37033474445343,
+              "vitiligo": 3.890339106321335
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 2.5020152889192104,
+            "half_width_95": 0.4478286692183299,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7072800993919373,
+              "neurofibromatosis": 1.9746278673410416,
+              "pityriasis rosea": 3.0196622908115387,
+              "vitiligo": 2.306490898132324
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 2.502545353025198,
+            "half_width_95": 0.4462277033525152,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7042994499206543,
+              "neurofibromatosis": 1.981921747326851,
+              "pityriasis rosea": 3.0221159756183624,
+              "vitiligo": 2.3018442392349243
+            }
+          },
+          "correct source + transport": {
+            "mean": 2.5030280612409115,
+            "half_width_95": 0.44795889244060705,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7046034932136536,
+              "neurofibromatosis": 1.9830565303564072,
+              "pityriasis rosea": 3.026322692632675,
+              "vitiligo": 2.29812952876091
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.0010127723217010498,
+            "half_width_95": 0.007765682258593908,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026766061782836914,
+              "neurofibromatosis": -0.0084286630153656,
+              "pityriasis rosea": -0.006660401821136475,
+              "vitiligo": 0.008361369371414185
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0005300641059875488,
+            "half_width_95": 0.005324960039288246,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.002980649471282959,
+              "neurofibromatosis": 0.007293879985809326,
+              "pityriasis rosea": 0.0024536848068237305,
+              "vitiligo": -0.004646658897399902
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.5434630773961544,
+            "half_width_95": 0.1452599142620185,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5400798320770264,
+              "neurofibromatosis": 1.6975508481264114,
+              "pityriasis rosea": 1.344012051820755,
+              "vitiligo": 1.5922095775604248
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.5444758497178555,
+            "half_width_95": 0.14452191900249556,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5374032258987427,
+              "neurofibromatosis": 1.705979511141777,
+              "pityriasis rosea": 1.3506724536418915,
+              "vitiligo": 1.5838482081890106
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.543945785611868,
+            "half_width_95": 0.14341834072257745,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5403838753700256,
+              "neurofibromatosis": 1.6986856311559677,
+              "pityriasis rosea": 1.3482187688350677,
+              "vitiligo": 1.5884948670864105
+            }
+          }
+        }
+      },
+      "sw": {
+        "absolute": {
+          "target only": {
+            "mean": 0.36257784347981215,
+            "half_width_95": 0.045474156221274674,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40039850026369095,
+              "neurofibromatosis": 0.3363777883350849,
+              "pityriasis rosea": 0.4030013419687748,
+              "vitiligo": 0.3105337433516979
+            }
+          },
+          "source reuse": {
+            "mean": 0.36420340090990067,
+            "half_width_95": 0.04481363620809133,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40229179337620735,
+              "neurofibromatosis": 0.3385315574705601,
+              "pityriasis rosea": 0.40319662168622017,
+              "vitiligo": 0.31279363110661507
+            }
+          },
+          "population only": {
+            "mean": 0.286694448441267,
+            "half_width_95": 0.009363353719837285,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.2857690118253231,
+              "neurofibromatosis": 0.2792454771697521,
+              "pityriasis rosea": 0.300432913005352,
+              "vitiligo": 0.2813303917646408
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.3638407913967967,
+            "half_width_95": 0.04543985420128662,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.4023623578250408,
+              "neurofibromatosis": 0.33742548897862434,
+              "pityriasis rosea": 0.4035849906504154,
+              "vitiligo": 0.31199032813310623
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.363876823335886,
+            "half_width_95": 0.045400026895874745,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40202148631215096,
+              "neurofibromatosis": 0.3379201330244541,
+              "pityriasis rosea": 0.4038013741374016,
+              "vitiligo": 0.31176429986953735
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.3637552335858345,
+            "half_width_95": 0.045627478530987704,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40198536589741707,
+              "neurofibromatosis": 0.33797603473067284,
+              "pityriasis rosea": 0.40389516949653625,
+              "vitiligo": 0.31116436421871185
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 8.555781096220016e-05,
+            "half_width_95": 0.0006183508237301715,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0003769919276237488,
+              "neurofibromatosis": -0.0005505457520484924,
+              "pityriasis rosea": -0.00031017884612083435,
+              "vitiligo": 0.0008259639143943787
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 3.603193908929825e-05,
+            "half_width_95": 0.0003810606252393069,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.00034087151288986206,
+              "neurofibromatosis": 0.000494644045829773,
+              "pityriasis rosea": 0.00021638348698616028,
+              "vitiligo": -0.00022602826356887817
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": -0.07706078514456749,
+            "half_width_95": 0.03918597265908628,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11621635407209396,
+              "neurofibromatosis": -0.058730557560920715,
+              "pityriasis rosea": -0.10346225649118423,
+              "vitiligo": -0.029833972454071045
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": -0.07714634295552969,
+            "half_width_95": 0.039007906673883326,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11659334599971771,
+              "neurofibromatosis": -0.05818001180887222,
+              "pityriasis rosea": -0.1031520776450634,
+              "vitiligo": -0.030659936368465424
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": -0.07718237489461899,
+            "half_width_95": 0.03895479909261805,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11625247448682785,
+              "neurofibromatosis": -0.058674655854701996,
+              "pityriasis rosea": -0.10336846113204956,
+              "vitiligo": -0.030433908104896545
+            }
+          }
+        }
+      },
+      "mmd": {
+        "absolute": {
+          "target only": {
+            "mean": 7.13199770450592,
+            "half_width_95": 1.84541674248355,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.588757991790771,
+              "neurofibromatosis": 5.647550106048584,
+              "pityriasis rosea": 8.9223313331604,
+              "vitiligo": 5.369351387023926
+            }
+          },
+          "source reuse": {
+            "mean": 7.176485896110535,
+            "half_width_95": 1.8278251138284747,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.65583848953247,
+              "neurofibromatosis": 5.725451946258545,
+              "pityriasis rosea": 8.914713382720947,
+              "vitiligo": 5.409939765930176
+            }
+          },
+          "population only": {
+            "mean": 8.424566388130188,
+            "half_width_95": 1.482467356238915,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 9.179347038269043,
+              "neurofibromatosis": 7.165003776550293,
+              "pityriasis rosea": 10.190461158752441,
+              "vitiligo": 7.163453578948975
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 7.146573901176453,
+            "half_width_95": 1.8509047005411734,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.633580207824707,
+              "neurofibromatosis": 5.652626037597656,
+              "pityriasis rosea": 8.91897439956665,
+              "vitiligo": 5.381114959716797
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 7.144388318061829,
+            "half_width_95": 1.8488068037369947,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.617496013641357,
+              "neurofibromatosis": 5.664854526519775,
+              "pityriasis rosea": 8.924956798553467,
+              "vitiligo": 5.370245933532715
+            }
+          },
+          "correct source + transport": {
+            "mean": 7.142925977706909,
+            "half_width_95": 1.856629789180958,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.624180793762207,
+              "neurofibromatosis": 5.666975975036621,
+              "pityriasis rosea": 8.92843770980835,
+              "vitiligo": 5.352109432220459
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.003647923469543457,
+            "half_width_95": 0.01936928265659455,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0093994140625,
+              "neurofibromatosis": -0.014349937438964844,
+              "pityriasis rosea": -0.009463310241699219,
+              "vitiligo": 0.02900552749633789
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.0021855831146240234,
+            "half_width_95": 0.013185219001622948,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.01608419418334961,
+              "neurofibromatosis": 0.01222848892211914,
+              "pityriasis rosea": 0.005982398986816406,
+              "vitiligo": -0.010869026184082031
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.2816404104232788,
+            "half_width_95": 0.5233478608052742,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5551662445068359,
+              "neurofibromatosis": 1.4980278015136719,
+              "pityriasis rosea": 1.2620234489440918,
+              "vitiligo": 1.8113441467285156
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.2779924869537354,
+            "half_width_95": 0.5202616249423978,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5457668304443359,
+              "neurofibromatosis": 1.5123777389526367,
+              "pityriasis rosea": 1.271486759185791,
+              "vitiligo": 1.7823386192321777
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.2801780700683594,
+            "half_width_95": 0.5147863687565226,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5618510246276855,
+              "neurofibromatosis": 1.5001492500305176,
+              "pityriasis rosea": 1.2655043601989746,
+              "vitiligo": 1.7932076454162598
+            }
+          }
+        }
+      }
+    },
+    "20": {
+      "cls": {
+        "absolute": {
+          "target only": {
+            "mean": 0.039388021978084,
+            "half_width_95": 0.06550105732728012,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13932292070239782,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833721384406,
+              "vitiligo": 0.0052083334885537624
+            }
+          },
+          "source reuse": {
+            "mean": 0.04036458465270698,
+            "half_width_95": 0.06736887968341362,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.1432291716337204,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.011718750232830644,
+              "vitiligo": 0.006510416744276881
+            }
+          },
+          "population only": {
+            "mean": 0.028645834187045693,
+            "half_width_95": 0.05614583500660956,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.11458333674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.040039063489530236,
+            "half_width_95": 0.06427143065682452,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13802083674818277,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.03971354285022244,
+            "half_width_95": 0.0652862974679388,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.13932292070239782,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.00032552063930779696,
+            "half_width_95": 0.001221717107373258,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020839542150497,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": -0.0013020832557231188,
+              "vitiligo": -0.0013020832557231188
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.011067708663176745,
+            "half_width_95": 0.010340400322807029,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.02473958395421505,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.013020833837799728,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.011393229302484542,
+            "half_width_95": 0.009738965373774965,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0234375,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.014322917093522847,
+              "vitiligo": 0.007812500116415322
+            }
+          }
+        }
+      },
+      "ph": {
+        "absolute": {
+          "target only": {
+            "mean": 0.004882812645519152,
+            "half_width_95": 0.002415507962128486,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.006510416860692203,
+              "vitiligo": 0.0052083334885537624
+            }
+          },
+          "source reuse": {
+            "mean": 0.005533854331588373,
+            "half_width_95": 0.002179256087221284,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.007812500232830644,
+              "pityriasis rosea": 0.0052083334885537624,
+              "vitiligo": 0.006510416860692203
+            }
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.00032552084303461015,
+            "half_width_95": 0.0006380208523478359,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0,
+              "neurofibromatosis": 0.0,
+              "pityriasis rosea": 0.0,
+              "vitiligo": 0.0
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 0.004231770959449932,
+            "half_width_95": 0.001605650600492162,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026041667442768812,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 0.003906250116415322,
+            "half_width_95": 0.0020837673780104062,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0013020833721384406,
+              "neurofibromatosis": 0.006510416860692203,
+              "pityriasis rosea": 0.003906250116415322,
+              "vitiligo": 0.003906250116415322
+            }
+          }
+        }
+      },
+      "sig": {
+        "absolute": {
+          "target only": {
+            "mean": 2.5179878287017345,
+            "half_width_95": 0.4440459941611612,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.719462037086487,
+              "neurofibromatosis": 2.0035850256681442,
+              "pityriasis rosea": 3.036223292350769,
+              "vitiligo": 2.312680959701538
+            }
+          },
+          "source reuse": {
+            "mean": 2.5247886925935745,
+            "half_width_95": 0.44201455206292806,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7252639532089233,
+              "neurofibromatosis": 2.013989105820656,
+              "pityriasis rosea": 3.041227251291275,
+              "vitiligo": 2.318674460053444
+            }
+          },
+          "population only": {
+            "mean": 4.046491138637066,
+            "half_width_95": 0.3111450907115265,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 4.24468332529068,
+              "neurofibromatosis": 3.6806073784828186,
+              "pityriasis rosea": 4.37033474445343,
+              "vitiligo": 3.890339106321335
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 2.5020152889192104,
+            "half_width_95": 0.4478286692183299,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7072800993919373,
+              "neurofibromatosis": 1.9746278673410416,
+              "pityriasis rosea": 3.0196622908115387,
+              "vitiligo": 2.306490898132324
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 2.502545353025198,
+            "half_width_95": 0.4462277033525152,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7042994499206543,
+              "neurofibromatosis": 1.981921747326851,
+              "pityriasis rosea": 3.0221159756183624,
+              "vitiligo": 2.3018442392349243
+            }
+          },
+          "correct source + transport": {
+            "mean": 2.5030280612409115,
+            "half_width_95": 0.44795889244060705,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 2.7046034932136536,
+              "neurofibromatosis": 1.9830565303564072,
+              "pityriasis rosea": 3.026322692632675,
+              "vitiligo": 2.29812952876091
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": -0.0010127723217010498,
+            "half_width_95": 0.007765682258593908,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0026766061782836914,
+              "neurofibromatosis": -0.0084286630153656,
+              "pityriasis rosea": -0.006660401821136475,
+              "vitiligo": 0.008361369371414185
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 0.0005300641059875488,
+            "half_width_95": 0.005324960039288246,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.002980649471282959,
+              "neurofibromatosis": 0.007293879985809326,
+              "pityriasis rosea": 0.0024536848068237305,
+              "vitiligo": -0.004646658897399902
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.5434630773961544,
+            "half_width_95": 0.1452599142620185,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5400798320770264,
+              "neurofibromatosis": 1.6975508481264114,
+              "pityriasis rosea": 1.344012051820755,
+              "vitiligo": 1.5922095775604248
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.5444758497178555,
+            "half_width_95": 0.14452191900249556,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5374032258987427,
+              "neurofibromatosis": 1.705979511141777,
+              "pityriasis rosea": 1.3506724536418915,
+              "vitiligo": 1.5838482081890106
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.543945785611868,
+            "half_width_95": 0.14341834072257745,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 1.5403838753700256,
+              "neurofibromatosis": 1.6986856311559677,
+              "pityriasis rosea": 1.3482187688350677,
+              "vitiligo": 1.5884948670864105
+            }
+          }
+        }
+      },
+      "sw": {
+        "absolute": {
+          "target only": {
+            "mean": 0.36252554412931204,
+            "half_width_95": 0.04421654118938764,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.4002426601946354,
+              "neurofibromatosis": 0.33854731917381287,
+              "pityriasis rosea": 0.4004625491797924,
+              "vitiligo": 0.3108496479690075
+            }
+          },
+          "source reuse": {
+            "mean": 0.36420340090990067,
+            "half_width_95": 0.04481363620809133,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40229179337620735,
+              "neurofibromatosis": 0.3385315574705601,
+              "pityriasis rosea": 0.40319662168622017,
+              "vitiligo": 0.31279363110661507
+            }
+          },
+          "population only": {
+            "mean": 0.286694448441267,
+            "half_width_95": 0.009363353719837285,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.2857690118253231,
+              "neurofibromatosis": 0.2792454771697521,
+              "pityriasis rosea": 0.300432913005352,
+              "vitiligo": 0.2813303917646408
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 0.3638407913967967,
+            "half_width_95": 0.04543985420128662,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.4023623578250408,
+              "neurofibromatosis": 0.33742548897862434,
+              "pityriasis rosea": 0.4035849906504154,
+              "vitiligo": 0.31199032813310623
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 0.363876823335886,
+            "half_width_95": 0.045400026895874745,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40202148631215096,
+              "neurofibromatosis": 0.3379201330244541,
+              "pityriasis rosea": 0.4038013741374016,
+              "vitiligo": 0.31176429986953735
+            }
+          },
+          "correct source + transport": {
+            "mean": 0.3637552335858345,
+            "half_width_95": 0.045627478530987704,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 0.40198536589741707,
+              "neurofibromatosis": 0.33797603473067284,
+              "pityriasis rosea": 0.40389516949653625,
+              "vitiligo": 0.31116436421871185
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 8.555781096220016e-05,
+            "half_width_95": 0.0006183508237301715,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0003769919276237488,
+              "neurofibromatosis": -0.0005505457520484924,
+              "pityriasis rosea": -0.00031017884612083435,
+              "vitiligo": 0.0008259639143943787
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": 3.603193908929825e-05,
+            "half_width_95": 0.0003810606252393069,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.00034087151288986206,
+              "neurofibromatosis": 0.000494644045829773,
+              "pityriasis rosea": 0.00021638348698616028,
+              "vitiligo": -0.00022602826356887817
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": -0.07706078514456749,
+            "half_width_95": 0.03918597265908628,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11621635407209396,
+              "neurofibromatosis": -0.058730557560920715,
+              "pityriasis rosea": -0.10346225649118423,
+              "vitiligo": -0.029833972454071045
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": -0.07714634295552969,
+            "half_width_95": 0.039007906673883326,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11659334599971771,
+              "neurofibromatosis": -0.05818001180887222,
+              "pityriasis rosea": -0.1031520776450634,
+              "vitiligo": -0.030659936368465424
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": -0.07718237489461899,
+            "half_width_95": 0.03895479909261805,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.11625247448682785,
+              "neurofibromatosis": -0.058674655854701996,
+              "pityriasis rosea": -0.10336846113204956,
+              "vitiligo": -0.030433908104896545
+            }
+          }
+        }
+      },
+      "mmd": {
+        "absolute": {
+          "target only": {
+            "mean": 7.136855959892273,
+            "half_width_95": 1.816635340352783,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.619855403900146,
+              "neurofibromatosis": 5.705094337463379,
+              "pityriasis rosea": 8.851664543151855,
+              "vitiligo": 5.370809555053711
+            }
+          },
+          "source reuse": {
+            "mean": 7.176485896110535,
+            "half_width_95": 1.8278251138284747,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.65583848953247,
+              "neurofibromatosis": 5.725451946258545,
+              "pityriasis rosea": 8.914713382720947,
+              "vitiligo": 5.409939765930176
+            }
+          },
+          "population only": {
+            "mean": 8.424566388130188,
+            "half_width_95": 1.482467356238915,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 9.179347038269043,
+              "neurofibromatosis": 7.165003776550293,
+              "pityriasis rosea": 10.190461158752441,
+              "vitiligo": 7.163453578948975
+            }
+          },
+          "wrong disease, same family": {
+            "mean": 7.146573901176453,
+            "half_width_95": 1.8509047005411734,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.633580207824707,
+              "neurofibromatosis": 5.652626037597656,
+              "pityriasis rosea": 8.91897439956665,
+              "vitiligo": 5.381114959716797
+            }
+          },
+          "wrong disease, different family": {
+            "mean": 7.144388318061829,
+            "half_width_95": 1.8488068037369947,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.617496013641357,
+              "neurofibromatosis": 5.664854526519775,
+              "pityriasis rosea": 8.924956798553467,
+              "vitiligo": 5.370245933532715
+            }
+          },
+          "correct source + transport": {
+            "mean": 7.142925977706909,
+            "half_width_95": 1.856629789180958,
+            "n_tasks": 4,
+            "per_task": {
+              "basal cell carcinoma": 8.624180793762207,
+              "neurofibromatosis": 5.666975975036621,
+              "pityriasis rosea": 8.92843770980835,
+              "vitiligo": 5.352109432220459
+            }
+          }
+        },
+        "paired": {
+          "correct_vs_same_family_wrong": {
+            "mean": 0.003647923469543457,
+            "half_width_95": 0.01936928265659455,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.0093994140625,
+              "neurofibromatosis": -0.014349937438964844,
+              "pityriasis rosea": -0.009463310241699219,
+              "vitiligo": 0.02900552749633789
+            }
+          },
+          "same_family_wrong_vs_different_family_wrong": {
+            "mean": -0.0021855831146240234,
+            "half_width_95": 0.013185219001622948,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": -0.01608419418334961,
+              "neurofibromatosis": 0.01222848892211914,
+              "pityriasis rosea": 0.005982398986816406,
+              "vitiligo": -0.010869026184082031
+            }
+          },
+          "correct_vs_population_only": {
+            "mean": 1.2816404104232788,
+            "half_width_95": 0.5233478608052742,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5551662445068359,
+              "neurofibromatosis": 1.4980278015136719,
+              "pityriasis rosea": 1.2620234489440918,
+              "vitiligo": 1.8113441467285156
+            }
+          },
+          "same_family_wrong_vs_population_only": {
+            "mean": 1.2779924869537354,
+            "half_width_95": 0.5202616249423978,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5457668304443359,
+              "neurofibromatosis": 1.5123777389526367,
+              "pityriasis rosea": 1.271486759185791,
+              "vitiligo": 1.7823386192321777
+            }
+          },
+          "different_family_wrong_vs_population_only": {
+            "mean": 1.2801780700683594,
+            "half_width_95": 0.5147863687565226,
+            "n_tasks": 4,
+            "orientation": "positive favours first named condition",
+            "per_task": {
+              "basal cell carcinoma": 0.5618510246276855,
+              "neurofibromatosis": 1.5001492500305176,
+              "pityriasis rosea": 1.2655043601989746,
+              "vitiligo": 1.7932076454162598
+            }
+          }
+        }
+      }
+    }
+  },
+  "instrument_ceilings": [
+    {
+      "phenotype": {
+        "held-out train/val conditions": 0.9054441260744985,
+        "test conditions (the transfer it is used for)": 0.6446629213483146
+      },
+      "condition": {
+        "held-out": 0.2084063047285464,
+        "basal cell carcinoma": 0.53125,
+        "neurofibromatosis": 0.0,
+        "pityriasis rosea": 0.0625,
+        "vitiligo": 0.0
+      },
+      "condition_n_way": 16
+    },
+    {
+      "phenotype": {
+        "held-out train/val conditions": 0.9054441260744985,
+        "test conditions (the transfer it is used for)": 0.6587078651685393
+      },
+      "condition": {
+        "held-out": 0.2031523642732049,
+        "basal cell carcinoma": 0.53125,
+        "neurofibromatosis": 0.0,
+        "pityriasis rosea": 0.125,
+        "vitiligo": 0.0
+      },
+      "condition_n_way": 16
+    }
+  ]
+}

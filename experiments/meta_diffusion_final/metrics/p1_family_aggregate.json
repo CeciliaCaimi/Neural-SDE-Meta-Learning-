@@ -1,0 +1,5827 @@
+{
+  "protocol": "experiments/meta_diffusion_final/protocol_lock.md",
+  "run_files": [
+    "experiments/meta_diffusion_final/runs/p1_family_fold0_zero.json",
+    "experiments/meta_diffusion_final/runs/p1_family_fold0_few.json",
+    "experiments/meta_diffusion_final/runs/p1_family_fold1_zero.json",
+    "experiments/meta_diffusion_final/runs/p1_family_fold1_few.json",
+    "experiments/meta_diffusion_final/runs/p1_family_fold2_zero.json",
+    "experiments/meta_diffusion_final/runs/p1_family_fold2_few.json"
+  ],
+  "family_to_outer_folds": {
+    "benign dermal": [
+      0
+    ],
+    "benign epidermal": [
+      0
+    ],
+    "genodermatoses": [
+      1
+    ],
+    "inflammatory": [
+      1
+    ],
+    "malignant epidermal": [
+      2
+    ],
+    "malignant melanoma": [
+      2
+    ]
+  },
+  "instrument_validity": {
+    "threshold_overall": 0.4,
+    "threshold_each_test_family": 0.25,
+    "folds": [
+      {
+        "fold": 0,
+        "overall": 0.6764132553606238,
+        "per_test_family": {
+          "benign dermal": 0.0,
+          "benign epidermal": 0.0
+        },
+        "passed": false
+      },
+      {
+        "fold": 1,
+        "overall": 0.6829109811565952,
+        "per_test_family": {
+          "genodermatoses": 0.0,
+          "inflammatory": 0.9912451361867705
+        },
+        "passed": false
+      },
+      {
+        "fold": 2,
+        "overall": 0.6874593892137751,
+        "per_test_family": {
+          "malignant epidermal": 0.15286624203821655,
+          "malignant melanoma": 0.3235294117647059
+        },
+        "passed": false
+      }
+    ],
+    "passed": false
+  },
+  "budgets": {
+    "0": {
+      "raw": {
+        "sig": {
+          "source reuse": {
+            "mean": 1.7451631625493367,
+            "half_width_95": 0.20889749903918356,
+            "n_families": 6,
+            "per_family": [
+              1.6040649861097336,
+              1.6028583198785782,
+              1.5635815858840942,
+              1.9636519104242325,
+              2.1762523651123047,
+              1.5605698078870773
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 3.0504358212153115,
+            "half_width_95": 0.2209111906678533,
+            "n_families": 6,
+            "per_family": [
+              2.9701507091522217,
+              2.8809922337532043,
+              2.7377409040927887,
+              3.1424095928668976,
+              3.5396777391433716,
+              3.0316437482833862
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 1.718528484304746,
+            "half_width_95": 0.2169636435773704,
+            "n_families": 6,
+            "per_family": [
+              1.5530273467302322,
+              1.5699639916419983,
+              1.533193126320839,
+              1.9330084323883057,
+              2.174998164176941,
+              1.54697984457016
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 1.7188171371817589,
+            "half_width_95": 0.21782464151366046,
+            "n_families": 6,
+            "per_family": [
+              1.5537256598472595,
+              1.5676855593919754,
+              1.532533198595047,
+              1.9321234375238419,
+              2.178388938307762,
+              1.5484460294246674
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "sw": {
+          "source reuse": {
+            "mean": 0.30806624082227546,
+            "half_width_95": 0.019218874529840224,
+            "n_families": 6,
+            "per_family": [
+              0.31108367443084717,
+              0.3276771083474159,
+              0.27034207433462143,
+              0.29893938452005386,
+              0.33876509591937065,
+              0.30159010738134384
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.2683384843791525,
+            "half_width_95": 0.0109622133556878,
+            "n_families": 6,
+            "per_family": [
+              0.2820669375360012,
+              0.27379412204027176,
+              0.2640671730041504,
+              0.27535002678632736,
+              0.2717370316386223,
+              0.24301561526954174
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.30635562787453335,
+            "half_width_95": 0.02000441748351737,
+            "n_families": 6,
+            "per_family": [
+              0.3054172843694687,
+              0.3257236145436764,
+              0.26731644943356514,
+              0.2962939254939556,
+              0.33976638689637184,
+              0.30361610651016235
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.30628611147403717,
+            "half_width_95": 0.019854008525566312,
+            "n_families": 6,
+            "per_family": [
+              0.30702337995171547,
+              0.3237636648118496,
+              0.2672043703496456,
+              0.29602278769016266,
+              0.33994803950190544,
+              0.30375442653894424
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "mmd": {
+          "source reuse": {
+            "mean": 5.794602394104004,
+            "half_width_95": 1.0078416298166684,
+            "n_families": 6,
+            "per_family": [
+              5.253684997558594,
+              7.216407775878906,
+              4.254980564117432,
+              5.664768218994141,
+              7.397163391113281,
+              4.98060941696167
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 6.847215175628662,
+            "half_width_95": 1.0089028253746712,
+            "n_families": 6,
+            "per_family": [
+              6.892346382141113,
+              7.973196029663086,
+              5.3335041999816895,
+              7.463905334472656,
+              8.119043827056885,
+              5.301295280456543
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 5.746780554453532,
+            "half_width_95": 1.0113809064895078,
+            "n_families": 6,
+            "per_family": [
+              5.112782955169678,
+              7.152068138122559,
+              4.228286266326904,
+              5.573188781738281,
+              7.401191234588623,
+              5.0131659507751465
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 5.7436134815216064,
+            "half_width_95": 1.002615151089345,
+            "n_families": 6,
+            "per_family": [
+              5.143033981323242,
+              7.108428478240967,
+              4.227871894836426,
+              5.5626325607299805,
+              7.406045913696289,
+              5.013668060302734
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "ph": {
+          "source reuse": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.00021701389535640678,
+            "half_width_95": 0.0004253472348985573,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0013020833721384406,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "cls": {
+          "source reuse": {
+            "mean": 0.1651475731826698,
+            "half_width_95": 0.32266948661703193,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9882812723517418,
+              0.0,
+              0.0026041667442768812
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.1640625037252903,
+            "half_width_95": 0.321562507301569,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9843750223517418,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.16558160013907278,
+            "half_width_95": 0.32301110589141313,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9895833507180214,
+              0.0,
+              0.003906250116415322
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.16558160013907278,
+            "half_width_95": 0.32301110589141313,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9895833507180214,
+              0.0,
+              0.003906250116415322
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        }
+      },
+      "paired": {
+        "sig": {
+          "source reuse": {
+            "mean": 0.02634602536757787,
+            "half_width_95": 0.014824004215359003,
+            "n_families": 6,
+            "per_family": [
+              0.05033932626247406,
+              0.03517276048660278,
+              0.03104838728904724,
+              0.031528472900390625,
+              -0.0021365731954574585,
+              0.012123778462409973
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.3316186840335529,
+            "half_width_95": 0.08916405072950319,
+            "n_families": 6,
+            "per_family": [
+              1.4164250493049622,
+              1.313306674361229,
+              1.2052077054977417,
+              1.2102861553430557,
+              1.3612888008356094,
+              1.4831977188587189
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0002886528770128886,
+            "half_width_95": 0.0016021222544697223,
+            "n_families": 6,
+            "per_family": [
+              -0.0006983131170272827,
+              0.002278432250022888,
+              0.0006599277257919312,
+              0.0008849948644638062,
+              -0.003390774130821228,
+              -0.0014661848545074463
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "sw": {
+          "source reuse": {
+            "mean": 0.0017801293482383092,
+            "half_width_95": 0.002183244838308152,
+            "n_families": 6,
+            "per_family": [
+              0.004060294479131699,
+              0.00391344353556633,
+              0.003137703984975815,
+              0.002916596829891205,
+              -0.00118294358253479,
+              -0.002164319157600403
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.037947627094884716,
+            "half_width_95": 0.020427910255922516,
+            "n_families": 6,
+            "per_family": [
+              -0.024956442415714264,
+              -0.049969542771577835,
+              -0.003137197345495224,
+              -0.020672760903835297,
+              -0.06821100786328316,
+              -0.060738811269402504
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 6.951640049616496e-05,
+            "half_width_95": 0.0009144443887339796,
+            "n_families": 6,
+            "per_family": [
+              -0.0016060955822467804,
+              0.0019599497318267822,
+              0.00011207908391952515,
+              0.0002711378037929535,
+              -0.00018165260553359985,
+              -0.00013832002878189087
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "mmd": {
+          "source reuse": {
+            "mean": 0.05098891258239746,
+            "half_width_95": 0.05141319062697652,
+            "n_families": 6,
+            "per_family": [
+              0.11065101623535156,
+              0.10797929763793945,
+              0.02710866928100586,
+              0.10213565826416016,
+              -0.008882522583007812,
+              -0.03305864334106445
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.1036016941070557,
+            "half_width_95": 0.496961210588672,
+            "n_families": 6,
+            "per_family": [
+              1.749312400817871,
+              0.8647675514221191,
+              1.1056323051452637,
+              1.9012727737426758,
+              0.7129979133605957,
+              0.2876272201538086
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0031670729319254556,
+            "half_width_95": 0.019253239794680847,
+            "n_families": 6,
+            "per_family": [
+              -0.030251026153564453,
+              0.0436396598815918,
+              0.0004143714904785156,
+              0.010556221008300781,
+              -0.004854679107666016,
+              -0.0005021095275878906
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "ph": {
+          "source reuse": {
+            "mean": 0.00021701389535640678,
+            "half_width_95": 0.0004253472348985573,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0013020833721384406,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": 0.00021701389535640678,
+            "half_width_95": 0.0004253472348985573,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0013020833721384406,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.00021701389535640678,
+            "half_width_95": 0.0004253472348985573,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0013020833721384406,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        },
+        "cls": {
+          "source reuse": {
+            "mean": 0.0004340269564030071,
+            "half_width_95": 0.00053802538927398,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.001302078366279602,
+              0.0,
+              0.0013020833721384406
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": 0.0015190964137824874,
+            "half_width_95": 0.0019116967905626957,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.005208328366279602,
+              0.0,
+              0.003906250116415322
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        }
+      }
+    },
+    "1": {
+      "raw": {
+        "sig": {
+          "target only": {
+            "mean": 1.7322059410313766,
+            "half_width_95": 0.21933201948116837,
+            "n_families": 6,
+            "per_family": [
+              1.6138558685779572,
+              1.5605933964252472,
+              1.5235692486166954,
+              1.9688975661993027,
+              2.178094819188118,
+              1.5482247471809387
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 1.7451631625493367,
+            "half_width_95": 0.20889749903918356,
+            "n_families": 6,
+            "per_family": [
+              1.6040649861097336,
+              1.6028583198785782,
+              1.5635815858840942,
+              1.9636519104242325,
+              2.1762523651123047,
+              1.5605698078870773
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 3.0504358212153115,
+            "half_width_95": 0.2209111906678533,
+            "n_families": 6,
+            "per_family": [
+              2.9701507091522217,
+              2.8809922337532043,
+              2.7377409040927887,
+              3.1424095928668976,
+              3.5396777391433716,
+              3.0316437482833862
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 1.718528484304746,
+            "half_width_95": 0.2169636435773704,
+            "n_families": 6,
+            "per_family": [
+              1.5530273467302322,
+              1.5699639916419983,
+              1.533193126320839,
+              1.9330084323883057,
+              2.174998164176941,
+              1.54697984457016
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 1.7188171371817589,
+            "half_width_95": 0.21782464151366046,
+            "n_families": 6,
+            "per_family": [
+              1.5537256598472595,
+              1.5676855593919754,
+              1.532533198595047,
+              1.9321234375238419,
+              2.178388938307762,
+              1.5484460294246674
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": 0.30452287290245295,
+            "half_width_95": 0.019429304506003862,
+            "n_families": 6,
+            "per_family": [
+              0.3103369288146496,
+              0.31354204192757607,
+              0.2649231720715761,
+              0.296847652643919,
+              0.3391766808927059,
+              0.302310761064291
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.30806624082227546,
+            "half_width_95": 0.019218874529840224,
+            "n_families": 6,
+            "per_family": [
+              0.31108367443084717,
+              0.3276771083474159,
+              0.27034207433462143,
+              0.29893938452005386,
+              0.33876509591937065,
+              0.30159010738134384
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.2683384843791525,
+            "half_width_95": 0.0109622133556878,
+            "n_families": 6,
+            "per_family": [
+              0.2820669375360012,
+              0.27379412204027176,
+              0.2640671730041504,
+              0.27535002678632736,
+              0.2717370316386223,
+              0.24301561526954174
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.30635562787453335,
+            "half_width_95": 0.02000441748351737,
+            "n_families": 6,
+            "per_family": [
+              0.3054172843694687,
+              0.3257236145436764,
+              0.26731644943356514,
+              0.2962939254939556,
+              0.33976638689637184,
+              0.30361610651016235
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.30628611147403717,
+            "half_width_95": 0.019854008525566312,
+            "n_families": 6,
+            "per_family": [
+              0.30702337995171547,
+              0.3237636648118496,
+              0.2672043703496456,
+              0.29602278769016266,
+              0.33994803950190544,
+              0.30375442653894424
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": 5.720766385396321,
+            "half_width_95": 0.9738694203621729,
+            "n_families": 6,
+            "per_family": [
+              5.240771770477295,
+              6.9300665855407715,
+              4.173648357391357,
+              5.600222587585449,
+              7.386877059936523,
+              4.993011951446533
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 5.794602394104004,
+            "half_width_95": 1.0078416298166684,
+            "n_families": 6,
+            "per_family": [
+              5.253684997558594,
+              7.216407775878906,
+              4.254980564117432,
+              5.664768218994141,
+              7.397163391113281,
+              4.98060941696167
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 6.847215175628662,
+            "half_width_95": 1.0089028253746712,
+            "n_families": 6,
+            "per_family": [
+              6.892346382141113,
+              7.973196029663086,
+              5.3335041999816895,
+              7.463905334472656,
+              8.119043827056885,
+              5.301295280456543
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 5.746780554453532,
+            "half_width_95": 1.0113809064895078,
+            "n_families": 6,
+            "per_family": [
+              5.112782955169678,
+              7.152068138122559,
+              4.228286266326904,
+              5.573188781738281,
+              7.401191234588623,
+              5.0131659507751465
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 5.7436134815216064,
+            "half_width_95": 1.002615151089345,
+            "n_families": 6,
+            "per_family": [
+              5.143033981323242,
+              7.108428478240967,
+              4.227871894836426,
+              5.5626325607299805,
+              7.406045913696289,
+              5.013668060302734
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": 0.005208333449748655,
+            "half_width_95": 0.00645631703382037,
+            "n_families": 6,
+            "per_family": [
+              0.015625000349245965,
+              0.015625000349245965,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.009331597519728044,
+            "half_width_95": 0.011795240078255307,
+            "n_families": 6,
+            "per_family": [
+              0.02343750069849193,
+              0.03255208441987634,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.007378472500325491,
+            "half_width_95": 0.010556840849274784,
+            "n_families": 6,
+            "per_family": [
+              0.011718750349245965,
+              0.03255208465270698,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.15581597511967024,
+            "half_width_95": 0.30539931123455366,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9348958507180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.15668403108914694,
+            "half_width_95": 0.30710070093472797,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9401041865348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.16558160011967024,
+            "half_width_95": 0.3245399362345536,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9934896007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.15668403068169331,
+            "half_width_95": 0.30659056670421386,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9388021007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.15625000331783667,
+            "half_width_95": 0.3057398738591724,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9361979365348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        }
+      },
+      "paired": {
+        "sig": {
+          "target only": {
+            "mean": 0.01338880384961764,
+            "half_width_95": 0.0226976823138737,
+            "n_families": 6,
+            "per_family": [
+              0.06013020873069763,
+              -0.0070921629667282104,
+              -0.008963949978351593,
+              0.036774128675460815,
+              -0.00029411911964416504,
+              -0.0002212822437286377
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.02634602536757787,
+            "half_width_95": 0.014824004215359003,
+            "n_families": 6,
+            "per_family": [
+              0.05033932626247406,
+              0.03517276048660278,
+              0.03104838728904724,
+              0.031528472900390625,
+              -0.0021365731954574585,
+              0.012123778462409973
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.3316186840335529,
+            "half_width_95": 0.08916405072950319,
+            "n_families": 6,
+            "per_family": [
+              1.4164250493049622,
+              1.313306674361229,
+              1.2052077054977417,
+              1.2102861553430557,
+              1.3612888008356094,
+              1.4831977188587189
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0002886528770128886,
+            "half_width_95": 0.0016021222544697223,
+            "n_families": 6,
+            "per_family": [
+              -0.0006983131170272827,
+              0.002278432250022888,
+              0.0006599277257919312,
+              0.0008849948644638062,
+              -0.003390774130821228,
+              -0.0014661848545074463
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": -0.0017632385715842247,
+            "half_width_95": 0.0036732887528787305,
+            "n_families": 6,
+            "per_family": [
+              0.0033135488629341125,
+              -0.010221622884273529,
+              -0.002281198278069496,
+              0.0008248649537563324,
+              -0.0007713586091995239,
+              -0.001443665474653244
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.0017801293482383092,
+            "half_width_95": 0.002183244838308152,
+            "n_families": 6,
+            "per_family": [
+              0.004060294479131699,
+              0.00391344353556633,
+              0.003137703984975815,
+              0.002916596829891205,
+              -0.00118294358253479,
+              -0.002164319157600403
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.037947627094884716,
+            "half_width_95": 0.020427910255922516,
+            "n_families": 6,
+            "per_family": [
+              -0.024956442415714264,
+              -0.049969542771577835,
+              -0.003137197345495224,
+              -0.020672760903835297,
+              -0.06821100786328316,
+              -0.060738811269402504
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 6.951640049616496e-05,
+            "half_width_95": 0.0009144443887339796,
+            "n_families": 6,
+            "per_family": [
+              -0.0016060955822467804,
+              0.0019599497318267822,
+              0.00011207908391952515,
+              0.0002711378037929535,
+              -0.00018165260553359985,
+              -0.00013832002878189087
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": -0.022847096125284832,
+            "half_width_95": 0.07453244017184882,
+            "n_families": 6,
+            "per_family": [
+              0.09773778915405273,
+              -0.1783618927001953,
+              -0.05422353744506836,
+              0.03759002685546875,
+              -0.019168853759765625,
+              -0.020656108856201172
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.05098891258239746,
+            "half_width_95": 0.05141319062697652,
+            "n_families": 6,
+            "per_family": [
+              0.11065101623535156,
+              0.10797929763793945,
+              0.02710866928100586,
+              0.10213565826416016,
+              -0.008882522583007812,
+              -0.03305864334106445
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.1036016941070557,
+            "half_width_95": 0.496961210588672,
+            "n_families": 6,
+            "per_family": [
+              1.749312400817871,
+              0.8647675514221191,
+              1.1056323051452637,
+              1.9012727737426758,
+              0.7129979133605957,
+              0.2876272201538086
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0031670729319254556,
+            "half_width_95": 0.019253239794680847,
+            "n_families": 6,
+            "per_family": [
+              -0.030251026153564453,
+              0.0436396598815918,
+              0.0004143714904785156,
+              0.010556221008300781,
+              -0.004854679107666016,
+              -0.0005021095275878906
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": 0.002604166821887096,
+            "half_width_95": 0.0046126158293411995,
+            "n_families": 6,
+            "per_family": [
+              0.0013020834885537624,
+              0.014322917442768812,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0015190972480922937,
+            "half_width_95": 0.0021267361668869857,
+            "n_families": 6,
+            "per_family": [
+              -0.006510416860692203,
+              -0.0026041666278615594,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0004340277713102599,
+            "half_width_95": 0.002048743605250463,
+            "n_families": 6,
+            "per_family": [
+              0.0052083334885537624,
+              -0.002604166860692203,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.00043402819816643995,
+            "half_width_95": 0.0005380269285787437,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.001302085816860199,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0004340277713102599,
+            "half_width_95": 0.0014234840789830064,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.00390625,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.00933159680183356,
+            "half_width_95": 0.018804965001987577,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.0572916641831398,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0004340273638566335,
+            "half_width_95": 0.0008506936331590016,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              -0.002604164183139801,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        }
+      }
+    },
+    "2": {
+      "raw": {
+        "sig": {
+          "target only": {
+            "mean": 1.7306151141722996,
+            "half_width_95": 0.22005863618393623,
+            "n_families": 6,
+            "per_family": [
+              1.5822041034698486,
+              1.5612173974514008,
+              1.5451330095529556,
+              1.9645619839429855,
+              2.1831233501434326,
+              1.547450840473175
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 1.7451631625493367,
+            "half_width_95": 0.20889749903918356,
+            "n_families": 6,
+            "per_family": [
+              1.6040649861097336,
+              1.6028583198785782,
+              1.5635815858840942,
+              1.9636519104242325,
+              2.1762523651123047,
+              1.5605698078870773
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 3.0504358212153115,
+            "half_width_95": 0.2209111906678533,
+            "n_families": 6,
+            "per_family": [
+              2.9701507091522217,
+              2.8809922337532043,
+              2.7377409040927887,
+              3.1424095928668976,
+              3.5396777391433716,
+              3.0316437482833862
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 1.718528484304746,
+            "half_width_95": 0.2169636435773704,
+            "n_families": 6,
+            "per_family": [
+              1.5530273467302322,
+              1.5699639916419983,
+              1.533193126320839,
+              1.9330084323883057,
+              2.174998164176941,
+              1.54697984457016
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 1.7188171371817589,
+            "half_width_95": 0.21782464151366046,
+            "n_families": 6,
+            "per_family": [
+              1.5537256598472595,
+              1.5676855593919754,
+              1.532533198595047,
+              1.9321234375238419,
+              2.178388938307762,
+              1.5484460294246674
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": 0.3055363819003105,
+            "half_width_95": 0.01911010815750753,
+            "n_families": 6,
+            "per_family": [
+              0.3082021437585354,
+              0.3211413435637951,
+              0.26789336651563644,
+              0.29519594833254814,
+              0.33822448551654816,
+              0.3025610037147999
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.30806624082227546,
+            "half_width_95": 0.019218874529840224,
+            "n_families": 6,
+            "per_family": [
+              0.31108367443084717,
+              0.3276771083474159,
+              0.27034207433462143,
+              0.29893938452005386,
+              0.33876509591937065,
+              0.30159010738134384
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.2683384843791525,
+            "half_width_95": 0.0109622133556878,
+            "n_families": 6,
+            "per_family": [
+              0.2820669375360012,
+              0.27379412204027176,
+              0.2640671730041504,
+              0.27535002678632736,
+              0.2717370316386223,
+              0.24301561526954174
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.30635562787453335,
+            "half_width_95": 0.02000441748351737,
+            "n_families": 6,
+            "per_family": [
+              0.3054172843694687,
+              0.3257236145436764,
+              0.26731644943356514,
+              0.2962939254939556,
+              0.33976638689637184,
+              0.30361610651016235
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.30628611147403717,
+            "half_width_95": 0.019854008525566312,
+            "n_families": 6,
+            "per_family": [
+              0.30702337995171547,
+              0.3237636648118496,
+              0.2672043703496456,
+              0.29602278769016266,
+              0.33994803950190544,
+              0.30375442653894424
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": 5.730336348215739,
+            "half_width_95": 0.9849911121951339,
+            "n_families": 6,
+            "per_family": [
+              5.199573516845703,
+              7.069748401641846,
+              4.212634563446045,
+              5.562039852142334,
+              7.348892688751221,
+              4.989129066467285
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 5.794602394104004,
+            "half_width_95": 1.0078416298166684,
+            "n_families": 6,
+            "per_family": [
+              5.253684997558594,
+              7.216407775878906,
+              4.254980564117432,
+              5.664768218994141,
+              7.397163391113281,
+              4.98060941696167
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 6.847215175628662,
+            "half_width_95": 1.0089028253746712,
+            "n_families": 6,
+            "per_family": [
+              6.892346382141113,
+              7.973196029663086,
+              5.3335041999816895,
+              7.463905334472656,
+              8.119043827056885,
+              5.301295280456543
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 5.746780554453532,
+            "half_width_95": 1.0113809064895078,
+            "n_families": 6,
+            "per_family": [
+              5.112782955169678,
+              7.152068138122559,
+              4.228286266326904,
+              5.573188781738281,
+              7.401191234588623,
+              5.0131659507751465
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 5.7436134815216064,
+            "half_width_95": 1.002615151089345,
+            "n_families": 6,
+            "per_family": [
+              5.143033981323242,
+              7.108428478240967,
+              4.227871894836426,
+              5.5626325607299805,
+              7.406045913696289,
+              5.013668060302734
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": 0.007595486259864022,
+            "half_width_95": 0.00942122512229004,
+            "n_families": 6,
+            "per_family": [
+              0.02343750058207661,
+              0.022135416977107525,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.009331597519728044,
+            "half_width_95": 0.011795240078255307,
+            "n_families": 6,
+            "per_family": [
+              0.02343750069849193,
+              0.03255208441987634,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.007378472500325491,
+            "half_width_95": 0.010556840849274784,
+            "n_families": 6,
+            "per_family": [
+              0.011718750349245965,
+              0.03255208465270698,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.15581597511967024,
+            "half_width_95": 0.30539931123455366,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9348958507180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.15668403108914694,
+            "half_width_95": 0.30710070093472797,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9401041865348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.16558160011967024,
+            "half_width_95": 0.3245399362345536,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9934896007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.15668403068169331,
+            "half_width_95": 0.30659056670421386,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9388021007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.15625000331783667,
+            "half_width_95": 0.3057398738591724,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9361979365348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        }
+      },
+      "paired": {
+        "sig": {
+          "target only": {
+            "mean": 0.011797976990540823,
+            "half_width_95": 0.012662494459003668,
+            "n_families": 6,
+            "per_family": [
+              0.02847844362258911,
+              -0.006468161940574646,
+              0.01259981095790863,
+              0.03243854641914368,
+              0.004734411835670471,
+              -0.0009951889514923096
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.02634602536757787,
+            "half_width_95": 0.014824004215359003,
+            "n_families": 6,
+            "per_family": [
+              0.05033932626247406,
+              0.03517276048660278,
+              0.03104838728904724,
+              0.031528472900390625,
+              -0.0021365731954574585,
+              0.012123778462409973
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.3316186840335529,
+            "half_width_95": 0.08916405072950319,
+            "n_families": 6,
+            "per_family": [
+              1.4164250493049622,
+              1.313306674361229,
+              1.2052077054977417,
+              1.2102861553430557,
+              1.3612888008356094,
+              1.4831977188587189
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0002886528770128886,
+            "half_width_95": 0.0016021222544697223,
+            "n_families": 6,
+            "per_family": [
+              -0.0006983131170272827,
+              0.002278432250022888,
+              0.0006599277257919312,
+              0.0008849948644638062,
+              -0.003390774130821228,
+              -0.0014661848545074463
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": -0.000749729573726654,
+            "half_width_95": 0.0011566082537063276,
+            "n_families": 6,
+            "per_family": [
+              0.0011787638068199158,
+              -0.0026223212480545044,
+              0.0006889961659908295,
+              -0.0008268393576145172,
+              -0.0017235539853572845,
+              -0.0011934228241443634
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.0017801293482383092,
+            "half_width_95": 0.002183244838308152,
+            "n_families": 6,
+            "per_family": [
+              0.004060294479131699,
+              0.00391344353556633,
+              0.003137703984975815,
+              0.002916596829891205,
+              -0.00118294358253479,
+              -0.002164319157600403
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.037947627094884716,
+            "half_width_95": 0.020427910255922516,
+            "n_families": 6,
+            "per_family": [
+              -0.024956442415714264,
+              -0.049969542771577835,
+              -0.003137197345495224,
+              -0.020672760903835297,
+              -0.06821100786328316,
+              -0.060738811269402504
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 6.951640049616496e-05,
+            "half_width_95": 0.0009144443887339796,
+            "n_families": 6,
+            "per_family": [
+              -0.0016060955822467804,
+              0.0019599497318267822,
+              0.00011207908391952515,
+              0.0002711378037929535,
+              -0.00018165260553359985,
+              -0.00013832002878189087
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": -0.013277133305867514,
+            "half_width_95": 0.03147484721732419,
+            "n_families": 6,
+            "per_family": [
+              0.05653953552246094,
+              -0.038680076599121094,
+              -0.01523733139038086,
+              -0.0005927085876464844,
+              -0.05715322494506836,
+              -0.02453899383544922
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.05098891258239746,
+            "half_width_95": 0.05141319062697652,
+            "n_families": 6,
+            "per_family": [
+              0.11065101623535156,
+              0.10797929763793945,
+              0.02710866928100586,
+              0.10213565826416016,
+              -0.008882522583007812,
+              -0.03305864334106445
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.1036016941070557,
+            "half_width_95": 0.496961210588672,
+            "n_families": 6,
+            "per_family": [
+              1.749312400817871,
+              0.8647675514221191,
+              1.1056323051452637,
+              1.9012727737426758,
+              0.7129979133605957,
+              0.2876272201538086
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0031670729319254556,
+            "half_width_95": 0.019253239794680847,
+            "n_families": 6,
+            "per_family": [
+              -0.030251026153564453,
+              0.0436396598815918,
+              0.0004143714904785156,
+              0.010556221008300781,
+              -0.004854679107666016,
+              -0.0005021095275878906
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": 0.0002170140117717286,
+            "half_width_95": 0.003634168496221333,
+            "n_families": 6,
+            "per_family": [
+              -0.006510416744276881,
+              0.007812500814907253,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0015190972480922937,
+            "half_width_95": 0.0021267361668869857,
+            "n_families": 6,
+            "per_family": [
+              -0.006510416860692203,
+              -0.0026041666278615594,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0004340277713102599,
+            "half_width_95": 0.002048743605250463,
+            "n_families": 6,
+            "per_family": [
+              0.0052083334885537624,
+              -0.002604166860692203,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.00043402819816643995,
+            "half_width_95": 0.0005380269285787437,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.001302085816860199,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0004340277713102599,
+            "half_width_95": 0.0014234840789830064,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.00390625,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.00933159680183356,
+            "half_width_95": 0.018804965001987577,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.0572916641831398,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0004340273638566335,
+            "half_width_95": 0.0008506936331590016,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              -0.002604164183139801,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        }
+      }
+    },
+    "5": {
+      "raw": {
+        "sig": {
+          "target only": {
+            "mean": 1.7411890551447868,
+            "half_width_95": 0.2117066768321594,
+            "n_families": 6,
+            "per_family": [
+              1.5759045481681824,
+              1.6046889573335648,
+              1.5728833079338074,
+              1.9556996524333954,
+              2.182869702577591,
+              1.5550881624221802
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 1.7451631625493367,
+            "half_width_95": 0.20889749903918356,
+            "n_families": 6,
+            "per_family": [
+              1.6040649861097336,
+              1.6028583198785782,
+              1.5635815858840942,
+              1.9636519104242325,
+              2.1762523651123047,
+              1.5605698078870773
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 3.0504358212153115,
+            "half_width_95": 0.2209111906678533,
+            "n_families": 6,
+            "per_family": [
+              2.9701507091522217,
+              2.8809922337532043,
+              2.7377409040927887,
+              3.1424095928668976,
+              3.5396777391433716,
+              3.0316437482833862
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 1.718528484304746,
+            "half_width_95": 0.2169636435773704,
+            "n_families": 6,
+            "per_family": [
+              1.5530273467302322,
+              1.5699639916419983,
+              1.533193126320839,
+              1.9330084323883057,
+              2.174998164176941,
+              1.54697984457016
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 1.7188171371817589,
+            "half_width_95": 0.21782464151366046,
+            "n_families": 6,
+            "per_family": [
+              1.5537256598472595,
+              1.5676855593919754,
+              1.532533198595047,
+              1.9321234375238419,
+              2.178388938307762,
+              1.5484460294246674
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": 0.30405960883945227,
+            "half_width_95": 0.01902771957455264,
+            "n_families": 6,
+            "per_family": [
+              0.3046543374657631,
+              0.31720833107829094,
+              0.26676603965461254,
+              0.29571225866675377,
+              0.33851394057273865,
+              0.3015027455985546
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.30806624082227546,
+            "half_width_95": 0.019218874529840224,
+            "n_families": 6,
+            "per_family": [
+              0.31108367443084717,
+              0.3276771083474159,
+              0.27034207433462143,
+              0.29893938452005386,
+              0.33876509591937065,
+              0.30159010738134384
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.2683384843791525,
+            "half_width_95": 0.0109622133556878,
+            "n_families": 6,
+            "per_family": [
+              0.2820669375360012,
+              0.27379412204027176,
+              0.2640671730041504,
+              0.27535002678632736,
+              0.2717370316386223,
+              0.24301561526954174
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.30635562787453335,
+            "half_width_95": 0.02000441748351737,
+            "n_families": 6,
+            "per_family": [
+              0.3054172843694687,
+              0.3257236145436764,
+              0.26731644943356514,
+              0.2962939254939556,
+              0.33976638689637184,
+              0.30361610651016235
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.30628611147403717,
+            "half_width_95": 0.019854008525566312,
+            "n_families": 6,
+            "per_family": [
+              0.30702337995171547,
+              0.3237636648118496,
+              0.2672043703496456,
+              0.29602278769016266,
+              0.33994803950190544,
+              0.30375442653894424
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": 5.674875179926555,
+            "half_width_95": 0.9870851214228314,
+            "n_families": 6,
+            "per_family": [
+              5.056354522705078,
+              6.965060710906982,
+              4.161738395690918,
+              5.563243389129639,
+              7.335792541503906,
+              4.967061519622803
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 5.794602394104004,
+            "half_width_95": 1.0078416298166684,
+            "n_families": 6,
+            "per_family": [
+              5.253684997558594,
+              7.216407775878906,
+              4.254980564117432,
+              5.664768218994141,
+              7.397163391113281,
+              4.98060941696167
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 6.847215175628662,
+            "half_width_95": 1.0089028253746712,
+            "n_families": 6,
+            "per_family": [
+              6.892346382141113,
+              7.973196029663086,
+              5.3335041999816895,
+              7.463905334472656,
+              8.119043827056885,
+              5.301295280456543
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 5.746780554453532,
+            "half_width_95": 1.0113809064895078,
+            "n_families": 6,
+            "per_family": [
+              5.112782955169678,
+              7.152068138122559,
+              4.228286266326904,
+              5.573188781738281,
+              7.401191234588623,
+              5.0131659507751465
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 5.7436134815216064,
+            "half_width_95": 1.002615151089345,
+            "n_families": 6,
+            "per_family": [
+              5.143033981323242,
+              7.108428478240967,
+              4.227871894836426,
+              5.5626325607299805,
+              7.406045913696289,
+              5.013668060302734
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": 0.00824652804294601,
+            "half_width_95": 0.01055684077327606,
+            "n_families": 6,
+            "per_family": [
+              0.01953125058207661,
+              0.029947917675599456,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.009331597519728044,
+            "half_width_95": 0.011795240078255307,
+            "n_families": 6,
+            "per_family": [
+              0.02343750069849193,
+              0.03255208441987634,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.007378472500325491,
+            "half_width_95": 0.010556840849274784,
+            "n_families": 6,
+            "per_family": [
+              0.011718750349245965,
+              0.03255208465270698,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.15559896205862364,
+            "half_width_95": 0.3049739656349023,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9335937723517418,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.15668403108914694,
+            "half_width_95": 0.30710070093472797,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9401041865348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.16558160011967024,
+            "half_width_95": 0.3245399362345536,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9934896007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.15668403068169331,
+            "half_width_95": 0.30659056670421386,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9388021007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.15625000331783667,
+            "half_width_95": 0.3057398738591724,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9361979365348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        }
+      },
+      "paired": {
+        "sig": {
+          "target only": {
+            "mean": 0.022371917963027954,
+            "half_width_95": 0.01190234202469058,
+            "n_families": 6,
+            "per_family": [
+              0.02217888832092285,
+              0.037003397941589355,
+              0.040350109338760376,
+              0.023576214909553528,
+              0.004480764269828796,
+              0.006642132997512817
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.02634602536757787,
+            "half_width_95": 0.014824004215359003,
+            "n_families": 6,
+            "per_family": [
+              0.05033932626247406,
+              0.03517276048660278,
+              0.03104838728904724,
+              0.031528472900390625,
+              -0.0021365731954574585,
+              0.012123778462409973
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.3316186840335529,
+            "half_width_95": 0.08916405072950319,
+            "n_families": 6,
+            "per_family": [
+              1.4164250493049622,
+              1.313306674361229,
+              1.2052077054977417,
+              1.2102861553430557,
+              1.3612888008356094,
+              1.4831977188587189
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0002886528770128886,
+            "half_width_95": 0.0016021222544697223,
+            "n_families": 6,
+            "per_family": [
+              -0.0006983131170272827,
+              0.002278432250022888,
+              0.0006599277257919312,
+              0.0008849948644638062,
+              -0.003390774130821228,
+              -0.0014661848545074463
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": -0.0022265026345849037,
+            "half_width_95": 0.0018336267955372716,
+            "n_families": 6,
+            "per_family": [
+              -0.0023690424859523773,
+              -0.006555333733558655,
+              -0.0004383306950330734,
+              -0.00031052902340888977,
+              -0.0014340989291667938,
+              -0.002251680940389633
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.0017801293482383092,
+            "half_width_95": 0.002183244838308152,
+            "n_families": 6,
+            "per_family": [
+              0.004060294479131699,
+              0.00391344353556633,
+              0.003137703984975815,
+              0.002916596829891205,
+              -0.00118294358253479,
+              -0.002164319157600403
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.037947627094884716,
+            "half_width_95": 0.020427910255922516,
+            "n_families": 6,
+            "per_family": [
+              -0.024956442415714264,
+              -0.049969542771577835,
+              -0.003137197345495224,
+              -0.020672760903835297,
+              -0.06821100786328316,
+              -0.060738811269402504
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 6.951640049616496e-05,
+            "half_width_95": 0.0009144443887339796,
+            "n_families": 6,
+            "per_family": [
+              -0.0016060955822467804,
+              0.0019599497318267822,
+              0.00011207908391952515,
+              0.0002711378037929535,
+              -0.00018165260553359985,
+              -0.00013832002878189087
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": -0.06873830159505208,
+            "half_width_95": 0.03787018820365392,
+            "n_families": 6,
+            "per_family": [
+              -0.08667945861816406,
+              -0.14336776733398438,
+              -0.06613349914550781,
+              0.0006108283996582031,
+              -0.07025337219238281,
+              -0.04660654067993164
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.05098891258239746,
+            "half_width_95": 0.05141319062697652,
+            "n_families": 6,
+            "per_family": [
+              0.11065101623535156,
+              0.10797929763793945,
+              0.02710866928100586,
+              0.10213565826416016,
+              -0.008882522583007812,
+              -0.03305864334106445
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.1036016941070557,
+            "half_width_95": 0.496961210588672,
+            "n_families": 6,
+            "per_family": [
+              1.749312400817871,
+              0.8647675514221191,
+              1.1056323051452637,
+              1.9012727737426758,
+              0.7129979133605957,
+              0.2876272201538086
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0031670729319254556,
+            "half_width_95": 0.019253239794680847,
+            "n_families": 6,
+            "per_family": [
+              -0.030251026153564453,
+              0.0436396598815918,
+              0.0004143714904785156,
+              0.010556221008300781,
+              -0.004854679107666016,
+              -0.0005021095275878906
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": -0.0004340277713102599,
+            "half_width_95": 0.0008506944774029164,
+            "n_families": 6,
+            "per_family": [
+              -0.0026041667442768812,
+              1.1641532182693481e-10,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0015190972480922937,
+            "half_width_95": 0.0021267361668869857,
+            "n_families": 6,
+            "per_family": [
+              -0.006510416860692203,
+              -0.0026041666278615594,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0004340277713102599,
+            "half_width_95": 0.002048743605250463,
+            "n_families": 6,
+            "per_family": [
+              0.0052083334885537624,
+              -0.002604166860692203,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.0006510412592130402,
+            "half_width_95": 0.0008717017000609296,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.002604164183139801,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0004340277713102599,
+            "half_width_95": 0.0014234840789830064,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.00390625,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.00933159680183356,
+            "half_width_95": 0.018804965001987577,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.0572916641831398,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0004340273638566335,
+            "half_width_95": 0.0008506936331590016,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              -0.002604164183139801,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        }
+      }
+    },
+    "10": {
+      "raw": {
+        "sig": {
+          "target only": {
+            "mean": 1.7368662829200427,
+            "half_width_95": 0.21465956253500787,
+            "n_families": 6,
+            "per_family": [
+              1.5732794553041458,
+              1.5788905769586563,
+              1.566503256559372,
+              1.9561988562345505,
+              2.1844820231199265,
+              1.561843529343605
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 1.7451631625493367,
+            "half_width_95": 0.20889749903918356,
+            "n_families": 6,
+            "per_family": [
+              1.6040649861097336,
+              1.6028583198785782,
+              1.5635815858840942,
+              1.9636519104242325,
+              2.1762523651123047,
+              1.5605698078870773
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 3.0504358212153115,
+            "half_width_95": 0.2209111906678533,
+            "n_families": 6,
+            "per_family": [
+              2.9701507091522217,
+              2.8809922337532043,
+              2.7377409040927887,
+              3.1424095928668976,
+              3.5396777391433716,
+              3.0316437482833862
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 1.718528484304746,
+            "half_width_95": 0.2169636435773704,
+            "n_families": 6,
+            "per_family": [
+              1.5530273467302322,
+              1.5699639916419983,
+              1.533193126320839,
+              1.9330084323883057,
+              2.174998164176941,
+              1.54697984457016
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 1.7188171371817589,
+            "half_width_95": 0.21782464151366046,
+            "n_families": 6,
+            "per_family": [
+              1.5537256598472595,
+              1.5676855593919754,
+              1.532533198595047,
+              1.9321234375238419,
+              2.178388938307762,
+              1.5484460294246674
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": 0.3046657893185814,
+            "half_width_95": 0.020352368909021173,
+            "n_families": 6,
+            "per_family": [
+              0.3035813271999359,
+              0.3245727978646755,
+              0.26597284711897373,
+              0.29442036896944046,
+              0.33949335664510727,
+              0.29995403811335564
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.30806624082227546,
+            "half_width_95": 0.019218874529840224,
+            "n_families": 6,
+            "per_family": [
+              0.31108367443084717,
+              0.3276771083474159,
+              0.27034207433462143,
+              0.29893938452005386,
+              0.33876509591937065,
+              0.30159010738134384
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.2683384843791525,
+            "half_width_95": 0.0109622133556878,
+            "n_families": 6,
+            "per_family": [
+              0.2820669375360012,
+              0.27379412204027176,
+              0.2640671730041504,
+              0.27535002678632736,
+              0.2717370316386223,
+              0.24301561526954174
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.30635562787453335,
+            "half_width_95": 0.02000441748351737,
+            "n_families": 6,
+            "per_family": [
+              0.3054172843694687,
+              0.3257236145436764,
+              0.26731644943356514,
+              0.2962939254939556,
+              0.33976638689637184,
+              0.30361610651016235
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.30628611147403717,
+            "half_width_95": 0.019854008525566312,
+            "n_families": 6,
+            "per_family": [
+              0.30702337995171547,
+              0.3237636648118496,
+              0.2672043703496456,
+              0.29602278769016266,
+              0.33994803950190544,
+              0.30375442653894424
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": 5.709067662556966,
+            "half_width_95": 1.0350026063469489,
+            "n_families": 6,
+            "per_family": [
+              5.070408344268799,
+              7.148827075958252,
+              4.158334732055664,
+              5.540370941162109,
+              7.3990478515625,
+              4.937417030334473
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 5.794602394104004,
+            "half_width_95": 1.0078416298166684,
+            "n_families": 6,
+            "per_family": [
+              5.253684997558594,
+              7.216407775878906,
+              4.254980564117432,
+              5.664768218994141,
+              7.397163391113281,
+              4.98060941696167
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 6.847215175628662,
+            "half_width_95": 1.0089028253746712,
+            "n_families": 6,
+            "per_family": [
+              6.892346382141113,
+              7.973196029663086,
+              5.3335041999816895,
+              7.463905334472656,
+              8.119043827056885,
+              5.301295280456543
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 5.746780554453532,
+            "half_width_95": 1.0113809064895078,
+            "n_families": 6,
+            "per_family": [
+              5.112782955169678,
+              7.152068138122559,
+              4.228286266326904,
+              5.573188781738281,
+              7.401191234588623,
+              5.0131659507751465
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 5.7436134815216064,
+            "half_width_95": 1.002615151089345,
+            "n_families": 6,
+            "per_family": [
+              5.143033981323242,
+              7.108428478240967,
+              4.227871894836426,
+              5.5626325607299805,
+              7.406045913696289,
+              5.013668060302734
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": 0.008897569767820338,
+            "half_width_95": 0.011421187195550485,
+            "n_families": 6,
+            "per_family": [
+              0.02083333395421505,
+              0.03255208465270698,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.009331597519728044,
+            "half_width_95": 0.011795240078255307,
+            "n_families": 6,
+            "per_family": [
+              0.02343750069849193,
+              0.03255208441987634,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.007378472500325491,
+            "half_width_95": 0.010556840849274784,
+            "n_families": 6,
+            "per_family": [
+              0.011718750349245965,
+              0.03255208465270698,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.15581597511967024,
+            "half_width_95": 0.30539931123455366,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9348958507180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.15668403108914694,
+            "half_width_95": 0.30710070093472797,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9401041865348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.16558160011967024,
+            "half_width_95": 0.3245399362345536,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9934896007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.15668403068169331,
+            "half_width_95": 0.30659056670421386,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9388021007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.15625000331783667,
+            "half_width_95": 0.3057398738591724,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9361979365348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        }
+      },
+      "paired": {
+        "sig": {
+          "target only": {
+            "mean": 0.018049145738283794,
+            "half_width_95": 0.008029485338610406,
+            "n_families": 6,
+            "per_family": [
+              0.01955379545688629,
+              0.011205017566680908,
+              0.03397005796432495,
+              0.024075418710708618,
+              0.006093084812164307,
+              0.013397499918937683
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.02634602536757787,
+            "half_width_95": 0.014824004215359003,
+            "n_families": 6,
+            "per_family": [
+              0.05033932626247406,
+              0.03517276048660278,
+              0.03104838728904724,
+              0.031528472900390625,
+              -0.0021365731954574585,
+              0.012123778462409973
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.3316186840335529,
+            "half_width_95": 0.08916405072950319,
+            "n_families": 6,
+            "per_family": [
+              1.4164250493049622,
+              1.313306674361229,
+              1.2052077054977417,
+              1.2102861553430557,
+              1.3612888008356094,
+              1.4831977188587189
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0002886528770128886,
+            "half_width_95": 0.0016021222544697223,
+            "n_families": 6,
+            "per_family": [
+              -0.0006983131170272827,
+              0.002278432250022888,
+              0.0006599277257919312,
+              0.0008849948644638062,
+              -0.003390774130821228,
+              -0.0014661848545074463
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": -0.0016203221554557483,
+            "half_width_95": 0.001408104342949262,
+            "n_families": 6,
+            "per_family": [
+              -0.0034420527517795563,
+              0.0008091330528259277,
+              -0.0012315232306718826,
+              -0.0016024187207221985,
+              -0.000454682856798172,
+              -0.003800388425588608
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.0017801293482383092,
+            "half_width_95": 0.002183244838308152,
+            "n_families": 6,
+            "per_family": [
+              0.004060294479131699,
+              0.00391344353556633,
+              0.003137703984975815,
+              0.002916596829891205,
+              -0.00118294358253479,
+              -0.002164319157600403
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.037947627094884716,
+            "half_width_95": 0.020427910255922516,
+            "n_families": 6,
+            "per_family": [
+              -0.024956442415714264,
+              -0.049969542771577835,
+              -0.003137197345495224,
+              -0.020672760903835297,
+              -0.06821100786328316,
+              -0.060738811269402504
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 6.951640049616496e-05,
+            "half_width_95": 0.0009144443887339796,
+            "n_families": 6,
+            "per_family": [
+              -0.0016060955822467804,
+              0.0019599497318267822,
+              0.00011207908391952515,
+              0.0002711378037929535,
+              -0.00018165260553359985,
+              -0.00013832002878189087
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": -0.0345458189646403,
+            "half_width_95": 0.037429051045074664,
+            "n_families": 6,
+            "per_family": [
+              -0.07262563705444336,
+              0.040398597717285156,
+              -0.06953716278076172,
+              -0.022261619567871094,
+              -0.0069980621337890625,
+              -0.07625102996826172
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.05098891258239746,
+            "half_width_95": 0.05141319062697652,
+            "n_families": 6,
+            "per_family": [
+              0.11065101623535156,
+              0.10797929763793945,
+              0.02710866928100586,
+              0.10213565826416016,
+              -0.008882522583007812,
+              -0.03305864334106445
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.1036016941070557,
+            "half_width_95": 0.496961210588672,
+            "n_families": 6,
+            "per_family": [
+              1.749312400817871,
+              0.8647675514221191,
+              1.1056323051452637,
+              1.9012727737426758,
+              0.7129979133605957,
+              0.2876272201538086
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0031670729319254556,
+            "half_width_95": 0.019253239794680847,
+            "n_families": 6,
+            "per_family": [
+              -0.030251026153564453,
+              0.0436396598815918,
+              0.0004143714904785156,
+              0.010556221008300781,
+              -0.004854679107666016,
+              -0.0005021095275878906
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": -0.0010850694961845875,
+            "half_width_95": 0.0013848302819448616,
+            "n_families": 6,
+            "per_family": [
+              -0.003906250116415322,
+              -0.002604166860692203,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0015190972480922937,
+            "half_width_95": 0.0021267361668869857,
+            "n_families": 6,
+            "per_family": [
+              -0.006510416860692203,
+              -0.0026041666278615594,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0004340277713102599,
+            "half_width_95": 0.002048743605250463,
+            "n_families": 6,
+            "per_family": [
+              0.0052083334885537624,
+              -0.002604166860692203,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.00043402819816643995,
+            "half_width_95": 0.0005380269285787437,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.001302085816860199,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0004340277713102599,
+            "half_width_95": 0.0014234840789830064,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.00390625,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.00933159680183356,
+            "half_width_95": 0.018804965001987577,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.0572916641831398,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0004340273638566335,
+            "half_width_95": 0.0008506936331590016,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              -0.002604164183139801,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        }
+      }
+    },
+    "20": {
+      "raw": {
+        "sig": {
+          "target only": {
+            "mean": 1.7356210971872013,
+            "half_width_95": 0.21583002904682982,
+            "n_families": 6,
+            "per_family": [
+              1.5733981281518936,
+              1.580590695142746,
+              1.5563352853059769,
+              1.9657975435256958,
+              2.1793061941862106,
+              1.5582987368106842
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 1.7451631625493367,
+            "half_width_95": 0.20889749903918356,
+            "n_families": 6,
+            "per_family": [
+              1.6040649861097336,
+              1.6028583198785782,
+              1.5635815858840942,
+              1.9636519104242325,
+              2.1762523651123047,
+              1.5605698078870773
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 3.0504358212153115,
+            "half_width_95": 0.2209111906678533,
+            "n_families": 6,
+            "per_family": [
+              2.9701507091522217,
+              2.8809922337532043,
+              2.7377409040927887,
+              3.1424095928668976,
+              3.5396777391433716,
+              3.0316437482833862
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 1.718528484304746,
+            "half_width_95": 0.2169636435773704,
+            "n_families": 6,
+            "per_family": [
+              1.5530273467302322,
+              1.5699639916419983,
+              1.533193126320839,
+              1.9330084323883057,
+              2.174998164176941,
+              1.54697984457016
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 1.7188171371817589,
+            "half_width_95": 0.21782464151366046,
+            "n_families": 6,
+            "per_family": [
+              1.5537256598472595,
+              1.5676855593919754,
+              1.532533198595047,
+              1.9321234375238419,
+              2.178388938307762,
+              1.5484460294246674
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": 0.30388018240531284,
+            "half_width_95": 0.019408824239582418,
+            "n_families": 6,
+            "per_family": [
+              0.3011174723505974,
+              0.32267972454428673,
+              0.2685375213623047,
+              0.2924896739423275,
+              0.33834283426404,
+              0.30011386796832085
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.30806624082227546,
+            "half_width_95": 0.019218874529840224,
+            "n_families": 6,
+            "per_family": [
+              0.31108367443084717,
+              0.3276771083474159,
+              0.27034207433462143,
+              0.29893938452005386,
+              0.33876509591937065,
+              0.30159010738134384
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.2683384843791525,
+            "half_width_95": 0.0109622133556878,
+            "n_families": 6,
+            "per_family": [
+              0.2820669375360012,
+              0.27379412204027176,
+              0.2640671730041504,
+              0.27535002678632736,
+              0.2717370316386223,
+              0.24301561526954174
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.30635562787453335,
+            "half_width_95": 0.02000441748351737,
+            "n_families": 6,
+            "per_family": [
+              0.3054172843694687,
+              0.3257236145436764,
+              0.26731644943356514,
+              0.2962939254939556,
+              0.33976638689637184,
+              0.30361610651016235
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.30628611147403717,
+            "half_width_95": 0.019854008525566312,
+            "n_families": 6,
+            "per_family": [
+              0.30702337995171547,
+              0.3237636648118496,
+              0.2672043703496456,
+              0.29602278769016266,
+              0.33994803950190544,
+              0.30375442653894424
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": 5.69001301129659,
+            "half_width_95": 1.0112434418305043,
+            "n_families": 6,
+            "per_family": [
+              5.005138874053955,
+              7.088472843170166,
+              4.220260143280029,
+              5.507129669189453,
+              7.369201183319092,
+              4.949875354766846
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 5.794602394104004,
+            "half_width_95": 1.0078416298166684,
+            "n_families": 6,
+            "per_family": [
+              5.253684997558594,
+              7.216407775878906,
+              4.254980564117432,
+              5.664768218994141,
+              7.397163391113281,
+              4.98060941696167
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 6.847215175628662,
+            "half_width_95": 1.0089028253746712,
+            "n_families": 6,
+            "per_family": [
+              6.892346382141113,
+              7.973196029663086,
+              5.3335041999816895,
+              7.463905334472656,
+              8.119043827056885,
+              5.301295280456543
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 5.746780554453532,
+            "half_width_95": 1.0113809064895078,
+            "n_families": 6,
+            "per_family": [
+              5.112782955169678,
+              7.152068138122559,
+              4.228286266326904,
+              5.573188781738281,
+              7.401191234588623,
+              5.0131659507751465
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 5.7436134815216064,
+            "half_width_95": 1.002615151089345,
+            "n_families": 6,
+            "per_family": [
+              5.143033981323242,
+              7.108428478240967,
+              4.227871894836426,
+              5.5626325607299805,
+              7.406045913696289,
+              5.013668060302734
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": 0.008463541977107525,
+            "half_width_95": 0.010742017967138596,
+            "n_families": 6,
+            "per_family": [
+              0.02083333407063037,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.009331597519728044,
+            "half_width_95": 0.011795240078255307,
+            "n_families": 6,
+            "per_family": [
+              0.02343750069849193,
+              0.03255208441987634,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.0,
+            "half_width_95": 0.0,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.007378472500325491,
+            "half_width_95": 0.010556840849274784,
+            "n_families": 6,
+            "per_family": [
+              0.011718750349245965,
+              0.03255208465270698,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.15538194899757704,
+            "half_width_95": 0.304548620035251,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9322916939854622,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "source reuse": {
+            "mean": 0.15668403108914694,
+            "half_width_95": 0.30710070093472797,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9401041865348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "population only": {
+            "mean": 0.16558160011967024,
+            "half_width_95": 0.3245399362345536,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              0.9934896007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "wrong-task source + relation": {
+            "mean": 0.15668403068169331,
+            "half_width_95": 0.30659056670421386,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9388021007180214,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          },
+          "correct source + transport": {
+            "mean": 0.15625000331783667,
+            "half_width_95": 0.3057398738591724,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.9361979365348816,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ]
+          }
+        }
+      },
+      "paired": {
+        "sig": {
+          "target only": {
+            "mean": 0.016803960005442303,
+            "half_width_95": 0.009177266531213965,
+            "n_families": 6,
+            "per_family": [
+              0.019672468304634094,
+              0.012905135750770569,
+              0.02380208671092987,
+              0.03367410600185394,
+              0.0009172558784484863,
+              0.009852707386016846
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.02634602536757787,
+            "half_width_95": 0.014824004215359003,
+            "n_families": 6,
+            "per_family": [
+              0.05033932626247406,
+              0.03517276048660278,
+              0.03104838728904724,
+              0.031528472900390625,
+              -0.0021365731954574585,
+              0.012123778462409973
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.3316186840335529,
+            "half_width_95": 0.08916405072950319,
+            "n_families": 6,
+            "per_family": [
+              1.4164250493049622,
+              1.313306674361229,
+              1.2052077054977417,
+              1.2102861553430557,
+              1.3612888008356094,
+              1.4831977188587189
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0002886528770128886,
+            "half_width_95": 0.0016021222544697223,
+            "n_families": 6,
+            "per_family": [
+              -0.0006983131170272827,
+              0.002278432250022888,
+              0.0006599277257919312,
+              0.0008849948644638062,
+              -0.003390774130821228,
+              -0.0014661848545074463
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "sw": {
+          "target only": {
+            "mean": -0.0024059290687243142,
+            "half_width_95": 0.0020056664432393932,
+            "n_families": 6,
+            "per_family": [
+              -0.005905907601118088,
+              -0.0010839402675628662,
+              0.0013331510126590729,
+              -0.0035331137478351593,
+              -0.001605205237865448,
+              -0.003640558570623398
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.0017801293482383092,
+            "half_width_95": 0.002183244838308152,
+            "n_families": 6,
+            "per_family": [
+              0.004060294479131699,
+              0.00391344353556633,
+              0.003137703984975815,
+              0.002916596829891205,
+              -0.00118294358253479,
+              -0.002164319157600403
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.037947627094884716,
+            "half_width_95": 0.020427910255922516,
+            "n_families": 6,
+            "per_family": [
+              -0.024956442415714264,
+              -0.049969542771577835,
+              -0.003137197345495224,
+              -0.020672760903835297,
+              -0.06821100786328316,
+              -0.060738811269402504
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 6.951640049616496e-05,
+            "half_width_95": 0.0009144443887339796,
+            "n_families": 6,
+            "per_family": [
+              -0.0016060955822467804,
+              0.0019599497318267822,
+              0.00011207908391952515,
+              0.0002711378037929535,
+              -0.00018165260553359985,
+              -0.00013832002878189087
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "mmd": {
+          "target only": {
+            "mean": -0.053600470225016274,
+            "half_width_95": 0.03708628472575376,
+            "n_families": 6,
+            "per_family": [
+              -0.1378951072692871,
+              -0.01995563507080078,
+              -0.007611751556396484,
+              -0.055502891540527344,
+              -0.036844730377197266,
+              -0.06379270553588867
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": 0.05098891258239746,
+            "half_width_95": 0.05141319062697652,
+            "n_families": 6,
+            "per_family": [
+              0.11065101623535156,
+              0.10797929763793945,
+              0.02710866928100586,
+              0.10213565826416016,
+              -0.008882522583007812,
+              -0.03305864334106445
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "population only": {
+            "mean": 1.1036016941070557,
+            "half_width_95": 0.496961210588672,
+            "n_families": 6,
+            "per_family": [
+              1.749312400817871,
+              0.8647675514221191,
+              1.1056323051452637,
+              1.9012727737426758,
+              0.7129979133605957,
+              0.2876272201538086
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0031670729319254556,
+            "half_width_95": 0.019253239794680847,
+            "n_families": 6,
+            "per_family": [
+              -0.030251026153564453,
+              0.0436396598815918,
+              0.0004143714904785156,
+              0.010556221008300781,
+              -0.004854679107666016,
+              -0.0005021095275878906
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "comparator - correct (positive favours correct)"
+          }
+        },
+        "ph": {
+          "target only": {
+            "mean": -0.000651041705471774,
+            "half_width_95": 0.0012760417427246768,
+            "n_families": 6,
+            "per_family": [
+              -0.003906250232830644,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0015190972480922937,
+            "half_width_95": 0.0021267361668869857,
+            "n_families": 6,
+            "per_family": [
+              -0.006510416860692203,
+              -0.0026041666278615594,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": 0.00781250027163575,
+            "half_width_95": 0.010229578956356815,
+            "n_families": 6,
+            "per_family": [
+              0.016927083837799728,
+              0.029947917792014778,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": 0.0004340277713102599,
+            "half_width_95": 0.002048743605250463,
+            "n_families": 6,
+            "per_family": [
+              0.0052083334885537624,
+              -0.002604166860692203,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        },
+        "cls": {
+          "target only": {
+            "mean": 0.0008680543202596406,
+            "half_width_95": 0.001261781474815613,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              0.003906242549419403,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "source reuse": {
+            "mean": -0.0004340277713102599,
+            "half_width_95": 0.0014234840789830064,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.00390625,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "population only": {
+            "mean": -0.00933159680183356,
+            "half_width_95": 0.018804965001987577,
+            "n_families": 6,
+            "per_family": [
+              0.0013020833721384406,
+              0.0,
+              0.0,
+              -0.0572916641831398,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          },
+          "wrong-task source + relation": {
+            "mean": -0.0004340273638566335,
+            "half_width_95": 0.0008506936331590016,
+            "n_families": 6,
+            "per_family": [
+              0.0,
+              0.0,
+              0.0,
+              -0.002604164183139801,
+              0.0,
+              0.0
+            ],
+            "families": [
+              "benign dermal",
+              "benign epidermal",
+              "genodermatoses",
+              "inflammatory",
+              "malignant epidermal",
+              "malignant melanoma"
+            ],
+            "formula": "correct - comparator (positive favours correct)"
+          }
+        }
+      }
+    }
+  },
+  "primary_gate": {
+    "budget": 0,
+    "metric": "family semantic consistency",
+    "comparator": "wrong-task source + relation",
+    "minimum_meaningful_effect": 0.05,
+    "effect": {
+      "mean": 0.0,
+      "half_width_95": 0.0,
+      "n_families": 6,
+      "per_family": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "families": [
+        "benign dermal",
+        "benign epidermal",
+        "genodermatoses",
+        "inflammatory",
+        "malignant epidermal",
+        "malignant melanoma"
+      ],
+      "formula": "correct - comparator (positive favours correct)"
+    },
+    "verdict": "inconclusive: semantic evaluator failed the locked validity rule"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "wrong disease, same family": {
+    "basal cell carcinoma": "squamous cell carcinoma",
+    "neurofibromatosis": "dariers disease",
+    "pityriasis rosea": "pityriasis rubra pilaris",
+    "vitiligo": "pityriasis rosea"
+  },
+  "wrong disease, different family": {
+    "basal cell carcinoma": "dariers disease",
+    "neurofibromatosis": "pityriasis rosea",
+    "pityriasis rosea": "squamous cell carcinoma",
+    "vitiligo": "basal cell carcinoma"
+  }
+}

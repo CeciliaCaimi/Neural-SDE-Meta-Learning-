@@ -1,0 +1,337 @@
+
+
+distance from the real target population, in phototype-statistic space
+  lower is better; the instrument is fixed (ITA, L*, b*, a*) and trains nothing
+
+  -- basal cell carcinoma --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       2.725 +-0.376
+  population only                    4.245 +-0.016
+  wrong disease, same family         2.707 +-0.374
+  wrong disease, different family     2.704 +-0.375
+  correct source + transport         2.705 +-0.375
+
+  -- neurofibromatosis --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       2.014 +-0.212
+  population only                    3.681 +-0.020
+  wrong disease, same family         1.975 +-0.211
+  wrong disease, different family     1.982 +-0.209
+  correct source + transport         1.983 +-0.210
+
+  -- pityriasis rosea --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       3.041 +-0.256
+  population only                    4.370 +-0.020
+  wrong disease, same family         3.020 +-0.255
+  wrong disease, different family     3.022 +-0.256
+  correct source + transport         3.026 +-0.256
+
+  -- vitiligo --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       2.319 +-0.170
+  population only                    3.890 +-0.036
+  wrong disease, same family         2.306 +-0.174
+  wrong disease, different family     2.302 +-0.171
+  correct source + transport         2.298 +-0.169
+
+  -- across the 4 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       2.525 +-0.442
+  population only                    4.046 +-0.311
+  wrong disease, same family         2.502 +-0.448
+  wrong disease, different family     2.503 +-0.446
+  correct source + transport         2.503 +-0.448
+
+
+sliced Wasserstein distance to the real held-out target set, pixel space
+  lower is better; intervals treat diseases, not images, as independent units
+
+  -- basal cell carcinoma --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.402 +-0.011
+  population only                    0.286 +-0.001
+  wrong disease, same family         0.402 +-0.011
+  wrong disease, different family     0.402 +-0.012
+  correct source + transport         0.402 +-0.011
+
+  -- neurofibromatosis --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.339 +-0.009
+  population only                    0.279 +-0.001
+  wrong disease, same family         0.337 +-0.009
+  wrong disease, different family     0.338 +-0.008
+  correct source + transport         0.338 +-0.008
+
+  -- pityriasis rosea --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.403 +-0.015
+  population only                    0.300 +-0.001
+  wrong disease, same family         0.404 +-0.016
+  wrong disease, different family     0.404 +-0.016
+  correct source + transport         0.404 +-0.016
+
+  -- vitiligo --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.313 +-0.013
+  population only                    0.281 +-0.002
+  wrong disease, same family         0.312 +-0.013
+  wrong disease, different family     0.312 +-0.013
+  correct source + transport         0.311 +-0.013
+
+  -- across the 4 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.364 +-0.045
+  population only                    0.287 +-0.009
+  wrong disease, same family         0.364 +-0.045
+  wrong disease, different family     0.364 +-0.045
+  correct source + transport         0.364 +-0.046
+
+
+energy MMD to the real held-out target set, pixel space
+  lower is better; the small-sample distributional cross-check to sliced Wasserstein
+
+  -- basal cell carcinoma --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       8.656 +-0.823
+  population only                    9.179 +-0.053
+  wrong disease, same family         8.634 +-0.816
+  wrong disease, different family     8.617 +-0.801
+  correct source + transport         8.624 +-0.804
+
+  -- neurofibromatosis --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       5.725 +-0.493
+  population only                    7.165 +-0.038
+  wrong disease, same family         5.653 +-0.482
+  wrong disease, different family     5.665 +-0.489
+  correct source + transport         5.667 +-0.486
+
+  -- pityriasis rosea --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       8.915 +-0.851
+  population only                   10.190 +-0.071
+  wrong disease, same family         8.919 +-0.839
+  wrong disease, different family     8.925 +-0.840
+  correct source + transport         8.928 +-0.841
+
+  -- vitiligo --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       5.410 +-0.576
+  population only                    7.163 +-0.063
+  wrong disease, same family         5.381 +-0.573
+  wrong disease, different family     5.370 +-0.570
+  correct source + transport         5.352 +-0.569
+
+  -- across the 4 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       7.176 +-1.828
+  population only                    8.425 +-1.482
+  wrong disease, same family         7.147 +-1.851
+  wrong disease, different family     7.144 +-1.849
+  correct source + transport         7.143 +-1.857
+
+
+the individual typology angle of the generated set
+  not a distance: read it against the real target row printed above, and against the source row. higher = lighter skin
+
+  -- basal cell carcinoma --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      14.766 +-2.062
+  population only                   69.942 +-0.695
+  wrong disease, same family        14.013 +-2.103
+  wrong disease, different family    13.937 +-2.017
+  correct source + transport        13.967 +-2.051
+
+  -- neurofibromatosis --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      13.818 +-2.912
+  population only                   70.464 +-0.726
+  wrong disease, same family        12.661 +-2.910
+  wrong disease, different family    12.906 +-2.868
+  correct source + transport        12.967 +-2.905
+
+  -- pityriasis rosea --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      14.309 +-3.238
+  population only                   70.247 +-0.755
+  wrong disease, same family        13.272 +-3.204
+  wrong disease, different family    13.443 +-3.208
+  correct source + transport        13.457 +-3.246
+
+  -- vitiligo --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      15.247 +-1.713
+  population only                   69.162 +-1.110
+  wrong disease, same family        14.850 +-1.670
+  wrong disease, different family    14.714 +-1.731
+  correct source + transport        14.492 +-1.738
+
+  -- across the 4 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                      14.535 +-0.600
+  population only                   69.954 +-0.558
+  wrong disease, same family        13.699 +-0.927
+  wrong disease, different family    13.750 +-0.753
+  correct source + transport        13.721 +-0.643
+
+
+share of samples the population predictor calls Fitzpatrick IV-VI
+  higher is better; the predictor's own ceiling: held-out train/val conditions 90.5%  test conditions (the transfer it is used for) 64.5% (chance 50.0%)
+
+  -- basal cell carcinoma --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.145 +-0.024
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.150 +-0.025
+  wrong disease, different family     0.148 +-0.025
+  correct source + transport         0.146 +-0.026
+
+  -- neurofibromatosis --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.132 +-0.024
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.132 +-0.023
+  wrong disease, different family     0.134 +-0.026
+  correct source + transport         0.134 +-0.026
+
+  -- pityriasis rosea --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.151 +-0.024
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.152 +-0.024
+  wrong disease, different family     0.154 +-0.023
+  correct source + transport         0.154 +-0.023
+
+  -- vitiligo --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.129 +-0.032
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.135 +-0.032
+  wrong disease, different family     0.134 +-0.033
+  correct source + transport         0.134 +-0.033
+
+  -- across the 4 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.139 +-0.010
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.142 +-0.010
+  wrong disease, different family     0.143 +-0.010
+  correct source + transport         0.142 +-0.009
+
+
+share of samples the condition predictor calls the right condition
+  higher is better; ceiling held-out 20.8%  basal cell carcinoma 53.1%  neurofibromatosis 0.0%  pityriasis rosea 6.2%  vitiligo 0.0%, chance 6.2% -- a ceiling near chance means this row is uninformative, not that the arms agree
+
+  -- basal cell carcinoma --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.033 +-0.011
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.033 +-0.011
+  wrong disease, different family     0.034 +-0.012
+  correct source + transport         0.034 +-0.012
+
+  -- neurofibromatosis --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.001 +-0.003
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.001 +-0.003
+  wrong disease, different family     0.001 +-0.003
+  correct source + transport         0.001 +-0.003
+
+  -- pityriasis rosea --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.046 +-0.017
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.046 +-0.016
+  wrong disease, different family     0.047 +-0.016
+  correct source + transport         0.044 +-0.016
+
+  -- vitiligo --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.000 +-0.000
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.000 +-0.000
+  wrong disease, different family     0.000 +-0.000
+  correct source + transport         0.000 +-0.000
+
+  -- across the 4 tasks, interval over tasks --
+  arm                                      K_T=0
+  ---------------------------------------------
+  source reuse                       0.020 +-0.022
+  population only                    0.000 +-0.000
+  wrong disease, same family         0.020 +-0.022
+  wrong disease, different family     0.021 +-0.023
+  correct source + transport         0.020 +-0.022
+
+
+the claim: correct source plus learned relation against every way of not having it
+  paired within (task, K_T, repeat); positive = correct-source transport is better
+
+  phototype-statistic space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.0218 +-0.0065*
+  vs population only                    +1.5435 +-0.1453*
+  vs wrong disease, same family         -0.0010 +-0.0078 
+  vs wrong disease, different family    -0.0005 +-0.0032 
+
+  sliced Wasserstein, pixel space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.0004 +-0.0009 
+  vs population only                    -0.0771 +-0.0392*
+  vs wrong disease, same family         +0.0001 +-0.0006 
+  vs wrong disease, different family    +0.0001 +-0.0003 
+
+  energy MMD, pixel space
+  comparison                                     K_T=0
+  ---------------------------------------------------
+  vs source reuse                       +0.0336 +-0.0332*
+  vs population only                    +1.2816 +-0.5233*
+  vs wrong disease, same family         +0.0036 +-0.0194 
+  vs wrong disease, different family    +0.0015 +-0.0111 
+
+  * = the 95% interval over disease-level mean paired differences excludes zero.
+    Repeats reduce within-disease noise; they are not counted as independent tasks.
+
+
+pooled KID skipped: condition feature extractor held-out accuracy 0.208 is below the prespecified usefulness threshold 0.312
+
+
+what this can and cannot support
+  The full verified and cleaned archive supplies 4 held-out disease tasks.
+  Paired intervals use one mean difference per disease. They are statistically valid
+  for this split but necessarily imprecise with four test diseases; repeat-level noise
+  is averaged within disease and never treated as independent evidence.
+
+per-cell values written to experiments\meta_diffusion_final\runs\p2_hierarchical_zero.json

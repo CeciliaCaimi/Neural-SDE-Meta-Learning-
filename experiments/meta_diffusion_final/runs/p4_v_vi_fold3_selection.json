@@ -1,0 +1,34 @@
+{
+  "basis": {
+    "run": "p4_v_vi_fold3_basis",
+    "step": 4000,
+    "validation_loss_correct": 0.05776805259908239,
+    "checkpoint": "checkpoints/p4_v_vi_fold3_basis_step4000.pt",
+    "score_model": "basis",
+    "split": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\meta_diffusion_final\\manifests\\p4_v_vi_fold3.json",
+    "diagnostics": {
+      "loss_correct": 0.05776805259908239,
+      "loss_zero": 0.741008261218667,
+      "loss_shuffled": 0.057768794475123286,
+      "loss_random": 0.7770846001803875,
+      "loss_target_only": 0.05776531749870628,
+      "loss_mean_z": 0.06911887088790536,
+      "r_basis": 2.222181260585785,
+      "|dz_transport|": 0.059496816247701645,
+      "z_s_vs_enc_rel": 0.0435495397541672,
+      "z_spread_rel": 0.0090102544054389,
+      "gain_vs_zero": 0.6832402086195847,
+      "gain_vs_shuffled": 7.418760408980929e-07,
+      "gain_vs_target_only": -2.735100376106969e-06,
+      "gain_vs_mean_z": 0.011350818288822971,
+      "delta_task": 0.011350818288822971,
+      "z_center_norm": 1.3044359683990479,
+      "task_specific_frac": 0.01661321764384463
+    },
+    "warnings": [
+      "gain_vs_zero=0.6832 looks healthy but only 1.7% of it is task-specific: one shared mean coordinate does just as well, so the basis is a constant offset, not adaptation",
+      "coordinate collapse: relative spacing of z across episodes is only 0.009 (threshold 0.05) -- the encoder emits a near-constant, so gain_vs_zero reflects the basis acting as shared capacity, not task specificity",
+      "z_S and z^enc_T are only 0.044 apart relatively -- the encoder is not separating the source set from the target set"
+    ]
+  }
+}
