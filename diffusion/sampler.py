@@ -71,13 +71,18 @@ def ddim_sample(
     eta: float = 0.0,
     generator: torch.Generator | None = None,
     clip_x0: float | None = 1.0,
+    x_init: Tensor | None = None,
 ) -> Tensor:
-    """DDIM. Fully deterministic at eta=0 -- use this for reproducible comparisons."""
+    """DDIM. Fully deterministic at eta=0 -- use this for reproducible comparisons.
+
+    x_init (optional): supply the initial noise x_T directly. Lets several coordinate
+    conditions share identical initial noise (paired comparisons) and be sampled in one batch.
+    """
     T = schedule.n_steps
     ts = [int(v) for v in torch.linspace(T - 1, 0, n_steps).round().long().tolist()]
     ab = schedule.alphas_cumprod.to(device)
 
-    x = torch.randn(shape, device=device, generator=generator)
+    x = x_init if x_init is not None else torch.randn(shape, device=device, generator=generator)
     for i, t in enumerate(ts):
         tt = torch.full((shape[0],), t, device=device, dtype=torch.long)
         eps = eps_fn(x, tt)

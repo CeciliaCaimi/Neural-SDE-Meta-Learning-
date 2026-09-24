@@ -38,6 +38,7 @@ class Transport(nn.Module):
         hidden: int = 64,
         out_moments: bool = False,
         init_scale: float = 1e-2,
+        kind: str = "mlp",
     ) -> None:
         """
         n_relations : number of relations. None means a single relation is under
@@ -58,17 +59,26 @@ class Transport(nn.Module):
         in_dim = self.k + (relation_dim if self.relation_emb is not None else 0)
         out_dim = self.k * (2 if out_moments else 1)
 
-        self.net = nn.Sequential(
-            nn.Linear(in_dim, hidden), nn.SiLU(),
-            nn.Linear(hidden, hidden), nn.SiLU(),
-            nn.Linear(hidden, out_dim),
-        )
-        # Small initialisation, so that z_tilde_T is approximately z_S at the
-        # start -- equivalent to the "reuse the source coordinate" baseline --
-        # and training then pushes it away. This keeps any gain attributable to
-        # the transport map itself.
-        nn.init.normal_(self.net[-1].weight, std=init_scale)
-        nn.init.zeros_(self.net[-1].bias)
+        # kind="mlp": residual MLP (A.2). kind="linear": z_tilde = z_S + (W z_S + b), the
+        # linear source->target map the Office-Home headline locks (note section 3).
+        self.kind = kind
+        if kind == "linear":
+            self.net = nn.Linear(in_dim, out_dim)
+            last = self.net
+        elif kind == "mlp":
+            self.net = nn.Sequential(
+                nn.Linear(in_dim, hidden), nn.SiLU(),
+                nn.Linear(hidden, hidden), nn.SiLU(),
+                nn.Linear(hidden, out_dim),
+            )
+            last = self.net[-1]
+        else:
+            raise ValueError(f"transport kind must be 'mlp' or 'linear', got {kind}")
+        # Small initialisation, so that z_tilde_T is approximately z_S at the start --
+        # equivalent to the "reuse the source coordinate" baseline -- and training then
+        # pushes it away, keeping any gain attributable to the transport map itself.
+        nn.init.normal_(last.weight, std=init_scale)
+        nn.init.zeros_(last.bias)
 
     @staticmethod
     def _as_batched(z_s: Tensor) -> tuple[Tensor, bool]:

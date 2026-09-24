@@ -41,6 +41,7 @@ class ModelConfig:
     # "indexed by relation, never semantic class".
     n_relations: int | None = None
     transport_out_moments: bool = False     # the single extension point of A.7; keep False in v1
+    transport_kind: str = "mlp"              # "mlp" (A.2 residual MLP) | "linear" (Office-Home headline)
 
 
 @dataclass
@@ -56,6 +57,7 @@ class EpisodeConfig:
     scheme: str = "sibling"                 # sibling | domainshift
     split_path: str = "artifacts/cifar100_split.json"
     domainshift_path: str = "artifacts/cifar100_domainshift.json"
+    officehome_root: str = "artifacts/officehome"   # dir with parquet/*.parquet + phase1/{class_split,partitions}.json
     k_shots: tuple[int, ...] = (1, 2, 5, 10, 20)
 
     # Number of source images fed to the encoder during training.

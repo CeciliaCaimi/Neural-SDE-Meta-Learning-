@@ -104,7 +104,7 @@ def build(
     transport = Transport(
         k=cfg.model.k, n_relations=cfg.model.n_relations,
         relation_dim=cfg.model.relation_dim, hidden=cfg.model.transport_hidden,
-        out_moments=cfg.model.transport_out_moments,
+        out_moments=cfg.model.transport_out_moments, kind=cfg.model.transport_kind,
     ).to(device)
     return model, encoder, transport
 
@@ -130,8 +130,19 @@ def train(cfg: BaseConfig, model_cls: type[ScoreModel] = ScoreModel) -> str:
     np.random.seed(cfg.global_seed)
     device = torch.device(cfg.device if torch.cuda.is_available() else "cpu")
 
-    raw = load_cifar100()
-    if cfg.episodes.scheme == "domainshift":
+    if cfg.episodes.scheme == "officehome":
+        import glob
+        from episodes.officehome import OfficeHomeData, OfficeHomeLoader
+        root = cfg.episodes.officehome_root
+        pqs = sorted(glob.glob(os.path.join(root, "parquet", "*.parquet")))
+        S = int(cfg.model.backbone_kwargs.get("image_size", 64))
+        data = OfficeHomeData(pqs, os.path.join(root, "phase1", "class_split.json"),
+                              os.path.join(root, "phase1", "partitions.json"), image_size=S)
+        cfg.model.n_relations = None
+        loader = OfficeHomeLoader(data, "train", device=device, seed=cfg.global_seed)
+        diag_loader = OfficeHomeLoader(data, "val", device=device, seed=cfg.global_seed + 1)
+    elif cfg.episodes.scheme == "domainshift":
+        raw = load_cifar100()
         from episodes.domainshift import load_domainshift, DomainShiftLoader
         split = load_domainshift(cfg.episodes.domainshift_path)
         # The relation is the corruption type. More than one enables the relation embedding:
@@ -154,6 +165,7 @@ def train(cfg: BaseConfig, model_cls: type[ScoreModel] = ScoreModel) -> str:
             k_shots=cfg.episodes.k_shots, seed=cfg.global_seed + 1)
         diag_loader.images = loader.images
     else:
+        raw = load_cifar100()
         split = load_split(cfg.episodes.split_path)
         loader = EpisodeLoader(
             raw, split, "train", device=device,
