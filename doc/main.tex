@@ -1,0 +1,404 @@
+\documentclass{article}
+
+\usepackage{iclr2027_conference,times}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,multirow,array}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+
+\setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\floatsep}{5pt plus 2pt minus 2pt}
+\setlength{\intextsep}{5pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\belowcaptionskip}{0pt}
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\jot}{2pt}
+\setlength{\parskip}{3pt}
+\setlist{nosep,leftmargin=*}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.9}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\dblfloatpagefraction}{0.9}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{assumption}{Assumption}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\KT}{K_T}
+\newcommand{\MS}{M_S}
+\newcommand{\Ttrain}{\mathcal{Y}_{\mathrm{train}}}
+\newcommand{\Tval}{\mathcal{Y}_{\mathrm{val}}}
+\newcommand{\Ttest}{\mathcal{Y}_{\mathrm{test}}}
+\newcommand{\epshat}{\widehat{\epsilon}}
+\newcommand{\sigstar}{^{\ast}}
+
+\title{Bridging the Data Gap: Source-Informed Task-Space Transport for Few-Shot Diffusion}
+\author{Anonymous Authors}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Many deployments require a model to move rapidly from a data-rich source to a related target observed only sparsely. This is especially consequential where target data are difficult to collect, as in healthcare settings with persistent population or acquisition imbalances. Retraining or fine-tuning a high-capacity generator for every target is costly and can be statistically unreliable when target data are scarce. We introduce \emph{Meta-Diff}, which instead learns a recurring source--target relation once in a compact task space. A shared encoder maps each distribution to a low-dimensional coordinate; a learned relation transports a new source coordinate to its predicted target, and a shared diffusion backbone generates from that prediction without target-specific retraining. Controlled Gaussian-mixture experiments identify when this works: task identity must survive the representation, the relation must generalise across tasks, and the source--target shift must leave useful headroom for transport. On held-out CIFAR-100 validation tasks, correct source $+$ transport achieves 13.9\% lower mean SW than transport from the wrong source. In the final-test one-target comparison, its mean SW is 14.7\% lower than target-only modelling and 32.7\% lower than full fine-tuning; the main route itself uses no target image. Office-Home exposes a complementary boundary: transport can align target-domain statistics without reliable object identity. Together, these results recast extreme-few-shot adaptation as reusable transport in task space, while making the conditions for its success and failure directly measurable.
+\end{abstract}
+
+\section{Introduction}
+A new deployment rarely arrives with exactly the data one would like. A category may be abundant in one visual domain but scarce in another; an institution, device or population may be well represented while a related target setting contains only a handful of observations. The imbalance is especially consequential in healthcare, where uneven sampling across demographic groups, institutions and acquisition settings can produce systematic subgroup performance gaps \citep{larrazabal2020gender,seyyedkalantari2021underdiagnosis,daneshjou2022ddi}. Representative target-data collection remains the preferred long-term remedy, but it can be slow, costly, privacy-sensitive or infeasible for rare settings.
+
+The conventional response is target adaptation. Full fine-tuning, restricted parameter updates and learned embeddings reduce the cost of fitting a generator to a new target \citep{ruiz2023dreambooth,kumari2023customdiffusion,hu2022lora,gal2023textualinversion,ruiz2024hyperdreambooth}, but they still infer each target largely from target-side evidence. We exploit a different regularity: source and target domains often recur across semantic tasks. If their relationship is structured, earlier source--target pairs can teach us how a new source task should move before target examples become plentiful.
+
+We therefore consider relation-level generalisation. During meta-training we observe
+\[
+P_S^{y_1}\!\rightarrow P_T^{y_1},\ldots,P_S^{y_n}\!\rightarrow P_T^{y_n},
+\]
+for semantic tasks $y_i\in\Ttrain$. At test time the semantic identity changes to an unseen task $y^\star\in\Ttest$, but the source--target relation is shared. The comparison protocol provides a source set $D_S^{y^\star}$ and a target budget $D_T^{y^\star}$ for independent baselines. The main route uses the source set and relation only, at every reported target budget.
+
+Meta-Diff turns this question into low-dimensional transport (Figure~\ref{fig:method}). A set encoder estimates $z_S$, a linear relation predicts $\widetilde z_T$, and a frozen shared diffusion backbone generates from that prediction without target-time optimisation. Figure~\ref{fig:cifar-qualitative-early} instead intervenes on own, mean, shuffled and zero coordinates of the model; it visualises coordinate sensitivity, not the deployment transport comparison.
+
+Task-space transport also makes the mechanism inspectable. Task identity must survive the encoder; the relation must generalise; the shift must leave headroom over source reuse; and the generator must express the transported information. Section~\ref{sec:method} establishes two supporting properties, source-coordinate concentration and stability to coordinate error, but not task identity or relational generalisation. Section~\ref{sec:gmm} isolates those missing conditions, Section~\ref{sec:cifar} tests their generative consequence, and Section~\ref{sec:office} locates a further decoder-side semantic bottleneck.
+
+\begin{figure*}[t]
+\centering
+\definecolor{sourceblue}{RGB}{54,105,165}
+\definecolor{targetorange}{RGB}{215,122,46}
+\definecolor{softgray}{RGB}{246,246,246}
+\begin{minipage}[t]{0.31\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\scriptsize}]
+\node[font=\small\bfseries] at (2.0,2.55) {(a) Observe recurring pairs};
+\node[draw=sourceblue,fill=sourceblue!8,rounded corners,minimum width=.9cm,minimum height=.43cm] (s1) at (.62,1.95) {$D_S^{y_1}$};
+\node[draw=targetorange,fill=targetorange!10,rounded corners,minimum width=.9cm,minimum height=.43cm] (t1) at (3.35,1.95) {$D_T^{y_1}$};
+\draw[-{Latex[length=1.7mm]},thick] (s1)--node[above,font=\tiny]{same relation}(t1);
+\node[draw=sourceblue,fill=sourceblue!8,rounded corners,minimum width=.9cm,minimum height=.43cm] (s2) at (.62,1.20) {$D_S^{y_2}$};
+\node[draw=targetorange,fill=targetorange!10,rounded corners,minimum width=.9cm,minimum height=.43cm] (t2) at (3.35,1.20) {$D_T^{y_2}$};
+\draw[-{Latex[length=1.7mm]},thick] (s2)--node[above,font=\tiny]{same relation}(t2);
+\node[draw=sourceblue,fill=sourceblue!8,rounded corners,minimum width=.9cm,minimum height=.43cm] (sn) at (.62,.45) {$D_S^{y_n}$};
+\node[draw=targetorange,fill=targetorange!10,rounded corners,minimum width=.9cm,minimum height=.43cm] (tn) at (3.35,.45) {$D_T^{y_n}$};
+\draw[-{Latex[length=1.7mm]},thick] (sn)--node[above,font=\tiny]{same relation}(tn);
+\node[draw,rounded corners,fill=softgray,align=center,minimum width=1.65cm] at (1.98,-.15) {learn across\\semantic tasks};
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.33\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\scriptsize}]
+\node[font=\small\bfseries] at (2.0,2.55) {(b) Learn task-space transport};
+\draw[->,gray] (.25,.18)--(3.85,.18); \draw[->,gray] (.25,.18)--(.25,2.12);
+\foreach \sx/\sy/\tx/\ty in {.8/.55/1.45/1.03,1.15/1.60/1.82/1.88,2.0/.62/2.72/1.08}{
+ \fill[sourceblue] (\sx,\sy) circle (2.2pt); \fill[targetorange] (\tx,\ty) circle (2.2pt);
+ \draw[-{Latex[length=1.5mm]},gray!75,thick] (\sx,\sy)--(\tx,\ty);
+}
+\fill[sourceblue] (2.65,1.62) circle (2.6pt); \node[above left] at (2.65,1.62) {$z_S^{y^\star}$};
+\fill[targetorange] (3.40,2.00) circle (2.6pt); \node[above right] at (3.40,2.00) {$\widetilde z_T^{y^\star}$};
+\draw[-{Latex[length=1.9mm]},very thick] (2.65,1.62)--(3.40,2.00);
+\node[font=\tiny] at (1.05,-.15) {source}; \node[sourceblue] at (.62,-.15) {$\bullet$};
+\node[font=\tiny] at (3.12,-.15) {target}; \node[targetorange] at (2.67,-.15) {$\bullet$};
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.33\textwidth}
+\centering
+\begin{tikzpicture}[scale=.80,transform shape,node distance=2.1mm and 3.2mm,every node/.style={font=\scriptsize},box/.style={draw,rounded corners,align=center,minimum height=5.3mm,inner sep=2.1pt},arr/.style={-{Latex[length=1.6mm]},thick}]
+\node[font=\small\bfseries] (title) {(c) Deploy on unseen $y^\star$};
+\node[box,draw=sourceblue,fill=sourceblue!8,below=4mm of title] (ds) {$D_S^{y^\star}$};
+\node[box,right=of ds] (enc) {set\\encoder};
+\node[box,right=of enc] (zs) {$z_S$};
+\node[box,right=of zs] (map) {$A z_S+b_c$};
+\node[box,draw=targetorange,fill=targetorange!10,below=5mm of map] (zt) {$\widetilde z_T$};
+\node[box,left=of zt] (diff) {shared\\diffusion};
+\node[box,left=of diff,draw=targetorange,fill=targetorange!10] (gen) {target\\samples};
+\draw[arr] (ds)--(enc); \draw[arr] (enc)--(zs); \draw[arr] (zs)--(map); \draw[arr] (map)--(zt); \draw[arr] (zt)--(diff); \draw[arr] (diff)--(gen);
+\node[font=\tiny,below=4mm of diff,align=center] {all headline $K_T$: no target input\\no coordinate or backbone update};
+\end{tikzpicture}
+\end{minipage}
+\caption{\textbf{Meta-Diff learns a relation between task distributions, rather than a separate adaptation for each target.} Meta-training observes the same source$\rightarrow$target relation across different semantic tasks; a shared encoder embeds these distributions in task space; and the learned relation is applied to the source coordinate of a held-out task. At every headline $\KT$, the main route generates directly from the transported coordinate, with no target input, coordinate refinement or backbone update. Target-support budgets apply to independent baselines.}
+\label{fig:method}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.76\linewidth]{figures/gen_grid.png}
+\caption{\textbf{Qualitative task-coordinate control on held-out CIFAR generations.} Columns share initial diffusion noise; rows differ only in the task coordinate (own, mean, shuffled, or $z=0$). The samples come from the 50k-step CIFAR checkpoint, with matched tasks and paired noise. Own-task coordinates are encoder coordinates, not transported predictions; deployment claims use the separate paired route evaluations in Section~\ref{sec:cifar}.}
+\label{fig:cifar-qualitative-early}
+\end{figure*}
+
+
+The paper makes four contributions. \textbf{First}, we formulate data-asymmetric generation as relation-level meta-learning over a shared source--target transformation. \textbf{Second}, a 210-run GMM study maps its operating regime and separates intrinsically recoverable task information from what is represented in $z$. \textbf{Third}, CIFAR-100 tests source-specific generation without target input and the comparison with target-adapted baselines. At one target image for the baselines, SW is $0.1781$, $0.2087$ and $0.2648$ for direct transport, target-only and full fine-tuning, respectively. The paired final-test comparisons support a low-data advantage followed by a crossover to full fine-tuning. FiLM independently reproduces source specificity; the transport-structure ablations test whether nonlinearity is needed. \textbf{Finally}, Office-Home separates target-domain alignment from semantic use of the coordinate. Clinical and external-domain stress tests remain in Appendix~\ref{app:clinical} because they do not support the headline source-specific claim.
+
+\section{Related Work}
+\paragraph{Few-shot diffusion and compact adaptation.}
+Few-Shot Diffusion Models condition on support sets from unseen classes \citep{giannone2022fsdm}; Conditional Distribution Modelling transfers learned conditioning statistics \citep{gupta2024cdm}; and CRDI obtains sample-wise guidance embeddings through diffusion inversion \citep{cao2024crdi}. Personalisation methods adapt pretrained text-to-image models through full fine-tuning, compact embeddings, restricted cross-attention updates or amortised hypernetwork prediction \citep{ruiz2023dreambooth,gal2023textualinversion,kumari2023customdiffusion,ruiz2024hyperdreambooth}. LoRA constrains adaptation to a low-rank parameter space \citep{hu2022lora}, while intrinsic-dimension and weight-space studies suggest that useful adaptation can occupy a much smaller space than the full parameter vector \citep{aghajanyan2021intrinsic,dravid2024weights2weights}. These approaches establish that target adaptation can be compressed. Meta-Diff asks a complementary question: when a data-rich source exists for the \emph{same} unseen semantic task, can experience from earlier source--target pairs predict the new target before enough target data exist to adapt conventionally?
+
+\paragraph{Meta-learning and task representations.}
+Meta-learning reuses experience across tasks through shared representations or update rules \citep{finn2017maml}. Our set encoder follows the permutation-invariant Deep Sets construction \citep{zaheer2017deepsets}; FiLM provides a generic affine mechanism for injecting the resulting coordinate into the denoiser \citep{perez2018film}. Transfer Guided Diffusion Processes likewise combine source diffusion with target-domain guidance \citep{ouyang2024tgdp}. The distinguishing requirement here is \emph{relational generalisation}: semantic identity is held out while the source--target relation has been observed on other tasks. Success therefore depends on the quality of the task representation as well as on adaptation capacity.
+
+\paragraph{Data asymmetry as motivation.}
+Uneven population and institutional coverage can induce subgroup degradation in medical imaging \citep{larrazabal2020gender,seyyedkalantari2021underdiagnosis,daneshjou2022ddi}, while dataset audits document substantial gaps in demographic coverage and reporting \citep{daneshjou2021transparency,wen2022skindatasets}. This motivates methods that make use of related abundant data, but synthetic data are not a substitute for representative collection. We therefore treat the clinical studies in Appendix~\ref{app:clinical} as stress tests and limitations, not as evidence for clinical deployment.
+
+\section{Problem and Method}
+\label{sec:method}
+\subsection{Data-asymmetric task transfer}
+Let $y\in\mathcal{Y}$ denote a semantic task and $d\in\{S,T\}$ a source or target domain, with distribution $P_d^y$. Semantic tasks are partitioned into disjoint $\Ttrain,\Tval,\Ttest$. At deployment, the comparison protocol provides a source support set $D_S^y$ of size $\MS$ and permits independent baselines to use a target support set $D_T^y$ of size $\KT$; evaluation uses a disjoint target query set. The correct source $+$ transport main route consumes only $D_S^y$ and the relation descriptor for every $\KT$. We focus on $\MS\gg\KT$.
+
+A shared permutation-invariant encoder maps any support set to a task coordinate,
+\begin{equation}
+z=r_\psi(D)=\rho_\psi\!\left(\frac{1}{|D|}\sum_{x\in D}h_\psi(x)\right).
+\label{eq:encoder}
+\end{equation}
+The same encoder places source and target distributions in a common task space. Transfer therefore becomes a prediction problem in that space rather than a new high-dimensional optimisation problem for every target.
+
+\subsection{Conditioning and transport}
+The coordinate must next control a shared generator. We use standard DDPM noise prediction \citep{ho2020ddpm}, with the continuous-time score interpretation of \citet{song2021score}. The additive-basis parameterisation writes
+\begin{equation}
+\epshat_z(x_t,t)=\epshat_0(x_t,t)+\sum_{\ell=1}^{k}z_\ell R_\ell(x_t,t),
+\label{eq:basis}
+\end{equation}
+where $R_\ell$ are learned residual noise-prediction fields. To test whether the task-space effect depends on this construction, we also use FiLM. At U-Net block $j$, the feature tensor $H^{(j)}$ is modulated as
+\[
+H^{(j)}\leftarrow(1+\gamma_j(z))\odot H^{(j)}+\beta_j(z),
+\]
+with learned projections $\gamma_j,\beta_j$ from the task coordinate to feature-wise scales and shifts.
+
+For a source set, $z_S=r_\psi(D_S^y)$. We compare identity, relation-only offsets, residual MLPs and linear maps; the experiments show that source dependence matters but non-linearity is not required. The final transport is therefore
+\begin{equation}
+\widetilde z_T=A z_S+b_{c_{S\rightarrow T}},
+\label{eq:transport}
+\end{equation}
+where the relation-specific bias reduces to a single $b$ when only one relation is present. Across all headline $\KT$, the main route directly decodes $\widetilde z_T$ with no target-time coordinate refinement or backbone update. Target-only and full-fine-tuning baselines use their stated target-support budgets. Strict source reuse decodes $z_S$ directly; source-initialised target adaptation is named separately. The matched refinement ablation in Appendix~\ref{app:cifar-selection} tests a separate intervention and does not imply that refinement is universally ineffective.
+
+\subsection{Meta-training and low-data bias--variance trade-off}
+Each training episode contains source and target support/query sets for one semantic task. With $z_S=r_\psi(D_S^s)$, $z_T=r_\psi(D_T^s)$ and $\widetilde z_T$ from Equation~\eqref{eq:transport}, we minimise
+\begin{equation}
+\mathcal{L}_{\mathrm{meta}}=\mathcal{L}_{S}(z_S)+\lambda_T\mathcal{L}_{T}(z_T)+\lambda_{\mathrm{tr}}\mathcal{L}_{T}(\widetilde z_T)+\lambda_z(\|z_S\|_2^2+\|z_T\|_2^2),
+\label{eq:meta}
+\end{equation}
+where each $\mathcal{L}$ is the standard diffusion denoising loss evaluated on a disjoint query set. Target supports and queries supervise meta-training through separate branches. The transport map takes only the source coordinate and relation; at deployment the main route reads no target support or query and updates neither coordinates nor backbone weights.
+
+\paragraph{Why task-space transfer can help in the low-data regime.}
+A compact coordinate is useful only if abundant source data estimate it reliably and transport errors do not destabilise generation. Two results formalise these requirements.
+
+\begin{proposition}[Source-coordinate concentration]
+\label{prop:source-concentration}
+For i.i.d.\ $X_1,\ldots,X_M$, let $\mu=\E h_\psi(X)$ and
+$z_M=\rho_\psi(M^{-1}\sum_i h_\psi(X_i))$. If
+$\E\|h_\psi(X)\|_2^2<\infty$ and $\rho_\psi$ is $L_\rho$-Lipschitz, then
+\[
+\E\|z_M-\rho_\psi(\mu)\|_2^2
+\leq
+\frac{L_\rho^2\,\mathrm{tr}(\mathrm{Cov}[h_\psi(X)])}{M}.
+\]
+\end{proposition}
+
+Thus source-coordinate estimation error decays at the usual $O(M^{-1})$ mean-squared rate. This motivates the CIFAR source-budget check, but does not establish a generated-distance plateau at any particular $\MS$.
+
+\begin{proposition}[Stability to coordinate perturbations]
+\label{prop:coordinate-stability}
+For the reverse SDE with drift
+$b_z(x,t)=f(x,t)-g(t)^2[s_0(x,t)+B(x,t)z]$, assume $b_z$ is uniformly
+$L_x$-Lipschitz in $x$ and
+$\sup_{x,t}\|g(t)^2B(x,t)\|_{\mathrm{op}}\leq L_z$. Under synchronous coupling,
+\[
+\E\sup_{t\leq T}\|X_t^z-X_t^{z'}\|_2^2
+\leq C_T\|z-z'\|_2^2,
+\qquad
+W_2(P_z,P_{z'})\leq\sqrt{C_T}\|z-z'\|_2,
+\]
+where $C_T=L_z^2\phi_{L_x}(T)^2$ and
+$\phi_{L_x}(T)=(e^{L_xT}-1)/L_x$ (with value $T$ at $L_x=0$).
+\end{proposition}
+
+Together, the propositions capture the intended low-data bias: source evidence can make $z_S$ precise, while transport error cannot be amplified arbitrarily by the reverse process. They do not establish semantic task identity, relation predictability on unseen tasks, or semantic use by the decoder. Section~\ref{sec:gmm} tests those missing conditions; full proofs are in Appendix~\ref{app:theory}.
+
+\section{Experimental Design}
+\label{sec:experiments}
+The propositions establish estimation and stability, not task content or relational generalisation. Experiments therefore progress from GMMs, where these missing quantities are observable, to CIFAR under controlled image shifts and finally to the natural Product$\rightarrow$Clipart relation in Office-Home. Headline comparisons are paired on semantic task, support draw, target query set and sampling noise whenever possible. Generation repeats are not independent semantic tasks. CIFAR uses mean $\pm1.96\,\mathrm{SE}$ convention over matched class-by-transformation episodes (60 per target budget), with one training seed per arm; three transformations share each class, so these are not class-cluster or training-seed intervals. Other benchmarks retain their separately specified statistical units. Hyperparameters for target-only adaptation and full fine-tuning are selected on validation tasks and frozen before final test evaluation.
+
+\paragraph{Controlled GMM boundary study.}
+Two-dimensional Gaussian-mixture tasks vary source-task separation through $\alpha\in\{0,.1,.25,.5,.75,1,1.5\}$ and relation heterogeneity through $\eta\in\{0,.1,.25,.5,1,2\}$. The full $7\times6$ grid is repeated over five seeds, giving 210 trained cells and 13,440 held-out task evaluations at $\KT=0$. A separate shift-magnitude sweep at $\alpha=1,\eta=0$ contributes a further 25 cells and 1{,}600 held-out task evaluations. The primary effect is
+\[
+G_{\mathrm{source}}=\mathrm{SW}_{\mathrm{wrong}}-\mathrm{SW}_{\mathrm{correct}},
+\]
+so positive values favour the correct source. Because the data-generating distributions are known, intrinsic Bayes task identification can be measured separately from task identification in the learned coordinate and from held-out affine relation predictability.
+
+\paragraph{CIFAR-100.}
+Fine classes are semantic tasks \citep{krizhevsky2009}. Entire superclasses are held out: 60 fine classes from 12 superclasses for meta-training, 20 from four superclasses for validation, and 20 from four disjoint superclasses for final testing. Sources are clean; targets apply Gaussian blur, Gaussian noise or contrast reduction at fixed severity \citep{hendrycks2019}. Source and target pools contain disjoint underlying images. We test zero-shot source controls and $\KT\in\{1,5,20\}$ against target-only modelling and validation-selected full fine-tuning. Sliced Wasserstein distance (SW) is the headline distribution metric; energy MMD and semantic consistency are complementary. The appendix retains separate GMM denoising-calibration and historical oracle diagnostics; these are not pooled with the image-generation metrics.
+
+\paragraph{Office-Home.}
+Product$\rightarrow$Clipart provides a natural relation across 65 object categories. The fixed semantic split is 45/10/10 train/validation/test classes. Real-image audits verify both the semantic evaluator and the Product--Clipart domain distinction before generated images are scored. We first evaluate the same source controls used on CIFAR, then use frozen-checkpoint diagnostics to localise whether weak semantics arise in the encoder, transport or coordinate-to-generation path.
+
+\section{Results}
+\label{sec:results}
+\subsection{GMM: a controlled operating regime}
+\label{sec:gmm}
+The analytical results guarantee a stable coordinate, not a useful one. GMMs make the missing ingredients observable: we vary source-task separation $\alpha$ and relation heterogeneity $\eta$ independently, then evaluate zero-target transfer over the resulting $7\times6$ grid. Figure~\ref{fig:gmm-main} shows the first two conclusions. When $\alpha=0$, correct and wrong sources are unresolved in all six relation conditions; once the source carries task information, a correct-source advantage emerges, but it decreases as the relation becomes less reusable. In total, 34 of 42 cells have positive paired intervals excluding zero, with the unresolved cells confined to the six $\alpha=0$ conditions and the two most heterogeneous relations at $\alpha=.1$.
+
+The same experiment distinguishes \emph{intrinsic} from \emph{usable} identifiability. At $\alpha=.25$, the Bayes classifier on the true GMM likelihoods already identifies the source task with accuracy $.953$, yet nearest-centroid identification in the learned coordinate is only $.323$. At $\alpha=1.5$, the corresponding values are $1.000$ and $.920$. This gap is not cosmetic: across the 42 cells, $G_{\rm source}$ correlates much more strongly with learned-ID than with Bayes-ID ($\rho=.98$ versus $.88$). Replacing Bayes-ID with learned-ID in the same descriptive interaction model raises the cell-level fit from $R^2=.587$ to $.850$; even within the 24 cells with Bayes-ID $>.99$, learned-ID remains strongly associated with the source-specific gain ($\rho=.97$). We treat these regressions as descriptive summaries of the factorial experiment rather than causal estimates.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[t]{0.49\textwidth}\centering
+\includegraphics[width=\linewidth]{plots/gmm_phase_main.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}\centering
+\includegraphics[width=\linewidth]{plots/gmm_identifiability_main.png}
+\end{minipage}
+\caption{\textbf{GMM operating regime.} \emph{Left:} correct-source advantage $G_{\mathrm{source}}=\mathrm{SW}_{\mathrm{wrong}}-\mathrm{SW}_{\mathrm{correct}}$ over the full source-identifiability/relation-heterogeneity grid at $\KT=0$. The advantage disappears when source identity is absent and attenuates as the relation becomes less predictable. \emph{Right:} intrinsic Bayes task identification and nearest-centroid identification in the learned encoder coordinate, averaged over relation levels. Nearly perfect intrinsic identifiability can coexist with substantially weaker usable identity. Full cell-level results and paired intervals are in Appendix~\ref{app:gmm}.}
+\label{fig:gmm-main}
+\end{figure*}
+
+Relation predictability is a separate requirement, and it produces a crossover rather than a simple attenuation. Along $\alpha=1$, Bayes-ID stays at 1.0 while increasing $\eta$ from 0 to 2 lowers held-out affine relation $R^2$ from $1.000$ to $.408$ and reduces the correct-over-wrong SW advantage from $.573$ to $.253$. The corresponding rank association over the full grid is $\rho(G_{\rm source},R^2_{\rm rel})=.55$. At the clean anchor $(\alpha,\eta)=(1,0)$, correct-source transport reaches SW $.752$, versus $1.324$ for wrong-source transport, $1.099$ for relation-only prediction and $1.037$ for direct source reuse. The comparison against source reuse changes sign across the $\eta$ range: transport is better by $+.285$ $[+.200,+.367]$ at $(1,0)$ and worse by $-.250$ $[-.407,-.081]$ at $(1,2)$, and the transport-over-reuse difference declines with $\eta$ and is negative at $\eta=2$ for every $\alpha\geq.5$. At $(1,2)$ the routes order as source reuse $1.720$, correct-source transport $1.971$ and relation-only $2.112$, mirroring how much task identity each retains under an attenuated relation map. Transport is therefore preferable to source reuse only while the relation remains predictable. The complete route tables are reported in Appendix~\ref{app:gmm}.
+
+The coordinate-retrieval analysis makes information loss along the pipeline explicit. For $\alpha\geq.5$, intrinsic identity is perfect, yet learned-ID ranges from $.691$ to $.920$ and transported target-coordinate retrieval from only $.169$ to $.341$ (chance $1/64$). Averaged over the grid, transported retrieval is $.172$ versus $.061$ for the raw cross-domain $z_S\!\to z_T$ baseline; the transport gain is resolved in every cell with $\alpha\geq.25$ ($+.112$ overall, paired seed-block interval $[+.106,+.116]$) and correctly vanishes at $\alpha\in\{0,.1\}$. Across the grid it correlates with $G_{\rm source}$ at $\rho=.91$, between Bayes-ID ($.88$) and learned-ID ($.98$). Retrieval margins show that the recovery is partial: the learned-$z$ margin rises from $-.002$ to $+.060$ across the sweep, whereas the transported margin remains negative ($-.039$ to $-.079$). Figure~\ref{fig:gmm-new-mechanism}a and Appendix~\ref{app:gmm} report the full identity chain.
+
+The shift-magnitude sweep in Figure~\ref{fig:gmm-new-mechanism}b isolates a different question: \emph{when is transport itself needed?} We fix $\alpha=1,\eta=0$ and interpolate the same source--target transformation by $\lambda$. The correct-source advantage over a wrong source remains large even at $\lambda=0$ ($G_{\rm source}=.482$), because source identity is still recoverable. In contrast, transport improves over direct source reuse by an unresolved $.024$ SW when there is essentially no shift to correct, but by $.541$ at $\lambda=2$; the independently measured source--target headroom increases from $.08$ to $1.59$ SW over the same sweep. Source specificity and transport utility are therefore different quantities: identifying the right source is not enough to make a transport map useful if source and target are already nearly the same.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[t]{0.49\textwidth}\centering
+\includegraphics[width=\linewidth]{plots/gmm_identity_chain.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}\centering
+\includegraphics[width=\linewidth]{plots/gmm_shift_sweep.png}
+\end{minipage}
+\caption{\textbf{Two additional GMM boundaries.} \emph{Left:} task identity through the pipeline. Bayes-ID is the intrinsic ceiling, learned $z_S$ measures usable source identity, and transported $\widetilde z_T$ measures whether the predicted target coordinate retrieves the correct held-out target task; raw $z_S\!\to z_T$ retrieval is a cross-domain baseline. \emph{Right:} the shift-magnitude sweep separates source specificity from the value of transport, with hierarchical seed/task 95\% intervals. The correct source remains informative as $\lambda\!\to\!0$, whereas the advantage of transport over source reuse grows only when there is nontrivial source--target headroom. Exact tables, regression diagnostics and uncertainty are in Appendix~\ref{app:gmm}.}
+\label{fig:gmm-new-mechanism}
+\end{figure*}
+
+The controlled study therefore adds four empirical requirements beyond the two analytical guarantees: task identity must survive the encoder, the relation must generalise, transport must preserve enough identity to reach the target task, and the source--target discrepancy must leave useful headroom over source reuse. CIFAR now asks whether this mechanism survives when the distributions are images rather than known mixtures.
+
+\subsection{CIFAR: source-specific zero-shot transfer and a low-data crossover}
+\label{sec:cifar}
+We first evaluate generation without any target input on the 60 held-out validation class--transformation episodes. Correct source $+$ transport reaches SW $0.2061$, versus $0.2393$ for wrong-source transport and $0.2407$ for relation-only prediction (Table~\ref{tab:cifar-main}). Their paired SW and semantic-consistency contrasts favour the correct source; the semantic difference from strict source reuse remains unresolved. Frozen-coordinate diagnostics point in the same direction before generation: transported target-coordinate retrieval reaches $62.5\%$, $59.5\%$ and $49.0\%$ top-1 for blur, noise and contrast, versus $17.3\%$, $26.5\%$ and $14.0\%$ for the raw source coordinate and at most $2.25\%$ for wrong-source transport (Appendix~\ref{app:cifar}). A separate $K_T=1$ deployment grid from the model checkpoint is shown in Figure~\ref{fig:cifar-strategy-grid}; it retains six labelled routes and paired generation noise. This visual diagnostic is distinct from the zero-target and frozen-coordinate packages.
+
+On the separate final-test episodes, one-target SW is $0.1781$ for correct source $+$ transport, $0.2087$ for target-only and $0.2648$ for full fine-tuning. At $K_T=20$, the corresponding transport and full-FT values are $0.1844$ and $0.1483$. Paired transport-versus-target-only intervals favour transport at $K_T=1$; remain unresolved at $K_T=5,20$; transport-versus-full-FT intervals favour transport at $K_T=1,5$; favour full fine-tuning at $K_T=20$. The paired final-test comparisons support a low-data advantage followed by a crossover to full fine-tuning. Energy MMD and its paired contrasts are reported separately in Appendix~\ref{app:cifar}. Full-FT settings were selected on validation tasks and frozen before final-test evaluation. The appendix also reports the matched refinement on/off experiment on the correct source $+$ transport checkpoint; it is a separate diagnostic, not part of the headline route.
+
+\begin{table}[t]
+\centering\footnotesize\setlength{\tabcolsep}{5pt}
+\caption{\textbf{CIFAR headline comparisons for correct source $+$ transport, $J=0$.} Panel A uses validation classes; Panel B uses separate final-test classes. Distances: $\Delta=\mathrm{comparator}-\mathrm{main}$; consistency: $\Delta=\mathrm{main}-\mathrm{comparator}$. Positive favours the main route. Entries show episode-level 95\% half-widths; stars use unrounded paired intervals excluding zero, in either direction.}
+\label{tab:cifar-main}
+\begin{tabular}{lcccc}
+\toprule
+\multicolumn{5}{l}{\textbf{A. Zero-target controls: 60 validation episodes}}\\
+Route & SW & $\Delta$ SW & Class consistency & $\Delta$ class\\
+\midrule
+\shortstack[l]{correct source\\$+$ transport} & $0.2061\pm0.0194$ & -- & $0.1075\pm0.0235$ & --\\
+Strict source reuse & $0.2416\pm0.0190$ & $0.0355\pm0.0108\sigstar$ & $0.1102\pm0.0254$ & $-0.0028\pm0.0109$\\
+Wrong source & $0.2393\pm0.0205$ & $0.0333\pm0.0113\sigstar$ & $0.0470\pm0.0079$ & $0.0604\pm0.0216\sigstar$\\
+Relation-only & $0.2407\pm0.0197$ & $0.0346\pm0.0081\sigstar$ & $0.0490\pm0.0094$ & $0.0585\pm0.0206\sigstar$\\
+\midrule
+\multicolumn{5}{l}{\textbf{B. Final-test SW: 180 episodes, 60 per budget}}\\
+Route & $\KT=1$ & $\KT=5$ & $\KT=20$ & \\
+\midrule
+\shortstack[l]{correct source\\$+$ transport} & $0.1781\pm0.0116$ & $0.1834\pm0.0107$ & $0.1844\pm0.0118$ & \\
+Target-only & $0.2087\pm0.0157$ & $0.1884\pm0.0128$ & $0.1799\pm0.0099$ & \\
+Full fine-tuning & $0.2648\pm0.0184$ & $0.2205\pm0.0183$ & $0.1483\pm0.0098$ & \\
+$\Delta$ target-only & $0.0306\pm0.0105\sigstar$ & $0.0051\pm0.0058$ & $-0.0044\pm0.0067$ & \\
+$\Delta$ full FT & $0.0867\pm0.0176\sigstar$ & $0.0371\pm0.0197\sigstar$ & $-0.0361\pm0.0147\sigstar$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two further results distinguish source use from architecture. FiLM correct source $+$ transport improves SW and class consistency over mean-source, shuffled-source and relation-only controls at all three budgets in its own validation package. This tests FiLM source specificity, not a complete FiLM full-FT crossover. The matched conditioning comparison favours FiLM at $K_T=5,20$, with the other budgets unresolved. In the separate retained transport-structure ablations, Basis linear versus residual MLP remains unresolved, while FiLM linear has lower SW and energy MMD than FiLM nonlinear at all three budgets. These one-seed matched comparisons do not quantify training-seed variation. The basis uses 55,344 conditioning parameters versus 118,784 for FiLM; this does not establish a runtime or memory advantage.
+
+The source-budget sweep shows small changes between $M_S=16$ and 300, but not exact equivalence: the paired SW difference at $M_S=64$ relative to 16 is $-0.00287\pm0.00236\sigstar$. Other measured increments relative to 16 have intervals containing zero; no $M_S<16$ was tested. Figure~\ref{fig:cifar-budgets} uses the actual final-test target-budget and nested source-budget records. Appendix~\ref{app:cifar} contains the validation source-dependence sweep, final-test MMD, discussion of the source-budget sweep, FiLM controls, frozen adaptation settings, the separate refinement ablation, and conditioning/task-scarcity results.
+
+\begin{table}[t]
+\centering\footnotesize
+\caption{\textbf{Three separate matched CIFAR packages.} The first row uses the two conditioning runs of correct source $+$ transport; the other rows compare transport structures. Each evaluated transport route uses $J=0$. Signs follow the first column; stars use unrounded paired episode intervals. One training seed per arm.}
+\label{tab:cifar-ablation}
+\begin{tabular}{lccc}
+\toprule
+Paired SW comparison & $\KT=1$ & $\KT=5$ & $\KT=20$\\
+\midrule
+FiLM $-$ basis & $-0.0094\pm0.0099$ & $-0.0148\pm0.0107\sigstar$ & $-0.0149\pm0.0107\sigstar$\\
+Linear $-$ MLP (basis) & $0.0022\pm0.0049$ & $0.0004\pm0.0048$ & $0.0036\pm0.0050$\\
+MLP $-$ linear (FiLM) & $0.0093\pm0.0037\sigstar$ & $0.0112\pm0.0040\sigstar$ & $0.0087\pm0.0042\sigstar$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[t]{0.49\textwidth}\centering
+\includegraphics[width=\linewidth]{figures/low_data_crossover.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}\centering
+\includegraphics[width=\linewidth]{figures/A4_ms_curve.png}
+\end{minipage}
+\caption{\textbf{CIFAR target and source budgets.} Left: final-test SW for correct source $+$ transport and target-adapted baselines. The main route uses no target support at any $K_T$; its small changes across budgets reflect different sampled source/query episodes and generation noise. Right: $K_T=1$ with nested source supports and the checkpoint trained at $M_S=64$. Error bars show marginal episode-level 95\% intervals; paired effects and stars are computed separately.}
+\label{fig:cifar-budgets}
+\end{figure*}
+
+\FloatBarrier
+\subsection{Office-Home: domain alignment without reliable object identity}
+\label{sec:office}
+CIFAR supports source-specific generation under the tested controlled shifts, with architecture and budget qualifications described above; those relations remain synthetic. Office-Home asks what remains under a natural Product$\rightarrow$Clipart shift. Before scoring generated images, the benchmark passes the intended structural checks: CLIP reaches $65.96\%$ top-1 on held-out real Clipart images, DINOv2 distinguishes Product from Clipart with $98.30\%$ accuracy, and same-class cross-domain centroid retrieval is $100\%$ top-1 with median rank 1. Weak generated semantics therefore cannot be dismissed as a broken real-image evaluator.
+
+The generative result is deliberately reported as a stress test rather than a positive semantic-transfer claim. At $\KT=0$, correct-source transport improves DINO-SW over wrong-source transport ($.038969$ vs. $.039394$), relation-only prediction ($.039251$) and source reuse ($.041641$); all three paired distance gains exclude zero. It also raises predicted Clipart share from $63.8\%$ under source reuse to $86.5\%$. Yet requested-object identity is only $1.67\%$, and its differences from wrong-source and relation-only controls are unresolved. Figure~\ref{fig:office-summary} summarises this separation: with one target example, transport beats target-only in DINO-SW and MMD but is unresolved against full fine-tuning in SW; by $\KT=5$ and $10$, full fine-tuning is clearly better.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[t]{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{plots/O-F2_K_curve.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.50\textwidth}\centering
+\includegraphics[width=\linewidth]{plots/O-F3_semantic_vs_domain.png}
+\end{minipage}
+\caption{\textbf{Office-Home exposes a different boundary from CIFAR.} \emph{Left:} correct-source transport remains nearly flat in DINO feature-SW, while full fine-tuning improves as target support grows. \emph{Right:} generated routes can become strongly Clipart-like without preserving the requested object; the star is the held-out real Clipart audit. The natural-domain limitation is therefore semantic, not simply a failure to change domain appearance.}
+\label{fig:office-summary}
+\end{figure*}
+
+The distributional gain without reliable object identity creates a localisation question: is semantic information lost in the encoder, the transport map, or the decoder? Frozen-checkpoint diagnostics separate these stages. Independent 16-image Product support sets retrieve the matching held-out class in learned $z$ with $91.0\%$ top-1 accuracy, so the encoder has substantial within-domain object information. Transport improves cross-domain target-coordinate retrieval from $12.0\%$ to $42.0\%$ L2 top-1, although the correct-versus-wrong transport interval remains unresolved over the ten test classes. More decisively, bypassing transport does not restore semantics: a direct target coordinate estimated from abundant Clipart support produces only $2.38\%$ requested-class accuracy on seen classes and $1.56\%$ on held-out classes, despite real-query accuracies around $50\%$. Correct coordinates do reduce denoising MSE slightly across diffusion time, so the generator is not coordinate-blind, but the effect is weak. An explicit learned class embedding raises generated identity to $6.90\%$ on seen classes, still far below the real-image calibration. The most defensible conclusion is therefore a bottleneck at the coordinate-to-generation interface, possibly compounded by incomplete semantic encoding, rather than transport error alone. Full route matrices, frozen-checkpoint diagnostics, and the validation-only checkpoint/baseline selection record are in Appendix~\ref{app:office} (Table~\ref{tab:office-selection}).
+
+\section{Mechanistic Synthesis and Limitations}
+\label{sec:synthesis}
+Theory and experiments form one diagnostic chain. Propositions~\ref{prop:source-concentration}--\ref{prop:coordinate-stability} explain why task-space transfer can be stable; Table~\ref{tab:mechanism-synthesis} shows what else makes it useful. GMMs isolate usable identity, relation predictability, transport preservation and headroom; CIFAR tests its image-generation consequences through paired comparisons; Office-Home adds the final requirement that the generator actually use the transported semantics.
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{\textbf{Where the source-informed pipeline succeeds and where it breaks.} Representative diagnostics locate distinct stages of the mechanism; values are not intended as a common metric across rows.}
+\label{tab:mechanism-synthesis}
+\begin{tabular}{@{}p{.14\linewidth}p{.42\linewidth}p{.35\linewidth}@{}}
+\toprule
+Setting & Representation / transport evidence & Generative implication\\
+\midrule
+GMM & Bayes-ID can be perfect while learned-ID is weaker; at $\alpha=1$, learned-ID $.883$ and transported retrieval $.315$. Shift sweep: transport-over-reuse $.024\!\rightarrow\!.541$ as headroom grows. & Correct-vs-wrong SW gain $.573$ at $(1,0)$; usable identity tracks the gain more closely than Bayes-ID\\
+CIFAR & Transported target-coordinate retrieval $49$--$62.5\%$ across relations & Correct source $+$ transport improves on wrong/relation-only at $\KT=0$; the separate final-test budget comparison is in Table~\ref{tab:cifar-main}\\
+Office-Home & Product-$z$ retrieval $91.0\%$; transport raises target-coordinate retrieval $12.0\%\!\rightarrow\!42.0\%$ & Clipart share $86.5\%$, but object ID $1.67\%$; abundant direct $z_T$ also fails\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This comparison suggests a practical diagnostic hierarchy for source-informed generative transfer. Before training a new route, one can ask whether source tasks are separable, whether the learned coordinate retains that information, whether the source--target relation generalises, whether there is enough headroom for transport to improve on source reuse, and whether the generator uses the resulting coordinate semantically. The GMM study isolates the first four under known ground truth; Office-Home exposes the final generator-side failure. These are operating diagnostics rather than interchangeable post-hoc explanations.
+
+Source specificity survives FiLM under the matched source-control protocol, while the transport-structure ablations retain their own comparison scope. At $k=16$, a single-relation affine map needs 272 active parameters; the three-relation CIFAR implementation uses a shared matrix plus relation-specific biases (304 active parameters) and performs no deployment update. Its source-budget changes over 16--300 images are small but do not establish a precise plateau at 16. The paired final-test comparisons support a low-data advantage followed by a crossover to full fine-tuning.
+
+\paragraph{Limitations.}
+CIFAR provides positive source-specific image evidence under controlled shifts, conditional on the tested checkpoints and episode-level uncertainty; Office-Home achieves target-domain alignment without reliable object-specific generation. Propositions~\ref{prop:source-concentration}--\ref{prop:coordinate-stability}, proved in Appendix~\ref{app:theory}, establish concentration and continuity only, not relational generalisation. The clinical studies are likewise stress tests rather than positive evidence: ChestX-ray14 lacks a resolved source-specific effect, Fitzpatrick17k remains unresolved at disease and pathology-family granularity, and CRC stops at a prespecified benchmark-structure gate before diffusion training (Appendix~\ref{app:clinical}).
+
+\section{Conclusion}
+Meta-Diff asks whether a recurring source--target relation can replace repeated high-capacity adaptation when target data are scarce. The theory explains why source coordinates can be estimated stably and why transport error need not be amplified by generation; GMMs identify the additional requirements of usable task identity, relation predictability and headroom. CIFAR supports source-specific generation without target input and quantifies the budget-dependent comparison with target adaptation, while Office-Home exposes a separate decoder-side semantic bottleneck. Together, these results make both the promise and the failure modes of source-informed transfer directly inspectable.
+
+\bibliographystyle{iclr2027_conference}
+\bibliography{references}
+
+\section*{Impact Statement}
+This work studies generative modelling under uneven data availability. Source-informed generation may reduce target-specific optimisation where representative target data are difficult to obtain, but synthetic data can also reproduce existing bias or create misleading detail. We therefore evaluate against held-out real data, retain negative stress tests, and do not treat generated clinical images as substitutes for representative collection or clinical validation. Any healthcare deployment would require independent clinical evaluation, governance and privacy review beyond the scope of this work.
+
+\clearpage
+\appendix
+\let\AppendixSection\section
+\renewcommand{\section}{\FloatBarrier\AppendixSection}
+\input{appendix}
+
+\end{document}
