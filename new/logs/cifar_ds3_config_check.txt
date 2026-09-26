@@ -1,0 +1,157 @@
+{
+  "run": "cifar_ds3",
+  "engine": "legacy",
+  "original_config": {
+    "model": {
+      "backbone": "small_unet",
+      "backbone_kwargs": {
+        "base_channels": 128,
+        "channel_mult": [
+          1,
+          2,
+          2
+        ],
+        "num_res_blocks": 2,
+        "attn_resolutions": [
+          16
+        ]
+      },
+      "k": 16,
+      "basis_init_scale": 0.001,
+      "encoder_width": 64,
+      "encoder_feature_dim": 256,
+      "encoder_hidden": 256,
+      "encoder_pooling": "mean",
+      "transport_hidden": 64,
+      "relation_dim": 8,
+      "n_relations": 3,
+      "transport_out_moments": false
+    },
+    "diffusion": {
+      "n_steps": 1000,
+      "schedule": "cosine",
+      "loss_weighting": "simple",
+      "min_snr_gamma": 5.0
+    },
+    "episodes": {
+      "scheme": "domainshift",
+      "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+      "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_domainshift.json",
+      "k_shots": [
+        1,
+        2,
+        5,
+        10,
+        20
+      ],
+      "enc_source_images": 64,
+      "query_batch": 32
+    },
+    "train": {
+      "steps": 50000,
+      "lr": 0.0002,
+      "weight_decay": 0.0,
+      "grad_clip": 1.0,
+      "ema_decay": 0.999,
+      "warmup_steps": 500,
+      "lambda_tgt": 1.0,
+      "lambda_trans": 1.0,
+      "lambda_z": 0.0001,
+      "log_every": 50,
+      "diagnose_every": 1000,
+      "ckpt_every": 10000,
+      "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+      "amp": true
+    },
+    "adapt": {
+      "steps": 25,
+      "lr": 0.01,
+      "beta0": 1.0,
+      "noise_batch": 16
+    },
+    "device": "cuda",
+    "global_seed": 12345,
+    "run_name": "cifar_ds3"
+  },
+  "replay_config": {
+    "model": {
+      "backbone": "small_unet",
+      "backbone_kwargs": {
+        "base_channels": 128,
+        "channel_mult": [
+          1,
+          2,
+          2
+        ],
+        "num_res_blocks": 2,
+        "attn_resolutions": [
+          16
+        ]
+      },
+      "k": 16,
+      "basis_init_scale": 0.001,
+      "encoder_width": 64,
+      "encoder_feature_dim": 256,
+      "encoder_hidden": 256,
+      "encoder_pooling": "mean",
+      "transport_hidden": 64,
+      "relation_dim": 8,
+      "n_relations": 3,
+      "transport_out_moments": false
+    },
+    "diffusion": {
+      "n_steps": 1000,
+      "schedule": "cosine",
+      "loss_weighting": "simple",
+      "min_snr_gamma": 5.0
+    },
+    "episodes": {
+      "scheme": "domainshift",
+      "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+      "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\legacy\\artifacts\\cifar100_domainshift_c3.json",
+      "k_shots": [
+        1,
+        2,
+        5,
+        10,
+        20
+      ],
+      "severity_override": null,
+      "enc_source_images": 64,
+      "query_batch": 32
+    },
+    "train": {
+      "steps": 50000,
+      "lr": 0.0002,
+      "weight_decay": 0.0,
+      "grad_clip": 1.0,
+      "ema_decay": 0.999,
+      "warmup_steps": 500,
+      "lambda_tgt": 1.0,
+      "lambda_trans": 1.0,
+      "lambda_z": 0.0001,
+      "log_every": 50,
+      "diagnose_every": 1000,
+      "ckpt_every": 10000,
+      "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints",
+      "amp": true
+    },
+    "adapt": {
+      "steps": 25,
+      "lr": 0.01,
+      "beta0": 1.0,
+      "noise_batch": 16
+    },
+    "device": "cuda",
+    "global_seed": 12345,
+    "run_name": "cifar_ds3"
+  },
+  "only_scientific_change": "transport_kind=linear",
+  "path_changes": "output directory and equivalent frozen split files",
+  "legacy_diagnostics": "8 episodes, 1 noise draw",
+  "non_transport_initial_weights_identical": true,
+  "non_transport_initial_sha256": {
+    "model": "827efffbae2b99bcd634b4d683a8d8d920b3f0425669171c38550fa4abcff11f",
+    "encoder": "e2c9a49252c1797035f15dbcfd42ede84b79f8ac1f610af88653ae384cfb21bb"
+  }
+}

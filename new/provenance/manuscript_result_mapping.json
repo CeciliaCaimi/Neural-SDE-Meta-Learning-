@@ -1,0 +1,208 @@
+{
+  "C0": {
+    "files": [
+      {
+        "path": "results/A6_zero_shot.json",
+        "sha256": "4767b4b0d20c622239b56db155a53ea5632cf71b89c762ae21c6f933260ae2cc"
+      }
+    ],
+    "manuscript_anchors": [
+      "MAIN tab:cifar-main panel A",
+      "MAIN abstract and zero-target paragraph"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "C1": {
+    "files": [
+      {
+        "path": "results/A9_cifar_full_ft.json",
+        "sha256": "6a67a962979bc3248e538872473a9b0e979a4911e45a303ba27594b14d87f003"
+      }
+    ],
+    "manuscript_anchors": [
+      "MAIN tab:cifar-main panel B",
+      "MAIN abstract, contributions, discussion and conclusion",
+      "MAIN fig:cifar-budgets left"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "C2": {
+    "files": [
+      {
+        "path": "results/A9_cifar_full_ft.json",
+        "sha256": "6a67a962979bc3248e538872473a9b0e979a4911e45a303ba27594b14d87f003"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP final-test MMD paragraph",
+      "MAIN crossover paragraph"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "C3": {
+    "files": [
+      {
+        "path": "results/A1_per_episode.json",
+        "sha256": "5f82aa399a7868463e0b252eb0664a94d375544a438079b081d36079a0edb72e"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP source-dependence table"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "C4": {
+    "files": [
+      {
+        "path": "results/A4_ms16_per_episode.json",
+        "sha256": "bb369c7f0f668b53dac0127a877d4ecfa624a651399bc285fbd84fc387c8f949"
+      },
+      {
+        "path": "results/A4_ms32_per_episode.json",
+        "sha256": "09784a23ffb6bfe85f449039f8323b104c581e6a56ffc28f70060b43def044de"
+      },
+      {
+        "path": "results/A4_ms64_per_episode.json",
+        "sha256": "a370894aad47023df13d6d99c46279ebd787143b129b2e8a7ce75cdff83a8b29"
+      },
+      {
+        "path": "results/A4_ms128_per_episode.json",
+        "sha256": "328b4a4a94211274615eefd00cc7dfa7056e9971da3afce6c432faec6e5776a1"
+      },
+      {
+        "path": "results/A4_ms256_per_episode.json",
+        "sha256": "e704d459466f95c25c5d8b6da10e55d32d98d3b08689c86a215980bfa5728feb"
+      },
+      {
+        "path": "results/A4_ms300_per_episode.json",
+        "sha256": "e8287559e712e02b8e4d8242e611f8af3636d5b6804231ce8dbd9bca5b624249"
+      }
+    ],
+    "manuscript_anchors": [
+      "MAIN fig:cifar-budgets right",
+      "MAIN/APP source-budget discussion"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "C5": {
+    "files": [
+      {
+        "path": "results/A7_film_source_dependence.json",
+        "sha256": "9fd375b21eab1ed5c918b0806f05fb990bc8e6e279b3f43249f6487e0a8f2996"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP FiLM source/semantic summary",
+      "MAIN source-specificity and contributions"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "C6": {
+    "files": [
+      {
+        "path": "results/A2_basis_per_episode.json",
+        "sha256": "3a20645bdae728bc2701420c2a71d599098f19bcb5ac14d8692066288ee64d1a"
+      },
+      {
+        "path": "results/A2_film_per_episode.json",
+        "sha256": "d09f7baa963acb1be2526615e3b479d3cf64bf763ed289269829309fa5019adb"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP conditioning block",
+      "MAIN tab:cifar-ablation first row"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "C9": {
+    "files": [
+      {
+        "path": "results/C7_cifar_train50_basis_per_episode.json",
+        "sha256": "47ca694f9585cfc87c81e578cb138b044a2918823e7db5ce97bb63b0f44e648c"
+      },
+      {
+        "path": "results/C7_cifar_train50_film_per_episode.json",
+        "sha256": "5aeffd8b8a8fbd9ef50aa91f805e0fe40ae1eb10ca9a75bd1e55c80448b5b6ab"
+      },
+      {
+        "path": "results/C7_cifar_train25_basis_per_episode.json",
+        "sha256": "991da29c6912f1800eea95d153c9da28a01e9c8fc3ef7191f3c7a4c442b4e8c4"
+      },
+      {
+        "path": "results/C7_cifar_train25_film_per_episode.json",
+        "sha256": "089757c53faa32ebca326a659784f21c1606c49b01b8db2a2b8b62c35a52081e"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP meta-training-task scarcity"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  },
+  "REF-01": {
+    "files": [
+      {
+        "path": "results/A3_kt_curve_per_episode.json",
+        "sha256": "dab03c85d4b5b9c5cd3efa488f351effa4c1cc2197ad76715bef588ad01da0c5"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP tab:cifar-refinement",
+      "MAIN method and CIFAR interpretation"
+    ],
+    "status": "KEEP_ABLATION"
+  },
+  "CAL-01": {
+    "files": [
+      {
+        "path": "results/stage1_linear_k16_s80000_related0.1.panel.json",
+        "sha256": "e0fb5c43e4f962b68cc86ad3dabdb8e7fe7379c20f0652eb98fa1414fb228bf1"
+      },
+      {
+        "path": "results/stage1_linear_k16_s80000_related0.25.panel.json",
+        "sha256": "aece70679260ff6144686e57e6007adfeda2109c8efbdb345fadddc8b86c57a2"
+      },
+      {
+        "path": "results/stage1_linear_k16_s80000_related0.5.panel.json",
+        "sha256": "27175394314fc450b7027d625823deae556ded94ddb5d09686f99068ab6d3929"
+      },
+      {
+        "path": "results/stage1_linear_k16_s80000_related1.0.panel.json",
+        "sha256": "99d0e30b2157e8fe4db8eec849168f0d188bfc0e6a4a5df606d6f6730305bbae"
+      },
+      {
+        "path": "results/stage1_linear_k16_s80000_unrelated.panel.json",
+        "sha256": "83fb26e71483137a3ca4efb7a0a73b5af4abdac9e6ee2456ef8fd8e088bd8d10"
+      },
+      {
+        "path": "results/E12a_controls.raw.json",
+        "sha256": "f896d3426d44848cfd6b391aac3b015f8f92171b6d5715a16f38215f83e44518"
+      },
+      {
+        "path": "results/E12b_generation.raw.json",
+        "sha256": "845391a4b014e16cc2210197af69b6b928b188f4bc1b347f71c5ad2beab7b7ba"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP coordinate calibration / fig:coord-profile",
+      "MAIN fig:cifar-qualitative-early"
+    ],
+    "status": "VERIFIED_LINEAR_CHECKPOINT_DIAGNOSTIC"
+  },
+  "FIG-02": {
+    "files": [
+      {
+        "path": "results/E14_generation_strategies_per_episode.json",
+        "sha256": "f108587efad9e5ed6100fab49ebf7c5c1c51fd67bf57e37a50a03726faf9f4dd"
+      },
+      {
+        "path": "results/E14_generation_strategies.raw.json",
+        "sha256": "e7b6f99dafa3cd04e3eece0e6982fe3bbdc72a5c4087c5a9318a9b1a945a3db9"
+      }
+    ],
+    "manuscript_anchors": [
+      "APP fig:cifar-strategy-grid",
+      "MAIN qualitative-grid reference"
+    ],
+    "status": "VERIFIED_LINEAR_NO_REFINE"
+  }
+}

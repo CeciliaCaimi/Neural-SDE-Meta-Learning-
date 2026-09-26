@@ -1,0 +1,9 @@
+{
+  "status": "complete",
+  "required_free_mib": 12500,
+  "started": "2026-09-25T08:11:53+01:00",
+  "pid": 4016,
+  "exit_code": 0,
+  "finished": "2026-09-25T09:58:48+01:00",
+  "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train50_film_k16_step50000.pt"
+}

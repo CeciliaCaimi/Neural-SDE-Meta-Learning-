@@ -1,0 +1,55 @@
+PRIMARY METHOD: linear transport without refinement (J=0); refinement is a separate ablation.
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+arm        basis / small_unet  k=16
+parameters phi 27.798M in the evaluated path, of which 55344 carry z; encoder 0.327M, transport 352
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets nested (prefix)
+
+60 episodes: 20 classes x 3 transformations x 1 values of K_T
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1
+  ------------------------------------
+  no adaptation            1.677 +-0.065
+  reuse z_S                1.465 +-0.101
+  transport                0.330 +-0.039
+  transport + refine       0.335 +-0.035
+  target only              0.408 +-0.059
+  oracle                   0.331 +-0.045
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1
+  ------------------------------------
+  no adaptation            0.259 +-0.019
+  reuse z_S                0.247 +-0.020
+  transport                0.209 +-0.020
+  transport + refine       0.210 +-0.020
+  target only              0.227 +-0.020
+  oracle                   0.199 +-0.025
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=1
+  ------------------------------------------------------------
+  transport vs reuse z_S                +1.1357 +-0.1148*
+  transport vs target only              +0.0782 +-0.0540*
+  refinement: off vs on                 -0.0048 +-0.0143 
+  transport + refine vs oracle          +0.0036 +-0.0394 
+
+  comparison, sliced Wasserstein, pixel space             K_T=1
+  -------------------------------------------------------------
+  transport vs reuse z_S                +0.0381 +-0.0100*
+  transport vs target only              +0.0181 +-0.0080*
+  refinement: off vs on                 -0.0012 +-0.0013 
+  transport + refine vs oracle          +0.0107 +-0.0134 
+
+  * = the 95% interval excludes zero
+per-episode values written to C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\work\results\A4_ms64_per_episode.json
+VERIFIED A4_ms64: evaluated linear-transport checkpoint(s)

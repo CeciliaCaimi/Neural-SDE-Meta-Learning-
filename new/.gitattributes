@@ -1,0 +1,9 @@
+# Preserve original output bytes and SHA256 values across platforms.
+.gitattributes text eol=lf
+.gitignore text eol=lf
+results/** -text -whitespace
+logs/** -text -whitespace
+configs/** -text -whitespace
+provenance/** -text -whitespace
+statistics/** -text -whitespace
+figures/** -text -whitespace

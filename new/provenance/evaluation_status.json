@@ -1,0 +1,201 @@
+{
+  "pid": 10668,
+  "status": "complete",
+  "jobs": {
+    "A1_source_dependence": {
+      "status": "complete",
+      "started": "2026-09-25T13:36:19+01:00",
+      "pid": 21144,
+      "finished": "2026-09-25T14:41:02+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A3_kt_curve": {
+      "status": "complete",
+      "started": "2026-09-25T14:41:02+01:00",
+      "pid": 24692,
+      "finished": "2026-09-25T15:58:18+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A4_ms16": {
+      "status": "complete",
+      "started": "2026-09-25T15:58:18+01:00",
+      "pid": 22348,
+      "finished": "2026-09-25T16:14:12+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A4_ms32": {
+      "status": "complete",
+      "started": "2026-09-25T16:14:12+01:00",
+      "pid": 26224,
+      "finished": "2026-09-25T16:29:59+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A4_ms64": {
+      "status": "complete",
+      "started": "2026-09-25T16:29:59+01:00",
+      "pid": 25832,
+      "finished": "2026-09-25T16:45:58+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A4_ms128": {
+      "status": "complete",
+      "started": "2026-09-25T16:45:58+01:00",
+      "pid": 14564,
+      "finished": "2026-09-25T17:01:39+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A4_ms256": {
+      "status": "complete",
+      "started": "2026-09-25T17:01:39+01:00",
+      "pid": 25220,
+      "finished": "2026-09-25T17:17:28+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A4_ms300": {
+      "status": "complete",
+      "started": "2026-09-25T17:17:28+01:00",
+      "pid": 27628,
+      "finished": "2026-09-25T17:33:13+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A6_zero_shot": {
+      "status": "complete",
+      "started": "2026-09-25T17:33:13+01:00",
+      "pid": 30728,
+      "finished": "2026-09-25T17:42:25+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "E14_generation_strategies": {
+      "status": "complete",
+      "started": "2026-09-25T17:42:25+01:00",
+      "pid": 7880,
+      "finished": "2026-09-25T17:52:16+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "E14_strategies_n60": {
+      "status": "complete",
+      "started": "2026-09-25T17:52:16+01:00",
+      "pid": 20876,
+      "finished": "2026-09-25T18:15:11+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A2_basis_gen": {
+      "status": "complete",
+      "started": "2026-09-25T18:15:11+01:00",
+      "pid": 30392,
+      "finished": "2026-09-25T19:02:11+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A2_film_gen": {
+      "status": "complete",
+      "started": "2026-09-25T19:02:11+01:00",
+      "pid": 10408,
+      "finished": "2026-09-25T19:56:29+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "A7_film_source_dependence": {
+      "status": "complete",
+      "started": "2026-09-25T19:56:29+01:00",
+      "pid": 17256,
+      "finished": "2026-09-25T20:21:42+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "C7_cifar_train50_basis": {
+      "status": "complete",
+      "started": "2026-09-25T20:21:42+01:00",
+      "pid": 10148,
+      "finished": "2026-09-25T20:28:10+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "C7_cifar_train50_film": {
+      "status": "complete",
+      "started": "2026-09-25T20:28:10+01:00",
+      "pid": 1636,
+      "finished": "2026-09-25T20:34:36+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "C7_cifar_train25_basis": {
+      "status": "complete",
+      "started": "2026-09-25T20:34:36+01:00",
+      "pid": 30108,
+      "finished": "2026-09-25T20:41:07+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "C7_cifar_train25_film": {
+      "status": "complete",
+      "started": "2026-09-25T20:41:07+01:00",
+      "pid": 22272,
+      "finished": "2026-09-25T20:47:32+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "SEED1001_source_dependence": {
+      "status": "complete",
+      "started": "2026-09-25T20:47:32+01:00",
+      "pid": 24716,
+      "finished": "2026-09-25T21:51:05+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "SEED2002_source_dependence": {
+      "status": "complete",
+      "started": "2026-09-25T21:51:05+01:00",
+      "pid": 19144,
+      "finished": "2026-09-25T22:55:49+01:00",
+      "exit_code": 0,
+      "cached": true
+    },
+    "SEED3003_source_dependence": {
+      "status": "complete",
+      "started": "2026-09-25T22:55:49+01:00",
+      "pid": 27876,
+      "exit_code": 0,
+      "finished": "2026-09-26T00:01:25.542721+01:00",
+      "cached": true
+    },
+    "E12a_controls": {
+      "status": "complete",
+      "started": "2026-09-26T00:01:25+01:00",
+      "pid": 22444,
+      "finished": "2026-09-26T00:01:36+01:00",
+      "exit_code": 0
+    },
+    "E12b_generation": {
+      "status": "complete",
+      "started": "2026-09-26T00:01:36+01:00",
+      "pid": 30780,
+      "finished": "2026-09-26T00:06:20+01:00",
+      "exit_code": 0
+    },
+    "A9_cifar_full_ft": {
+      "status": "complete",
+      "started": "2026-09-26T00:06:20+01:00",
+      "pid": 9672,
+      "finished": "2026-09-26T00:41:56+01:00",
+      "exit_code": 0
+    }
+  },
+  "scope": "R3 existing packages only; original FT budget frozen",
+  "omitted_jobs": {
+    "A9_cifar_ft_select": "not required by R3; original frozen selection retained",
+    "cifar_ds3_table": "not required by R3; original frozen selection retained"
+  },
+  "finished": "2026-09-26T00:41:56+01:00"
+}

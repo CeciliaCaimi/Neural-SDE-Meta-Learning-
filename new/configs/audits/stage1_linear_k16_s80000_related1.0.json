@@ -1,0 +1,91 @@
+{
+  "run": "stage1_linear_k16_s80000_related1.0",
+  "engine": "legacy",
+  "original_config": {
+    "model": {
+      "backbone": "small_unet",
+      "backbone_kwargs": {
+        "base_channels": 128,
+        "channel_mult": [
+          1,
+          2,
+          2
+        ],
+        "num_res_blocks": 2,
+        "attn_resolutions": [
+          16
+        ]
+      },
+      "k": 16,
+      "basis_init_scale": 0.001,
+      "encoder_width": 64,
+      "encoder_feature_dim": 256,
+      "encoder_hidden": 256,
+      "encoder_pooling": "mean",
+      "transport_hidden": 64,
+      "relation_dim": 8,
+      "n_relations": 4,
+      "transport_out_moments": false
+    },
+    "diffusion": {
+      "n_steps": 1000,
+      "schedule": "cosine",
+      "loss_weighting": "simple",
+      "min_snr_gamma": 5.0
+    },
+    "episodes": {
+      "scheme": "sibling",
+      "split_path": "artifacts/cifar100_split.json",
+      "domainshift_path": "artifacts/cifar100_domainshift.json",
+      "k_shots": [
+        1,
+        2,
+        5,
+        10,
+        20
+      ],
+      "severity_override": null,
+      "enc_source_images": 64,
+      "query_batch": 32
+    },
+    "train": {
+      "steps": 20000,
+      "lr": 0.002,
+      "weight_decay": 0.0,
+      "grad_clip": 1.0,
+      "ema_decay": 0.999,
+      "warmup_steps": 500,
+      "lambda_tgt": 1.0,
+      "lambda_trans": 1.0,
+      "lambda_z": 0.0001,
+      "log_every": 50,
+      "diagnose_every": 500,
+      "ckpt_every": 2000,
+      "ckpt_dir": "checkpoints",
+      "amp": true
+    },
+    "adapt": {
+      "steps": 25,
+      "lr": 0.01,
+      "beta0": 1.0,
+      "noise_batch": 16
+    },
+    "device": "cuda",
+    "global_seed": 12345,
+    "run_name": "meta_diffusion_v1"
+  },
+  "changed_field": "transport_kind: residual_mlp -> linear",
+  "non_transport_initial_weights_identical": true,
+  "training_steps": 80000,
+  "train_tasks": 192,
+  "test_tasks": 32,
+  "source_samples": 256,
+  "query_batch": 256,
+  "effective_optimizer": {
+    "name": "AdamW",
+    "lr": 0.002,
+    "weight_decay": 0.01,
+    "warmup_steps": 200
+  },
+  "effective_optimizer_note": "The original stage1 runner uses its own optimizer defaults and 200-step warmup, not the unused BaseConfig fields."
+}

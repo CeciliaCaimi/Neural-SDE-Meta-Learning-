@@ -1,0 +1,705 @@
+[
+  {
+    "id": "stage1_linear_k16_s80000_related0.1",
+    "phase": "train",
+    "engine": "legacy",
+    "source": "checkpoints/stage1_linear_k16_s80000_related0.1.pt",
+    "source_config": null,
+    "gmm_metadata": {
+      "k": 16,
+      "decoder": "linear",
+      "steps": 80000,
+      "seed": 12345,
+      "family": "related",
+      "perturb": 0.1
+    },
+    "steps": 80000,
+    "status": "pending"
+  },
+  {
+    "id": "stage1_linear_k16_s80000_related0.25",
+    "phase": "train",
+    "engine": "legacy",
+    "source": "checkpoints/stage1_linear_k16_s80000_related0.25.pt",
+    "source_config": null,
+    "gmm_metadata": {
+      "k": 16,
+      "decoder": "linear",
+      "steps": 80000,
+      "seed": 12345,
+      "family": "related",
+      "perturb": 0.25
+    },
+    "steps": 80000,
+    "status": "pending"
+  },
+  {
+    "id": "stage1_linear_k16_s80000_related0.5",
+    "phase": "train",
+    "engine": "legacy",
+    "source": "checkpoints/stage1_linear_k16_s80000_related0.5.pt",
+    "source_config": null,
+    "gmm_metadata": {
+      "k": 16,
+      "decoder": "linear",
+      "steps": 80000,
+      "seed": 12345,
+      "family": "related",
+      "perturb": 0.5
+    },
+    "steps": 80000,
+    "status": "pending"
+  },
+  {
+    "id": "stage1_linear_k16_s80000_related1.0",
+    "phase": "train",
+    "engine": "legacy",
+    "source": "checkpoints/stage1_linear_k16_s80000_related1.0.pt",
+    "source_config": null,
+    "gmm_metadata": {
+      "k": 16,
+      "decoder": "linear",
+      "steps": 80000,
+      "seed": 12345,
+      "family": "related",
+      "perturb": 1.0
+    },
+    "steps": 80000,
+    "status": "pending"
+  },
+  {
+    "id": "stage1_linear_k16_s80000_unrelated",
+    "phase": "train",
+    "engine": "legacy",
+    "source": "checkpoints/stage1_linear_k16_s80000_unrelated.pt",
+    "source_config": null,
+    "gmm_metadata": {
+      "k": 16,
+      "decoder": "linear",
+      "steps": 80000,
+      "seed": 12345,
+      "family": "unrelated",
+      "perturb": 0.25
+    },
+    "steps": 80000,
+    "status": "pending"
+  },
+  {
+    "id": "cifar_ds3",
+    "phase": "train",
+    "engine": "legacy",
+    "source": "checkpoints/cifar_ds3_step50000.pt",
+    "source_config": {
+      "model": {
+        "backbone": "small_unet",
+        "backbone_kwargs": {
+          "base_channels": 128,
+          "channel_mult": [
+            1,
+            2,
+            2
+          ],
+          "num_res_blocks": 2,
+          "attn_resolutions": [
+            16
+          ]
+        },
+        "k": 16,
+        "basis_init_scale": 0.001,
+        "encoder_width": 64,
+        "encoder_feature_dim": 256,
+        "encoder_hidden": 256,
+        "encoder_pooling": "mean",
+        "transport_hidden": 64,
+        "relation_dim": 8,
+        "n_relations": 3,
+        "transport_out_moments": false
+      },
+      "diffusion": {
+        "n_steps": 1000,
+        "schedule": "cosine",
+        "loss_weighting": "simple",
+        "min_snr_gamma": 5.0
+      },
+      "episodes": {
+        "scheme": "domainshift",
+        "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+        "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_domainshift.json",
+        "k_shots": [
+          1,
+          2,
+          5,
+          10,
+          20
+        ],
+        "enc_source_images": 64,
+        "query_batch": 32
+      },
+      "train": {
+        "steps": 50000,
+        "lr": 0.0002,
+        "weight_decay": 0.0,
+        "grad_clip": 1.0,
+        "ema_decay": 0.999,
+        "warmup_steps": 500,
+        "lambda_tgt": 1.0,
+        "lambda_trans": 1.0,
+        "lambda_z": 0.0001,
+        "log_every": 50,
+        "diagnose_every": 1000,
+        "ckpt_every": 10000,
+        "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+        "amp": true
+      },
+      "adapt": {
+        "steps": 25,
+        "lr": 0.01,
+        "beta0": 1.0,
+        "noise_batch": 16
+      },
+      "device": "cuda",
+      "global_seed": 12345,
+      "run_name": "cifar_ds3"
+    },
+    "gmm_metadata": {},
+    "steps": 50000,
+    "status": "pending"
+  },
+  {
+    "id": "a2_basis",
+    "phase": "train",
+    "engine": "current",
+    "source": "checkpoints/a2_basis_step50000.pt",
+    "source_config": {
+      "model": {
+        "backbone": "small_unet",
+        "backbone_kwargs": {
+          "base_channels": 128,
+          "channel_mult": [
+            1,
+            2,
+            2
+          ],
+          "num_res_blocks": 2,
+          "attn_resolutions": [
+            16
+          ]
+        },
+        "k": 16,
+        "basis_init_scale": 0.001,
+        "score_model": "basis",
+        "center_coords": false,
+        "encoder_width": 64,
+        "encoder_feature_dim": 256,
+        "encoder_hidden": 256,
+        "encoder_pooling": "mean",
+        "transport_hidden": 64,
+        "relation_dim": 8,
+        "n_relations": 3,
+        "transport_out_moments": false,
+        "transport_kind": "residual_mlp"
+      },
+      "diffusion": {
+        "n_steps": 1000,
+        "schedule": "cosine",
+        "loss_weighting": "simple",
+        "min_snr_gamma": 5.0
+      },
+      "episodes": {
+        "scheme": "domainshift",
+        "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+        "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_domainshift_c3.json",
+        "k_shots": [
+          1,
+          2,
+          5,
+          10,
+          20
+        ],
+        "severity_override": null,
+        "enc_source_images": 64,
+        "query_batch": 32
+      },
+      "train": {
+        "steps": 50000,
+        "lr": 0.0002,
+        "weight_decay": 0.0,
+        "grad_clip": 1.0,
+        "ema_decay": 0.999,
+        "warmup_steps": 500,
+        "lambda_tgt": 1.0,
+        "lambda_trans": 1.0,
+        "lambda_z": 0.0001,
+        "log_every": 50,
+        "diagnose_every": 2000,
+        "diag_episodes": 24,
+        "diag_noise_draws": 4,
+        "ckpt_every": 10000,
+        "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+        "amp": true
+      },
+      "adapt": {
+        "steps": 25,
+        "lr": 0.01,
+        "beta0": 1.0,
+        "noise_batch": 32
+      },
+      "device": "cuda",
+      "global_seed": 12345,
+      "run_name": "a2_basis"
+    },
+    "gmm_metadata": {},
+    "steps": 50000,
+    "status": "pending"
+  },
+  {
+    "id": "a2_film",
+    "phase": "train",
+    "engine": "current",
+    "source": "checkpoints/a2_film_step50000.pt",
+    "source_config": {
+      "model": {
+        "backbone": "film_unet",
+        "backbone_kwargs": {
+          "base_channels": 128,
+          "channel_mult": [
+            1,
+            2,
+            2
+          ],
+          "num_res_blocks": 2,
+          "attn_resolutions": [
+            16
+          ],
+          "k": 16,
+          "film_mode": "per_block"
+        },
+        "k": 16,
+        "basis_init_scale": 0.001,
+        "score_model": "film",
+        "center_coords": false,
+        "encoder_width": 64,
+        "encoder_feature_dim": 256,
+        "encoder_hidden": 256,
+        "encoder_pooling": "mean",
+        "transport_hidden": 64,
+        "relation_dim": 8,
+        "n_relations": 3,
+        "transport_out_moments": false,
+        "transport_kind": "residual_mlp"
+      },
+      "diffusion": {
+        "n_steps": 1000,
+        "schedule": "cosine",
+        "loss_weighting": "simple",
+        "min_snr_gamma": 5.0
+      },
+      "episodes": {
+        "scheme": "domainshift",
+        "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+        "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_domainshift_c3.json",
+        "fitz_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/fitzpatrick_split.json",
+        "k_shots": [
+          1,
+          2,
+          5,
+          10,
+          20
+        ],
+        "severity_override": null,
+        "enc_source_images": 64,
+        "query_batch": 32
+      },
+      "train": {
+        "steps": 50000,
+        "lr": 0.0002,
+        "weight_decay": 0.0,
+        "grad_clip": 1.0,
+        "ema_decay": 0.999,
+        "warmup_steps": 500,
+        "lambda_tgt": 1.0,
+        "lambda_trans": 1.0,
+        "lambda_z": 0.0001,
+        "log_every": 50,
+        "diagnose_every": 2000,
+        "diag_episodes": 24,
+        "diag_noise_draws": 4,
+        "ckpt_every": 10000,
+        "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+        "amp": true
+      },
+      "adapt": {
+        "steps": 25,
+        "lr": 0.01,
+        "beta0": 1.0,
+        "noise_batch": 32
+      },
+      "device": "cuda",
+      "global_seed": 12345,
+      "run_name": "a2_film"
+    },
+    "gmm_metadata": {},
+    "steps": 50000,
+    "status": "pending"
+  },
+  {
+    "id": "cifar_train50_basis_k16",
+    "phase": "train",
+    "engine": "current",
+    "source": "checkpoints/cifar_train50_basis_k16_step50000.pt",
+    "source_config": {
+      "model": {
+        "backbone": "small_unet",
+        "backbone_kwargs": {
+          "base_channels": 128,
+          "channel_mult": [
+            1,
+            2,
+            2
+          ],
+          "num_res_blocks": 2,
+          "attn_resolutions": [
+            16
+          ]
+        },
+        "k": 16,
+        "basis_init_scale": 0.001,
+        "score_model": "basis",
+        "center_coords": false,
+        "encoder_width": 64,
+        "encoder_feature_dim": 256,
+        "encoder_hidden": 256,
+        "encoder_pooling": "mean",
+        "transport_hidden": 64,
+        "relation_dim": 8,
+        "n_relations": 3,
+        "transport_out_moments": false,
+        "transport_kind": "residual_mlp"
+      },
+      "diffusion": {
+        "n_steps": 1000,
+        "schedule": "cosine",
+        "loss_weighting": "simple",
+        "min_snr_gamma": 5.0
+      },
+      "episodes": {
+        "scheme": "domainshift",
+        "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+        "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts\\cifar100_domainshift_c3_train50_stratified_v1.json",
+        "fitz_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/fitzpatrick_split.json",
+        "cxr_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/chestxray_split_v2.json",
+        "k_shots": [
+          1,
+          2,
+          5,
+          10,
+          20
+        ],
+        "severity_override": null,
+        "enc_source_images": 64,
+        "query_batch": 32
+      },
+      "train": {
+        "steps": 50000,
+        "lr": 0.0002,
+        "weight_decay": 0.0,
+        "grad_clip": 1.0,
+        "ema_decay": 0.999,
+        "warmup_steps": 500,
+        "lambda_tgt": 1.0,
+        "lambda_trans": 1.0,
+        "lambda_z": 0.0001,
+        "log_every": 50,
+        "diagnose_every": 2000,
+        "diag_episodes": 24,
+        "diag_noise_draws": 4,
+        "ckpt_every": 10000,
+        "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+        "amp": true
+      },
+      "adapt": {
+        "steps": 25,
+        "lr": 0.01,
+        "beta0": 1.0,
+        "noise_batch": 32
+      },
+      "device": "cuda",
+      "global_seed": 12345,
+      "run_name": "cifar_train50_basis_k16"
+    },
+    "gmm_metadata": {},
+    "steps": 50000,
+    "status": "pending"
+  },
+  {
+    "id": "cifar_train50_film_k16",
+    "phase": "train",
+    "engine": "current",
+    "source": "checkpoints/cifar_train50_film_k16_step50000.pt",
+    "source_config": {
+      "model": {
+        "backbone": "film_unet",
+        "backbone_kwargs": {
+          "base_channels": 128,
+          "channel_mult": [
+            1,
+            2,
+            2
+          ],
+          "num_res_blocks": 2,
+          "attn_resolutions": [
+            16
+          ],
+          "k": 16,
+          "film_mode": "per_block"
+        },
+        "k": 16,
+        "basis_init_scale": 0.001,
+        "score_model": "film",
+        "center_coords": false,
+        "encoder_width": 64,
+        "encoder_feature_dim": 256,
+        "encoder_hidden": 256,
+        "encoder_pooling": "mean",
+        "transport_hidden": 64,
+        "relation_dim": 8,
+        "n_relations": 3,
+        "transport_out_moments": false,
+        "transport_kind": "residual_mlp"
+      },
+      "diffusion": {
+        "n_steps": 1000,
+        "schedule": "cosine",
+        "loss_weighting": "simple",
+        "min_snr_gamma": 5.0
+      },
+      "episodes": {
+        "scheme": "domainshift",
+        "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+        "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts\\cifar100_domainshift_c3_train50_stratified_v1.json",
+        "fitz_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/fitzpatrick_split.json",
+        "cxr_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/chestxray_split_v2.json",
+        "k_shots": [
+          1,
+          2,
+          5,
+          10,
+          20
+        ],
+        "severity_override": null,
+        "enc_source_images": 64,
+        "query_batch": 32
+      },
+      "train": {
+        "steps": 50000,
+        "lr": 0.0002,
+        "weight_decay": 0.0,
+        "grad_clip": 1.0,
+        "ema_decay": 0.999,
+        "warmup_steps": 500,
+        "lambda_tgt": 1.0,
+        "lambda_trans": 1.0,
+        "lambda_z": 0.0001,
+        "log_every": 50,
+        "diagnose_every": 2000,
+        "diag_episodes": 24,
+        "diag_noise_draws": 4,
+        "ckpt_every": 10000,
+        "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+        "amp": true
+      },
+      "adapt": {
+        "steps": 25,
+        "lr": 0.01,
+        "beta0": 1.0,
+        "noise_batch": 32
+      },
+      "device": "cuda",
+      "global_seed": 12345,
+      "run_name": "cifar_train50_film_k16"
+    },
+    "gmm_metadata": {},
+    "steps": 50000,
+    "status": "pending"
+  },
+  {
+    "id": "cifar_train25_basis_k16",
+    "phase": "train",
+    "engine": "current",
+    "source": "checkpoints/cifar_train25_basis_k16_step50000.pt",
+    "source_config": {
+      "model": {
+        "backbone": "small_unet",
+        "backbone_kwargs": {
+          "base_channels": 128,
+          "channel_mult": [
+            1,
+            2,
+            2
+          ],
+          "num_res_blocks": 2,
+          "attn_resolutions": [
+            16
+          ]
+        },
+        "k": 16,
+        "basis_init_scale": 0.001,
+        "score_model": "basis",
+        "center_coords": false,
+        "encoder_width": 64,
+        "encoder_feature_dim": 256,
+        "encoder_hidden": 256,
+        "encoder_pooling": "mean",
+        "transport_hidden": 64,
+        "relation_dim": 8,
+        "n_relations": 3,
+        "transport_out_moments": false,
+        "transport_kind": "residual_mlp"
+      },
+      "diffusion": {
+        "n_steps": 1000,
+        "schedule": "cosine",
+        "loss_weighting": "simple",
+        "min_snr_gamma": 5.0
+      },
+      "episodes": {
+        "scheme": "domainshift",
+        "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+        "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts\\cifar100_domainshift_c3_train25_stratified_v1.json",
+        "fitz_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/fitzpatrick_split.json",
+        "cxr_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/chestxray_split_v2.json",
+        "k_shots": [
+          1,
+          2,
+          5,
+          10,
+          20
+        ],
+        "severity_override": null,
+        "enc_source_images": 64,
+        "query_batch": 32
+      },
+      "train": {
+        "steps": 50000,
+        "lr": 0.0002,
+        "weight_decay": 0.0,
+        "grad_clip": 1.0,
+        "ema_decay": 0.999,
+        "warmup_steps": 500,
+        "lambda_tgt": 1.0,
+        "lambda_trans": 1.0,
+        "lambda_z": 0.0001,
+        "log_every": 50,
+        "diagnose_every": 2000,
+        "diag_episodes": 24,
+        "diag_noise_draws": 4,
+        "ckpt_every": 10000,
+        "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+        "amp": true
+      },
+      "adapt": {
+        "steps": 25,
+        "lr": 0.01,
+        "beta0": 1.0,
+        "noise_batch": 32
+      },
+      "device": "cuda",
+      "global_seed": 12345,
+      "run_name": "cifar_train25_basis_k16"
+    },
+    "gmm_metadata": {},
+    "steps": 50000,
+    "status": "pending"
+  },
+  {
+    "id": "cifar_train25_film_k16",
+    "phase": "train",
+    "engine": "current",
+    "source": "checkpoints/cifar_train25_film_k16_step50000.pt",
+    "source_config": {
+      "model": {
+        "backbone": "film_unet",
+        "backbone_kwargs": {
+          "base_channels": 128,
+          "channel_mult": [
+            1,
+            2,
+            2
+          ],
+          "num_res_blocks": 2,
+          "attn_resolutions": [
+            16
+          ],
+          "k": 16,
+          "film_mode": "per_block"
+        },
+        "k": 16,
+        "basis_init_scale": 0.001,
+        "score_model": "film",
+        "center_coords": false,
+        "encoder_width": 64,
+        "encoder_feature_dim": 256,
+        "encoder_hidden": 256,
+        "encoder_pooling": "mean",
+        "transport_hidden": 64,
+        "relation_dim": 8,
+        "n_relations": 3,
+        "transport_out_moments": false,
+        "transport_kind": "residual_mlp"
+      },
+      "diffusion": {
+        "n_steps": 1000,
+        "schedule": "cosine",
+        "loss_weighting": "simple",
+        "min_snr_gamma": 5.0
+      },
+      "episodes": {
+        "scheme": "domainshift",
+        "split_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/cifar100_split.json",
+        "domainshift_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts\\cifar100_domainshift_c3_train25_stratified_v1.json",
+        "fitz_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/fitzpatrick_split.json",
+        "cxr_path": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\artifacts/chestxray_split_v2.json",
+        "k_shots": [
+          1,
+          2,
+          5,
+          10,
+          20
+        ],
+        "severity_override": null,
+        "enc_source_images": 64,
+        "query_batch": 32
+      },
+      "train": {
+        "steps": 50000,
+        "lr": 0.0002,
+        "weight_decay": 0.0,
+        "grad_clip": 1.0,
+        "ema_decay": 0.999,
+        "warmup_steps": 500,
+        "lambda_tgt": 1.0,
+        "lambda_trans": 1.0,
+        "lambda_z": 0.0001,
+        "log_every": 50,
+        "diagnose_every": 2000,
+        "diag_episodes": 24,
+        "diag_noise_draws": 4,
+        "ckpt_every": 10000,
+        "ckpt_dir": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\checkpoints",
+        "amp": true
+      },
+      "adapt": {
+        "steps": 25,
+        "lr": 0.01,
+        "beta0": 1.0,
+        "noise_batch": 32
+      },
+      "device": "cuda",
+      "global_seed": 12345,
+      "run_name": "cifar_train25_film_k16"
+    },
+    "gmm_metadata": {},
+    "steps": 50000,
+    "status": "pending"
+  }
+]

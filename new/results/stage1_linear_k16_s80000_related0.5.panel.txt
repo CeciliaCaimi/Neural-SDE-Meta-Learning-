@@ -1,0 +1,30 @@
+
+checkpoint stage1_linear_k16_s80000_related0.5.pt
+  k=16  decoder=linear  steps=80000  family=related@0.5
+
+  denoising loss per coordinate, averaged over 32 TASKS (not over the batch)
+    coordinate                              loss      95% CI
+    this task's own (transport)           0.5847      0.0250
+    one coordinate shared by all          0.6729      0.0386
+    another task's                        0.8419      0.0571
+    z = 0                                 0.6751      0.0386
+
+  paired differences over tasks
+    quantity                               value      95% CI
+    delta_task = L(mean) - L(own)        +0.0882      0.0272 *
+    gain_vs_zero = L(0) - L(own)         +0.0903      0.0256 *
+    gain_vs_shuffled                     +0.2571      0.0503 *
+    task-specific share of the gain        0.976
+      (reported for comparison with the CIFAR panel; the absolute paired difference above is the quantity to trust, since this ratio's denominator decays towards zero)
+
+  coordinate-loss profile: L(z_bar + s (z - z_bar)), averaged over tasks
+    s = 0 is the shared mean coordinate, s = 1 is the task's own
+
+        s    toward own  toward another
+      0.0        0.6729          0.6729
+      0.5        0.6002          0.7281
+      1.0        0.5847          0.8419  <- minimum expected here
+      1.5        0.6267          1.0141
+      2.0        0.7260          1.2449
+
+    the profile toward this task's own coordinate is minimised at s = 1.0

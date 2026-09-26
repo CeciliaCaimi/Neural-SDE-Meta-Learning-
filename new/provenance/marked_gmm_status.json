@@ -1,0 +1,5 @@
+{
+  "status": "cancelled_superseded_by_R3",
+  "reason": "R3 excludes absent GMM deployment tables and retires old promotion/deletion",
+  "active_status": "r3_delivery_status.json"
+}

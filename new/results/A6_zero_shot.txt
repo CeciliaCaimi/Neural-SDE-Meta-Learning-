@@ -1,0 +1,97 @@
+PRIMARY METHOD: linear transport without refinement (J=0); refinement is a separate ablation.
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+arm        basis / small_unet  k=16
+parameters phi 27.798M in the evaluated path, of which 55344 carry z; encoder 0.327M, transport 352
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets drawn independently
+
+60 episodes: 20 classes x 3 transformations x 1 values of K_T
+
+ZERO-SHOT PANEL: K_T=0; source reuse, relation-only, wrong-source and correct-source transport; no row consults target support
+
+  semantic instrument: 20-way over the val classes, 336 steps on 11000 images
+  held-out accuracy on 50 images per class, by domain:
+    clean            fine  40.0%   superclass  67.5%      (chance 5% / 25%)
+    gaussian_blur    fine  39.2%   superclass  66.7%      (chance 5% / 25%)
+    gaussian_noise   fine  39.3%   superclass  67.4%      (chance 5% / 25%)
+    contrast         fine  38.5%   superclass  66.4%      (chance 5% / 25%)
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=0
+  ------------------------------------
+  source reuse             1.688 +-0.106
+  relation only            0.371 +-0.039
+  wrong source + relation     0.354 +-0.048
+  correct source + transport     0.324 +-0.039
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=0
+  ------------------------------------
+  source reuse             0.242 +-0.019
+  relation only            0.241 +-0.020
+  wrong source + relation     0.239 +-0.021
+  correct source + transport     0.206 +-0.019
+
+semantic-class consistency: share of samples put in the episode's own class
+  higher is better; the instrument's own ceiling on real held-out images is 39.3% fine (chance 5%)
+
+  strategy                       K_T=0
+  ------------------------------------
+  source reuse             0.110 +-0.025
+  relation only            0.049 +-0.009
+  wrong source + relation     0.047 +-0.008
+  correct source + transport     0.107 +-0.024
+
+the same reading at superclass level
+  higher is better; ceiling 67.0%, chance 25%
+
+  strategy                       K_T=0
+  ------------------------------------
+  source reuse             0.343 +-0.029
+  relation only            0.245 +-0.021
+  wrong source + relation     0.239 +-0.021
+  correct source + transport     0.337 +-0.024
+
+pooled KID against the real target sets, in the instrument's feature space (x1000)
+  lower is better; the estimator is standard, the feature space is this project's own
+  instrument and not InceptionV3, so these numbers compare arms here and nothing published
+
+  strategy                         K_T=0
+  --------------------------------------
+  source reuse            +24.570 +-2.132
+  relation only           +33.393 +-2.824
+  wrong source + relation    +11.148 +-1.707
+  correct source + transport    +11.115 +-1.611
+
+  pooled from 60 episodes per cell, 5760 generated against 7680 real samples
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=0
+  ------------------------------------------------------------
+  transport vs source reuse             +1.3637 +-0.1145*
+  transport vs wrong source             +0.0295 +-0.0325 
+  transport vs relation only            +0.0465 +-0.0391*
+
+  comparison, sliced Wasserstein, pixel space             K_T=0
+  -------------------------------------------------------------
+  transport vs source reuse             +0.0355 +-0.0108*
+  transport vs wrong source             +0.0333 +-0.0113*
+  transport vs relation only            +0.0346 +-0.0081*
+
+  comparison, semantic-class consistency             K_T=0
+  --------------------------------------------------------
+  transport vs source reuse             -0.0028 +-0.0109 
+  transport vs wrong source             +0.0604 +-0.0216*
+  transport vs relation only            +0.0585 +-0.0206*
+
+  * = the 95% interval excludes zero
+per-episode values written to C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\work\results\A6_zero_shot.json
+VERIFIED A6_zero_shot: evaluated linear-transport checkpoint(s)

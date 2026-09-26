@@ -1,0 +1,13 @@
+REPLAY stage1_linear_k16_s80000_unrelated: transport=linear; decoder=linear; steps=80000; seed=12345
+  step      1  L=3.3925  src=1.1044  tgt=1.1440  trans=1.1440  |dz|=0.000  3 it/s
+  step   8000  L=1.9768  src=0.6192  tgt=0.7197  trans=0.6379  |dz|=0.395  101 it/s
+  step  16000  L=1.3772  src=0.4807  tgt=0.4507  trans=0.4456  |dz|=0.495  105 it/s
+  step  24000  L=1.5065  src=0.4683  tgt=0.5729  trans=0.4652  |dz|=1.127  106 it/s
+  step  32000  L=1.6810  src=0.4967  tgt=0.5979  trans=0.5862  |dz|=0.689  107 it/s
+  step  40000  L=1.3664  src=0.4809  tgt=0.4003  trans=0.4851  |dz|=1.151  107 it/s
+  step  48000  L=1.3588  src=0.4708  tgt=0.4511  trans=0.4367  |dz|=1.212  107 it/s
+  step  56000  L=1.2581  src=0.3701  tgt=0.4613  trans=0.4264  |dz|=1.099  108 it/s
+  step  64000  L=1.4740  src=0.5270  tgt=0.4664  trans=0.4805  |dz|=1.011  108 it/s
+  step  72000  L=1.6436  src=0.4752  tgt=0.5936  trans=0.5746  |dz|=0.746  108 it/s
+  step  80000  L=1.3708  src=0.4454  tgt=0.4762  trans=0.4490  |dz|=0.651  108 it/s
+COMPLETE C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\work\checkpoints\stage1_linear_k16_s80000_unrelated.pt

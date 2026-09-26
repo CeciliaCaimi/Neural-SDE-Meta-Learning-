@@ -1,0 +1,11 @@
+{
+  "reported_grid_routes": [
+    "no adaptation",
+    "reuse z_S",
+    "transport",
+    "target only",
+    "oracle",
+    "real target"
+  ],
+  "refinement_results_omitted": true
+}

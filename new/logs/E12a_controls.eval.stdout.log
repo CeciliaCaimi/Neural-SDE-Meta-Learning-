@@ -1,0 +1,43 @@
+PRIMARY METHOD: linear transport without refinement (J=0); refinement is a separate ablation.
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+split      cifar100_domainshift_c3.json  ('gaussian_blur', 'gaussian_noise', 'contrast')  severity 3
+protocol   24 val episodes x 4 noise draws, K_T=1, M_S=64
+           coordinate encoded on 32 target images, loss measured on 32 disjoint ones
+
+denoising loss per coordinate (mean over episodes)
+  coordinate                              loss
+  --------------------------------------------
+  this episode's own (transport)        0.0806
+  one shared mean coordinate            0.0818
+  another episode's                     0.0830
+  z = 0                                 0.0818
+  encoder on abundant target            0.0806
+  shared mean of those                  0.0818
+
+paired differences over episodes, positive = the coordinate helps
+  quantity                               value     95% CI   verdict
+  ----------------------------------------------------------------------
+  delta_task  = L(mean) - L(own)      +0.00121  +-0.00034   > 0
+  gain_vs_zero = L(0) - L(own)        +0.00126  +-0.00022   > 0
+  gain_vs_shuffled                    +0.00242  +-0.00101   > 0
+  delta_task, abundant coordinate     +0.00120  +-0.00034   > 0
+    of which: transformation id       +0.00120  +-0.00034   > 0
+    of which: class id                +0.00002  +-0.00001   > 0
+
+  r_basis (||B z|| / ||eps_0||)          0.0342  +- 0.0032
+  z_spread_rel                          1.1861
+
+coordinate-loss profile: L(z_bar + s (z - z_bar)), mean over episodes
+  s = 0 is the shared mean coordinate, s = 1 is the episode's own
+
+      s    toward own  toward another
+  -----------------------------------
+    0.0        0.0818          0.0818
+    0.5        0.0809          0.0821
+    1.0        0.0806          0.0830
+    1.5        0.0809          0.0846
+    2.0        0.0818          0.0869
+
+  largest excursion along the correct ray  0.00121
+  largest excursion along a wrong ray      0.00509
+VERIFIED E12a_controls: evaluated linear-transport checkpoint(s)

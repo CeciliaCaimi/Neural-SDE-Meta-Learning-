@@ -1,0 +1,9 @@
+{
+  "status": "complete",
+  "required_free_mib": 12500,
+  "started": "2026-09-25T01:42:44+01:00",
+  "pid": 2328,
+  "exit_code": 0,
+  "finished": "2026-09-25T03:28:22+01:00",
+  "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt"
+}

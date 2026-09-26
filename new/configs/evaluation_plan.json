@@ -1,0 +1,831 @@
+[
+  {
+    "id": "A1_source_dependence",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A1_per_episode.json",
+      "--source-controls",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A1_grid.png"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A1_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A1_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A3_kt_curve",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A3_kt_curve_per_episode.json",
+      "--k-shots",
+      "1",
+      "2",
+      "5",
+      "10",
+      "20",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A3_grid.png"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A3_kt_curve_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A3_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A4_ms16",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms16_per_episode.json",
+      "--m-source",
+      "16",
+      "--k-shots",
+      "1"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms16_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A4_ms32",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms32_per_episode.json",
+      "--m-source",
+      "32",
+      "--k-shots",
+      "1"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms32_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A4_ms64",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms64_per_episode.json",
+      "--m-source",
+      "64",
+      "--k-shots",
+      "1"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms64_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A4_ms128",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms128_per_episode.json",
+      "--m-source",
+      "128",
+      "--k-shots",
+      "1"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms128_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A4_ms256",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms256_per_episode.json",
+      "--m-source",
+      "256",
+      "--k-shots",
+      "1"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms256_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A4_ms300",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms300_per_episode.json",
+      "--m-source",
+      "300",
+      "--k-shots",
+      "1"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A4_ms300_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A6_zero_shot",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A6_zero_shot.json",
+      "--zero-shot",
+      "--semantic"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A6_zero_shot.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "E14_generation_strategies",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "4",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\E14_generation_strategies_per_episode.json",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\delivery\\plots\\strategy_grid.png"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\E14_generation_strategies_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\delivery\\plots\\strategy_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "E14_strategies_n60",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "64",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\E14_strategies_n60_per_episode.json",
+      "--k-shots",
+      "1",
+      "20"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\E14_strategies_n60_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A2_basis_gen",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\a2_basis_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_basis_per_episode.json",
+      "--semantic",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_basis_grid.png"
+    ],
+    "dependencies": [
+      "a2_basis"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_basis_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_basis_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A2_film_gen",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\a2_film_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_film_per_episode.json",
+      "--semantic",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_film_grid.png"
+    ],
+    "dependencies": [
+      "a2_film"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_film_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A2_film_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A7_film_source_dependence",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\a2_film_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A7_film_source_dependence.json",
+      "--source-controls-only",
+      "--semantic"
+    ],
+    "dependencies": [
+      "a2_film"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A7_film_source_dependence.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "C7_cifar_train50_basis",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train50_basis_k16_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_basis_per_episode.json",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3_train50_stratified_v1.json",
+      "--m-source",
+      "64",
+      "--semantic",
+      "--transport-only",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_basis_grid.png"
+    ],
+    "dependencies": [
+      "cifar_train50_basis_k16"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_basis_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_basis_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "C7_cifar_train50_film",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train50_film_k16_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_film_per_episode.json",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3_train50_stratified_v1.json",
+      "--m-source",
+      "64",
+      "--semantic",
+      "--transport-only",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_film_grid.png"
+    ],
+    "dependencies": [
+      "cifar_train50_film_k16"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_film_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train50_film_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "C7_cifar_train25_basis",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train25_basis_k16_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_basis_per_episode.json",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3_train25_stratified_v1.json",
+      "--m-source",
+      "64",
+      "--semantic",
+      "--transport-only",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_basis_grid.png"
+    ],
+    "dependencies": [
+      "cifar_train25_basis_k16"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_basis_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_basis_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "C7_cifar_train25_film",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train25_film_k16_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_film_per_episode.json",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3_train25_stratified_v1.json",
+      "--m-source",
+      "64",
+      "--semantic",
+      "--transport-only",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_film_grid.png"
+    ],
+    "dependencies": [
+      "cifar_train25_film_k16"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_film_per_episode.json",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\C7_cifar_train25_film_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "SEED1001_source_dependence",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\SEED1001_per_episode.json",
+      "--source-controls",
+      "--seed",
+      "1001"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\SEED1001_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "SEED2002_source_dependence",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\SEED2002_per_episode.json",
+      "--source-controls",
+      "--seed",
+      "2002"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\SEED2002_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "SEED3003_source_dependence",
+    "module": "gen_strategies",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "20",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--progress",
+      "20",
+      "--json-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\SEED3003_per_episode.json",
+      "--source-controls",
+      "--seed",
+      "3003"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\SEED3003_per_episode.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "E12a_controls",
+    "module": "posthoc_controls",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-episodes",
+      "24",
+      "--n-noise",
+      "4",
+      "--query-batch",
+      "64",
+      "--k-shot",
+      "1",
+      "--seed",
+      "1234"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [],
+    "device": "cuda"
+  },
+  {
+    "id": "E12b_generation",
+    "module": "gen_specificity",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-classes",
+      "8",
+      "--n-samples",
+      "128",
+      "--ddim-steps",
+      "50",
+      "--seed",
+      "4321",
+      "--grid-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\delivery\\plots\\gen_grid.png"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\delivery\\plots\\gen_grid.png"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "cifar_ds3_table",
+    "module": "cifar_table",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--n-episodes",
+      "40",
+      "--n-noise",
+      "6",
+      "--split",
+      "test"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [],
+    "device": "cuda"
+  },
+  {
+    "id": "A9_cifar_ft_select",
+    "module": "cifar_full_ft",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--seed",
+      "4321",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--mode",
+      "select",
+      "--split",
+      "val",
+      "--n-classes",
+      "4",
+      "--ft-steps",
+      "25",
+      "100",
+      "400",
+      "--ft-lrs",
+      "1e-05",
+      "0.0001",
+      "--budget-out",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A9_replay_validation_choices.json",
+      "--out-prefix",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A9_cifar_ft_select"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A9_cifar_ft_select.json"
+    ],
+    "device": "cuda"
+  },
+  {
+    "id": "A9_cifar_full_ft",
+    "module": "cifar_full_ft",
+    "args": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt",
+      "--domainshift-path",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\engines\\current\\artifacts\\cifar100_domainshift_c3.json",
+      "--seed",
+      "4321",
+      "--n-samples",
+      "96",
+      "--ddim-steps",
+      "50",
+      "--mode",
+      "evaluate",
+      "--split",
+      "test",
+      "--n-classes",
+      "20",
+      "--budget",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\A9_frozen_original_budget.json",
+      "--out-prefix",
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A9_cifar_full_ft"
+    ],
+    "dependencies": [
+      "cifar_ds3"
+    ],
+    "outputs": [
+      "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\results\\A9_cifar_full_ft.json"
+    ],
+    "device": "cuda"
+  }
+]

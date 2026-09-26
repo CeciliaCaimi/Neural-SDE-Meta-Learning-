@@ -1,0 +1,32 @@
+PRIMARY METHOD: linear transport without refinement (J=0); refinement is a separate ablation.
+CIFAR full fine-tuning reference -- evaluate
+==============================================================================
+checkpoint cifar_ds3_step50000.pt step 50000 (EMA), split test, 20 classes
+episodes 180 = 20 classes x 3 relations x 3 K_T values; K_T=[1, 5, 20]
+generation 96 samples, DDIM 50; paired seed 4321
+TEST STATUS: budgets are frozen from the supplied validation result; no test quantity is used for selection.
+
+pixel sliced Wasserstein (lower is better)
+  arm                                      K_T=1             K_T=5            K_T=20
+  ---------------------------------------------------------------------------------
+  target only                      0.2087 +-0.0157     0.1884 +-0.0128     0.1799 +-0.0099
+  transport                        0.1781 +-0.0116     0.1834 +-0.0107     0.1844 +-0.0118
+  full fine-tune                   0.2648 +-0.0184     0.2205 +-0.0183     0.1483 +-0.0098
+
+pixel energy distance (lower is better)
+  arm                                      K_T=1             K_T=5            K_T=20
+  ---------------------------------------------------------------------------------
+  target only                      3.4434 +-0.5379     2.5351 +-0.3342     2.4137 +-0.2728
+  transport                        2.3306 +-0.2752     2.3386 +-0.2495     2.4041 +-0.3150
+  full fine-tune                   5.8971 +-0.8310     4.0219 +-0.6546     1.9086 +-0.2101
+
+paired differences (control - transport; positive means transport is closer)
+  sw
+    target only             +0.0306 +-0.0105*    +0.0051 +-0.0058     -0.0044 +-0.0067 
+    full fine-tune          +0.0867 +-0.0176*    +0.0371 +-0.0197*    -0.0361 +-0.0147*
+  mmd
+    target only             +1.1129 +-0.3763*    +0.1965 +-0.1611*    +0.0096 +-0.1781 
+    full fine-tune          +3.5666 +-0.7496*    +1.6833 +-0.6629*    -0.4955 +-0.3955*
+  * = the 95% episode-level interval excludes zero
+written to C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\work\results\A9_cifar_full_ft.txt and .json
+VERIFIED A9_cifar_full_ft: evaluated linear-transport checkpoint(s)

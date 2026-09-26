@@ -1,0 +1,36 @@
+{
+  "chosen": {
+    "1": {
+      "steps": 25,
+      "lr_weights": 1e-05
+    },
+    "5": {
+      "steps": 25,
+      "lr_weights": 0.0001
+    },
+    "20": {
+      "steps": 400,
+      "lr_weights": 1e-05
+    }
+  },
+  "selected_on": "val",
+  "selection_classes": [
+    3,
+    6,
+    7,
+    9
+  ],
+  "checkpoint": "cifar_ds3_step50000.pt",
+  "grid": {
+    "steps": [
+      25,
+      100,
+      400
+    ],
+    "lr_weights": [
+      1e-05,
+      0.0001
+    ]
+  },
+  "provenance": "Original validation-selected step/lr settings, frozen for transport-only replay."
+}

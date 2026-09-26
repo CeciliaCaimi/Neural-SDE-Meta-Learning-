@@ -1,0 +1,57 @@
+PRIMARY METHOD: linear transport without refinement (J=0); refinement is a separate ablation.
+checkpoint cifar_ds3_step50000.pt  step 50000  weights EMA
+arm        basis / small_unet  k=16
+parameters phi 27.798M in the evaluated path, of which 55344 carry z; encoder 0.327M, transport 352
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets drawn independently
+
+36 episodes: 4 classes x 3 transformations x 3 values of K_T
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            1.643 +-0.105     1.678 +-0.125     1.666 +-0.140
+  reuse z_S                1.393 +-0.195     0.939 +-0.104     0.653 +-0.163
+  transport                0.259 +-0.079     0.280 +-0.051     0.309 +-0.049
+  transport + refine       0.267 +-0.086     0.316 +-0.087     0.357 +-0.093
+  target only              0.299 +-0.092     0.317 +-0.089     0.352 +-0.083
+  oracle                   0.278 +-0.077     0.366 +-0.097     0.309 +-0.083
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  no adaptation            0.225 +-0.015     0.224 +-0.021     0.220 +-0.013
+  reuse z_S                0.211 +-0.018     0.204 +-0.020     0.173 +-0.016
+  transport                0.173 +-0.013     0.174 +-0.015     0.167 +-0.011
+  transport + refine       0.175 +-0.014     0.171 +-0.014     0.162 +-0.020
+  target only              0.204 +-0.022     0.170 +-0.013     0.160 +-0.019
+  oracle                   0.169 +-0.025     0.177 +-0.024     0.166 +-0.025
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +1.1349 +-0.2498*    +0.6590 +-0.1346*    +0.3445 +-0.1689*
+  transport vs target only              +0.0405 +-0.0878     +0.0371 +-0.0699     +0.0429 +-0.0997 
+  refinement: off vs on                 -0.0084 +-0.0216     -0.0361 +-0.0652     -0.0486 +-0.1084 
+  transport + refine vs oracle          -0.0113 +-0.0779     -0.0501 +-0.0857     +0.0480 +-0.1157 
+
+  comparison, sliced Wasserstein, pixel space             K_T=1             K_T=5            K_T=20
+  -------------------------------------------------------------------------------------------------
+  transport vs reuse z_S                +0.0379 +-0.0228*    +0.0300 +-0.0147*    +0.0065 +-0.0113 
+  transport vs target only              +0.0312 +-0.0156*    -0.0033 +-0.0104     -0.0073 +-0.0130 
+  refinement: off vs on                 -0.0027 +-0.0030     +0.0030 +-0.0078     +0.0050 +-0.0142 
+  transport + refine vs oracle          +0.0068 +-0.0221     -0.0066 +-0.0200     -0.0042 +-0.0147 
+
+  * = the 95% interval excludes zero
+per-episode values written to C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\work\results\E14_generation_strategies_per_episode.json
+
+grid written to C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\delivery\plots\strategy_grid.png
+VERIFIED E14_generation_strategies: evaluated linear-transport checkpoint(s)

@@ -1,0 +1,73 @@
+PRIMARY METHOD: linear transport without refinement (J=0); refinement is a separate ablation.
+checkpoint cifar_train25_basis_k16_step50000.pt  step 50000  weights EMA
+arm        basis / small_unet  k=16
+parameters phi 27.798M in the evaluated path, of which 55344 carry z; encoder 0.327M, transport 352
+refinement J=25, eta_z=0.01, beta_0=1.0
+sampling   DDIM eta=0, 50 steps, 96 samples per cell
+source     M_S=64, sets nested (prefix)
+
+180 episodes: 20 classes x 3 transformations x 3 values of K_T
+
+  semantic instrument: 20-way over the val classes, 336 steps on 11000 images
+  held-out accuracy on 50 images per class, by domain:
+    clean            fine  41.1%   superclass  68.3%      (chance 5% / 25%)
+    gaussian_blur    fine  38.8%   superclass  65.8%      (chance 5% / 25%)
+    gaussian_noise   fine  40.9%   superclass  68.1%      (chance 5% / 25%)
+    contrast         fine  38.5%   superclass  66.0%      (chance 5% / 25%)
+
+
+distance from the real target domain, in transformation-statistic space
+  lower is better; this is the axis the coordinate was shown to control
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  transport                0.348 +-0.046     0.336 +-0.047     0.350 +-0.050
+
+sliced Wasserstein distance to the real target set, pixel space
+  lower is better
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  transport                0.201 +-0.017     0.197 +-0.015     0.204 +-0.016
+
+semantic-class consistency: share of samples put in the episode's own class
+  higher is better; the instrument's own ceiling on real held-out images is 39.8% fine (chance 5%)
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  transport                0.099 +-0.030     0.105 +-0.030     0.102 +-0.032
+
+the same reading at superclass level
+  higher is better; ceiling 67.1%, chance 25%
+
+  strategy                       K_T=1           K_T=5          K_T=20
+  --------------------------------------------------------------------
+  transport                0.327 +-0.032     0.332 +-0.030     0.330 +-0.032
+
+pooled KID against the real target sets, in the instrument's feature space (x1000)
+  lower is better; the estimator is standard, the feature space is this project's own
+  instrument and not InceptionV3, so these numbers compare arms here and nothing published
+
+  strategy                         K_T=1             K_T=5            K_T=20
+  --------------------------------------------------------------------------
+  transport               +11.818 +-1.620    +12.468 +-1.982    +11.014 +-1.644
+
+  pooled from 60 episodes per cell, 5760 generated against 7680 real samples
+
+
+the two questions, as paired differences over episodes (positive = the first one is worse)
+
+  comparison, transformation-statistic space             K_T=1             K_T=5            K_T=20
+  ------------------------------------------------------------------------------------------------
+
+  comparison, sliced Wasserstein, pixel space             K_T=1             K_T=5            K_T=20
+  -------------------------------------------------------------------------------------------------
+
+  comparison, semantic-class consistency             K_T=1             K_T=5            K_T=20
+  --------------------------------------------------------------------------------------------
+
+  * = the 95% interval excludes zero
+per-episode values written to C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\work\results\C7_cifar_train25_basis_per_episode.json
+
+grid written to C:\T1D Meta Learning\code\python\meta-diffusion\experiments\linear_transport_replacement_2026-09-24\work\results\C7_cifar_train25_basis_grid.png
+VERIFIED C7_cifar_train25_basis: evaluated linear-transport checkpoint(s)

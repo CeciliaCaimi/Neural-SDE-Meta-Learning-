@@ -1,0 +1,66 @@
+{
+  "layout_reference": "User-supplied original profile contrast and scripts/plot_panel.py",
+  "well_depth_formula": "100 * (mean loss at s=0 - minimum mean own-direction loss) / mean loss at s=0",
+  "panels": [
+    {
+      "title": "2-D Gaussian mixtures (stage 1)",
+      "source": "stage1_linear_k16_s80000_related0.1.panel.json",
+      "sha256": "e0fb5c43e4f962b68cc86ad3dabdb8e7fe7379c20f0652eb98fa1414fb228bf1",
+      "scales": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0
+      ],
+      "own_loss_percent_of_shared": [
+        100.0,
+        81.22007079589848,
+        73.84458936892823,
+        77.873554878613,
+        93.30696759859623
+      ],
+      "other_loss_percent_of_shared": [
+        100.0,
+        113.54307276368264,
+        140.80318747310477,
+        181.7803374240023,
+        236.47453324937717
+      ],
+      "well_depth_percent": 26.15541063107177,
+      "well_depth_display": "26.2%",
+      "minimum_scale": 1.0
+    },
+    {
+      "title": "CIFAR-100 domain shift (stage 3)",
+      "source": "E12a_controls.raw.json",
+      "sha256": "f896d3426d44848cfd6b391aac3b015f8f92171b6d5715a16f38215f83e44518",
+      "scales": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0
+      ],
+      "own_loss_percent_of_shared": [
+        100.0,
+        98.88919511769453,
+        98.51829191791185,
+        98.8872900210609,
+        99.99618992535497
+      ],
+      "other_loss_percent_of_shared": [
+        100.0,
+        100.33127979474719,
+        101.47869377276714,
+        103.44224034452208,
+        106.22192005567416
+      ],
+      "well_depth_percent": 1.4817080820881483,
+      "well_depth_display": "1.5%",
+      "minimum_scale": 1.0
+    }
+  ],
+  "experiments_repeated": 0,
+  "figure_sha256": "0ed75bfc94ac3b4e1afd410104c205fe399aa9ff3877828ab47d76a7c112c1bf"
+}

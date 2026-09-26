@@ -1,0 +1,8 @@
+{
+  "status": "complete",
+  "started": "2026-09-25T00:19:19+01:00",
+  "pid": 12312,
+  "exit_code": 0,
+  "finished": "2026-09-25T01:02:17+01:00",
+  "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\stage1_linear_k16_s80000_related0.25.pt"
+}

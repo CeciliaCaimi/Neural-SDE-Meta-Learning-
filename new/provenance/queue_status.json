@@ -1,0 +1,106 @@
+{
+  "pid": 31240,
+  "started": "2026-09-25T00:19:19+01:00",
+  "jobs": {
+    "stage1_linear_k16_s80000_related0.1": {
+      "status": "complete",
+      "cached": true
+    },
+    "stage1_linear_k16_s80000_related0.25": {
+      "status": "complete",
+      "started": "2026-09-25T00:19:19+01:00",
+      "pid": 12312,
+      "exit_code": 0,
+      "finished": "2026-09-25T01:02:17+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\stage1_linear_k16_s80000_related0.25.pt"
+    },
+    "stage1_linear_k16_s80000_related0.5": {
+      "status": "complete",
+      "started": "2026-09-25T01:02:17+01:00",
+      "pid": 28992,
+      "exit_code": 0,
+      "finished": "2026-09-25T01:17:24+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\stage1_linear_k16_s80000_related0.5.pt"
+    },
+    "stage1_linear_k16_s80000_related1.0": {
+      "status": "complete",
+      "started": "2026-09-25T01:17:24+01:00",
+      "pid": 1820,
+      "exit_code": 0,
+      "finished": "2026-09-25T01:30:17+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\stage1_linear_k16_s80000_related1.0.pt"
+    },
+    "stage1_linear_k16_s80000_unrelated": {
+      "status": "complete",
+      "started": "2026-09-25T01:30:17+01:00",
+      "pid": 29032,
+      "exit_code": 0,
+      "finished": "2026-09-25T01:42:44+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\stage1_linear_k16_s80000_unrelated.pt"
+    },
+    "cifar_ds3": {
+      "status": "complete",
+      "required_free_mib": 12500,
+      "started": "2026-09-25T01:42:44+01:00",
+      "pid": 2328,
+      "exit_code": 0,
+      "finished": "2026-09-25T03:28:22+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_ds3_step50000.pt"
+    },
+    "a2_basis": {
+      "status": "complete",
+      "required_free_mib": 12500,
+      "started": "2026-09-25T03:28:22+01:00",
+      "pid": 30896,
+      "exit_code": 0,
+      "finished": "2026-09-25T05:11:58+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\a2_basis_step50000.pt"
+    },
+    "a2_film": {
+      "status": "complete",
+      "required_free_mib": 12500,
+      "started": "2026-09-25T05:11:58+01:00",
+      "pid": 8672,
+      "exit_code": 0,
+      "finished": "2026-09-25T06:59:36+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\a2_film_step50000.pt"
+    },
+    "cifar_train50_basis_k16": {
+      "status": "complete",
+      "required_free_mib": 12500,
+      "started": "2026-09-25T06:59:36+01:00",
+      "pid": 20416,
+      "exit_code": 0,
+      "finished": "2026-09-25T08:11:53+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train50_basis_k16_step50000.pt"
+    },
+    "cifar_train50_film_k16": {
+      "status": "complete",
+      "required_free_mib": 12500,
+      "started": "2026-09-25T08:11:53+01:00",
+      "pid": 4016,
+      "exit_code": 0,
+      "finished": "2026-09-25T09:58:48+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train50_film_k16_step50000.pt"
+    },
+    "cifar_train25_basis_k16": {
+      "status": "complete",
+      "required_free_mib": 12500,
+      "started": "2026-09-25T09:58:48+01:00",
+      "pid": 4372,
+      "exit_code": 0,
+      "finished": "2026-09-25T11:10:34+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train25_basis_k16_step50000.pt"
+    },
+    "cifar_train25_film_k16": {
+      "status": "complete",
+      "required_free_mib": 12500,
+      "started": "2026-09-25T11:10:34+01:00",
+      "pid": 18460,
+      "exit_code": 0,
+      "finished": "2026-09-25T13:36:14+01:00",
+      "checkpoint": "C:\\T1D Meta Learning\\code\\python\\meta-diffusion\\experiments\\linear_transport_replacement_2026-09-24\\work\\checkpoints\\cifar_train25_film_k16_step50000.pt"
+    }
+  },
+  "finished": "2026-09-25T13:36:14+01:00"
+}

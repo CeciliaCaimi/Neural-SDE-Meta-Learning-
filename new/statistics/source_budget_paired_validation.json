@@ -1,0 +1,261 @@
+{
+  "source_budgets": [
+    16,
+    32,
+    64,
+    128,
+    256,
+    300
+  ],
+  "target_budget": 1,
+  "primary_method": "correct source + transport",
+  "primary_refinement_steps": 0,
+  "difference": "reuse/target-only minus primary; primary minus oracle; paired within the same episode",
+  "oracle_comparison": "unrefined correct source + transport minus the existing oracle baseline; positive is a remaining gap to oracle",
+  "ci_method": "mean +/- 1.96 * sample standard deviation of paired differences / sqrt(n)",
+  "statistical_unit": "class-transformation episode",
+  "source_init_route": "reuse z_S; source-initialised target adaptation, not strict reuse",
+  "significance": "unrounded paired interval excludes zero in either direction",
+  "paired_effects": {
+    "16": {
+      "reuse z_S": {
+        "mean": 0.0387336486329635,
+        "halfwidth": 0.010132835066486483,
+        "ci95": [
+          0.028600813566477014,
+          0.04886648369944998
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "target only": {
+        "mean": 0.015270693600177765,
+        "halfwidth": 0.008571132336437835,
+        "ci95": [
+          0.006699561263739931,
+          0.0238418259366156
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "oracle": {
+        "mean": 0.012429125607013702,
+        "halfwidth": 0.014349892127157843,
+        "ci95": [
+          -0.0019207665201441404,
+          0.026779017734171545
+        ],
+        "n": 60,
+        "significant": false,
+        "paired": true
+      }
+    },
+    "32": {
+      "reuse z_S": {
+        "mean": 0.03860095329582691,
+        "halfwidth": 0.010048254462352166,
+        "ci95": [
+          0.028552698833474745,
+          0.048649207758179075
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "target only": {
+        "mean": 0.016068831582864127,
+        "halfwidth": 0.007736927989130634,
+        "ci95": [
+          0.008331903593733493,
+          0.02380575957199476
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "oracle": {
+        "mean": 0.01163185661037763,
+        "halfwidth": 0.013917654232242789,
+        "ci95": [
+          -0.002285797621865159,
+          0.02554951084262042
+        ],
+        "n": 60,
+        "significant": false,
+        "paired": true
+      }
+    },
+    "64": {
+      "reuse z_S": {
+        "mean": 0.03813380151987076,
+        "halfwidth": 0.009998420583726103,
+        "ci95": [
+          0.028135380936144656,
+          0.04813222210359686
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "target only": {
+        "mean": 0.01813802532851696,
+        "halfwidth": 0.007951314563047299,
+        "ci95": [
+          0.01018671076546966,
+          0.026089339891564256
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "oracle": {
+        "mean": 0.00950373187661171,
+        "halfwidth": 0.01352106571522294,
+        "ci95": [
+          -0.0040173338386112305,
+          0.02302479759183465
+        ],
+        "n": 60,
+        "significant": false,
+        "paired": true
+      }
+    },
+    "128": {
+      "reuse z_S": {
+        "mean": 0.03766306626300017,
+        "halfwidth": 0.00991869296384177,
+        "ci95": [
+          0.027744373299158402,
+          0.04758175922684194
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "target only": {
+        "mean": 0.017387986928224564,
+        "halfwidth": 0.008031098568164512,
+        "ci95": [
+          0.009356888360060052,
+          0.025419085496389077
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "oracle": {
+        "mean": 0.010202428077658017,
+        "halfwidth": 0.01366275288702487,
+        "ci95": [
+          -0.003460324809366854,
+          0.02386518096468289
+        ],
+        "n": 60,
+        "significant": false,
+        "paired": true
+      }
+    },
+    "256": {
+      "reuse z_S": {
+        "mean": 0.037445005401968955,
+        "halfwidth": 0.010019544381626886,
+        "ci95": [
+          0.027425461020342067,
+          0.04746454978359584
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "target only": {
+        "mean": 0.017319774627685545,
+        "halfwidth": 0.00812855768204885,
+        "ci95": [
+          0.009191216945636696,
+          0.025448332309734395
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "oracle": {
+        "mean": 0.009994871169328689,
+        "halfwidth": 0.013134188191550242,
+        "ci95": [
+          -0.0031393170222215536,
+          0.02312905936087893
+        ],
+        "n": 60,
+        "significant": false,
+        "paired": true
+      }
+    },
+    "300": {
+      "reuse z_S": {
+        "mean": 0.037247412651777265,
+        "halfwidth": 0.01003202545170421,
+        "ci95": [
+          0.027215387200073056,
+          0.04727943810348147
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "target only": {
+        "mean": 0.017341357842087745,
+        "halfwidth": 0.00815334307839911,
+        "ci95": [
+          0.009188014763688634,
+          0.025494700920486855
+        ],
+        "n": 60,
+        "significant": true,
+        "paired": true
+      },
+      "oracle": {
+        "mean": 0.010213674356540045,
+        "halfwidth": 0.013103450508445776,
+        "ci95": [
+          -0.002889776151905731,
+          0.02331712486498582
+        ],
+        "n": 60,
+        "significant": false,
+        "paired": true
+      }
+    }
+  },
+  "number_of_panels": 2,
+  "layout_reference": "User-supplied original A4 figure and scripts/a4_curve.py; refinement curves/comparisons omitted; agreed primary name and paired significance stars retained",
+  "raw_sources": [
+    {
+      "file": "A4_ms16_per_episode.json",
+      "sha256": "bb369c7f0f668b53dac0127a877d4ecfa624a651399bc285fbd84fc387c8f949"
+    },
+    {
+      "file": "A4_ms32_per_episode.json",
+      "sha256": "09784a23ffb6bfe85f449039f8323b104c581e6a56ffc28f70060b43def044de"
+    },
+    {
+      "file": "A4_ms64_per_episode.json",
+      "sha256": "a370894aad47023df13d6d99c46279ebd787143b129b2e8a7ce75cdff83a8b29"
+    },
+    {
+      "file": "A4_ms128_per_episode.json",
+      "sha256": "328b4a4a94211274615eefd00cc7dfa7056e9971da3afce6c432faec6e5776a1"
+    },
+    {
+      "file": "A4_ms256_per_episode.json",
+      "sha256": "e704d459466f95c25c5d8b6da10e55d32d98d3b08689c86a215980bfa5728feb"
+    },
+    {
+      "file": "A4_ms300_per_episode.json",
+      "sha256": "e8287559e712e02b8e4d8242e611f8af3636d5b6804231ce8dbd9bca5b624249"
+    }
+  ],
+  "figure_sha256": "c2fb0c498ff7aa4dc78e6eab5bf8c0436198a8a8f6770a8a4ae7571c180f2def",
+  "experiments_repeated": 0
+}
