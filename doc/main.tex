@@ -331,11 +331,11 @@ MLP $-$ linear (FiLM) & $0.0093\pm0.0037\sigstar$ & $0.0112\pm0.0040\sigstar$ & 
 \centering
 \begin{minipage}[t]{0.49\textwidth}\centering
 \includegraphics[width=\linewidth]{figures/low_data_crossover.png}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\textwidth}\centering
+\end{minipage}\par\medskip
+\begin{minipage}[t]{0.98\textwidth}\centering
 \includegraphics[width=\linewidth]{figures/A4_ms_curve.png}
 \end{minipage}
-\caption{\textbf{CIFAR target and source budgets.} Left: final-test SW for correct source $+$ transport and target-adapted baselines. The main route uses no target support at any $K_T$; its small changes across budgets reflect different sampled source/query episodes and generation noise. Right: $K_T=1$ with nested source supports and the checkpoint trained at $M_S=64$. Error bars show marginal episode-level 95\% intervals; paired effects and stars are computed separately.}
+\caption{\textbf{CIFAR target and source budgets.} Top: final-test SW for correct source $+$ transport and target-adapted baselines. The main route uses no target support at any $K_T$; its small changes across budgets reflect different sampled source/query episodes and generation noise. Bottom: $K_T=1$ with nested source supports and the checkpoint trained at $M_S=64$. Left: route means. Right: paired SW differences for source-initialised adaptation (reuse $z_S$) and target-only, each minus correct source $+$ transport. Intervals are episode-level 95\% intervals, marginal for means and paired for differences. Positive differences favour the main route; superscript $^{\ast}$ marks unrounded paired intervals excluding zero.}
 \label{fig:cifar-budgets}
 \end{figure*}
 
