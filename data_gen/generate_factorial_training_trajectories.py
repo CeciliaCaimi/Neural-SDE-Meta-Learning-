@@ -24,6 +24,23 @@
 # duplicated) -- those functions are already generic over (tasks, out_root,
 # roles, device), so no new simulation code is needed here.
 #
+# Seeding (item 6 audit finding #1 fix): simulate_tasks's `sim_seed` falls
+# back to item 5's own default (cfg.global_seed + 9999 -- see
+# generate_factorial_benchmark.py) when not given one explicitly, which is
+# exactly what item 5 used to generate the support/query trajectories
+# already on disk. The original version of this script called simulate_tasks
+# without a sim_seed at all, so train_inner/val_inner silently inherited
+# that same default stream -- not independent of (and, for however many
+# tasks share the leading generator state, able to literally duplicate)
+# support/query, and not independent of each other either (both roles were
+# drawn from the one shared, sequentially-advancing generator). Fixed by
+# giving train_inner and val_inner each their own deterministic seed,
+# derived from (theta_id, role-specific offset) via _role_seed below --
+# distinct from item 5's default, from each other, and stable regardless of
+# which other tasks are simulated in the same run (unlike a single shared
+# generator advanced across a whole task list, where task N's draws depend
+# on everything simulated before it).
+#
 # --- Stages ---------------------------------------------------------------
 #   verify -- simulate train_inner/val_inner for a SMALL subset of the
 #             requested task ids (--verify-n-tasks, default 3), time it,
@@ -43,10 +60,11 @@
 #       --stage full --task-ids-file <path> --confirm-full-run
 
 import argparse
+import hashlib
 import os
 import shutil
 import time
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import pandas as pd
 import torch
@@ -59,8 +77,60 @@ from dataloaders.factorial_dataset import load_mechanism_theta_dict
 DEFAULT_N_TRAIN_INNER = 80
 DEFAULT_N_VAL_INNER = 20
 
+# Role-specific seed offsets (item 6 audit finding #1 fix -- see module
+# docstring). Distinct from item 5's simulate_tasks default sim_seed
+# (cfg.global_seed + 9999, generate_factorial_benchmark.py) and from each
+# other; passed through _role_seed, never used as a raw seed on their own.
+TRAIN_INNER_SEED_OFFSET = 100_000
+VAL_INNER_SEED_OFFSET = 200_000
+
 FACTORIAL_TRAIN_TRAJ_ROOT = os.path.join(cfg.paths.data_root, "factorial_train_trajectories")
 FACTORIAL_TRAIN_INDEX_PATH = os.path.join(cfg.paths.data_root, "factorial_train_index.csv")
+
+
+def _role_seed(theta_id: str, seed_offset: int) -> int:
+    """Deterministic per-(task, role) seed, stable across processes and
+    runs. NOT Python's built-in hash(): hash() of a str is randomized per
+    process (PYTHONHASHSEED) unless explicitly fixed, so it cannot be used
+    to derive a reproducible simulation seed here."""
+    digest = hashlib.sha256(f"{cfg.global_seed}:{seed_offset}:{theta_id}".encode()).digest()
+    return int.from_bytes(digest[:4], "big")
+
+
+def simulate_roles_seeded(
+    tasks: List[MechanismTheta],
+    out_root: str,
+    n_train_inner: int,
+    n_val_inner: int,
+    device: str,
+) -> Tuple[List[dict], float, int]:
+    """Simulate train_inner/val_inner for every task in `tasks`, each role on
+    its OWN deterministic per-(task, role) seed (_role_seed) -- distinct from
+    each other and from item 5's support/query default. Calls item 5's
+    simulate_tasks once per (task, role) rather than once for the whole
+    batch, so each task's draws depend only on its own id, not on which
+    other tasks happen to share the run. Returns (index_rows, elapsed_seconds,
+    total_bytes_written), same shape as simulate_tasks."""
+    index_rows: List[dict] = []
+    total_bytes = 0
+    t0 = time.time()
+    for i, theta in enumerate(tasks):
+        for role, count, seed_offset in (
+            ("train_inner", n_train_inner, TRAIN_INNER_SEED_OFFSET),
+            ("val_inner", n_val_inner, VAL_INNER_SEED_OFFSET),
+        ):
+            if count == 0:
+                continue
+            rows, _, n_bytes = simulate_tasks(
+                [theta], out_root, [(role, count)], device,
+                sim_seed=_role_seed(theta.id, seed_offset),
+            )
+            index_rows.extend(rows)
+            total_bytes += n_bytes
+        if (i + 1) % 50 == 0 or (i + 1) == len(tasks):
+            print(f"  simulated {i + 1}/{len(tasks)} tasks...")
+    elapsed = time.time() - t0
+    return index_rows, elapsed, total_bytes
 
 
 def load_task_ids(task_ids_file: str) -> List[str]:
@@ -99,10 +169,6 @@ def check_disk_space(estimated_bytes: float, out_root: str, safety_factor: float
         )
 
 
-def _roles(n_train_inner: int, n_val_inner: int):
-    return [("train_inner", n_train_inner), ("val_inner", n_val_inner)]
-
-
 def run_verify(
     task_ids: List[str],
     meta_params_path: str,
@@ -119,7 +185,6 @@ def run_verify(
           f"requested tasks (roles=train_inner:{n_train_inner}, val_inner:{n_val_inner}), device={device}...")
 
     verify_root = out_root.rstrip("/") + "_verify"
-    roles = _roles(n_train_inner, n_val_inner)
 
     # Rough pre-check using item-5's measured 343 KB/task for 10+32=42
     # trajectories -> ~8.17 KB/trajectory -> scale to the requested counts.
@@ -127,7 +192,7 @@ def run_verify(
     rough_estimate = bytes_per_traj_estimate * (n_train_inner + n_val_inner) * len(all_tasks)
     check_disk_space(rough_estimate, verify_root)
 
-    index_rows, elapsed, total_bytes = simulate_tasks(subset, verify_root, roles, device)
+    index_rows, elapsed, total_bytes = simulate_roles_seeded(subset, verify_root, n_train_inner, n_val_inner, device)
     report_stability_stats(subset, index_rows)
 
     per_task_time = elapsed / len(subset)
@@ -159,14 +224,13 @@ def run_full(
     device: str,
 ) -> None:
     tasks = tasks_for_ids(meta_params_path, task_ids)
-    roles = _roles(n_train_inner, n_val_inner)
 
     bytes_per_traj_estimate = 343_000.0 / 42.0
     rough_estimate = bytes_per_traj_estimate * (n_train_inner + n_val_inner) * len(tasks)
     check_disk_space(rough_estimate, out_root)
 
     print(f"Generating train_inner/val_inner for {len(tasks)} tasks on device={device}...")
-    index_rows, elapsed, total_bytes = simulate_tasks(tasks, out_root, roles, device)
+    index_rows, elapsed, total_bytes = simulate_roles_seeded(tasks, out_root, n_train_inner, n_val_inner, device)
     report_stability_stats(tasks, index_rows)
 
     os.makedirs(os.path.dirname(index_out) or ".", exist_ok=True)

@@ -258,6 +258,7 @@ def build_toy_environment(tmp_root: str, fractions: Sequence[float], split_seed:
 
     from data_gen.compositional_splits import build_split, save_split
     from data_gen.generate_factorial_benchmark import build_tasks, save_tasks, simulate_tasks
+    from data_gen.generate_factorial_training_trajectories import simulate_roles_seeded
 
     os.makedirs(tmp_root, exist_ok=True)
     meta_params_path = os.path.join(tmp_root, "meta_params.npz")
@@ -268,7 +269,10 @@ def build_toy_environment(tmp_root: str, fractions: Sequence[float], split_seed:
     train_traj_root = os.path.join(tmp_root, "train_trajectories")
 
     sq_rows, _, _ = simulate_tasks(tasks, sq_traj_root, [("support", 3), ("query", 3)], device="cpu")
-    train_rows, _, _ = simulate_tasks(tasks, train_traj_root, [("train_inner", 4), ("val_inner", 2)], device="cpu")
+    # train_inner/val_inner get their own seed streams (simulate_roles_seeded),
+    # NOT a bare simulate_tasks call -- see item 6 audit finding #1 /
+    # data_gen/generate_factorial_training_trajectories.py's module docstring.
+    train_rows, _, _ = simulate_roles_seeded(tasks, train_traj_root, n_train_inner=4, n_val_inner=2, device="cpu")
 
     sq_index_path = os.path.join(tmp_root, "sq_index.csv")
     train_index_path = os.path.join(tmp_root, "train_index.csv")

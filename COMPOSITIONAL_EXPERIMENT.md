@@ -131,7 +131,30 @@ adaptation), but not for `train_base` (which needs many `train_inner`
 trajectories per task, the same role `training/train_meta.py` consumes).
 `data_gen/generate_factorial_training_trajectories.py` adds exactly that,
 to a NEW directory (`data/factorial_train_trajectories/`) and a NEW index
-(`data/factorial_train_index.csv`), reusing item 5's `simulate_tasks` as-is.
+(`data/factorial_train_index.csv`), reusing item 5's `simulate_task`/
+`simulate_tasks`/`report_stability_stats` as-is (imported, not duplicated).
+
+**Seeds.** `simulate_tasks`'s `sim_seed` falls back to item 5's own default
+(`cfg.global_seed + 9999`) when not given one, which is exactly what item 5
+used for `support`/`query`. An earlier version of this script called
+`simulate_tasks` without a `sim_seed` at all, so `train_inner`/`val_inner`
+silently inherited that same default -- not independent of `support`/
+`query` (able to literally duplicate them) and not independent of each
+other either (both roles were drawn from one shared, sequentially-advancing
+generator). Fixed: `simulate_roles_seeded` (same module) calls
+`simulate_tasks` once per `(task, role)`, each with its own deterministic
+seed from `_role_seed(theta_id, seed_offset)` --
+`TRAIN_INNER_SEED_OFFSET=100_000` / `VAL_INNER_SEED_OFFSET=200_000`, distinct
+from item 5's default and from each other, and a SHA-256-based hash (not
+Python's built-in `hash()`, which is randomized per process for strings
+unless `PYTHONHASHSEED` is fixed) so the seed is reproducible across runs.
+`experiments/run_compositional.py`'s `build_toy_environment` had the same
+bug (a bare `simulate_tasks(...)` call for `train_inner`/`val_inner`) and is
+fixed the same way, via the same `simulate_roles_seeded` helper.
+`smoke_test_compositional.py`'s `check_seed_independence` generates a few
+toy tasks' support/query/train_inner/val_inner and asserts no trajectory is
+byte-identical across any pair of the four roles (it fails against the old
+code, confirmed by temporarily reverting the fix and re-running it).
 
 **This has not been run at full scale.** A tiny 5-task timing test (real
 settings: `x_dim=10`, `n_steps=200`, 80 `train_inner` + 20 `val_inner`
@@ -140,6 +163,51 @@ trajectories/task) gave 0.164 s/task, 817 KB/task, extrapolating to
 ~2.9 GB free at generation time, but still not run for real (the smallest
 training set, at 10% holdout, needs ~1414 of the 1792 tasks, so somewhat
 less than this upper bound).
+
+### Evaluation context length (independent-audit finding #3)
+
+The independent audit (`paper_work/item6_audit.md`, finding #3) flagged
+that `experiments/run_compositional.py`'s `stage_evaluate` does not apply
+the `steps_available` truncation that `training/train_compositional.py`
+(line ~257) and `training/train_controller.py` (line ~234) both apply
+before meta-training `train_adapt`'s policy modules (default 50), and
+asked (a) whether the on-disk trajectory length is the intended fixed
+length and (b) whether eval needs the same truncation. Conclusions, from
+reading the code (not changed, since neither is clearly wrong):
+
+- **(a) Yes, fixed and intended.** Every role (`support`/`query` from item
+  5, `train_inner`/`val_inner` from item 6) is simulated with the same
+  `cfg.time_grid.T`/`cfg.time_grid.n_steps`, so every on-disk trajectory
+  has the same length (`n_steps + 1` points) regardless of role or task --
+  `dataloaders/factorial_dataset.py`'s `FactorialTrajectoryDataset`
+  defaults its shape check to exactly `cfg.time_grid.n_steps + 1` for this
+  reason. There is no per-task or per-role length variation to guard
+  against.
+- **(b) Not patched, by design -- not a clear bug.** `stage_evaluate`
+  passes the full on-disk support length into `evaluate_task`.
+  `single_z`/`factorised` already internally cap their encoder window at
+  `min(T, 50)` regardless of input length (matching the pre-item-6
+  `gated_finetuning_regularized.py` convention the audit also checked), so
+  truncation there is cosmetic. For `factorised_learned_rates`/
+  `factorised_selective`, `differentiable_adapt_factorial` similarly caps
+  only the *encoder* window at `min(T, 50)` -- `initial_grad_norms`,
+  `compute_mechanism_error_factorial`, and `k_step_adapt` all still see the
+  untruncated support, whereas during `train_adapt` the policy modules
+  were meta-trained on support already truncated to `steps_available=50`
+  by the caller. This is a genuine train/eval context-length difference
+  for those two arms specifically, but the legacy pipeline this was built
+  from treats context length as an explicit, swept experimental axis
+  (`adaptation/gated_finetuning_regularized.py`'s `STEPS_SWEEP`, which
+  includes the full length as one of its own data points) rather than a
+  single fixed convention -- so an untruncated eval length is a legitimate
+  point on that axis, not an obviously-wrong default. Since no real-scale
+  run has been executed yet (see "What is NOT established" below),
+  patching this now would be a methodological decision made without
+  evidence it matters. Before the real run: either pass `--steps-available`
+  through to `stage_evaluate` and truncate support the same way
+  `train_adapt` does (for a matched comparison), or deliberately sweep it
+  as `STEPS_SWEEP` does and record it as its own CSV column -- pick one
+  explicitly rather than leaving it implicit.
 
 ## Exact commands for the real run, in order
 

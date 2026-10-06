@@ -77,6 +77,62 @@ def check_real_split_counts():
           ">=100 held-out test tasks for every fraction, deterministic given seed, seed-sensitive, no leakage.")
 
 
+def check_seed_independence():
+    """Item 6 audit finding #1: data_gen/generate_factorial_training_trajectories.py
+    used to call simulate_tasks for train_inner/val_inner without a sim_seed,
+    silently falling back to the exact default item 5 uses for support/query
+    -- so train_inner/val_inner could duplicate support/query (and, since
+    both roles shared one sequentially-advancing generator, were not
+    independent of each other either). Generates a few toy tasks' four roles
+    (support/query via item 5's generator, train_inner/val_inner via item 6's
+    generator) and asserts no trajectory is identical (by content hash)
+    across any pair of the four roles, for any task."""
+    import hashlib
+
+    from config.base_config import cfg
+    from data_gen.generate_factorial_benchmark import build_tasks
+    from data_gen.generate_factorial_benchmark import simulate_tasks as simulate_sq
+    from data_gen.generate_factorial_training_trajectories import simulate_roles_seeded
+
+    old_x_dim, old_n_steps, old_retries = cfg.basis.x_dim, cfg.time_grid.n_steps, cfg.stability.max_retries_per_theta
+    cfg.basis.x_dim = 2
+    cfg.time_grid.n_steps = 6
+    cfg.stability.max_retries_per_theta = 3
+
+    tmp_root = tempfile.mkdtemp(prefix="smoke_test_compositional_seeds_")
+    try:
+        tasks = build_tasks(2, 2, seed=0)[:3]
+
+        sq_root = os.path.join(tmp_root, "sq")
+        train_root = os.path.join(tmp_root, "train")
+        simulate_sq(tasks, sq_root, [("support", 2), ("query", 2)], device="cpu")
+        simulate_roles_seeded(tasks, train_root, n_train_inner=2, n_val_inner=2, device="cpu")
+
+        def traj_hash(root, theta_id, role, k):
+            path = os.path.join(root, theta_id, role, f"traj_{k}.npy")
+            with open(path, "rb") as f:
+                return hashlib.sha256(f.read()).hexdigest()
+
+        for theta in tasks:
+            tagged = []
+            for root, role, count in (
+                (sq_root, "support", 2), (sq_root, "query", 2),
+                (train_root, "train_inner", 2), (train_root, "val_inner", 2),
+            ):
+                for k in range(count):
+                    tagged.append((f"{role}_{k}", traj_hash(root, theta.id, role, k)))
+            digests = [d for _, d in tagged]
+            assert len(digests) == len(set(digests)), (
+                f"{theta.id}: duplicate trajectory found across support/query/train_inner/val_inner: {tagged}"
+            )
+    finally:
+        shutil.rmtree(tmp_root, ignore_errors=True)
+        cfg.basis.x_dim, cfg.time_grid.n_steps, cfg.stability.max_retries_per_theta = old_x_dim, old_n_steps, old_retries
+
+    print("Seed-independence check passed: train_inner/val_inner trajectories differ from support/query "
+          "and from each other for every sampled task (item 6 audit finding #1).")
+
+
 def check_four_arms_end_to_end():
     from adaptation.compositional_arms import ARMS, encode
     from experiments.run_compositional import build_toy_environment, checkpoint_paths
@@ -235,6 +291,7 @@ def check_aggregation():
 
 def main():
     check_real_split_counts()
+    check_seed_independence()
     check_four_arms_end_to_end()
     check_aggregation()
     print("\nCompositional-generalisation smoke test passed. This confirms the splits, the four "
